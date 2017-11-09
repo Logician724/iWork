@@ -48,3 +48,10 @@ start_date DATETIME NOT NULL,
 end_date DATETIME NOT NULL,
 FOREIGN KEY (Manager_User_Name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 )
+CREATE TABLE Managers_Assign_Projects_To_Regulars
+(
+PRIMARY KEY(manager_user_name,regular_user_name,project_name),
+manager_user_name VARCHAR(30)  NOT NULL,
+regular_user_name VARCHAR(30)  NOT NULL,
+project_name VARCHAR(30)  NOT NULL
+)
