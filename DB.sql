@@ -84,15 +84,29 @@ FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
-Create Table Department (
+Create Table Departments (
 
-department_code int ,
-department_name varchar(50),
-company_domain_name varchar(50),
+department_code INT ,
+name VARCHAR(50),
+company_domain_name VARCHAR(50),
 primary key (demartment_code, company_domain_name),
 Foreign key ( company_domain_name ) references Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 
 
 );
+
+Create Table Requests(
+
+request_id INT PRIMARY KEY, 
+end_date TIMESTAMP,
+hr_response VARCHAR(20),
+manager_response VARCHAR(20),
+no_of_leave_days INT,
+request_date TIMESTAMP,
+start_date TIMESTAMP,
+
+
+);
+
 
 
