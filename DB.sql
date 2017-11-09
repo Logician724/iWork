@@ -18,6 +18,7 @@ CREATE TABLE Job_Seekers(
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
+--Implementation of staff member has job relation is missing, discussion is needed--
 CREATE TABLE Staff_Members( 
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 day_off VARCHAR(15) NOT NULL,
@@ -29,6 +30,7 @@ company_domain VARCHAR(50) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 --Assumption: Removing a department results in removing all its staff members
 FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+
 )
 CREATE TABLE Attendances(
 PRIMARY KEY (user_name,date),
