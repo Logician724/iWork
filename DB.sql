@@ -54,5 +54,10 @@ status VARCHAR(20) NOT NULL,
 FOREIGN KEY (project_name) REFERENCES Projects(project_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 )
-
+CREATE TABLE Projects(
+project_name VARCHAR(20) PRIMARY KEY NOT NULL,
+start_date DATETIME NOT NULL,
+end_date DATETIME NOT NULL,
+FOREIGN KEY (Manager_User_Name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
+)
 
