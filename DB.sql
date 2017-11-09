@@ -87,10 +87,10 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 
 Create Table Departments (
 
-department_code INT ,
-name VARCHAR(50),
-company_domain_name VARCHAR(50),
-PRIMARY KEY (demartment_code, company_domain_name),
+department_code INT NOT NULL  ,
+name VARCHAR(50) NOT NULL ,
+company_domain_name VARCHAR(50) NOT NULL ,
+PRIMARY KEY (demartment_code, company_domain_name)  ,
 FOREIGN KEY ( company_domain_name ) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 
 
@@ -98,16 +98,16 @@ FOREIGN KEY ( company_domain_name ) REFERENCES Company(domain_name)  ON DELETE C
 
 Create Table Requests(
 
-request_id INT PRIMARY KEY, 
-end_date TIMESTAMP,
-hr_response VARCHAR(20),
-hr_user_name VARCHAR(50),
-manager_response VARCHAR(20),
-manager_user_name VARCHAR(50),
+request_id INT PRIMARY KEY NOT NULL , 
+end_date TIMESTAMP NOT NULL ,
+hr_response VARCHAR(20) NOT NULL ,
+hr_user_name VARCHAR(50) NOT NULL ,
+manager_response VARCHAR(20) NOT NULL ,
+manager_user_name VARCHAR(50) NOT NULL ,
 --no_of_leave_days INT AS (YEAR(end_date)-YEAR(start_date)),
-request_date TIMESTAMP,
-reason_of_disapproval  VARCHAR(50),
-start_date TIMESTAMP,
+request_date TIMESTAMP NOT NULL ,
+reason_of_disapproval  VARCHAR(50) NOT NULL ,
+start_date TIMESTAMP NOT NULL ,
 
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE CASCADE
@@ -117,8 +117,8 @@ FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE
 
 Create Table Leave_Requests(
 
-request_id INT PRIMARY KEY,
-type VARCHAR(50),
+request_id INT PRIMARY KEY NOT NULL ,
+type VARCHAR(50) NOT NULL ,
 
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
@@ -126,9 +126,9 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 Create Table Business_Trip_Requests(
 
-request_id INT PRIMARY KEY,
-trip_destination VARCHAR(50),
-trip_purpose VARCHAR(50)
+request_id INT PRIMARY KEY NOT NULL ,
+trip_destination VARCHAR(50) NOT NULL ,
+trip_purpose VARCHAR(50) NOT NULL 
 
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -137,7 +137,7 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 Create Table HR_Employees(
 
-user_name VARCHAR(50) PRIMARY KEY, 
+user_name VARCHAR(50) PRIMARY KEY NOT NULL , 
 
 FOREIGN KEY (user_name) REFERENCES Staff_Members
 
