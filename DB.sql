@@ -108,8 +108,8 @@ request_date TIMESTAMP,
 reason_of_disapproval  VARCHAR(50),
 start_date TIMESTAMP,
 
-FOREIGN KEY (hr_user_name) REFERENCES HR_Employees,
-FOREIGN KEY  (manager_user_name) REFERENCES Managers
+FOREIGN KEY (hr_user_name) REFERENCES HR_Employees ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE CASCADE
 
 
 );
@@ -119,6 +119,7 @@ Create Table Leave_Requests(
 request_id INT PRIMARY KEY,
 type VARCHAR(50),
 
+FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 );
 
