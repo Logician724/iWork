@@ -82,6 +82,7 @@ task_deadline DATETIME NOT NULL,
 FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
+
 )
 
 Create Table Departments (
@@ -141,3 +142,25 @@ user_name VARCHAR(50) PRIMARY KEY,
 FOREIGN KEY (user_name) REFERENCES Staff_Members
 
 );
+
+
+CREATE TABLE Replace_Managers(
+PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
+request_id INT,
+user_name_replacer VARCHAR(20),
+user_name_request_owner VARCHAR(20),
+FOREIGN KEY(user_name_request) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+
+CREATE TABLE Replace_HR(
+PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
+request_id INT,
+user_name_replacer VARCHAR(20),
+user_name_request_owner VARCHAR(20),
+FOREIGN KEY(user_name_request) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+)
+
