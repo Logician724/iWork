@@ -76,5 +76,8 @@ manager_user_name VARCHAR(30) NOT NULL,
 regular_user_name VARCHAR(30) NOT NULL,
 project_name VARCHAR(50) NOT NULL,
 task_name VARCHAR(30) NOT NULL,
-task_deadline DATETIME NOT NULL
+task_deadline DATETIME NOT NULL,
+FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
