@@ -146,3 +146,12 @@ FOREIGN KEY(user_name_request) REFERENCES Regular_Employees(user_name) ON DELETE
 FOREIGN KEY(user_name_request_owner) REFERENCES Regular_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
+CREATE TABLE Announcements(
+PRIMARY KEY(domain_name,title,date),
+date DATETIME NOT NULL,
+domain_name VARCHAR(20) NOT NULL,
+title VARCHAR(20) NOT NULL,
+HR_user_name VARCHAR(20) NOT NULL,
+description TEXT NOT NULL,
+type VARCHAR(20) NOT NULL
+)
