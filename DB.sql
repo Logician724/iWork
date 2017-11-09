@@ -123,5 +123,13 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 );
 
+Create Table Business_Trip_Requests(
+
+request_id INT PRIMARY KEY,
+trip_destination VARCHAR(50),
+trip_purpose VARCHAR(50)
+
+);
+
 
 
