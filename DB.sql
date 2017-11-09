@@ -27,7 +27,8 @@ company_email VARCHAR(70) NOT NULL,
 department_code INT NOT NULL,
 company_domain VARCHAR(50) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (department_code,company_domain) REFERENCES Departments (department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+--Assumption: Removing a department results in removing all its staff members
+FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 )
 CREATE TABLE Attendances(
 PRIMARY KEY (user_name,date),
