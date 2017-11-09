@@ -20,5 +20,7 @@ no_annual_leaves INT,
 salary INT,
 company_email VARCHAR(50),
 department_code INT,
-company_domain VARCHAR(50)
+company_domain VARCHAR(50),
+FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (department_code,company_domain) REFERENCES Departments (department_code,company_domain) ON DELETE SET NULL ON UPDATE CASCADE
 )
