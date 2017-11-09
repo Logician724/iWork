@@ -62,8 +62,7 @@ start_date DATETIME NOT NULL,
 end_date DATETIME NOT NULL,
 FOREIGN KEY (Manager_User_Name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 )
-CREATE TABLE Managers_Assign_Projects_To_Regulars
-(
+CREATE TABLE Managers_Assign_Projects_To_Regulars(
 PRIMARY KEY(manager_user_name,regular_user_name,project_name),
 manager_user_name VARCHAR(30)  NOT NULL,
 regular_user_name VARCHAR(30)  NOT NULL,
@@ -82,85 +81,59 @@ task_deadline DATETIME NOT NULL,
 FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
-
 )
-
-Create Table Departments (
-
-department_code INT ,
-name VARCHAR(50),
-company_domain_name VARCHAR(50),
+CREATE TABLE Departments(
 PRIMARY KEY (demartment_code, company_domain_name),
-FOREIGN KEY ( company_domain_name ) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
-
-
-);
-
-Create Table Requests(
-
-request_id INT PRIMARY KEY, 
-end_date TIMESTAMP,
-hr_response VARCHAR(20),
-hr_user_name VARCHAR(50),
-manager_response VARCHAR(20),
-manager_user_name VARCHAR(50),
+department_code INT NOT NULL,
+name VARCHAR(50) NOT NULL,
+company_domain_name VARCHAR(50) NOT NULL,
+FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+)
+CREATE TABLE Requests(
+request_id INT PRIMARY KEY NOT NULL, 
+end_date TIMESTAMP NOT NULL,
+hr_response VARCHAR(20) NOT NULL,
+hr_user_name VARCHAR(50) NOT NULL,
+manager_response VARCHAR(20) NOT NULL,
+manager_user_name VARCHAR(50) NOT NULL,
 --no_of_leave_days INT AS (YEAR(end_date)-YEAR(start_date)),
-request_date TIMESTAMP,
-reason_of_disapproval  VARCHAR(50),
-start_date TIMESTAMP,
-
+request_date TIMESTAMP NOT NULL,
+reason_of_disapproval  VARCHAR(50) NOT NULL,
+start_date TIMESTAMP NOT NULL,
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE CASCADE
-
-
-);
-
+)
 Create Table Leave_Requests(
-
-request_id INT PRIMARY KEY,
-type VARCHAR(50),
-
+request_id INT PRIMARY KEY NOT NULL,
+--Adjustment: attribute type should be changed
+type VARCHAR(50) NOT NULL,
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
-
-);
-
+)
 Create Table Business_Trip_Requests(
-
-request_id INT PRIMARY KEY,
-trip_destination VARCHAR(50),
-trip_purpose VARCHAR(50)
-
+request_id INT PRIMARY KEY NOT NULL,
+trip_destination VARCHAR(50) NOT NULL,
+trip_purpose VARCHAR(50)NOT NULL,
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
+)
+CREATE TABLE HR_Employees(
+user_name VARCHAR(50) PRIMARY KEY NOT NULL, 
+FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
-Create Table HR_Employees(
-
-user_name VARCHAR(50) PRIMARY KEY, 
-
-FOREIGN KEY (user_name) REFERENCES Staff_Members
-
-);
-
-
 CREATE TABLE Replace_Managers(
 PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
-request_id INT,
-user_name_replacer VARCHAR(20),
-user_name_request_owner VARCHAR(20),
+request_id INT NOT NULL,
+user_name_replacer VARCHAR(20) NOT NULL,
+user_name_request_owner VARCHAR(20) NOT NULL,
 FOREIGN KEY(user_name_request) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
-
 CREATE TABLE Replace_HR(
 PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
-request_id INT,
-user_name_replacer VARCHAR(20),
-user_name_request_owner VARCHAR(20),
+request_id INT NOT NULL,
+user_name_replacer VARCHAR(20) NOT NULL,
+user_name_request_owner VARCHAR(20) NOT NULL,
 FOREIGN KEY(user_name_request) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
-
