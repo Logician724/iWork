@@ -36,3 +36,7 @@ start_time DATETIME ,
 leave_time DATETIME,
 PRIMARY KEY (user_name,date)
 )
+CREATE TABLE Regular_Employees (
+user_name VARCHAR(30) PRIMARY KEY NOT NULL,
+
+)
