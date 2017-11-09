@@ -38,5 +38,5 @@ PRIMARY KEY (user_name,date)
 )
 CREATE TABLE Regular_Employees (
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
-
+FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
