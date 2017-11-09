@@ -38,3 +38,13 @@ start_time DATETIME NOT NULL,
 leave_time DATETIME NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
+CREATE TABLE Tasks(
+PRIMARY KEY(deadline,name,project_name),
+deadline DATETIME NOT NULL,
+name VARCHAR(30) NOT NULL,
+project_name VARCHAR(50) NOT NULL,
+comments TEXT NOT NULL,
+description TEXT NOT NULL,
+regular_user_name VARCHAR(30) NOT NULL,
+status VARCHAR(20) NOT NULL
+)
