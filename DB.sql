@@ -83,3 +83,16 @@ FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL
 FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
+
+Create Table Department (
+
+department_code int ,
+department_name varchar(50),
+company_domain_name varchar(50),
+primary key (demartment_code, company_domain_name),
+
+
+
+);
+
+
