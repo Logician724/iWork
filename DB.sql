@@ -103,13 +103,21 @@ hr_response VARCHAR(20),
 hr_user_name VARCHAR(50),
 manager_response VARCHAR(20),
 manager_user_name VARCHAR(50),
-no_of_leave_days INT,
+--no_of_leave_days INT AS (YEAR(end_date)-YEAR(start_date)),
 request_date TIMESTAMP,
 reason_of_disapproval  VARCHAR(50),
 start_date TIMESTAMP,
 
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees,
-FOREIGN KEY  (manager_user_name) REFERENCES Managers,
+FOREIGN KEY  (manager_user_name) REFERENCES Managers
+
+
+);
+
+Create Table Leave_Requests(
+
+request_id INT PRIMARY KEY,
+type VARCHAR(50),
 
 
 );
