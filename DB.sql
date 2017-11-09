@@ -24,3 +24,10 @@ company_domain VARCHAR(50),
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (department_code,company_domain) REFERENCES Departments (department_code,company_domain) ON DELETE SET NULL ON UPDATE CASCADE
 )
+CREATE TABLE Attendances(
+user_name VARCHAR(50) ,
+date DATETIME,
+start_time DATETIME ,
+leave_time DATETIME,
+PRIMARY KEY (user_name,date)
+)
