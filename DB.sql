@@ -1,13 +1,13 @@
 --put your creations in here
 CREATE TABLE Users (
-user_name VARCHAR(15) PRIMARY KEY,
-password VARCHAR(30),
-personal_email VARCHAR(50),
-birth_date DATETIME,
-exp_year INT,
-first_name VARCHAR(25),
-last_name VARCHAR(25),
-age  AS (YEAR(CURRENT_TIMESTAMP)-YEAR(birth_date))
+user_name VARCHAR(15) PRIMARY KEY NOT NULL,
+password VARCHAR(30) NOT NULL,
+personal_email VARCHAR(50) NOT NULL,
+birth_date DATETIME NOT NULL,
+exp_year INT NOT NULL,
+first_name VARCHAR(25) NOT NULL,
+last_name VARCHAR(25) NOT NULL,
+age  AS (YEAR(CURRENT_TIMESTAMP)-YEAR(birth_date)) NOT NULL
 )
 CREATE TABLE USER_Prev_Jobs(
 user_name VARCHAR(15) PRIMARY KEY,
@@ -35,4 +35,7 @@ date DATETIME,
 start_time DATETIME ,
 leave_time DATETIME,
 PRIMARY KEY (user_name,date)
+)
+CREATE TABLE Regular_Employees(
+user_name 
 )
