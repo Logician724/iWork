@@ -103,7 +103,7 @@ start_date TIMESTAMP NOT NULL,
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE CASCADE
 )
-Create Table Leave_Requests(
+CREATE TABLE Leave_Requests(
 request_id INT PRIMARY KEY NOT NULL,
 --Adjustment: attribute type should be changed
 type VARCHAR(50) NOT NULL,
