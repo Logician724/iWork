@@ -50,7 +50,9 @@ project_name VARCHAR(50) NOT NULL,
 comments TEXT NOT NULL,
 description TEXT NOT NULL,
 regular_user_name VARCHAR(30) NOT NULL,
-status VARCHAR(20) NOT NULL
+status VARCHAR(20) NOT NULL,
+FOREIGN KEY (project_name) REFERENCES Projects(project_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 )
 
 
