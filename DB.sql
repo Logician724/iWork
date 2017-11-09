@@ -89,8 +89,8 @@ Create Table Departments (
 department_code INT ,
 name VARCHAR(50),
 company_domain_name VARCHAR(50),
-primary key (demartment_code, company_domain_name),
-Foreign key ( company_domain_name ) references Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+PRIMARY KEY (demartment_code, company_domain_name),
+FOREIGN KEY ( company_domain_name ) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 
 
 );
@@ -100,13 +100,16 @@ Create Table Requests(
 request_id INT PRIMARY KEY, 
 end_date TIMESTAMP,
 hr_response VARCHAR(20),
+hr_user_name VARCHAR(50),
 manager_response VARCHAR(20),
+manager_user_name VARCHAR(50),
 no_of_leave_days INT,
 request_date TIMESTAMP,
+reason_of_disapproval  VARCHAR(50),
 start_date TIMESTAMP,
-hr_user_name VARCHAR(50),
-manager_user_name VARCHAR(50),
-reason_of_disapproval  VARCHAR(50)
+
+FOREIGN KEY (hr_user_name) REFERENCES HR_Employees,
+FOREIGN KEY  (manager_user_name) REFERENCES Managers,
 
 
 );
