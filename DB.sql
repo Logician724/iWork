@@ -18,7 +18,7 @@ CREATE TABLE Job_Seekers(
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
---Implementation of staff member has job relation is missing, discussion is needed--
+--Implementation of staff member has job relation missing, discussion is needed--
 CREATE TABLE Staff_Members( 
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 day_off VARCHAR(15) NOT NULL,
