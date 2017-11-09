@@ -134,3 +134,10 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 
 
+Create Table HR_Employees(
+
+user_name VARCHAR(50) PRIMARY KEY, 
+
+FOREIGN KEY (user_name) REFERENCES Staff_Members
+
+);
