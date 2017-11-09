@@ -151,7 +151,7 @@ PRIMARY KEY (job_title,department_code,compamy_domain),
 company_domain VARCHAR(50) NOT NULL ,
 job_title VARCHAR(50) NOT NULL,
 department_code INT, 
-FOREIGN KEY (department_code, company_domain) REFERENCES Department,
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments,
 
 short_description VARCHAR(100) NOT NULL,
 detailed_description TEXT NOT NULL,
