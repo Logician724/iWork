@@ -104,6 +104,9 @@ manager_response VARCHAR(20),
 no_of_leave_days INT,
 request_date TIMESTAMP,
 start_date TIMESTAMP,
+hr_user_name VARCHAR(50),
+manager_user_name VARCHAR(50),
+reason_of_disapproval  VARCHAR(50)
 
 
 );
