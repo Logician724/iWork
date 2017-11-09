@@ -84,7 +84,7 @@ FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
 CREATE TABLE Replace_Managers(
-PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id)
+PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
 request_id INT,
 user_name_replacer VARCHAR(20),
 user_name_request_owner VARCHAR(20),
