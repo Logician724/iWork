@@ -54,4 +54,7 @@ PRIMARY KEY(manager_user_name,regular_user_name,project_name),
 manager_user_name VARCHAR(30)  NOT NULL,
 regular_user_name VARCHAR(30)  NOT NULL,
 project_name VARCHAR(30)  NOT NULL
+FOREIGN KEY (manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE SET NULL,
+FOREIGN KEY (regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE SET NULL,
+FOREIGN KEY (project_name) REFERENCES Projects(project_name) ON DELETE CASCADE ON UPDATE CASCADE
 )
