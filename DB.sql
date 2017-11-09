@@ -87,10 +87,11 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 
 Create Table Departments (
 
-department_code INT NOT NULL  ,
-name VARCHAR(50) NOT NULL ,
-company_domain_name VARCHAR(50) NOT NULL ,
 PRIMARY KEY (demartment_code, company_domain_name)  ,
+department_code INT NOT NULL  ,
+company_domain_name VARCHAR(50) NOT NULL ,
+name VARCHAR(50) NOT NULL ,
+
 FOREIGN KEY ( company_domain_name ) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 
 
@@ -140,6 +141,27 @@ Create Table HR_Employees(
 user_name VARCHAR(50) PRIMARY KEY NOT NULL , 
 
 FOREIGN KEY (user_name) REFERENCES Staff_Members
+
+);
+
+
+Create Table Jobs(
+
+PRIMARY KEY (job_title,department_code,compamy_domain),
+company_domain VARCHAR(50) NOT NULL ,
+job_title VARCHAR(50) NOT NULL,
+department_code INT, 
+FOREIGN KEY (department_code, company_domain) REFERENCES Department,
+
+short_description VARCHAR(100) NOT NULL,
+detailed_description TEXT NOT NULL,
+salary INT NOT NULL,
+min_years_experience INT NOT NULL,
+working_hours INT NOT NULL,
+vacancies INT NOT NULL,
+application_deadline TIMESTAMP NOT NULL
+
+
 
 );
 
