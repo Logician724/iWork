@@ -88,8 +88,8 @@ PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
 request_id INT,
 user_name_replacer VARCHAR(20),
 user_name_request_owner VARCHAR(20),
-FOREIGN KEY(user_name_request) REFERENCES Regular_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(user_name_request_owner) REFERENCES Regular_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
 CREATE TABLE Replace_HR(
