@@ -90,7 +90,7 @@ department_code int ,
 department_name varchar(50),
 company_domain_name varchar(50),
 primary key (demartment_code, company_domain_name),
-
+Foreign key ( company_domain_name ) references Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 
 
 );
