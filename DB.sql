@@ -7,12 +7,13 @@ birth_date DATETIME NOT NULL,
 exp_year INT NOT NULL,
 first_name VARCHAR(25) NOT NULL,
 last_name VARCHAR(25) NOT NULL,
-age  AS (YEAR(CURRENT_TIMESTAMP)-YEAR(birth_date)) NOT NULL
+age  AS (YEAR(CURRENT_TIMESTAMP)-YEAR(birth_date))
 );
 
 CREATE TABLE USER_Prev_Jobs(
-user_name VARCHAR(30) PRIMARY KEY NOT NULL,
-prev_job VARCHAR(15) PRIMARY KEY NOT NULL,
+PRIMARY KEY(user_name, prev_job),
+user_name VARCHAR(30)  NOT NULL,
+prev_job VARCHAR(15)  NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -66,7 +67,6 @@ CREATE TABLE Projects(
 project_name VARCHAR(20) PRIMARY KEY NOT NULL,
 start_date DATETIME NOT NULL,
 end_date DATETIME NOT NULL,
-FOREIGN KEY (Manager_User_Name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers_Assign_Projects_To_Regulars(
