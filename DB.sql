@@ -267,5 +267,21 @@ sender_user_name varchar(30),
 FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 );
 
+Create table Questions(
+primary key (question_title,job_title,department_code,domain_name),
+
+question_title varchar(20),
+job_title varchar(20),
+department_code int,
+domain_name varchar(20),
+
+answer bit,
+
+
+
+);
+
+
+
 
 -- Romy ended her work here --
