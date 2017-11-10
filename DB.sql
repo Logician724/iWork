@@ -165,13 +165,13 @@ FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE SE
 FOREIGN KEY(request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Replace_HRs(
+CREATE TABLE HR_Employees_Replace_HR_Employees(
 request_id INT PRIMARY KEY NOT NULL,
-user_name_replacer VARCHAR(30) NOT NULL,
-user_name_request_owner VARCHAR(30) NOT NULL,
-FOREIGN KEY(user_name_request) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+user_name_replacer VARCHAR(30) NULL,
+user_name_request_owner VARCHAR(30) NULL,
+FOREIGN KEY(user_name_replacer) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(request_id) REFERENCES Request(request_ids) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Replace_Regulars(
