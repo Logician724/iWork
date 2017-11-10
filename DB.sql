@@ -156,21 +156,19 @@ type VARCHAR(50) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Replace_Managers(
-PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
-request_id INT NOT NULL,
-user_name_replacer VARCHAR(20) NOT NULL,
-user_name_request_owner VARCHAR(20) NOT NULL,
-FOREIGN KEY(user_name_request) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE Managers_Replace_Managers_In_Requests(
+request_id INT PRIMARY KEY NOT NULL,
+user_name_replacer VARCHAR(30) NULL,
+user_name_request_owner VARCHAR(30) NULL,
+FOREIGN KEY(user_name_replacer) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Replace_HRs(
-PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
-request_id INT NOT NULL,
-user_name_replacer VARCHAR(20) NOT NULL,
-user_name_request_owner VARCHAR(20) NOT NULL,
+request_id INT PRIMARY KEY NOT NULL,
+user_name_replacer VARCHAR(30) NOT NULL,
+user_name_request_owner VARCHAR(30) NOT NULL,
 FOREIGN KEY(user_name_request) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
