@@ -212,6 +212,15 @@ email varchar(20),
 );
 
 
+Create table Companies_Phones(
+PRIMARY KEY(phone,company_domain_name) ,
+phone int not null,
+
+
+FOREIGN KEY (company_domain_name) REFERENCES Companies(company_domain_name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 
 
 
