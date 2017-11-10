@@ -198,6 +198,8 @@ user_name varchar(30) primary key not null,
 
 manager_type varchar(20),
 
+FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+
 
 );
 
