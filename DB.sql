@@ -124,14 +124,14 @@ FOREIGN KEY (request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UP
 );
 
 CREATE TABLE Business_Trip_Requests(
-request_id INT PRIMARY KEY NOT NULL ,
-trip_destination VARCHAR(50) NOT NULL ,
-trip_purpose VARCHAR(50) NOT NULL, 
+request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+trip_destination VARCHAR(150) NOT NULL,
+trip_purpose TEXT NOT NULL, 
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE HR_Employees(
-user_name VARCHAR(50) PRIMARY KEY NOT NULL, 
+user_name VARCHAR(30) PRIMARY KEY NOT NULL, 
 FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CASCADE
 );
 
