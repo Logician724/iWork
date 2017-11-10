@@ -126,7 +126,7 @@ FOREIGN KEY (request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UP
 CREATE TABLE Business_Trip_Requests(
 request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 trip_destination VARCHAR(150) NOT NULL,
-trip_purpose TEXT NOT NULL, 
+trip_purpose TEXT NOT NULL,
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -139,12 +139,12 @@ CREATE TABLE Jobs(
 PRIMARY KEY (job_title,department_code,company_domain),
 company_domain VARCHAR(150) NOT NULL ,
 department_code VARCHAR(30) NOT NULL, 
-job_title VARCHAR(50) NOT NULL,
-application_deadline TIMESTAMP NOT NULL,
+job_title VARCHAR(150) NOT NULL,
+application_deadline DATETIME NOT NULL,
 detailed_description TEXT NOT NULL,
 min_years_experience INT NOT NULL,
 salary INT NOT NULL,
-short_description VARCHAR(100) NOT NULL,
+short_description TEXT NOT NULL,
 vacancies INT NOT NULL,
 working_hours INT NOT NULL,
 FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE,
