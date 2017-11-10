@@ -94,25 +94,27 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 
 CREATE TABLE Departments(
 PRIMARY KEY (demartment_code, company_domain_name),
-company_domain_name VARCHAR(50) NOT NULL,
-department_code INT NOT NULL,
-name VARCHAR(50) NOT NULL,
+company_domain_name VARCHAR(150) NOT NULL,
+department_code VARCHAR(30) NOT NULL,
+name VARCHAR(70) NOT NULL,
 FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Requests(
 request_id INT PRIMARY KEY NOT NULL IDENTITY(1,1), 
-end_date TIMESTAMP NOT NULL ,
+end_date DATETIME NOT NULL,
 hr_response VARCHAR(20) NOT NULL,
-hr_user_name VARCHAR(50) NOT NULL,
+hr_user_name VARCHAR(30) NULL,
 manager_response VARCHAR(20) NOT NULL,
-manager_user_name VARCHAR(50) NOT NULL,
+manager_user_name VARCHAR(30) NULL,
 --no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,   
-request_date TIMESTAMP NOT NULL ,
-reason_of_disapproval  VARCHAR(50) NOT NULL ,
-start_date TIMESTAMP NOT NULL ,
-FOREIGN KEY (hr_user_name) REFERENCES HR_Employees ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY  (manager_user_name) REFERENCES Managers ON DELETE CASCADE ON UPDATE CASCADE
+request_date DATETIME NOT NULL,
+reason_of_disapproval TEXT NULL,
+start_date DATETIME NOT NULL,
+FOREIGN KEY (hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+CONSTRAINT CHK_hr_respose CHECK(hr_response = 'Accepted' OR hr_response = 'Rejected' OR hr_response = NULL),
+CONSTRAINT CHK_manager_response CHECK(manager_response = 'Accepted' OR manager_response = 'Rejected' OR manager_response = NULL)
 );
 
 CREATE TABLE Leave_Requests(
