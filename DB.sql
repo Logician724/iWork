@@ -184,15 +184,15 @@ FOREIGN KEY(request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPD
 );
 
 CREATE TABLE Announcements(
-PRIMARY KEY(domain_name,title,date),
+PRIMARY KEY(company_domain,title,date),
 date DATETIME NOT NULL,
-domain_name VARCHAR(20) NOT NULL,
-title VARCHAR(20) NOT NULL,
-hr_user_name VARCHAR(20) NOT NULL,
+company_domain VARCHAR(150) NOT NULL,
+title VARCHAR(280) NOT NULL,
+hr_user_name VARCHAR(30) NOT NULL,
 description TEXT NOT NULL,
 type VARCHAR(20) NOT NULL,
 FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
-FOREIGN KEY(domain_name) REFERENCES Companys(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY(domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ROMY Was here--
