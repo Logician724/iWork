@@ -195,13 +195,6 @@ FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL 
 FOREIGN KEY(domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- ROMY Was here--
-CREATE TABLE Managers(
-user_name VARCHAR(30) PRIMARY KEY NOT NULL,
-manager_type VARCHAR(20),
-FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-);
-
 CREATE TABLE Companies(
 domain_name VARCHAR(100) PRIMARY KEY NOT NULL, -- company_type ,_name etc are because these are predefined names in sql --
 company_name VARCHAR(50),
