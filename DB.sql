@@ -1,4 +1,20 @@
 --put your creations in here
+CREATE TABLE Companies(
+domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
+name VARCHAR(50) NOT NULL,
+address VARCHAR(300) NOT NULL,
+field VARCHAR(80) NOT NULL,
+type VARCHAR(50) NOT NULL,
+vision TEXT NULL,
+email VARCHAR(70) NOT NULL
+);
+CREATE TABLE Departments(
+PRIMARY KEY (department_code, company_domain),
+company_domain VARCHAR(150) NOT NULL,
+department_code VARCHAR(30) NOT NULL,
+name VARCHAR(70) NOT NULL,
+FOREIGN KEY (company_domain) REFERENCES Companies(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+);
 CREATE TABLE Users (
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 password VARCHAR(30) NOT NULL,
@@ -29,11 +45,11 @@ day_off VARCHAR(10) NOT NULL,
 no_annual_leaves INT NOT NULL,
 salary INT NOT NULL,
 company_email VARCHAR(70) NOT NULL,
-department_code INT NOT NULL,
-company_domain VARCHAR(100) NOT NULL,
+department_code VARCHAR(30) NOT NULL,
+company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
---Assumption: Removing a department results in removing all its staff members
-FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,domain_name) ON DELETE CASCADE ON UPDATE CASCADE
+--Assumption: Removing a department results in removing all its staff members--
+FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Attendances(
@@ -50,6 +66,14 @@ user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE Projects(
+project_name VARCHAR(20) PRIMARY KEY NOT NULL,
+manager_user_name VARCHAR(30) NULL,
+start_date DATETIME NOT NULL,
+end_date DATETIME NOT NULL,
+FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
 CREATE TABLE Tasks(
 PRIMARY KEY(deadline,name,project_name),
 deadline DATETIME NOT NULL,
@@ -60,14 +84,6 @@ description TEXT NULL,
 status VARCHAR(10) NOT NULL,
 FOREIGN KEY (project_name) REFERENCES Projects(project_name) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT CHK_status CHECK(status = 'Open' OR status = 'Assigned' OR status = 'Fixed' or status = 'Closed')
-);
-
-CREATE TABLE Projects(
-project_name VARCHAR(20) PRIMARY KEY NOT NULL,
-manager_user_name VARCHAR(30) NULL,
-start_date DATETIME NOT NULL,
-end_date DATETIME NOT NULL,
-FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers_Assign_Projects_To_Regulars(
@@ -92,13 +108,7 @@ FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Departments(
-PRIMARY KEY (department_code, company_domain),
-company_domain VARCHAR(150) NOT NULL,
-department_code VARCHAR(30) NOT NULL,
-name VARCHAR(70) NOT NULL,
-FOREIGN KEY (company_domain) REFERENCES Companies(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
-);
+
 
 CREATE TABLE Requests(
 request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL , 
@@ -107,7 +117,7 @@ hr_response VARCHAR(20) NOT NULL,
 hr_user_name VARCHAR(30) NULL,
 manager_response VARCHAR(20) NOT NULL,
 manager_user_name VARCHAR(30) NULL,
---no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,   
+--no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,--
 request_date DATETIME NOT NULL,
 reason_of_disapproval TEXT NULL,
 start_date DATETIME NOT NULL,
@@ -195,16 +205,6 @@ FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL 
 FOREIGN KEY(company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Companies(
-domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
-name VARCHAR(50) NOT NULL,
-address VARCHAR(300) NOT NULL,
-field VARCHAR(80) NOT NULL,
-type VARCHAR(50) NOT NULL,
-vision TEXT NULL,
-email VARCHAR(70) NOT NULL
-);
-
 CREATE TABLE Companies_Phones(
 PRIMARY KEY(phone,company_domain),
 phone INT NOT NULL,
@@ -213,7 +213,7 @@ FOREIGN KEY (company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE
 );
 
 CREATE TABLE Applications (
-PRIMARY KEY(seeker_username,job_title,department_code,company_domain_name) ,
+PRIMARY KEY(seeker_username,job_title,department_code,company_domain) ,
 score INT NOT NULL DEFAULT 0,
 app_status VARCHAR(20) NOT NULL DEFAULT 'Pending',
 hr_response VARCHAR(20) NULL,
@@ -230,7 +230,7 @@ FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL 
 --debatable
 FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT CHK_app_status CHECK( app_status = 'Pending' OR app_status = 'Accepted' OR app_status = 'Rejected'),
-CONSTRAINT CHK_hr_response CHECK( hr_response = 'Accepted' OR hr_response = 'Rejected' OR hr_respone = NULL),
+CONSTRAINT CHK_hr_response CHECK( hr_response = 'Accepted' OR hr_response = 'Rejected' OR hr_response = NULL),
 CONSTRAINT CHK_manager_response CHECK( manager_response = 'Accepted' OR manager_response = 'Rejected' OR manager_response = NULL)
 );
 
@@ -248,26 +248,26 @@ FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET
 CREATE TABLE Staff_Receives_Email(
 PRIMARY KEY(time_stamp,sender_user_name,receipent_username),
 time_stamp TIMESTAMP NOT NULL,
-sender_username VARCHAR(30) NOT NULL,
+sender_user_name VARCHAR(30) NOT NULL,
 receipent_username VARCHAR(30) NOT NULL,
 FOREIGN KEY(time_stamp,sender_user_name) REFERENCES Emails(time_stamp,sender_user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 /*
-CREATE TABLE Questions(
-question_title VARCHAR(50) PRIMARY KEY NOT NULL,
-answer BIT,
-);
-
-CREATE TABLE Questions_in_Jobs(
-PRIMARY KEY(question_title ,job_title,department_code,domain_name),
-question_title VARCHAR(50)  NOT NULL,
-job_title VARCHAR(20),
-department_code VARCHAR(30) NOT NULL, 
-company_domain_name VARCHAR(20),
-FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
-);
+*CREATE TABLE Questions(
+*question_title VARCHAR(50) PRIMARY KEY NOT NULL,
+*answer BIT,
+*);
+*
+*CREATE TABLE Questions_in_Jobs(
+*PRIMARY KEY(question_title ,job_title,department_code,domain_name),
+*question_title VARCHAR(50)  NOT NULL,
+*job_title VARCHAR(20),
+*department_code VARCHAR(30) NOT NULL, 
+*company_domain_name VARCHAR(20),
+*FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
+*FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
+*);
 */
 -- Romy ended her work here --
