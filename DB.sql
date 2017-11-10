@@ -25,7 +25,7 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 --Implementation of staff member has job relation missing, discussion is needed--
 CREATE TABLE Staff_Members( 
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
-day_off VARCHAR(15) NOT NULL,
+day_off VARCHAR(10) NOT NULL,
 no_annual_leaves INT NOT NULL,
 salary INT NOT NULL,
 company_email VARCHAR(70) NOT NULL,
@@ -39,9 +39,9 @@ FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_c
 CREATE TABLE Attendances(
 PRIMARY KEY (user_name,date),
 user_name VARCHAR(30) NOT NULL,
-date DATETIME NOT NULL,
-start_time DATETIME NOT NULL,
-leave_time DATETIME NOT NULL,
+date DATE NOT NULL,
+start_time TIME NOT NULL,
+leave_time TIME NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
