@@ -192,41 +192,42 @@ hr_user_name VARCHAR(30) NOT NULL,
 description TEXT NOT NULL,
 type VARCHAR(20) NOT NULL,
 FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
-FOREIGN KEY(domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY(company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Companies(
 domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
-name VARCHAR(50),
-address VARCHAR(300),
-field VARCHAR(80),
-type VARCHAR(50),
-vision TEXT,
-email VARCHAR(70)
+name VARCHAR(50) NOT NULL,
+address VARCHAR(300) NOT NULL,
+field VARCHAR(80) NOT NULL,
+type VARCHAR(50) NOT NULL,
+vision TEXT NULL,
+email VARCHAR(70) NOT NULL
 );
 
 CREATE TABLE Companies_Phones(
 PRIMARY KEY(phone,company_domain),
 phone INT NOT NULL,
-company_domain VARCHAR(150),
+company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Applications (
 PRIMARY KEY(seeker_username,job_title,department_code,company_domain_name) ,
-score INT,
-app_status VARCHAR(20) DEFAULT 'Pending',
-hr_response VARCHAR(20),
-manager_response VARCHAR(20),
-hr_username VARCHAR(30),
-manager_username VARCHAR(30),
-seeker_username VARCHAR(30),
-job_title VARCHAR(20),
+score INT NOT NULL DEFAULT 0,
+app_status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+hr_response VARCHAR(20) NULL,
+manager_response VARCHAR(20) NULL ,
+hr_username VARCHAR(30) NULL,
+manager_username VARCHAR(30) NULL,
+seeker_username VARCHAR(30) NOT NULL,
+job_title VARCHAR(150) NOT NULL,
 department_code VARCHAR(30) NOT NULL, 
-company_domain VARCHAR(150),
+company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+--debatable
 FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT CHK_app_status CHECK( app_status = 'Pending' OR app_status = 'Accepted' OR app_status = 'Rejected'),
 CONSTRAINT CHK_hr_response CHECK( hr_response = 'Accepted' OR hr_response = 'Rejected' OR hr_respone = NULL),
@@ -234,25 +235,26 @@ CONSTRAINT CHK_manager_response CHECK( manager_response = 'Accepted' OR manager_
 );
 
 CREATE TABLE Emails(
-PRIMARY KEY(time_sent,sender_user_name),
-time_sent TIMESTAMP,
-sender_email VARCHAR(50),
-recipient_email VARCHAR(50),
-email_subject VARCHAR(20),
-email_body VARCHAR (100),
-sender_user_name VARCHAR(30),
-FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+PRIMARY KEY(time_stamp,sender_user_name),
+time_stamp TIMESTAMP NOT NULL,
+sender_email VARCHAR(70) NOT NULL,
+recipient_email VARCHAR(70) NOT NULL,
+email_subject VARCHAR(140) NULL,
+email_body TEXT NULL,
+sender_user_name VARCHAR(30) NOT NULL,
+FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE Staff_Receives_Email(
-PRIMARY KEY(time_sent,sender_user_name,receipent_username),
-time_sent TIMESTAMP,
-sender_username VARCHAR(30),
-receipent_username VARCHAR(30),
-FOREIGN KEY(time_sent,sender_user_name) REFERENCES Emails(time_sent,sender_user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+PRIMARY KEY(time_stamp,sender_user_name,receipent_username),
+time_stamp TIMESTAMP NOT NULL,
+sender_username VARCHAR(30) NOT NULL,
+receipent_username VARCHAR(30) NOT NULL,
+FOREIGN KEY(time_stamp,sender_user_name) REFERENCES Emails(time_stamp,sender_user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
+/*
 CREATE TABLE Questions(
 question_title VARCHAR(50) PRIMARY KEY NOT NULL,
 answer BIT,
@@ -267,5 +269,5 @@ company_domain_name VARCHAR(20),
 FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
 );
-
+*/
 -- Romy ended her work here --
