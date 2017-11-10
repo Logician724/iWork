@@ -147,13 +147,13 @@ salary INT NOT NULL,
 short_description TEXT NOT NULL,
 vacancies INT NOT NULL,
 working_hours INT NOT NULL,
-FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers(
 user_name VARCHAR(50) PRIMARY KEY NOT NULL ,
 type VARCHAR(50) NOT NULL,
-FOREIGN KEY (user_name) REFERENCES Staff_Members
+FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Replace_Managers(
