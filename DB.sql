@@ -52,6 +52,12 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE Managers(
+user_name VARCHAR(30) PRIMARY KEY NOT NULL ,
+type VARCHAR(50) NOT NULL,
+FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE Attendances(
 PRIMARY KEY (user_name,date),
 user_name VARCHAR(30) NOT NULL,
@@ -67,7 +73,7 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 );
 
 CREATE TABLE Projects(
-project_name VARCHAR(20) PRIMARY KEY NOT NULL,
+project_name VARCHAR(100) PRIMARY KEY NOT NULL,
 manager_user_name VARCHAR(30) NULL,
 start_date DATETIME NOT NULL,
 end_date DATETIME NOT NULL,
@@ -78,7 +84,7 @@ CREATE TABLE Tasks(
 PRIMARY KEY(deadline,name,project_name),
 deadline DATETIME NOT NULL,
 name VARCHAR(30) NOT NULL,
-project_name VARCHAR(50) NOT NULL,
+project_name VARCHAR(100) NOT NULL,
 comments TEXT NULL,
 description TEXT NULL,
 status VARCHAR(10) NOT NULL,
@@ -100,7 +106,7 @@ CREATE TABLE Managers_Assign_Tasks_To_Regulars(
 PRIMARY KEY(task_name,task_deadline,project_name),
 manager_user_name VARCHAR(30) NULL,
 regular_user_name VARCHAR(30) NULL,
-project_name VARCHAR(50) NOT NULL,
+project_name VARCHAR(100) NOT NULL,
 task_name VARCHAR(30) NOT NULL,
 task_deadline DATETIME NOT NULL,
 FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -160,11 +166,7 @@ working_hours INT NOT NULL,
 FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Managers(
-user_name VARCHAR(50) PRIMARY KEY NOT NULL ,
-type VARCHAR(50) NOT NULL,
-FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
-);
+
 
 CREATE TABLE Managers_Replace_Managers_In_Requests(
 request_id INT PRIMARY KEY NOT NULL,
