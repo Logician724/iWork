@@ -92,21 +92,21 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 );
 
 CREATE TABLE Departments(
-PRIMARY KEY (department_code, company_domain_name),
+PRIMARY KEY (demartment_code, company_domain_name),
+company_domain_name VARCHAR(50) NOT NULL,
 department_code INT NOT NULL,
 name VARCHAR(50) NOT NULL,
-company_domain_name VARCHAR(20) NOT NULL,
-FOREIGN KEY (company_domain_name) REFERENCES Companies(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Requests(
 request_id INT PRIMARY KEY NOT NULL, 
-end_date TIMESTAMP NOT NULL,
+end_date TIMESTAMP NOT NULL ,
 hr_response VARCHAR(20) NOT NULL,
 hr_user_name VARCHAR(50) NOT NULL,
 manager_response VARCHAR(20) NOT NULL,
 manager_user_name VARCHAR(50) NOT NULL,
---no_of_leave_days INT AS (YEAR(end_date)-YEAR(start_date)),
+--no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,   
 request_date TIMESTAMP NOT NULL ,
 reason_of_disapproval  VARCHAR(50) NOT NULL ,
 start_date TIMESTAMP NOT NULL ,
@@ -121,6 +121,7 @@ type VARCHAR(50) NOT NULL ,
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
 CREATE TABLE Business_Trip_Requests(
 request_id INT PRIMARY KEY NOT NULL ,
 trip_destination VARCHAR(50) NOT NULL ,
@@ -134,18 +135,20 @@ FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CAS
 );
 
 CREATE TABLE Jobs(
+
 PRIMARY KEY (job_title,department_code,compamy_domain),
 company_domain VARCHAR(50) NOT NULL ,
-job_title VARCHAR(50) NOT NULL,
 department_code INT NOT NULL, 
-short_description VARCHAR(100) NOT NULL,
-detailed_description TEXT NOT NULL,
-salary INT NOT NULL,
-min_years_experience INT NOT NULL,
-working_hours INT NOT NULL,
-vacancies INT NOT NULL,
+job_title VARCHAR(50) NOT NULL,
 application_deadline TIMESTAMP NOT NULL,
+detailed_description TEXT NOT NULL,
+min_years_experience INT NOT NULL,
+salary INT NOT NULL,
+short_description VARCHAR(100) NOT NULL,
+vacancies INT NOT NULL,
+working_hours INT NOT NULL,
 FOREIGN KEY (department_code, company_domain) REFERENCES Departments ON DELETE CASCADE ON UPDATE CASCADE,
+
 );
 
 CREATE TABLE Replace_Managers(
@@ -192,9 +195,7 @@ FOREIGN KEY(domain_name) REFERENCES Companys(domain_name) ON DELETE CASCADE ON U
 
 
 -- ROMY Was here--
-<<<<<<< HEAD
-create table Countries(
-=======
+
 
 Create table Managers(
 user_name varchar(30) primary key not null,
@@ -209,7 +210,6 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 
 
 create table Companies(
->>>>>>> b4f4b3781965edd847dd0df49d09675675a18cf5
 
  domain_name varchar(20) primary key not null, -- company_type ,_name etc are because these are predefined names in sql --
 company_name varchar(20),
@@ -219,12 +219,6 @@ field varchar(20),
 company_type varchar(20),
 vision varchar(50),
 email varchar(20),
-
-
-
-
-
-
 
 );
 
