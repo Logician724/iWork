@@ -101,21 +101,21 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 
 CREATE TABLE Departments(
 PRIMARY KEY (demartment_code, company_domain_name),
+company_domain_name VARCHAR(50) NOT NULL,
 department_code INT NOT NULL,
 name VARCHAR(50) NOT NULL,
-company_domain_name VARCHAR(50) NOT NULL,
 FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
 CREATE TABLE Requests(
 request_id INT PRIMARY KEY NOT NULL, 
-end_date TIMESTAMP NOT NULL,
+end_date TIMESTAMP NOT NULL ,
 hr_response VARCHAR(20) NOT NULL,
 hr_user_name VARCHAR(50) NOT NULL,
 manager_response VARCHAR(20) NOT NULL,
 manager_user_name VARCHAR(50) NOT NULL,
---no_of_leave_days INT AS (YEAR(end_date)-YEAR(start_date)),
+--no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,   
 request_date TIMESTAMP NOT NULL ,
 reason_of_disapproval  VARCHAR(50) NOT NULL ,
 start_date TIMESTAMP NOT NULL ,
@@ -135,12 +135,11 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 Create Table Business_Trip_Requests(
 
-
 request_id INT PRIMARY KEY NOT NULL ,
 trip_destination VARCHAR(50) NOT NULL ,
 trip_purpose VARCHAR(50) NOT NULL, 
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
 
 CREATE TABLE HR_Employees(
 user_name VARCHAR(50) PRIMARY KEY NOT NULL, 
@@ -156,20 +155,16 @@ Create Table Jobs(
 
 PRIMARY KEY (job_title,department_code,compamy_domain),
 company_domain VARCHAR(50) NOT NULL ,
+department_code INT NOT NULL, 
 job_title VARCHAR(50) NOT NULL,
-department_code INT, 
-FOREIGN KEY (department_code, company_domain) REFERENCES Departments ON DELETE CASCADE ON UPDATE CASCADE,
-
-short_description VARCHAR(100) NOT NULL,
 detailed_description TEXT NOT NULL,
-salary INT NOT NULL,
+application_deadline TIMESTAMP NOT NULL,
 min_years_experience INT NOT NULL,
-working_hours INT NOT NULL,
+salary INT NOT NULL,
+short_description VARCHAR(100) NOT NULL,
 vacancies INT NOT NULL,
-application_deadline TIMESTAMP NOT NULL
-
-
-
+working_hours INT NOT NULL,
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 
