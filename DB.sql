@@ -258,6 +258,16 @@ FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job
 
 );
 
+Create table Emails(
+primary key(time_sent,sender_user_name),
+time_sent timestamp,
+sender_email varchar(50),
+recipient_email varchar(50),
+email_subject varchar(20),
+email_body varchar (100),
+sender_user_name varchar(30),
+);
+
 
 
 
