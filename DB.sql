@@ -30,7 +30,7 @@ no_annual_leaves INT NOT NULL,
 salary INT NOT NULL,
 company_email VARCHAR(70) NOT NULL,
 department_code INT NOT NULL,
-company_domain VARCHAR(50) NOT NULL,
+company_domain VARCHAR(100) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 --Assumption: Removing a department results in removing all its staff members
 FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,domain_name) ON DELETE CASCADE ON UPDATE CASCADE
@@ -93,11 +93,11 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 );
 
 CREATE TABLE Departments(
-PRIMARY KEY (department_code, company_domain_name),
-company_domain_name VARCHAR(150) NOT NULL,
+PRIMARY KEY (department_code, company_domain),
+company_domain VARCHAR(150) NOT NULL,
 department_code VARCHAR(30) NOT NULL,
 name VARCHAR(70) NOT NULL,
-FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (company_domain) REFERENCES Companies(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Requests(
@@ -137,8 +137,8 @@ FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CAS
 );
 
 CREATE TABLE Jobs(
-PRIMARY KEY (job_title,department_code,compamy_domain),
-company_domain VARCHAR(50) NOT NULL ,
+PRIMARY KEY (job_title,department_code,company_domain),
+company_domain VARCHAR(150) NOT NULL ,
 department_code INT NOT NULL, 
 job_title VARCHAR(50) NOT NULL,
 application_deadline TIMESTAMP NOT NULL,
@@ -148,7 +148,7 @@ salary INT NOT NULL,
 short_description VARCHAR(100) NOT NULL,
 vacancies INT NOT NULL,
 working_hours INT NOT NULL,
-FOREIGN KEY (department_code, company_domain) REFERENCES Departments ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 CREATE TABLE Managers(
@@ -207,19 +207,19 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 );
 
 CREATE TABLE Companies(
-domain_name VARCHAR(20) PRIMARY KEY NOT NULL, -- company_type ,_name etc are because these are predefined names in sql --
-company_name VARCHAR(20),
-company_address VARCHAR(20),
-field VARCHAR(20),
-company_type VARCHAR(20),
-vision VARCHAR(50),
-email VARCHAR(20),
+domain_name VARCHAR(100) PRIMARY KEY NOT NULL, -- company_type ,_name etc are because these are predefined names in sql --
+company_name VARCHAR(50),
+company_address VARCHAR(300),
+field VARCHAR(80),
+company_type VARCHAR(50),
+vision TEXT,
+email VARCHAR(70),
 );
 
 CREATE TABLE Companies_Phones(
 PRIMARY KEY(phone,domain_name),
 phone INT NOT NULL,
-domain_name VARCHAR(20),
+domain_name VARCHAR(100),
 FOREIGN KEY (domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -234,11 +234,11 @@ manager_username VARCHAR(30),
 seeker_username VARCHAR(30),
 job_title VARCHAR(20),
 department_code INT NOT NULL, 
-company_domain_name VARCHAR(20),
+company_domain VARCHAR(150),
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
-FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 CREATE TABLE Emails(
