@@ -71,19 +71,19 @@ FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL
 );
 
 CREATE TABLE Managers_Assign_Projects_To_Regulars(
-PRIMARY KEY(manager_user_name,regular_user_name,project_name),
-manager_user_name VARCHAR(30) NULL,
+PRIMARY KEY(regular_user_name,project_name),
 regular_user_name VARCHAR(30) NULL,	
 project_name VARCHAR(100) NOT NULL,
+manager_user_name VARCHAR(30) NULL,
 FOREIGN KEY (manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (project_name) REFERENCES Projects(project_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers_Assign_Tasks_To_Regulars(
-PRIMARY KEY(manager_user_name,regular_user_name,task_name,task_deadline,project_name),
-manager_user_name VARCHAR(30) NOT NULL,
-regular_user_name VARCHAR(30) NOT NULL,
+PRIMARY KEY(task_name,task_deadline,project_name),
+manager_user_name VARCHAR(30) NULL,
+regular_user_name VARCHAR(30) NULL,
 project_name VARCHAR(50) NOT NULL,
 task_name VARCHAR(30) NOT NULL,
 task_deadline DATETIME NOT NULL,
