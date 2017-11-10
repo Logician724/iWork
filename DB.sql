@@ -101,7 +101,7 @@ FOREIGN KEY (company_domain) REFERENCES Companies(domain_name)  ON DELETE CASCAD
 );
 
 CREATE TABLE Requests(
-request_id INT PRIMARY KEY NOT NULL IDENTITY(1,1), 
+request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL , 
 end_date DATETIME NOT NULL,
 hr_response VARCHAR(20) NOT NULL,
 hr_user_name VARCHAR(30) NULL,
@@ -118,10 +118,9 @@ CONSTRAINT CHK_manager_response CHECK(manager_response = 'Accepted' OR manager_r
 );
 
 CREATE TABLE Leave_Requests(
-request_id INT PRIMARY KEY NOT NULL,
-type VARCHAR(50) NOT NULL ,
---Adjustment: attribute type should be changed
-FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
+request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+type VARCHAR(50) NOT NULL,
+FOREIGN KEY (request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Business_Trip_Requests(
