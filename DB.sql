@@ -156,7 +156,7 @@ CREATE TABLE Managers(
 
 user_name VARCHAR(50) PRIMARY KEY NOT NULL ,
 type VARCHAR(50) NOT NULL,
-
+FOREIGN KEY (user_name) REFERENCES Staff_Members
 
 );
 
