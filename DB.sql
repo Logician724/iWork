@@ -64,8 +64,10 @@ CONSTRAINT CHK_status CHECK(status = 'Open' OR status = 'Assigned' OR status = '
 
 CREATE TABLE Projects(
 project_name VARCHAR(20) PRIMARY KEY NOT NULL,
+manager_user_name VARCHAR(30) NULL,
 start_date DATETIME NOT NULL,
 end_date DATETIME NOT NULL,
+FOREIGN KEY(manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers_Assign_Projects_To_Regulars(
