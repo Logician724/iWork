@@ -192,6 +192,9 @@ FOREIGN KEY(domain_name) REFERENCES Companys(domain_name) ON DELETE CASCADE ON U
 
 
 -- ROMY Was here--
+<<<<<<< HEAD
+create table Countries(
+=======
 
 Create table Managers(
 user_name varchar(30) primary key not null,
@@ -206,6 +209,7 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 
 
 create table Companies(
+>>>>>>> b4f4b3781965edd847dd0df49d09675675a18cf5
 
  domain_name varchar(20) primary key not null, -- company_type ,_name etc are because these are predefined names in sql --
 company_name varchar(20),
@@ -234,9 +238,7 @@ FOREIGN KEY (domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON
 );
 
 Create table Applications (
-
 PRIMARY KEY(seeker_username,job_title,department_code,company_domain_name) ,
-
 score int,
 app_status varchar(20),
 hr_response varchar(20),
@@ -245,17 +247,12 @@ hr_username varchar(30),
 manager_username varchar(30),
 seeker_username varchar(30),
 job_title varchar(20),
-
 department_code INT NOT NULL, 
 company_domain_name varchar(20),
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
-
-
-
 );
 
 Create table Emails(
@@ -269,14 +266,6 @@ sender_user_name varchar(30),
 
 FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 );
-
-
-
-
-
-
-
-
 
 
 -- Romy ended her work here --
