@@ -33,7 +33,7 @@ department_code INT NOT NULL,
 company_domain VARCHAR(50) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 --Assumption: Removing a department results in removing all its staff members
-FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Attendances(
@@ -95,8 +95,8 @@ CREATE TABLE Departments(
 PRIMARY KEY (department_code, company_domain_name),
 department_code INT NOT NULL,
 name VARCHAR(50) NOT NULL,
-company_domain_name VARCHAR(50) NOT NULL,
-FOREIGN KEY (company_domain_name) REFERENCES Company(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
+company_domain_name VARCHAR(20) NOT NULL,
+FOREIGN KEY (company_domain_name) REFERENCES Companies(domain_name)  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Requests(
@@ -266,6 +266,8 @@ recipient_email varchar(50),
 email_subject varchar(20),
 email_body varchar (100),
 sender_user_name varchar(30),
+
+FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 );
 
 
