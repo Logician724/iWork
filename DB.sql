@@ -220,6 +220,27 @@ phone int not null,
 FOREIGN KEY (company_domain_name) REFERENCES Companies(company_domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+Create table Applications (
+
+PRIMARY KEY(seeker_username,job_titel,depertment_code,company_domain_name) ,
+
+int score,
+app_status varchar(20),
+hr_response varchar(20),
+manager_response varchar(20),
+hr_username varchar(20),
+manager_username varchar(20),
+
+
+FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs ON DELETE CASCADE ON UPDATE CASCADE,
+
+FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+
+
+
+);
+
 
 
 
