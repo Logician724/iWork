@@ -151,6 +151,15 @@ FOREIGN KEY (department_code, company_domain) REFERENCES Departments ON DELETE C
 
 );
 
+
+CREATE TABLE Managers(
+
+user_name VARCHAR(50) PRIMARY KEY NOT NULL ,
+type VARCHAR(50) NOT NULL,
+FOREIGN KEY (user_name) REFERENCES Staff_Members
+
+);
+
 CREATE TABLE Replace_Managers(
 PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
 request_id INT NOT NULL,
