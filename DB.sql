@@ -202,114 +202,73 @@ FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL 
 FOREIGN KEY(domain_name) REFERENCES Companys(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
 -- ROMY Was here--
-
-
-Create table Managers(
-user_name varchar(30) primary key not null,
-
-manager_type varchar(20),
-
+CREATE TABLE Managers(
+user_name VARCHAR(30) PRIMARY KEY NOT NULL,
+manager_type VARCHAR(20),
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-
-
 );
-
-
-
-create table Companies(
-
- domain_name varchar(20) primary key not null, -- company_type ,_name etc are because these are predefined names in sql --
-company_name varchar(20),
-company_address varchar(20),
-
-field varchar(20),
-company_type varchar(20),
-vision varchar(50),
-email varchar(20),
-
+CREATE TABLE Companies(
+domain_name VARCHAR(20) PRIMARY KEY NOT NULL, -- company_type ,_name etc are because these are predefined names in sql --
+company_name VARCHAR(20),
+company_address VARCHAR(20),
+field VARCHAR(20),
+company_type VARCHAR(20),
+vision VARCHAR(50),
+email VARCHAR(20),
 );
-
-
-Create table Companies_Phones(
-PRIMARY KEY(phone,domain_name) ,
-phone int not null,
-domain_name varchar(20),
-
+CREATE TABLE Companies_Phones(
+PRIMARY KEY(phone,domain_name),
+phone INT NOT NULL,
+domain_name VARCHAR(20),
 FOREIGN KEY (domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-Create table Applications (
+CREATE TABLE Applications (
 PRIMARY KEY(seeker_username,job_title,department_code,company_domain_name) ,
-score int,
-app_status varchar(20),
-hr_response varchar(20),
-manager_response varchar(20),
-hr_username varchar(30),
-manager_username varchar(30),
-seeker_username varchar(30),
-job_title varchar(20),
+score INT,
+app_status VARCHAR(20),
+hr_response VARCHAR(20),
+manager_response VARCHAR(20),
+hr_username VARCHAR(30),
+manager_username VARCHAR(30),
+seeker_username VARCHAR(30),
+job_title VARCHAR(20),
 department_code INT NOT NULL, 
-company_domain_name varchar(20),
+company_domain_name VARCHAR(20),
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
 );
-
-Create table Emails(
-primary key(time_sent,sender_user_name),
-time_sent timestamp,
-sender_email varchar(50),
-recipient_email varchar(50),
-email_subject varchar(20),
-email_body varchar (100),
-sender_user_name varchar(30),
-
+CREATE TABLE Emails(
+PRIMARY KEY(time_sent,sender_user_name),
+time_sent TIMESTAMP,
+sender_email VARCHAR(50),
+recipient_email VARCHAR(50),
+email_subject VARCHAR(20),
+email_body VARCHAR (100),
+sender_user_name VARCHAR(30),
 FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
-
-
-Create table Staff_Receives_Email(
-
-primary key(time_sent,sender_user_name,receipent_username),
-
-time_sent timestamp,
-sender_username varchar(30),
-receipent_username varchar(30),
-
-foreign key(time_sent,sender_user_name) REFERENCES Emails(time_sent,sender_user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-foreign key (receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-
+CREATE TABLE Staff_Receives_Email(
+PRIMARY KEY(time_sent,sender_user_name,receipent_username),
+time_sent TIMESTAMP,
+sender_username VARCHAR(30),
+receipent_username VARCHAR(30),
+FOREIGN KEY(time_sent,sender_user_name) REFERENCES Emails(time_sent,sender_user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
-
-Create table Questions(
- question_title varchar(50) primary key not null,
-
-
-
-
- answer bit,
-
-
-);
-
-Create table Questions_in_Jobs(
-primary key (question_title ,job_title,department_code,domain_name),
- question_title varchar(50)  not null,
-
-
-job_title varchar(20),
-department_code INT NOT NULL, 
-company_domain_name varchar(20),
-FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
-
-FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
-
-
+CREATE TABLE Questions(
+question_title VARCHAR(50) PRIMARY KEY NOT NULL,
+answer BIT,
 )
-
-
-
+CREATE TABLE Questions_in_Jobs(
+PRIMARY KEY(question_title ,job_title,department_code,domain_name),
+question_title VARCHAR(50)  NOT NULL,
+job_title VARCHAR(20),
+department_code INT NOT NULL, 
+company_domain_name VARCHAR(20),
+FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
+);
 -- Romy ended her work here --
