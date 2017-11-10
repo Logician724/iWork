@@ -171,17 +171,16 @@ user_name_replacer VARCHAR(30) NULL,
 user_name_request_owner VARCHAR(30) NULL,
 FOREIGN KEY(user_name_replacer) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(user_name_request_owner) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
-FOREIGN KEY(request_id) REFERENCES Request(request_ids) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY(request_id) REFERENCES Requests(request_ids) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Replace_Regulars(
-PRIMARY KEY(user_name_request_owner,user_name_replacer,request_id),
-request_id INT NOT NULL,
-user_name_replacer VARCHAR(20) NOT NULL,
-user_name_request_owner VARCHAR(20) NOT NULL,
-FOREIGN KEY(user_name_request) REFERENCES Regular_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(user_name_request_owner) REFERENCES Regular_Employees(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(request_id) REFERENCES Request(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE Regular_Employees_Replace_Regular_Employees(
+request_id INT PRIMARY KEY NOT NULL,
+user_name_replacer VARCHAR(30) NULL,
+user_name_request_owner VARCHAR(30) NULL,
+FOREIGN KEY(user_name_replacer) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(user_name_request_owner) REFERENCES Regular_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY(request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Announcements(
