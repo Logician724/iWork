@@ -93,7 +93,7 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 );
 
 CREATE TABLE Departments(
-PRIMARY KEY (demartment_code, company_domain_name),
+PRIMARY KEY (department_code, company_domain_name),
 company_domain_name VARCHAR(150) NOT NULL,
 department_code VARCHAR(30) NOT NULL,
 name VARCHAR(70) NOT NULL,
