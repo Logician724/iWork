@@ -196,20 +196,20 @@ FOREIGN KEY(domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON 
 );
 
 CREATE TABLE Companies(
-domain_name VARCHAR(100) PRIMARY KEY NOT NULL, -- company_type ,_name etc are because these are predefined names in sql --
-company_name VARCHAR(50),
-company_address VARCHAR(300),
+domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
+name VARCHAR(50),
+address VARCHAR(300),
 field VARCHAR(80),
-company_type VARCHAR(50),
+type VARCHAR(50),
 vision TEXT,
-email VARCHAR(70),
+email VARCHAR(70)
 );
 
 CREATE TABLE Companies_Phones(
-PRIMARY KEY(phone,domain_name),
+PRIMARY KEY(phone,company_domain),
 phone INT NOT NULL,
-domain_name VARCHAR(100),
-FOREIGN KEY (domain_name) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
+company_domain VARCHAR(150),
+FOREIGN KEY (company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Applications (
