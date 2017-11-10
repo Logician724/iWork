@@ -279,7 +279,27 @@ Create table Questions(
  question_title varchar(50) primary key not null,
 
 
+
+
+ answer bit,
+
+
 );
+
+Create table Questions_in_Jobs(
+primary key (question_title ,job_title,department_code,domain_name),
+ question_title varchar(50)  not null,
+
+
+job_title varchar(20),
+department_code INT NOT NULL, 
+company_domain_name varchar(20),
+FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
+
+FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
+
+
+)
 
 
 
