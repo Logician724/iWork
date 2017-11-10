@@ -215,7 +215,7 @@ FOREIGN KEY (company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE
 CREATE TABLE Applications (
 PRIMARY KEY(seeker_username,job_title,department_code,company_domain_name) ,
 score INT,
-app_status VARCHAR(20),
+app_status VARCHAR(20) DEFAULT 'Pending',
 hr_response VARCHAR(20),
 manager_response VARCHAR(20),
 hr_username VARCHAR(30),
@@ -228,6 +228,9 @@ FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE CASCAD
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT CHK_app_status CHECK( app_status = 'Pending' OR app_status = 'Accepted' OR app_status = 'Rejected'),
+CONSTRAINT CHK_hr_response CHECK( hr_response = 'Accepted' OR hr_response = 'Rejected' OR hr_respone = NULL),
+CONSTRAINT CHK_manager_response CHECK( manager_response = 'Accepted' OR manager_response = 'Rejected' OR manager_response = NULL)
 );
 
 CREATE TABLE Emails(
