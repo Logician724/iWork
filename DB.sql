@@ -92,7 +92,7 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 );
 
 CREATE TABLE Departments(
-PRIMARY KEY (demartment_code, company_domain_name),
+PRIMARY KEY (department_code, company_domain_name),
 department_code INT NOT NULL,
 name VARCHAR(50) NOT NULL,
 company_domain_name VARCHAR(50) NOT NULL,
@@ -189,3 +189,33 @@ type VARCHAR(20) NOT NULL,
 FOREIGN KEY(hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(domain_name) REFERENCES Companys(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+-- ROMY Was here--
+create table Countries(
+
+ domain_name varchar(20) primary key not null, -- company_type ,_name etc are because these are predefined names in sql --
+company_name varchar(20),
+company_address varchar(20),
+
+field varchar(20),
+company_type varchar(20),
+vision varchar(50),
+email varchar(20),
+
+
+
+
+
+
+
+);
+
+
+
+
+
+
+
+
+-- Romy ended her work here --
