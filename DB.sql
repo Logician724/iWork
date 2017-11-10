@@ -267,8 +267,29 @@ email_subject varchar(20),
 email_body varchar (100),
 sender_user_name varchar(30),
 
-FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
+
+
+Create table Staff_Receives_Email(
+
+primary key(time_sent,sender_user_name,receipent_username),
+
+time_sent timestamp,
+sender_username varchar(30),
+receipent_username varchar(30),
+
+foreign key(time_sent,sender_user_name) REFERENCES Emails(time_sent,sender_user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+foreign key (receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+
+);
+
+Create table Questions(
+ question_title varchar(50) primary key not null,
+
+
+);
+
 
 
 -- Romy ended her work here --
