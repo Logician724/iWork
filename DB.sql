@@ -1,4 +1,19 @@
 --put your creations in here
+USE iWork
+
+DROP TABLE Tasks;
+DROP TABLE Projects;
+DROP TABLE HR_Employees;
+DROP TABLE Regular_Employees;
+DROP TABLE Managers;
+DROP TABLE Job_Seekers;
+DROP TABLE Attendances;
+DROP TABLE Staff_Members;
+DROP TABLE USER_Prev_Jobs;
+DROP TABLE Users;
+DROP TABLE Departments;
+DROP TABLE Companies;
+
 CREATE TABLE Companies(
 domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
 name VARCHAR(50) NOT NULL,
@@ -50,6 +65,11 @@ company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 --Assumption: Removing a department results in removing all its staff members--
 FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE HR_Employees(
+user_name VARCHAR(30) PRIMARY KEY NOT NULL, 
+FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Managers(
@@ -114,8 +134,6 @@ FOREIGN KEY(regular_user_name) REFERENCES Regular_Employees(user_name) ON DELETE
 FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline,project_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-
 CREATE TABLE Requests(
 request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL , 
 end_date DATETIME NOT NULL,
@@ -146,10 +164,7 @@ trip_purpose TEXT NOT NULL,
 FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE HR_Employees(
-user_name VARCHAR(30) PRIMARY KEY NOT NULL, 
-FOREIGN KEY (user_name) REFERENCES Staff_Members ON DELETE CASCADE ON UPDATE CASCADE
-);
+
 
 CREATE TABLE Jobs(
 PRIMARY KEY (job_title,department_code,company_domain),
@@ -256,20 +271,19 @@ FOREIGN KEY(time_stamp,sender_user_name) REFERENCES Emails(time_stamp,sender_use
 FOREIGN KEY(receipent_username) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
-/*
-*CREATE TABLE Questions(
-*question_title VARCHAR(50) PRIMARY KEY NOT NULL,
-*answer BIT,
-*);
-*
-*CREATE TABLE Questions_in_Jobs(
-*PRIMARY KEY(question_title ,job_title,department_code,domain_name),
-*question_title VARCHAR(50)  NOT NULL,
-*job_title VARCHAR(20),
-*department_code VARCHAR(30) NOT NULL, 
-*company_domain_name VARCHAR(20),
-*FOREIGN KEY (question_title) REFERENCES Questions(question_title) ON DELETE CASCADE ON UPDATE CASCADE,
-*FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE,
-*);
-*/
--- Romy ended her work here --
+
+CREATE TABLE Questions(
+question_id INT IDENTITY PRIMARY KEY NOT NULL,
+question_title VARCHAR(700) NOT NULL,
+answer BIT NULL,
+);
+
+CREATE TABLE Jobs_Have_Questions(
+PRIMARY KEY(question_title ,job_title,department_code,domain_name),
+question_title VARCHAR(700),
+job_title VARCHAR(150) NOT NULL,
+department_code VARCHAR(30)NOT NULL, 
+company_domain_name VARCHAR(150) NULL,
+FOREIGN KEY(question_id) REFERENCES Questions(question_id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE
+);
