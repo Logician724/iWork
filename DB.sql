@@ -279,11 +279,11 @@ answer BIT NULL,
 );
 
 CREATE TABLE Jobs_Have_Questions(
-PRIMARY KEY(question_title ,job_title,department_code,domain_name),
-question_title VARCHAR(700),
+PRIMARY KEY(question_id,job_title,department_code,company_domain),
+question_id VARCHAR(700) NOT NULL,
 job_title VARCHAR(150) NOT NULL,
 department_code VARCHAR(30)NOT NULL, 
-company_domain_name VARCHAR(150) NULL,
+company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY(question_id) REFERENCES Questions(question_id) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (job_title,department_code, company_domain_name) REFERENCES Jobs(job_title,department_code, domain_name ) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE
 );
