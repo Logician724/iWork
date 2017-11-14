@@ -187,6 +187,15 @@ SELECT s.*
 FROM Job_Seekers s
 WHERE (s.user_name = @seekerUserName)
 
+GO
+CREATE PROC ViewJobInfoSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
+AS
+SELECT j.*
+FROM Jobs j
+WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.company_domain = @companyDomain)
 
 -- Romy Was here too --
 GO 
