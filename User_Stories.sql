@@ -136,6 +136,17 @@ INSERT INTO Questions
 VALUES
 (@questionTitle,@answer)
 
+GO
+CREATE PROC AddQuestionToJobSP
+@questionID INT,
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
+AS
+INSERT INTO Jobs_Have_Questions
+(question_id,job_title,department_code,company_domain)
+VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
+
 -- Romy Was here too --
 GO 
 
