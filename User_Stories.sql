@@ -85,3 +85,20 @@ AS
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
+
+-- Romy Was here too --
+GO 
+
+CREATE PROC ViewCompanySP 
+@companyName varchar(50),
+@companyAddress varchar(300),
+@companyType varchar(80)
+AS
+Select C.* From Companies C Where C.field =@companyType OR  C.address=@companyAddress OR C.name=@companyName
+
+
+
+
+
+
+-- And she ended here --
