@@ -214,8 +214,20 @@ SELECT j.* FROM Jobs j WHERE j.job_title=@jobTitle AND j.company_domain IN ( SEL
 AND j.department_code IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) --I KNOW IT LOOKS STUPID BUT I'M LAZY
 
 DROP PROC ViewJobInformationSP;
+GO
+CREATE PROC HRPostsAnnouncementSP 
+@username varchar(30),
+
+@title VARCHAR(280) ,
+@description TEXT ,
+@type VARCHAR(20) 
+AS
+DECLARE @domainName varchar(150)
+SELECT @domainName=company_domain FROM Staff_Members WHERE @username=user_name AND @username IN ( SELECT * FROM HR_Employees)
+INSERT INTO Announcements VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
 
 
+DROP PROC HRPostsAnnouncementSP 
 
 DROP PROC ViewReceivedEmailsSP;
 DROP PROC StaffCheckInSp;
