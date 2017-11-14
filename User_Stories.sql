@@ -108,6 +108,33 @@ INSERT INTO Emails
 VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
 
+GO
+CREATE PROC AddJobSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@applicationDeadline DATETIME,
+@detailedDescription TEXT,
+@minYearsExperience INT,
+@salary INT,
+@shortDescription TEXT,
+@vacancies INT,
+@workingHours INT
+AS
+INSERT INTO Jobs
+(job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES
+(@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
+
+GO
+CREATE PROC AddQuestionSP
+@questionTitle VARCHAR(700),
+@answer BIT
+AS
+INSERT INTO Questions
+(question_title,answer)
+VALUES
+(@questionTitle,@answer)
 
 -- Romy Was here too --
 GO 
