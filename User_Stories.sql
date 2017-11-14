@@ -136,17 +136,6 @@ INSERT INTO Questions
 VALUES
 (@questionTitle,@answer)
 
-GO
-CREATE PROC AddQuestionToJobSP
-@questionID INT,
-@jobTitle VARCHAR(150),
-@departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
-AS
-INSERT INTO Jobs_Have_Questions
-(question_id,job_title,department_code,company_domain)
-VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
-
 -- Romy Was here too --
 GO 
 
@@ -187,15 +176,31 @@ SELECT @firstName = first_name FROM Users WHERE @userName=user_name
 SELECT @lastName = last_name FROM Users WHERE @userName=user_name 
 SELECT @age = AGE FROM Users WHERE @userName=user_name 
 
-DROP PROC ViewMyInformationSP;
+
 
 GO 
 CREATE PROC ViewMyScoreSP 
 @username VARCHAR(3), @job VARCHAR(150),
 @score INT OUTPUT
 AS 
-SELECT @score= score From  Applications  WHERE @username=seeker_username
+SELECT @score= score From  Applications  WHERE @username=seeker_username AND @job=job_title
 print @score
+
+
+GO 
+
+CREATE PROC StaffCheckInSp @username VARCHAR(30)
+AS
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username )
+INSERT INTO Attendances (user_name,date,start_time )VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+
+
+
+
+
+DROP PROC ViewMyInformationSP;
+DROP PROC ViewMyScoreSP;
+
 
 -- And she ended here --
 
