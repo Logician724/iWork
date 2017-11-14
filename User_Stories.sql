@@ -313,7 +313,21 @@ CREATE PROC RemoveRegularFromProjectSp
 AS
 IF NOT EXISTS ( SELECT M.regular_user_name FROM Managers_Assign_Tasks_To_Regulars M , TASKS t WHERE @username=M.regular_user_name AND t.name=M.task_name AND t.project_name=M.project_name AND t.deadline=M.task_deadline AND t.status='Assigned')
 
+
 DELETE Managers_Assign_Projects_To_Regulars WHERE @username=regular_user_name
+
+
+GO
+CREATE PROC ReplaceRegularSp @username VARCHAR(30), @taskName VARCHAR(30),@deadline DATETIME, @project VARCHAR(100) --THIS ONLY TAKES THE ONE WHO IS GOING TO REPLACE NOT THE THE one being replaces 
+AS
+IF  EXISTS ( SELECT M.regular_user_name FROM Managers_Assign_Tasks_To_Regulars M , TASKS t WHERE   t.name=M.task_name AND t.project_name=M.project_name
+AND t.deadline=M.task_deadline AND
+@taskName=t.name AND @project=t.project_name AND @deadline=t.deadline AND t.status='Assigned')
+
+UPDATE Managers_Assign_Tasks_To_Regulars 
+SET Regular_user_name=@username
+WHERE @taskName=task_name AND @deadline=task_deadline AND @project=project_name 
+
 
 
 DROP PROC RemoveRegularFromProjectSp
