@@ -74,18 +74,32 @@ user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
---Implementation of staff member has job relation missing, discussion is needed--
+CREATE TABLE Jobs(
+PRIMARY KEY (job_title,department_code,company_domain),
+company_domain VARCHAR(150) NOT NULL ,
+department_code VARCHAR(30) NOT NULL, 
+job_title VARCHAR(150) NOT NULL,
+application_deadline DATETIME NOT NULL,
+detailed_description TEXT NOT NULL,
+min_years_experience INT NOT NULL,
+salary INT NOT NULL,
+short_description TEXT NOT NULL,
+vacancies INT NOT NULL,
+working_hours INT NOT NULL,
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE Staff_Members( 
 user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 day_off VARCHAR(10) NOT NULL,
 no_annual_leaves INT NOT NULL,
 salary INT NOT NULL,
 company_email VARCHAR(70) NOT NULL,
+job_title VARCHAR(150) NOT NULL,
 department_code VARCHAR(30) NOT NULL,
 company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
---Assumption: Removing a department results in removing all its staff members--
-FOREIGN KEY (department_code,company_domain) REFERENCES Departments(department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (job_title,department_code,company_domain) REFERENCES Jobs(job_title,department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE HR_Employees(
@@ -106,6 +120,7 @@ date DATE NOT NULL,
 start_time TIME NOT NULL,
 leave_time TIME NOT NULL,
 duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
+
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -188,20 +203,6 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 
 
-CREATE TABLE Jobs(
-PRIMARY KEY (job_title,department_code,company_domain),
-company_domain VARCHAR(150) NOT NULL ,
-department_code VARCHAR(30) NOT NULL, 
-job_title VARCHAR(150) NOT NULL,
-application_deadline DATETIME NOT NULL,
-detailed_description TEXT NOT NULL,
-min_years_experience INT NOT NULL,
-salary INT NOT NULL,
-short_description TEXT NOT NULL,
-vacancies INT NOT NULL,
-working_hours INT NOT NULL,
-FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 
 
