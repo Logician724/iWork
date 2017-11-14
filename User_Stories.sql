@@ -263,6 +263,30 @@ DECLARE @domainName varchar(150)
 SELECT @domainName=company_domain FROM Staff_Members WHERE @username=user_name AND @username IN ( SELECT * FROM HR_Employees)
 INSERT INTO Announcements VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
 
+GO
+CREATE PROC RegularFinalizesTaskSP
+@username VARCHAR(30) ,@taskName VARCHAR(30),@deadline DATETIME, @project VARCHAR(100)
+AS 
+IF EXISTS  (SELECT M.task_name FROM Managers_Assign_Tasks_To_Regulars M WHERE @username=M.regular_user_name AND @taskName=M.task_name AND @deadline=M.task_deadline AND @project=M.project_name) AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+UPDATE Tasks
+SET status='Fixed'
+WHERE  @taskName=name AND @deadline=deadline AND project_name=@project
+
+GO
+CREATE PROC RemoveRegularFromProjectSp
+@username VARCHAR(30),@project VARCHAR(100)
+AS
+IF NOT EXISTS ( SELECT M.regular_user_name FROM Managers_Assign_Tasks_To_Regulars M , TASKS t WHERE @username=M.regular_user_name AND t.name=M.task_name AND t.project_name=M.project_name AND t.deadline=M.task_deadline AND t.status='Assigned')
+
+DELETE Managers_Assign_Projects_To_Regulars WHERE @username=regular_user_name
+
+
+DROP PROC RemoveRegularFromProjectSp
+
+
+DROP PROC RegularFinalizesTaskSP;
+
+
 
 DROP PROC HRPostsAnnouncementSP 
 
