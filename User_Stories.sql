@@ -195,6 +195,14 @@ FROM Emails E inner Join Staff_Receives_EmailS R ON E.sender_user_name=sender_us
 
 
 
+GO
+CREATE PROC ViewJobInformation @username VARCHAR(30),@job_title VARCHAR(150)
+AS
+SELECT j.* FROM Jobs j WHERE ( j.company_domain,j.department_code )IN SELECT s.company_domain,s.department_code  FROM Staff_Members s WHERE s.user_name=@username
+
+
+
+
 
 
 
