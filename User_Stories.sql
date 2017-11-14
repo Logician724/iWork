@@ -126,6 +126,15 @@ INSERT INTO Jobs
 VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
 
+GO
+CREATE PROC AddQuestionSP
+@questionTitle VARCHAR(700),
+@answer BIT
+AS
+INSERT INTO Questions
+(question_title,answer)
+VALUES
+(@questionTitle,@answer)
 
 -- Romy Was here too --
 GO 
