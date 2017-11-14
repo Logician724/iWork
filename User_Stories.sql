@@ -240,3 +240,26 @@ ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.com
 WHERE s.user_name = @userName 
 RETURN (@workingHours - @duration)
 END
+
+
+GO
+CREATE PROC ViewCompaniesSP
+AS
+SELECT C.* , CP.phone
+FROM Companies C INNER JOIN  Companies_Phones CP
+ON  C.domain_name = CP.company_domain
+GO
+
+
+GO
+Alter PROC SearchJobsSP
+@keywords TEXT
+AS
+SELECT J.* , C.name AS company_name, D.name AS department_name
+FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
+INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
+where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+GO
+
+
+
