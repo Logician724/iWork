@@ -159,9 +159,9 @@ END
 GO
 create proc ViewCompaniesSP
 AS
-select C.* , CP.phone
-From Companies C inner join  Companies_Phones CP
-on  C.domain_name = CP.company_domain
+SELECT C.* , CP.phone
+FROM Companies C INNER JOIN  Companies_Phones CP
+ON  C.domain_name = CP.company_domain
 GO
 
 
