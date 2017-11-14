@@ -247,6 +247,17 @@ UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name AND @deadline=deadline AND project_name=@project
 
+GO
+CREATE PROC RemoveRegularFromProjectSp
+@username VARCHAR(30),@project VARCHAR(100)
+AS
+IF NOT EXISTS ( SELECT M.regular_user_name FROM Managers_Assign_Tasks_To_Regulars M , TASKS t WHERE @username=M.regular_user_name AND t.name=M.task_name AND t.project_name=M.project_name AND t.deadline=M.task_deadline AND t.status='Assigned')
+
+DELETE Managers_Assign_Projects_To_Regulars WHERE @username=regular_user_name
+
+
+DROP PROC RemoveRegularFromProjectSp
+
 
 DROP PROC RegularFinalizesTaskSP;
 
