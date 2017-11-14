@@ -105,6 +105,7 @@ user_name VARCHAR(30) NOT NULL,
 date DATE NOT NULL,
 start_time TIME NOT NULL,
 leave_time TIME NOT NULL,
+duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
