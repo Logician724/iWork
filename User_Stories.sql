@@ -169,6 +169,15 @@ FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
 ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
 
+GO
+CREATE PROC ViewApprovedJobAppSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@CompanyDomain VARCHAR(150)
+AS
+SELECT a.*
+FROM Applications a
+WHERE (a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @CompanyDomain AND a.hr_response_app='Accepted')
 
 
 
