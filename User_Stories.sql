@@ -384,6 +384,16 @@ Users.last_name = @lastName
 WHERE Users.user_name = @username
 GO
 
+GO
+CREATE PROC ViewJobStatusSP
+@username VARCHAR(30)
+AS
+Select A.score, A.app_status
+FROM Applications A
+WHERE A.seeker_username=@username
+GO
+
+
 
 
 CREATE FUNCTION GetMissingHours
