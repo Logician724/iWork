@@ -384,7 +384,8 @@ Users.last_name = @lastName
 WHERE Users.user_name = @username
 GO
 
-GO
+
+GO  --to be edited 
 CREATE PROC ViewJobStatusSP
 @username VARCHAR(30)
 AS
@@ -393,6 +394,19 @@ FROM Applications A
 WHERE A.seeker_username=@username
 GO
 
+GO
+CREATE PROC CheckOutSP
+@leaveTime DATETIME, @username VARCHAR(30)
+AS
+UPDATE Attendances 
+SET  Attendances.leave_time = @leaveTime
+WHERE Attendances.user_name=@username AND NOT EXISTS 
+(
+SELECT *
+FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
+WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
+ )
+GO
 
 
 
