@@ -95,6 +95,18 @@ SELECT a.*
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
+GO
+CREATE PROC SendEmailSP
+@senderUserName VARCHAR(30),
+@senderEmail VARCHAR(70),
+@recepientEmail VARCHAR(70),
+@emailSubject VARCHAR(140),
+@emailBody TEXT
+AS 
+INSERT INTO Emails
+(time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
+VALUES
+(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
 
 
 -- Romy Was here too --
