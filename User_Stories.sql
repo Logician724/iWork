@@ -136,6 +136,17 @@ INSERT INTO Questions
 VALUES
 (@questionTitle,@answer)
 
+GO
+CREATE PROC AddQuestionToJobSP
+@questionID INT,
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
+AS
+INSERT INTO Jobs_Have_Questions
+(question_id,job_title,department_code,company_domain)
+VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
+
 -- Romy Was here too --
 GO 
 
@@ -157,26 +168,7 @@ CREATE PROC RegisterToWebsite
 @firstName VARCHAR(25) ,
 @lastName VARCHAR(25) 
 AS
-INSERT INTO Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
-
-GO
-Create PROC ViewMyInformationSP @username varchar(30) , @personalEmail VARCHAR(70) OUTPUT, 
-@birthDate DATETIME OUTPUT,
-@age INT OUTPUT,
-@expYear INT OUTPUT,
-@firstName VARCHAR(25) OUTPUT,
-@lastName VARCHAR(25) OUTPUT
-AS 
-
-
-SELECT @personalEmail = personal_email FROM Users WHERE @userName=user_name 
-SELECT @birthDate = birth_date FROM Users WHERE @userName=user_name 
-SELECT @expYear = exp_year FROM Users WHERE @userName=user_name 
-SELECT @firstName = first_name FROM Users WHERE @userName=user_name 
-SELECT @lastName = last_name FROM Users WHERE @userName=user_name 
-SELECT @age = AGE FROM Users WHERE @userName=user_name 
-
-
+insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
 
 GO 
 CREATE PROC ViewMyScoreSP 
@@ -221,6 +213,27 @@ DROP PROC ViewMyScoreSP;
 
 -- And she ended here --
 
+
+GO
+CREATE PROC ViewCompaniesSP
+AS
+SELECT C.* , CP.phone
+FROM Companies C INNER JOIN  Companies_Phones CP
+ON  C.domain_name = CP.company_domain
+GO
+
+
+GO
+Alter PROC SearchJobsSP
+@keywords TEXT
+AS
+SELECT J.* , C.name AS company_name, D.name AS department_name
+FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
+INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
+where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+GO
+
+
 GO
 
 CREATE FUNCTION GetMissingHours
@@ -243,23 +256,15 @@ END
 
 
 GO
-CREATE PROC ViewCompaniesSP
+CREATE FUNCTION CheckJobTitle
+(@jobTitle VARCHAR(150))
+RETURNS BIT
 AS
-SELECT C.* , CP.phone
-FROM Companies C INNER JOIN  Companies_Phones CP
-ON  C.domain_name = CP.company_domain
-GO
-
-
-GO
-Alter PROC SearchJobsSP
-@keywords TEXT
-AS
-SELECT J.* , C.name AS company_name, D.name AS department_name
-FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
-INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
-where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
-GO
-
-
-
+BEGIN
+DECLARE @returnedBit BIT
+IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Regular%')
+SET @returnedBit = '1'
+ELSE
+SET @returnedBit ='0'
+RETURN @returnedBit
+END

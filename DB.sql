@@ -86,7 +86,8 @@ salary INT NOT NULL,
 short_description TEXT NOT NULL,
 vacancies INT NOT NULL,
 working_hours INT NOT NULL,
-FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (department_code, company_domain) REFERENCES Departments(department_code, company_domain) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT CHK_job_title CHECK (dbo.CheckJobTitle(job_title) = '1')
 );
 
 CREATE TABLE Staff_Members( 
