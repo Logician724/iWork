@@ -159,6 +159,18 @@ UPDATE Applications
 SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
+GO
+CREATE PROC ViewTasksInProjectSP
+@projectName VARCHAR(100),
+@userName VARCHAR(30)
+AS
+SELECT t.*
+FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
+ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
+WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
+
+
+
 
 -- Romy Was here too --
 GO 
