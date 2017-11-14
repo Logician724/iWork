@@ -85,6 +85,17 @@ AS
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
+GO
+CREATE PROC ViewAttendaceSP
+@userName VARCHAR(30),
+@periodStart DATETIME,
+@periodEnd DATETIME
+AS
+SELECT a.*
+FROM Attendances a
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+
+
 
 -- Romy Was here too --
 GO 
@@ -111,3 +122,23 @@ insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,
 
 
 -- And she ended here --
+
+GO
+
+CREATE FUNCTION GetMissingHours
+(
+@userName VARCHAR(30),
+@startTime DATETIME,
+@leaveTime DATETIME
+)
+RETURNS INT
+BEGIN
+
+DECLARE @workingHours INT, @duration INT
+SET @duration = DATEPART(HOUR,@leaveTime) - DATEPART(HOUR,@startTime)
+SELECT @workingHours = j.working_hours
+FROM Staff_Members s INNER JOIN Jobs j
+ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
+WHERE s.user_name = @userName 
+RETURN (@workingHours - @duration)
+END
