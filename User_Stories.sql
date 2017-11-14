@@ -168,27 +168,7 @@ CREATE PROC RegisterToWebsite
 @firstName VARCHAR(25) ,
 @lastName VARCHAR(25) 
 AS
-INSERT INTO Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
-
-GO
-Create PROC ViewMyInformationSP @username varchar(30) , @personalEmail VARCHAR(70) OUTPUT, 
-@birthDate DATETIME OUTPUT,
-@age INT OUTPUT,
-@expYear INT OUTPUT,
-@firstName VARCHAR(25) OUTPUT,
-@lastName VARCHAR(25) OUTPUT
-AS 
-
-
-SELECT @personalEmail = personal_email FROM Users WHERE @userName=user_name 
-SELECT @birthDate = birth_date FROM Users WHERE @userName=user_name 
-SELECT @expYear = exp_year FROM Users WHERE @userName=user_name 
-SELECT @firstName = first_name FROM Users WHERE @userName=user_name 
-SELECT @lastName = last_name FROM Users WHERE @userName=user_name 
-SELECT @age = AGE FROM Users WHERE @userName=user_name 
-
-DROP PROC ViewMyInformationSP;
-
+insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
 
 
 -- And she ended here --
@@ -211,4 +191,18 @@ FROM Staff_Members s INNER JOIN Jobs j
 ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
 WHERE s.user_name = @userName 
 RETURN (@workingHours - @duration)
+END
+
+GO
+CREATE FUNCTION CheckJobTitle
+(@jobTitle VARCHAR(150))
+RETURNS BIT
+AS
+BEGIN
+DECLARE @returnedBit BIT
+IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Regular%')
+SET @returnedBit = '1'
+ELSE
+SET @returnedBit ='0'
+RETURN @returnedBit
 END
