@@ -307,8 +307,24 @@ SELECT J.* , C.name AS company_name, D.name AS department_name
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+GO
+
 
 GO
+CREATE PROC EditPersonalInfoSP
+@username VARCHAR(30) , @password VARCHAR(30), @personalEmail VARCHAR(70), @birthDate DATETIME, @expYear INT, @firstName VARCHAR(25), @lastName VARCHAR(25)
+AS
+UPDATE Users 
+SET Users.password=@password, 
+Users.personal_email=@personalEmail, 
+Users.birth_date=@birthDate,
+Users.exp_year = @expYear,
+Users.first_name = @firstName, 
+Users.last_name = @lastName
+WHERE Users.user_name = @username
+GO
+
+
 
 CREATE FUNCTION GetMissingHours
 (
