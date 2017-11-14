@@ -214,6 +214,23 @@ INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
 VALUES (@userName,@regularUserName,@projectName)
 
+GO
+CREATE PROC AssignRegularToTaskSP
+@projectName VARCHAR(100),
+@userName VARCHAR(30),
+@regularUserName VARCHAR(30),
+@taskName VARCHAR(30),
+@taskDeadline DATETIME
+AS
+IF EXISTS(
+SELECT *
+FROM Managers_Assign_Projects_To_Regulars mapr
+WHERE (mapr.project_name = @projectName AND mapr.regular_user_name = @regularUserName)
+)
+INSERT INTO Managers_Assign_Tasks_To_Regulars
+(manager_user_name,task_name,task_deadline,project_name)
+VALUES (@userName,@taskName,@taskDeadline,@projectName)
+
 
 -- Romy Was here too --
 GO 
