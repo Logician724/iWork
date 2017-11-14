@@ -108,6 +108,33 @@ INSERT INTO Emails
 VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
 
+GO
+CREATE PROC AddJobSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@applicationDeadline DATETIME,
+@detailedDescription TEXT,
+@minYearsExperience INT,
+@salary INT,
+@shortDescription TEXT,
+@vacancies INT,
+@workingHours INT
+AS
+INSERT INTO Jobs
+(job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES
+(@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
+
+GO
+CREATE PROC AddQuestionSP
+@questionTitle VARCHAR(700),
+@answer BIT
+AS
+INSERT INTO Questions
+(question_title,answer)
+VALUES
+(@questionTitle,@answer)
 
 -- Romy Was here too --
 GO 
@@ -130,7 +157,49 @@ CREATE PROC RegisterToWebsite
 @firstName VARCHAR(25) ,
 @lastName VARCHAR(25) 
 AS
-insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+INSERT INTO Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+
+GO
+Create PROC ViewMyInformationSP @username varchar(30) , @personalEmail VARCHAR(70) OUTPUT, 
+@birthDate DATETIME OUTPUT,
+@age INT OUTPUT,
+@expYear INT OUTPUT,
+@firstName VARCHAR(25) OUTPUT,
+@lastName VARCHAR(25) OUTPUT
+AS 
+
+
+SELECT @personalEmail = personal_email FROM Users WHERE @userName=user_name 
+SELECT @birthDate = birth_date FROM Users WHERE @userName=user_name 
+SELECT @expYear = exp_year FROM Users WHERE @userName=user_name 
+SELECT @firstName = first_name FROM Users WHERE @userName=user_name 
+SELECT @lastName = last_name FROM Users WHERE @userName=user_name 
+SELECT @age = AGE FROM Users WHERE @userName=user_name 
+
+
+
+GO 
+CREATE PROC ViewMyScoreSP 
+@username VARCHAR(3), @job VARCHAR(150),
+@score INT OUTPUT
+AS 
+SELECT @score= score From  Applications  WHERE @username=seeker_username AND @job=job_title
+print @score
+
+
+GO 
+
+CREATE PROC StaffCheckInSp @username VARCHAR(30)
+AS
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username )
+INSERT INTO Attendances (user_name,date,start_time )VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+
+
+
+
+
+DROP PROC ViewMyInformationSP;
+DROP PROC ViewMyScoreSP;
 
 
 -- And she ended here --

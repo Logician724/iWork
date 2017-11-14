@@ -76,9 +76,9 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 
 CREATE TABLE Jobs(
 PRIMARY KEY (job_title,department_code,company_domain),
+job_title VARCHAR(150) NOT NULL,
 company_domain VARCHAR(150) NOT NULL ,
 department_code VARCHAR(30) NOT NULL, 
-job_title VARCHAR(150) NOT NULL,
 application_deadline DATETIME NOT NULL,
 detailed_description TEXT NOT NULL,
 min_years_experience INT NOT NULL,
