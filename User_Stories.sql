@@ -183,13 +183,30 @@ GO
 
 CREATE PROC StaffCheckInSp @username VARCHAR(30)
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username )
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday')
 INSERT INTO Attendances (user_name,date,start_time )VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
 
+GO
+CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30),
+@time_Stamp DATETIME OUTPUT ,
+@senderUserName VARCHAR(30) OUTPUT ,
+@senderEmail VARCHAR(70)  OUTPUT,
+@recipientEmail VARCHAR(70) OUTPUT,
+@emailSubject VARCHAR(140) OUTPUT,
+@emailBody TEXT OUTPUT
+AS
+SELECT @time_Stamp=time_stamp , @senderUserName=sender_user_name , @senderEmail=sender_email,@recipientEmail=recipient_email  ,@emailSubject=email_subject,@emailBody=email_body
+FROM Emails E inner Join Staff_Receives_EmailS R ON E.sender_user_name=sender_user_name AND R.recepient_username=@username
 
+PRINT @time_Stamp 
+PRINT @senderUserName 
+PRINT @senderEmail 
+PRINT @recipientEmail 
+PRINT @emailSubject 
+PRINT @emailBody 
 
-
-
+DROP PROC ViewReceivedEmailsSP;
+DROP PROC StaffCheckInSp;
 DROP PROC ViewMyInformationSP;
 DROP PROC ViewMyScoreSP;
 
