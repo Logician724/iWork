@@ -169,7 +169,67 @@ FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
 ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
 
+GO
+CREATE PROC ViewApprovedJobAppSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@CompanyDomain VARCHAR(150)
+AS
+SELECT a.*
+FROM Applications a
+WHERE (a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @CompanyDomain AND a.hr_response_app='Accepted')
 
+GO
+CREATE PROC ViewSeekerInfoSP
+@seekerUserName VARCHAR(30)
+AS
+SELECT s.*
+FROM Job_Seekers s
+WHERE (s.user_name = @seekerUserName)
+
+GO
+CREATE PROC ViewJobInfoSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
+AS
+SELECT j.*
+FROM Jobs j
+WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.company_domain = @companyDomain)
+
+GO
+CREATE PROC AssignRegularToProjectSP
+@userName VARCHAR(30),
+@projectName VARCHAR(100),
+@definingUser VARCHAR(30), --user name of the manager that defined the project--
+@regularUserName VARCHAR(30)
+AS
+IF EXISTS (
+SELECT *
+FROM Staff_Members s1 INNER JOIN Staff_Members s2
+ON s1.user_name = s2.user_name
+WHERE(s1.department_code = s2.department_code AND s1.user_name = @userName AND s2.user_name = @definingUser)
+)
+INSERT INTO Managers_Assign_Projects_To_Regulars
+(manager_user_name,regular_user_name,project_name)
+VALUES (@userName,@regularUserName,@projectName)
+
+GO
+CREATE PROC AssignRegularToTaskSP
+@projectName VARCHAR(100),
+@userName VARCHAR(30),
+@regularUserName VARCHAR(30),
+@taskName VARCHAR(30),
+@taskDeadline DATETIME
+AS
+IF EXISTS(
+SELECT *
+FROM Managers_Assign_Projects_To_Regulars mapr
+WHERE (mapr.project_name = @projectName AND mapr.regular_user_name = @regularUserName)
+)
+INSERT INTO Managers_Assign_Tasks_To_Regulars
+(manager_user_name,task_name,task_deadline,project_name)
+VALUES (@userName,@taskName,@taskDeadline,@projectName)
 
 
 -- Romy Was here too --
