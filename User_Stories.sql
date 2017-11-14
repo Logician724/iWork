@@ -1,4 +1,7 @@
-﻿GO
+﻿DROP PROC ViewDepartmentSP;
+DROP PROC ViewQuetionsInInterviewSP;
+DROP PROC UserLoginSP;
+GO
 
 CREATE PROC ViewDepartmentSP
 @companyDomain VARCHAR(150),
@@ -57,14 +60,28 @@ PRINT 'Hello Employee'
 
 END
 
+
 GO
+
 
 CREATE PROC ViewQuetionsInInterviewSP
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain INT
+@companyDomain VARCHAR(150)
 AS
 SELECT q.question_title
 FROM Question q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
+
+GO
+
+CREATE PROC DeletePendingApplicationSP
+@seekerUserName VARCHAR(30),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
+AS
+DELETE FROM Applications
+WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
+
