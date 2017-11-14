@@ -154,3 +154,16 @@ ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.com
 WHERE s.user_name = @userName 
 RETURN (@workingHours - @duration)
 END
+
+
+GO
+create proc ViewCompaniesSP
+AS
+select C.* , CP.phone
+From Companies C inner join  Companies_Phones CP
+on  C.domain_name = CP.company_domain
+GO
+
+
+
+
