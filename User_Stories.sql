@@ -191,13 +191,13 @@ GO
 
 CREATE PROC StaffCheckInSp @username VARCHAR(30)
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username )
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday')
 INSERT INTO Attendances (user_name,date,start_time )VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
 
 
 
 
-
+DROP PROC StaffCheckInSp;
 DROP PROC ViewMyInformationSP;
 DROP PROC ViewMyScoreSP;
 
