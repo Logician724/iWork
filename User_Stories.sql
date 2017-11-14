@@ -179,6 +179,13 @@ SELECT a.*
 FROM Applications a
 WHERE (a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @CompanyDomain AND a.hr_response_app='Accepted')
 
+GO
+CREATE PROC ViewSeekerInfoSP
+@seekerUserName VARCHAR(30)
+AS
+SELECT s.*
+FROM Job_Seekers s
+WHERE (s.user_name = @seekerUserName)
 
 
 -- Romy Was here too --
