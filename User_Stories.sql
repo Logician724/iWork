@@ -132,6 +132,26 @@ CREATE PROC RegisterToWebsite
 AS
 insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
 
+GO
+Create PROC ViewMyInformationSP @username varchar(30) , @personalEmail VARCHAR(70) output, 
+@birthDate DATETIME output ,
+@age int output,
+@expYear INT output,
+@firstName VARCHAR(25) output,
+@lastName VARCHAR(25) output
+AS 
+
+
+SELECT @personalEmail = personal_email from Users where @userName=user_name 
+SELECT @birthDate = birth_date from Users where @userName=user_name 
+SELECT @expYear = exp_year from Users where @userName=user_name 
+SELECT @firstName = first_name from Users where @userName=user_name 
+SELECT @lastName = last_name from Users where @userName=user_name 
+SELECT @age = AGE from Users where @userName=user_name 
+
+DROP PROC ViewMyInformationSP;
+
+
 
 -- And she ended here --
 
