@@ -178,7 +178,13 @@ SELECT @age = AGE FROM Users WHERE @userName=user_name
 
 DROP PROC ViewMyInformationSP;
 
-
+GO 
+CREATE PROC ViewMyScoreSP 
+@username VARCHAR(3), @job VARCHAR(150),
+@score INT OUTPUT
+AS 
+SELECT @score= score From  Applications  WHERE @username=seeker_username
+print @score
 
 -- And she ended here --
 
