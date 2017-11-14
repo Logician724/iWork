@@ -147,19 +147,6 @@ INSERT INTO Jobs_Have_Questions
 (question_id,job_title,department_code,company_domain)
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
-GO
-CREATE PROC HrResponseSP
-@seekerUserName VARCHAR(30),
-@jobTitle VARCHAR(150),
-@departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150),
-@hrResponse VARCHAR(20)
-AS
-UPDATE Applications
-SET hr_response_app = @hrResponse
-WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
-
-
 -- Romy Was here too --
 GO 
 
@@ -209,14 +196,15 @@ FROM Emails E inner Join Staff_Receives_EmailS R ON E.sender_user_name=sender_us
 
 
 GO
-CREATE PROC ViewJobInformation @username VARCHAR(30),@job_title VARCHAR(150)
+CREATE PROC ViewJobInformationSP @username VARCHAR(30),@jobTitle VARCHAR(150)
 AS
-SELECT j.* FROM Jobs j WHERE ( j.company_domain,j.department_code )IN SELECT s.company_domain,s.department_code  FROM Staff_Members s WHERE s.user_name=@username
+SELECT j.* FROM Jobs j WHERE j.job_title=@jobTitle AND j.company_domain IN ( SELECT s.company_domain FROM Staff_Members s WHERE s.user_name=@username) 
+AND j.department_code IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) --I KNOW IT LOOKS STUPID BUT I'M LAZY 
 
 
 
 
-
+DROP PROC ViewJobInformationSP;
 
 
 DROP PROC ViewReceivedEmailsSP;
@@ -247,6 +235,12 @@ SELECT J.* , C.name AS company_name, D.name AS department_name
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+GO
+
+
+
+
+
 
 GO
 
