@@ -120,6 +120,7 @@ date DATE NOT NULL,
 start_time DATETIME NOT NULL,
 leave_time DATETIME NOT NULL,
 duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
+missing_hours AS dbo.GetMissingHours(user_name,start_time,leave_time),
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
