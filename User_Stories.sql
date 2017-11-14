@@ -157,7 +157,7 @@ END
 
 
 GO
-create proc ViewCompaniesSP
+CREATE PROC ViewCompaniesSP
 AS
 SELECT C.* , CP.phone
 FROM Companies C INNER JOIN  Companies_Phones CP
