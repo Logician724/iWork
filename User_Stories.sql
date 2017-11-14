@@ -56,3 +56,15 @@ WHERE (r.user_name = @userName)
 PRINT 'Hello Employee'
 
 END
+
+GO
+
+CREATE PROC ViewQuetionsInInterviewSP
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain INT
+AS
+SELECT q.question_title
+FROM Question q INNER JOIN Jobs_Have_Questions jq
+ON jq.question_id = q.question_id
+WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
