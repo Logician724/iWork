@@ -40,7 +40,7 @@ email VARCHAR(70) NOT NULL
 );
 CREATE TABLE Companies_Phones(
 PRIMARY KEY(phone,company_domain),
-phone INT NOT NULL,
+phone varchar(15) NOT NULL,
 company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (company_domain) REFERENCES Companies(domain_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
