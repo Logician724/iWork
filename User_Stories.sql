@@ -97,8 +97,17 @@ AS
 Select C.* From Companies C Where C.field =@companyType OR  C.address=@companyAddress OR C.name=@companyName
 
 
-
-
+GO
+CREATE PROC RegisterToWebsite 
+@userName VARCHAR(30)  ,
+@password VARCHAR(30) ,
+@personalEmail VARCHAR(70) ,
+@birthDate DATETIME ,
+@expYear INT ,
+@firstName VARCHAR(25) ,
+@lastName VARCHAR(25) 
+AS
+insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
 
 
 -- And she ended here --
