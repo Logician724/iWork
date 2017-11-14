@@ -170,6 +170,29 @@ CREATE PROC RegisterToWebsite
 AS
 insert into Users Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
 
+GO 
+CREATE PROC ViewMyScoreSP 
+@username VARCHAR(3), @job VARCHAR(150),
+@score INT OUTPUT
+AS 
+SELECT @score= score From  Applications  WHERE @username=seeker_username AND @job=job_title
+print @score
+
+
+GO 
+
+CREATE PROC StaffCheckInSp @username VARCHAR(30)
+AS
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username )
+INSERT INTO Attendances (user_name,date,start_time )VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+
+
+
+
+
+DROP PROC ViewMyInformationSP;
+DROP PROC ViewMyScoreSP;
+
 
 -- And she ended here --
 
