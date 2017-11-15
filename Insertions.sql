@@ -57,6 +57,56 @@ VALUES('google.com','SRC-2837','Google Search handlers');
 
 
 --JOBS INSERTIONS
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES	('facebook.com','PHP-5019','Manager- Managing PHP Department','1/1/2014','Managing employees who are in PHP department in facebook company on back end coding',
+3,10000,'Managing PHP Department in facebook',4,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('facebook.com','JS-8938','Manager- Managing JS Department','1/1/2014','Managing employees who are in JS department in facebook comapny on front end coding',
+3,15000,'Managing JS deparmtnet in facebook ',10,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('facebook.com','BS-3291','Manager- Managing BootStrap Department','1/1/2014','Managing employees who are in BootStrap department in facebook company  on front end coding',
+3,15000,'Managing BootStrap department in facebook',15,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','MRC-8738','Manager- Managing Merchandise Department','19/11/2010',
+'Manaing employees who are in  merchandise department who handle  storage, quality check, and posting to customers',1,5000,
+'Managing merchandise department in amazon',19,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','CSR-1263','Manager- Managing Customer Department','19/11/2010',
+'Managing employees who work in customer department who handle complaints, Refunds, and quality check with the customers',1,7000,
+'Managing merchandise department in amazon',11,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','WBST-2429','Manager- Managing Website Department','19/11/2010',
+'Handling website where from maintenance and making new websites',3,15000,
+'Managing Website department in amazon ',7,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('google.com','LOC-4729','Manager- Managing Location Department','1/11/2010',
+'Managing employees in Location department who do maintenance and conventions',
+10,50000,'Managing location department google',2,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('google.com','MPS-2849','Manager- Managing Map Department','1/11/2010',
+'Managing employees in Maps department who do maintenance and conventions',
+3,50000,'Managing maps department google',4,9)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours) 
+VALUES('google.com','SRC-2837','Manager- Managing Search Department','1/11/2010',
+'responsible for handling the search feature presented by google with maintenance and conventions',
+3,50000,'Managing search department google',3,9)
 
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
