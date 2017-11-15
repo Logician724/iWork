@@ -95,10 +95,10 @@ user_name VARCHAR(30) PRIMARY KEY NOT NULL,
 day_off VARCHAR(10) NOT NULL,
 no_annual_leaves INT NOT NULL,
 salary INT NOT NULL,
-company_email VARCHAR(70) NOT NULL,
+company_email AS (dbo.MakeCompanyEmail(user_name,company_domain),
 job_title VARCHAR(150) NOT NULL,
 department_code VARCHAR(30) NOT NULL,
-company_domain VARCHAR(150) NOT NULL,
+company_domain VARCHAR(150) NOT NULL ,
 FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (job_title,department_code,company_domain) REFERENCES Jobs(job_title,department_code,company_domain) ON DELETE CASCADE ON UPDATE CASCADE
 );

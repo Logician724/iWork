@@ -325,9 +325,10 @@ CREATE PROC ViewCompanySP
 AS
 Select C.*
 From Companies C
-Where C.field =@companyType OR 
-C.address=@companyAddress OR 
-C.name=@companyName
+Where  C.name=@companyName 
+OR C.field =@companyType 
+OR C.address=@companyAddress 
+
 
 
 GO
@@ -751,14 +752,14 @@ END
 -- And she ended here --
 
 GO
-CREATE PROC ViewCompaniesSP
+CREATE PROC ViewCompaniesSP --correct
 AS
 SELECT C.* , CP.phone
 FROM Companies C INNER JOIN  Companies_Phones CP
 ON  C.domain_name = CP.company_domain
 
 GO
-CREATE PROC SearchJobsSP
+CREATE PROC SearchJobsSP --correct
 @keywords TEXT
 AS
 SELECT J.* , C.name AS company_name, D.name AS department_name
@@ -766,9 +767,9 @@ FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
-
 GO
-CREATE PROC EditPersonalInfoSP
+
+CREATE PROC EditPersonalInfoSP --correct
 @username VARCHAR(30),
 @password VARCHAR(30),
 @personalEmail VARCHAR(70),
@@ -788,16 +789,16 @@ last_name = @lastName
 WHERE user_name = @username
 
 
-GO  --to be edited 
+GO  --to be edited  ( Yes it do )
 CREATE PROC ViewJobStatusSP
 @username VARCHAR(30)
 AS
-Select A.score, A.app_status
+Select A.score, A.app_status --Missing score and job title Don't we need to see these next to the JOB title maybe?
 FROM Applications A
 WHERE A.seeker_username=@username
 
 GO
-CREATE PROC CheckOutSP
+CREATE PROC CheckOutSP --Correct but why did u do the join u can just check with the username
 @leaveTime DATETIME, @username VARCHAR(30)
 AS
 UPDATE Attendances 
@@ -811,7 +812,7 @@ WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
 
 
 GO
-CREATE PROC ViewTasksSP
+CREATE PROC ViewTasksSP --project name is already in the table task u don't have to join !
 @project VARCHAR(100), @status VARCHAR(10)
 AS 
 SELECT T.*
@@ -819,7 +820,7 @@ FROM Task T inner join Project P on T.project_name = P.project_name
 WHERE T.project_name = @project AND T.status=@status
 
 GO
-CREATE PROC RespondToJobApplicationsSP
+CREATE PROC RespondToJobApplicationsSP --This needs to be redone .. needs to take input information about the manager if u need to check the manager department .. and need to take info about the application you want to update
 @managerResponse VARCHAR(20)
 AS
 UPDATE Applications
@@ -833,7 +834,7 @@ WHERE Applications.hr_response_app = 'Accepted' AND EXISTS
      )
 
 GO 
-CREATE PROC DefineTaskSP
+CREATE PROC DefineTaskSP --tasks can be defined by any manager don't need the exists condition Nor username as input
 @managerUsername VARCHAR(30) , @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30) , @status VARCHAR(10) = 'Open'
 AS
 IF EXISTS ( 
@@ -847,7 +848,7 @@ VALUES (@projectName, @deadline, @taskName , @status)
 END
 
 GO 
-CREATE PROC ChangeTaskStatusSP
+CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
 @username VARCHAR(30), @status VARCHAR(10),@name VARCHAR(30), @deadline DATETIME , @projectname VARCHAR(100)
 AS
 IF EXISTS (
@@ -863,13 +864,13 @@ WHERE Tasks.name=@name AND Tasks.deadline=@deadline AND Tasks.project_name=@proj
 END
 
 GO
-CREATE PROC EditJobInfoSP
+CREATE PROC EditJobInfoSP --Also needs editing
 @hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
 @applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
 @vacancies INT=NULL , @workingHours INT=NULL 
 AS 
 --If the department is the HR Employee's Department, He/She can edit the info
-IF EXISTS (
+IF EXISTS ( --We don't need this join we already have the HR username
 SELECT*
 FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
 WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
@@ -921,7 +922,7 @@ END
 
 GO
 
-CREATE PROC ViewCompanyAndItsDepartmentsSP
+CREATE PROC ViewCompanyAndItsDepartmentsSP --WHY !!!!! WHY !!!!!!!!!! why the join ?
 @companyDomain VARCHAR(150)
 AS 
 SELECT *
@@ -931,7 +932,7 @@ WHERE c.domain_name = @companyDomain
 
 GO
 -- i tried to do this one but i seriously couldnt i am so sorry
-CREATE PROC CompaniesSalaryOrderedSP
+CREATE PROC CompaniesSalaryOrderedSP --Why again ? you need to get staff members  working ini a certian department average's salary  group by company domain.. do join and check domain r the same
 AS
 SELECT c.*
 FROM Companies c INNER JOIN 
@@ -940,7 +941,7 @@ ON c.domain_name = m. company_domain
 
 GO
 
-CREATE PROC ApplyJobCheckSP
+CREATE PROC ApplyJobCheckSP --Too Many null ? the exists relation forces the seeker to only apply to jobs he applied in before ... needs to be redone
 @min_years_experience INT,
 @seeker_user_name VARCHAR(30),
 @job_title VARCHAR(150),
@@ -967,13 +968,13 @@ INSERT INTO Applications VALUES
 
 GO
 
-CREATE PROC ChooseJobFromAcceptedSP
+CREATE PROC ChooseJobFromAcceptedSP --Mostly correct <3 
 @seeker_username VARCHAR(30),
 @department_code VARCHAR(30),
 @company_domain VARCHAR(150),
 @job_title VARCHAR(150),
 @day_off VARCHAR(10),
-@company_email VARCHAR(70)
+@company_email VARCHAR(70) --Why take as input it when we can concatinate 
 AS
 IF(	EXISTS(
 			SELECT * 
@@ -1004,33 +1005,33 @@ END
 
 GO 
 
-CREATE PROC DeletePendingRequestsSP
+CREATE PROC DeletePendingRequestsSP --in this you are deleting alllllllllllllllllll requests he applied to .. need to take input request id
 @username VARCHAR(30)
 AS
 DELETE Requests
 	WHERE request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @username)
 	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @username)
 	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @username)
-	AND hr_response_req = NULL
+	AND hr_response_req = NULL --pending isn't null
 
 GO
 
-CREATE PROC AnnouncementWithinTwentyDaysSP
+CREATE PROC AnnouncementWithinTwentyDaysSP --Just a tiny issue
 @company_domain VARCHAR(150)
 AS
 SELECT a.*
 	FROM Announcements a 
-	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21
+	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21  --this will return the announcements in the past year when the difference <21
 
 GO
 
-CREATE PROC ViewNewApplicationsSP
+CREATE PROC ViewNewApplicationsSP --Another tiny issue
 @seeker_username VARCHAR(30),
 @compnay_domain VARCHAR(150),
 @department_code VARCHAR(30),
 @job_title VARCHAR(150)
 AS
-SELECT *,a.score 
+SELECT *,a.score --select all will return a.score already 
 	FROM Applications a INNER JOIN Job_Seekers js ON a.seeker_username = js.user_name INNER JOIN Jobs j 
 	ON a.company_domain = j.company_domain AND a.department_code = j.department_code 
 	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
@@ -1098,7 +1099,7 @@ CREATE PROC ManagerReviewTaskSP
 @manager_user_name VARCHAR(50),
 @project_name VARCHAR(100),
 @tasks_name VARCHAR(30),
-@acceptance VARCHAR(10),
+@acceptance VARCHAR(10), 
 @new_deadline DATETIME
 AS
 BEGIN
@@ -1122,13 +1123,13 @@ END
 
 GO
 CREATE FUNCTION MakeCompanyEmail
-( @seeker_user_name VARCHAR(30),
-@company_name VARCHAR(50)
+( @userName VARCHAR(30),
+  @companyDomain VARCHAR(150)
 )
-RETURNS VARCHAR(70)
+RETURNS VARCHAR(180)
 BEGIN
-DECLARE @email VARCHAR(70)
-SET @email =  @seeker_user_name+'@'+@company_name+'.com'
+DECLARE @email VARCHAR(180)
+SET @email =  @userName+'@'+@companyDomain
 RETURN @email
 END
 
