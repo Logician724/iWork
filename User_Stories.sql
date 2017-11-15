@@ -375,13 +375,13 @@ CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30) , @password VARCHAR(30), @personalEmail VARCHAR(70), @birthDate DATETIME, @expYear INT, @firstName VARCHAR(25), @lastName VARCHAR(25)
 AS
 UPDATE Users 
-SET Users.password=@password, 
-Users.personal_email=@personalEmail, 
-Users.birth_date=@birthDate,
-Users.exp_year = @expYear,
-Users.first_name = @firstName, 
-Users.last_name = @lastName
-WHERE Users.user_name = @username
+SET password=@password, 
+personal_email=@personalEmail, 
+birth_date=@birthDate,
+exp_year = @expYear,
+first_name = @firstName, 
+last_name = @lastName
+WHERE user_name = @username
 GO
 
 
@@ -399,8 +399,8 @@ CREATE PROC CheckOutSP
 @leaveTime DATETIME, @username VARCHAR(30)
 AS
 UPDATE Attendances 
-SET  Attendances.leave_time = @leaveTime
-WHERE Attendances.user_name=@username AND NOT EXISTS 
+SET    leave_time = @leaveTime
+WHERE  user_name=@username AND NOT EXISTS 
 (
 SELECT *
 FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
@@ -425,7 +425,7 @@ CREATE PROC RespondToJobApplicationsSP
 @managerResponse VARCHAR(20)
 AS
 UPDATE Applications
-SET Applications.manager_response_app=@managerResponse
+SET manager_response_app=@managerResponse
 WHERE Applications.hr_response_app = 'Accepted' AND EXISTS  
      (
 	   SELECT *
