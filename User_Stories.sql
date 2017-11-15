@@ -584,7 +584,7 @@ GO
 
 
 GO
-ALTER PROC EditJobInfoSP
+CREATE PROC EditJobInfoSP
 @hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
 @applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
 @vacancies INT=NULL , @workingHours INT=NULL 
