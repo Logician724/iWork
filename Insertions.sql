@@ -14,3 +14,12 @@ INSERT INTO Departments VALUES('google.com','SEARCH','Google Search handlers')
 INSERT INTO Departments VALUES('amazon.com','MERCHANDISE','Amazon Merchandise handlers')
 INSERT INTO Departments VALUES('amazon.com','CUSTOMER','Amazon CUSTOMER handlers')
 INSERT INTO Departments VALUES('amazon.com','WEBSITE','Amazon WEBSITE handlers')
+
+
+INSERT INTO Users VALUES ('Yousef.Mustafa', 'WWE123','yousef.mustafa@gmail.com','12/11/1993',2,'Yousef', 'Mustafa'); 
+INSERT INTO Users VALUES ('Fayrouz.Hussain','02306FM','fayrouz.hussain@hotmail.com','06/23/1994',1,'Fayrouz','Hussain');
+INSERT INTO Users VALUES ('Dina.AlMasry','DMAm111','dinamohamed@gmail.com','11/1/1990',5,'Dina', 'AlMasry');
+
+INSERT INTO Job_Seekers VALUES ('Yousef.Mustafa');
+INSERT INTO Job_Seekers VALUES ('Fayrouz.Hussain');
+INSERT INTO Job_Seekers VALUES ('Dina.AlMasry');
