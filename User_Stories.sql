@@ -478,7 +478,7 @@ AS
 SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) FROM Attendances A ,DBO.RegularsWithFixed() R , Users U WHERE  R.user_name=A.user_name AND R.user_name=U.user_name GROUP BY first_name +' '+ last_name  ORDER BY SUM(A.duration) desc
 
 GO
-CREATE PROC ViewEmployeesRequestsSP @username VARCHAR(30), @ManagerUserName VARCHAR(30) , @response VARCHAR(20), @Requestid int --View Single request at a time
+CREATE PROC ViewEmployeesRequestsSP @username VARCHAR(30), @ManagerUserName VARCHAR(30) , @response VARCHAR(20), @id int --View Single request at a time
 AS 
 if EXISTS (SELECT USER_NAME FROM HR_Employees WHERE @username=user_name) BEGIN IF EXISTS (SELECT USER_NAME FROM HR_Employees WHERE @ManagerUserName =user_name)
 SELECT * From Requests R,HR_Employees_Replace_HR_Employees H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
@@ -494,13 +494,14 @@ WHERE request_id=@id
 END
 
 ELSE BEGIN
-SELECT * From Requests R,Regular_Employees_Replace_Regular_Employees H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
+SELECT * From Requests R,Managers_Replace_Managers_In_Requests H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
 UPDATE Requests
 SET hr_response_req=@response
 WHERE request_id=@id 
 END
 
 
+DROP PROC ViewEmployeesRequestsSP;
 DROP PROC ViewTop3RegularSp;
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
