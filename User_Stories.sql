@@ -617,3 +617,31 @@ AS
 INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
 
 GO
+
+CREATE PROC ManagerReviewTaskSP
+@manager_user_name VARCHAR(50),
+@project_name VARCHAR(100),
+@tasks_name VARCHAR(30),
+@acceptance VARCHAR(10),
+@new_deadline DATETIME
+AS
+BEGIN
+IF(@acceptance='Accepted')
+	UPDATE Tasks
+		SET Tasks.status = 'Closed'
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+ELSE
+IF(@acceptance = 'Rejected')
+	BEGIN
+	DECLARE @description NVARCHAR(MAX), @comments NVARCHAR(MAX)
+	SELECT @description  = Tasks.description, @comments = Tasks.comments 
+		FROM Tasks
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+	DELETE Tasks
+		
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+	INSERT INTO Tasks VALUES(@new_deadline,@tasks_name,@project_name,@comments,@description,@acceptance)
+	END
+END
+
+GO
