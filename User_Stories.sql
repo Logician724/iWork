@@ -456,38 +456,6 @@ GO
 
 
 
-CREATE FUNCTION GetMissingHours
-(
-@userName VARCHAR(30),
-@startTime DATETIME,
-@leaveTime DATETIME
-)
-RETURNS INT
-BEGIN
-
-DECLARE @workingHours INT, @duration INT
-SET @duration = DATEPART(HOUR,@leaveTime) - DATEPART(HOUR,@startTime)
-SELECT @workingHours = j.working_hours
-FROM Staff_Members s INNER JOIN Jobs j
-ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
-WHERE s.user_name = @userName 
-RETURN (@workingHours - @duration)
-END
-
-
-GO
-CREATE FUNCTION CheckJobTitle
-(@jobTitle VARCHAR(150))
-RETURNS BIT
-AS
-BEGIN
-DECLARE @returnedBit BIT
-IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Regular%')
-SET @returnedBit = '1'
-ELSE
-SET @returnedBit ='0'
-RETURN @returnedBit
-END
 
 GO
 
@@ -690,7 +658,6 @@ IF(@acceptance = 'Rejected')
 END
 
 GO
-
 CREATE FUNCTION MakeCompanyEmail
 ( @seeker_user_name VARCHAR(30),
 @company_name VARCHAR(50)
@@ -701,8 +668,48 @@ DECLARE @email VARCHAR(70)
 SET @email =  @seeker_user_name+'@'+@company_name+'.com'
 RETURN @email
 END
+GO
+
 
 GO
+CREATE FUNCTION GetMissingHours
+(
+@userName VARCHAR(30),
+@startTime DATETIME,
+@leaveTime DATETIME
+)
+RETURNS INT
+BEGIN
+
+DECLARE @workingHours INT, @duration INT
+SET @duration = DATEPART(HOUR,@leaveTime) - DATEPART(HOUR,@startTime)
+SELECT @workingHours = j.working_hours
+FROM Staff_Members s INNER JOIN Jobs j
+ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
+WHERE s.user_name = @userName 
+RETURN (@workingHours - @duration)
+END
+GO
+
+GO
+CREATE FUNCTION CheckJobTitle
+(@jobTitle VARCHAR(150))
+RETURNS BIT
+AS
+BEGIN
+DECLARE @returnedBit BIT
+IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Regular%')
+SET @returnedBit = '1'
+ELSE
+SET @returnedBit ='0'
+RETURN @returnedBit
+END
+
+
+
+
+
+
 
 DROP PROC AllCompaniesAndDepartmentsSP 
 DROP PROC CompaniesSalaryOrderedSP
