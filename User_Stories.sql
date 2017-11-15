@@ -142,7 +142,7 @@ DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
 GO
-CREATE PROC ViewAttendaceSP --attendence mktoba 3'lt XDs el mfrod de view my attendence
+CREATE PROC ViewAttendanceSP --attendence mktoba 3'lt XDs el mfrod de view my attendence
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
@@ -204,11 +204,8 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
-<<<<<<< HEAD
-CREATE PROC HrResponseSP --Should be correct but..What if when we execute we give a wrong input ?? we have to options .. i think both r correct but a better one is not to leave the work for the user ... handle it with an if statement
-=======
-CREATE PROC AddHrResponseSP
->>>>>>> 573f2d4ef49b7cbe63f63daa9ff128a8188df3f0
+
+CREATE PROC AddHrResponseSP --Should be correct but..What if when we execute we give a wrong input ?? we have to options .. i think both r correct but a better one is not to leave the work for the user ... handle it with an if statement
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -220,11 +217,8 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
-<<<<<<< HEAD
-CREATE PROC ViewAttendanceOfStaffSP  --Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
-=======
+--Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
 CREATE PROC ViewYearlyAttendanceOfStaffSP
->>>>>>> 573f2d4ef49b7cbe63f63daa9ff128a8188df3f0
 @staffUserName VARCHAR(30),
 @year INT
 AS
