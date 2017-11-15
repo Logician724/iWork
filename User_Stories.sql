@@ -3,7 +3,7 @@ DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
 DROP PROC ViewQuetionsInInterviewSP;
 DROP PROC DeletePendingApplicationSP;
-DROP PROC ViewAttendanceOfStaffSP;
+DROP PROC ViewYearlyAttendanceOfStaffSP;
 DROP PROC SendEmailSP;
 DROP PROC AddJobSP;
 DROP PROC AddQuestionSP;
@@ -30,7 +30,7 @@ DROP PROC ViewReceivedEmailsSP;
 DROP PROC StaffCheckInSp;
 DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
-DROP PROC AllCompaniesAndDepartmentsSP;
+DROP PROC ViewCompanyAndItsDepartmentsSP;
 DROP PROC CompaniesSalaryOrderedSP;
 DROP PROC ChooseJobFromAcceptedSP;
 DROP PROC ApplyJobCheckSP;
@@ -53,7 +53,6 @@ DROP PROC DefineTaskSP;
 DROP PROC ChangeTaskStatusSP;
 DROP PROC EditJobInfoSP;
 DROP PROC RegisterToWebsite;
-DROP PROC ViewJobInformationSP;
 DROP PROC ApplyForBusinessRequestSP;
 DROP FUNCTION RegularsWithFixed;
 DROP FUNCTION MakeCompanyEmail;
@@ -217,7 +216,7 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
-CREATE PROC ViewAttendanceOfStaffSP
+CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
 AS
@@ -457,10 +456,10 @@ Create PROC FindTypeOfReplacementSp
 @job VARCHAR(30) OUTPUT
 AS
 IF EXISTS
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM HR_Employees 
 WHERE @userName =user_name ) 
-AND EXISTS ( SELECT USER_NAME 
+AND EXISTS ( SELECT user_name 
 FROM HR_Employees 
 WHERE @userName2 =user_name ) 
 SELECT @job='hr'
@@ -468,21 +467,21 @@ SELECT @job='hr'
 
 
 ELSE IF  EXISTS
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName =user_name ) 
-AND EXISTS( SELECT USER_NAME
+AND EXISTS( SELECT user_name
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Manager'
 
 
 ELSE IF EXISTS 
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName =user_name )
 AND EXISTS 
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Regular'
@@ -690,11 +689,11 @@ CREATE PROC ViewEmployeesRequestsSP
 , @id int --View Single request at a time
 AS 
 if EXISTS 
-(SELECT USER_NAME 
+(SELECT user_name 
 FROM HR_Employees 
 WHERE @username=user_name) 
 BEGIN
-IF EXISTS (SELECT USER_NAME 
+IF EXISTS (SELECT user_name
 FROM HR_Employees 
 WHERE @ManagerUserName =user_name)
 SELECT *
@@ -704,7 +703,7 @@ UPDATE Requests
 SET hr_response_req=@response
 WHERE request_id=@id
 END
-ELSE if EXISTS (SELECT USER_NAME 
+ELSE if EXISTS (SELECT user_name 
 FROM Regular_Employees 
 WHERE @username=user_name) 
 BEGIN 
@@ -870,12 +869,12 @@ END --END IF EXISTS
 GO
 
 CREATE PROC ViewCompanyAndItsDepartmentsSP
-@compnay_domain VARCHAR(150)
+@companyDomain VARCHAR(150)
 AS 
 SELECT *
 FROM Companies c INNER JOIN Departments d
 ON c.domain_name = d.company_domain 
-WHERE c.domain_name = @company_domain
+WHERE c.domain_name = @companyDomain
 
 GO
 -- i tried to do this one but i seriously couldnt i am so sorry
