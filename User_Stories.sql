@@ -437,6 +437,25 @@ GO
 
 
 
+
+GO 
+CREATE PROC DefineTaskSP
+@managerUsername VARCHAR(30) , @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30) , @status VARCHAR(10) = 'Open'
+AS
+IF EXISTS ( 
+  SELECT *
+  FROM Manager M INNER JOIN Projects P on M.user_name = P.manager_user_name
+  WHERE @managerUsername = P.manager_user_name
+          )
+BEGIN 
+INSERT INTO Tasks (project_name,deadline,name,status)
+VALUES (@projectName, @deadline, @taskName , @status)
+END
+GO
+
+
+
+
 CREATE FUNCTION GetMissingHours
 (
 @userName VARCHAR(30),
