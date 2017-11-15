@@ -511,13 +511,13 @@ CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30) , @password VARCHAR(30), @personalEmail VARCHAR(70), @birthDate DATETIME, @expYear INT, @firstName VARCHAR(25), @lastName VARCHAR(25)
 AS
 UPDATE Users 
-SET Users.password=@password, 
-Users.personal_email=@personalEmail, 
-Users.birth_date=@birthDate,
-Users.exp_year = @expYear,
-Users.first_name = @firstName, 
-Users.last_name = @lastName
-WHERE Users.user_name = @username
+SET password=@password, 
+personal_email=@personalEmail, 
+birth_date=@birthDate,
+exp_year = @expYear,
+first_name = @firstName, 
+last_name = @lastName
+WHERE user_name = @username
 GO
 
 
@@ -535,8 +535,8 @@ CREATE PROC CheckOutSP
 @leaveTime DATETIME, @username VARCHAR(30)
 AS
 UPDATE Attendances 
-SET  Attendances.leave_time = @leaveTime
-WHERE Attendances.user_name=@username AND NOT EXISTS 
+SET    leave_time = @leaveTime
+WHERE  user_name=@username AND NOT EXISTS 
 (
 SELECT *
 FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
@@ -561,7 +561,7 @@ CREATE PROC RespondToJobApplicationsSP
 @managerResponse VARCHAR(20)
 AS
 UPDATE Applications
-SET Applications.manager_response_app=@managerResponse
+SET manager_response_app=@managerResponse
 WHERE Applications.hr_response_app = 'Accepted' AND EXISTS  
      (
 	   SELECT *
@@ -588,6 +588,59 @@ INSERT INTO Tasks (project_name,deadline,name,status)
 VALUES (@projectName, @deadline, @taskName , @status)
 END
 GO
+
+
+
+GO 
+CREATE PROC ChangeTaskStatusSP
+@username VARCHAR(30), @status VARCHAR(10),@name VARCHAR(30), @deadline DATETIME , @projectname VARCHAR(100)
+AS
+IF EXISTS (
+SELECT *
+FROM Managers_Assign_Projects_To_Regulars M
+WHERE M.regular_user_name= @username AND M.project_name=@projectname 
+
+          )
+BEGIN 
+UPDATE Tasks 
+SET Tasks.status =@status
+WHERE Tasks.name=@name AND Tasks.deadline=@deadline AND Tasks.project_name=@projectName AND Tasks.deadline<CURRENT_TIMESTAMP 
+END
+GO
+
+
+
+GO
+ALTER PROC EditJobInfoSP
+@hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
+@applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
+@vacancies INT=NULL , @workingHours INT=NULL 
+AS 
+--If the department is the HR Employee's Department, He/She can edit the info
+IF EXISTS (
+SELECT*
+FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
+WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
+)
+BEGIN --BEGIN IF EXISTS
+IF(@applicationDeadline IS NOT NULL)
+BEGIN UPDATE Jobs SET application_deadline= @applicationDeadline WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@detailedDescription IS NOT  NULL)
+BEGIN UPDATE Jobs SET detailed_description= @detailedDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@minYearsExperience IS NOT NULL)
+BEGIN UPDATE Jobs SET min_years_experience= @minYearsExperience WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@salary IS NOT NULL)
+BEGIN UPDATE Jobs SET salary = @salary WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@shortDescription IS NOT NULL)
+BEGIN UPDATE Jobs SET short_description = @shortDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@vacancies IS NOT NULL)
+BEGIN UPDATE Jobs SET vacancies= @vacancies WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@workingHours IS NOT NULL)
+BEGIN UPDATE Jobs SET working_hours = @workingHours WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+END --END IF EXISTS
+GO
+
+
 
 
 
