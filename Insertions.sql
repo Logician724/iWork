@@ -1,46 +1,54 @@
-﻿-- COMPANIES INSERTIONS
+﻿TRUNCATE TABLE HR_Employees;
+TRUNCATE TABLE Managers;
+TRUNCATE TABLE Regular_Employees;
+TRUNCATE TABLE Job_Seekers;
+TRUNCATE TABLE Staff_Members;
+TRUNCATE TABLE Departments;
+TRUNCATE TABLE Companies;
+
+-- COMPANIES INSERTIONS
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email) 
 VALUES('facebook.com','facebook',' Palo Alto','computer marketing',
-		'social media','connection of all humanity','info@facebook.com')
+		'social media','connection of all humanity','info@facebook.com');
 
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
 VALUES('google.com','google','600 Amphitheatre Parkway in Mountain View, Santa Clara County, California, United States',
-		'computer marketing','internet managing','have all humanity search through it','google@google.com')
+		'computer marketing','internet managing','have all humanity search through it','google@google.com');
 
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
 VALUES('amazon.com','amazon','Beacon Hill neighborhood','computer marketing',
-		'digital marketing','sell to all humanity','amazon@amazon.com')
+		'digital marketing','sell to all humanity','amazon@amazon.com');
 
 
 
 
 --DEPARTMENTS INSERTIONS
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('facebook.com','PHP-5019','Facebook PHP handlers ')
+VALUES('facebook.com','PHP-5019','Facebook PHP handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('facebook.com','JS-8938','Facebook JS handlers')
+VALUES('facebook.com','JS-8938','Facebook JS handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('facebook.com','BS-3291','Facebook BootStrap handlers')
+VALUES('facebook.com','BS-3291','Facebook BootStrap handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('amazon.com','MRC-8738','Amazon Merchandise handlers')
+VALUES('amazon.com','MRC-8738','Amazon Merchandise handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('amazon.com','CSR-1263','Amazon CUSTOMER handlers')
+VALUES('amazon.com','CSR-1263','Amazon CUSTOMER handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('amazon.com','WBST-2429','Amazon WEBSITE handlers')
+VALUES('amazon.com','WBST-2429','Amazon WEBSITE handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('google.com','LOC-4729','Google location handlers')
+VALUES('google.com','LOC-4729','Google location handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('google.com','MPS-2849','Google Maps handlers')
+VALUES('google.com','MPS-2849','Google Maps handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('google.com','SRC-2837','Google Search handlers')
+VALUES('google.com','SRC-2837','Google Search handlers');
 
 
 
@@ -89,6 +97,7 @@ VALUES('google.com','LOC-4729','Employee- Developer in Location Department','12/
 'responsible for working for the location department presented by google by doing maintenance and contributions',
 10,50000,'working in location department google',13,8)
 
+
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES('google.com','MPS-2849','Employee- Developer in Maps Department','12/11/2011',
@@ -101,54 +110,52 @@ VALUES('google.com','SRC-2837','Employee- Developer in Search Department','5/1/2
 'responsible for working for the search engine department presented by google with maintenance and contributions',
 3,50000,'working in search engine department google',6,8)
 
-INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR PHP Web Programmer','facebook.com','PHP-5019','1/1/2018','detailed description',
+ VALUES ('HR- PHP Web Programmer','facebook.com','PHP-5019','1/1/2018','detailed description',
 2,4000,'short descriptions',10,8);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES ('HR BS-3291 Application Developer','facebook.com','BS-3291','1/5/2018','detailed description',
+VALUES ('HR- Application Developer','facebook.com','BS-3291','1/5/2018','detailed description',
 2,3000,'short descriptions',5,10);
 
-INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR JS-8938 Developer','facebook.com','JS-8938','10/12/2017','We are looking for a skilled Web programmer to join our IT team. You’ll be responsible for designing, coding and improving our company web pages, programs and applications.',
+ VALUES ('HR- Developer','facebook.com','JS-8938','10/12/2017',
+ 'We are looking for a skilled Web programmer to join our IT team. You’ll be responsible for designing, coding and improving our company web pages, programs and applications.',
 3,5000,'Produce fully functional programs writing clean, testable code',5,8);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES ('HR MRC-8738 Cashier','amazon.com','MRC-8738','1/3/2018','Receive payment by cash, check, credit cards, vouchers, or automatic debits.',
+VALUES ('HR- Cashier','amazon.com','MRC-8738','1/3/2018','Receive payment by cash, check, credit cards, vouchers, or automatic debits.',
 5,6000,'Compute and record totals of transactions.',8,12);
 
-INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR CSR-1263 Customer Service','amazon.com','CSR-1263','12/30/2017','Assists with complaints, orders, errors, account questions, billing, cancelations, and other queries.',
+ VALUES ('HR- Customer Service','amazon.com','CSR-1263','12/30/2017','Assists with complaints, orders, errors, account questions, billing, cancelations, and other queries.',
 5,8000,'Resolve customer complaints via phone, email, mail, or social media.',4,12);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR WBST-2429 Web Developer','amazon.com','WBST-2429','1/11/2017','Write well designed, testable, efficient code by using best software development practices.
-Create website layout/user interface by using standard HTML/CSS practices. Integrate data from various back-end services and databases.',
+ VALUES ('HR- Web Developer','amazon.com','WBST-2429','1/11/2017',
+ 'Write well designed, testable, efficient code by using best software development practices. Create website layout/user interface by using standard HTML/CSS practices. Integrate data from various back-end services and databases.',
 2,15000,'We are looking for an outstanding Web Developer to be responsible for the coding, innovative design and layout of our website.',6,10);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR LOC-4729 Researcher','google.com','LOC-4729','1/1/2018','Research across Google is advancing the state-of-the-art in almost every domain of computer science. The scale at which Google operates allows research teams integrated throughout Google to pursue work of strategic interest, and makes the innovation behind our products possible.',
+ VALUES ('HR- Researcher','google.com','LOC-4729','1/1/2018','Research across Google is advancing the state-of-the-art in almost every domain of computer science. The scale at which Google operates allows research teams integrated throughout Google to pursue work of strategic interest, and makes the innovation behind our products possible.',
 2,4000,'We tackle the most challenging problems in Computer Science and related fields',10,8);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES ('HR MPS-2849 Designer','google.com','MPS-2849','1/20/2018','Although the work is mostly studio-based, travel within the working day to meet clients may be required. Working away from home, however, is rare.',
+ VALUES ('HR- Designer','google.com','MPS-2849','1/20/2018','Although the work is mostly studio-based, travel within the working day to meet clients may be required. Working away from home, however, is rare.',
 6,30000,'thinking creatively to produce new ideas and concepts and developing interactive design',13,6);
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+INSERT INTO Jobs(job_title,company_domain,department_code,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
- VALUES  ('HR SRC-2837 Search Engine Managing','google.com','SRC-2837','1/12/2018','Execute tests, collect and analyze data and results, identify trends and insights in order to achieve maximum ROI in paid search campaigns',
+ VALUES  ('HR- Search Engine Managing','google.com','SRC-2837','1/12/2018','Execute tests, collect and analyze data and results, identify trends and insights in order to achieve maximum ROI in paid search campaigns',
 2,4000,'Research and implement search engine optimization recommendations',4,6);
->>>>>>> 7779a3247d45f1579b7ea232c4e3ccfe6bc1e54f
-
-
 
 
 
@@ -313,101 +320,214 @@ VALUES ('octavia.harlan','octano88','octave9@gmail.com','7/6/1989',3,'Octavia','
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
 VALUES ('tracee.charlton','tracemexd1998','tracer.tracee882@gmail.com','8/8/1991',6,'Tracee','Charlton');
 
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('godfrey.love','holypass12345','banme1998j@gmail.com','7/8/1991',6,'Godgfrey','Love');
+
+
 
 --STAFF MEMBERS INSERTIONS
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mohamed_Ahmed','Saturday',30,10000,'x','MANAGERS PHP DEVELOPER','PHP-5019','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mohamed_Ahmed','Saturday',30,10000,'MANAGERS PHP DEVELOPER','PHP-5019','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Ahmed_Mohamed','Saturday',30,10000,'x','MANAGERS PHP DEVELOPER','PHP-5019','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Ahmed_Mohamed','Saturday',30,10000,'MANAGERS PHP DEVELOPER','PHP-5019','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mahmoud_Ahmed','Sunday',30,15000,'x','MANAGERS JS DEVELOPER','JS-8938','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mahmoud_Ahmed','Sunday',30,15000,'MANAGERS JS DEVELOPER','JS-8938','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Ahmed_Mahmoud','Sunday',30,15000,'x','MANAGERS JS DEVELOPER','JS-8938','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Ahmed_Mahmoud','Sunday',30,15000,'MANAGERS JS DEVELOPER','JS-8938','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mahmoud_Mohamed','Sunday',30,15000,'x','MANAGERS JS DEVELOPER','BS-3291','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mahmoud_Mohamed','Sunday',30,15000,'MANAGERS JS DEVELOPER','BS-3291','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mohamed_Mahmoud','Sunday',30,15000,'x','MANAGERS BOOTSTRAP DEVELOPER','BS-3291','facebook.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mohamed_Mahmoud','Sunday',30,15000,'MANAGERS BOOTSTRAP DEVELOPER','BS-3291','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain) 
-VALUES('Joe_Matt','Sunday',30,5000,'y','MANAGERS MERCHANDISE MANAGING','MRC-8738','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain) 
+VALUES('Joe_Matt','Sunday',30,5000,'MANAGERS MERCHANDISE MANAGING','MRC-8738','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Matt_Joe','Sunday',30,5000,'y','MANAGERS MERCHANDISE MANAGING','MRC-8738','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Matt_Joe','Sunday',30,5000,'MANAGERS MERCHANDISE MANAGING','MRC-8738','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('John_Matt','Sunday',30,7000,'y','MANAGERS CUSTOMER MANAGING','CSR-1263','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('John_Matt','Sunday',30,7000,'MANAGERS CUSTOMER MANAGING','CSR-1263','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Matt_John','Sunday',30,7000,'y','MANAGERS CUSTOMER MANAGING','CSR-1263','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Matt_John','Sunday',30,7000,'MANAGERS CUSTOMER MANAGING','CSR-1263','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Joe_John','Sunday',30,15000,'y','MANAGERS WEBSITE DEVELOPER','WBST-2429','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Joe_John','Sunday',30,15000,'MANAGERS WEBSITE DEVELOPER','WBST-2429','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('John_Joe','Sunday',30,15000,'y','MANAGERS WEBSITE DEVELOPER','WBST-2429','amazon.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('John_Joe','Sunday',30,15000,'MANAGERS WEBSITE DEVELOPER','WBST-2429','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain) 
-VALUES('Bob_Mark','Monday',30,50000,'y','MANAGERS LOCATION MANAGING','LOC-4729','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain) 
+VALUES('Bob_Mark','Monday',30,50000,'MANAGERS LOCATION MANAGING','LOC-4729','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mark_Bob','Monday',30,50000,'y','MANAGERS LOCATION MANAGING','LOC-4729','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mark_Bob','Monday',30,50000,'MANAGERS LOCATION MANAGING','LOC-4729','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Jack_Bob','Monday',30,50000,'y','MANAGERS MAPS MANAGING','MPS-2849','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Jack_Bob','Monday',30,50000,'MANAGERS MAPS MANAGING','MPS-2849','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Bob_Jack','Monday',30,50000,'y','MANAGERS MAPS MANAGING','MPS-2849','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Bob_Jack','Monday',30,50000,'MANAGERS MAPS MANAGING','MPS-2849','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Jack_Mark','Monday',30,50000,'y','MANAGERS SEARCH MANAGING','SRC-2837','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Jack_Mark','Monday',30,50000,'MANAGERS SEARCH MANAGING','SRC-2837','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES('Mark_Jack','Monday',30,50000,'y','MANAGERS SEARCH MANAGING','SRC-2837','google.com')
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('Mark_Jack','Monday',30,50000,'MANAGERS SEARCH MANAGING','SRC-2837','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('claire.carles','Monday',23,2000,'leave','PHP-5019','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('clark.maurine','Tuesday',30,5000,'leave','PHP-5019','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('wade.brandee','Wednesday',16,10000,'leave','JS-8938','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('andra.kyla','Thursday',1,90000,'leave','JS-8938','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('rosannah.humphrey','Sunday',10,8599,'leave','BS-3291','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('marisa.lavender','Saturday',9,4500,'leave','BS-3291','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('elisabeth.aveline','Monday',13,6300,'leave','MRC-8738','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('sunny.debbie','Tuesday','leave','MRC-8738','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('coral.gaye','Wednesday',18,9000,'leave','CSR-1263','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('sherwood.alysa','Tuesday',15,8700,'leave','CSR-1263','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('van.krystal','Thursday',29,9000,'leave','WBST-2429','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('cam.percival','Monday',14,9500,'leave','WBST-2429','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('mindy.adella','Tuesday',19,7800,'leave','LOC-4729','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('juliana.clover','Saturday',11,8000,'leave','LOC-4729','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('wilburn.theresa','Tuesday',29,70000,'leave','MPS-2849','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('octavia.harlan','Wednesday',13,8000,'leave','MPS-2849','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('tracee.charlton','Monday',17,8000,'leave','SRC-2837','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES('godfrey.love','Tuesday',21,10000,'leave','SRC-2837','google.com');
 
 
 
 --MANAGERS INSERTIONS
-INSERT INTO Managers (user_name,type) VALUES('Mohamed_Ahmed','HR')
+INSERT INTO Managers (user_name,type)
+VALUES('Mohamed_Ahmed','HR');
 
-INSERT INTO Managers (user_name,type) VALUES('Ahmed_Mohamed','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Ahmed_Mohamed','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Mahmoud_Ahmed','Regular Employee')
+INSERT INTO Managers (user_name,type)
+VALUES('Mahmoud_Ahmed','Regular Employee');
 
-INSERT INTO Managers (user_name,type) VALUES('Ahmed_Mahmoud','HR')
+INSERT INTO Managers (user_name,type)
+VALUES('Ahmed_Mahmoud','HR');
 
-INSERT INTO Managers (user_name,type) VALUES('Mahmoud_Mohamed','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Mahmoud_Mohamed','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Mohamed_Mahmoud','Regular Eployee')
+INSERT INTO Managers (user_name,type)
+VALUES('Mohamed_Mahmoud','Regular Eployee');
 
-INSERT INTO Managers (user_name,type) VALUES('Joe_Matt','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Joe_Matt','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Matt_Joe','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Matt_Joe','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('John_Matt','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('John_Matt','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Matt_John','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Matt_John','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Joe_John','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Joe_John','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('John_Joe','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('John_Joe','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Bob_Mark','HR')
+INSERT INTO Managers (user_name,type)
+VALUES('Bob_Mark','HR');
 
-INSERT INTO Managers (user_name,type) VALUES('Mark_Bob','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Mark_Bob','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Jack_Bob','Regular Employee')
+INSERT INTO Managers (user_name,type)
+VALUES('Jack_Bob','Regular Employee');
 
-INSERT INTO Managers (user_name,type) VALUES('Bob_Jack','HR')
+INSERT INTO Managers (user_name,type)
+VALUES('Bob_Jack','HR');
 
-INSERT INTO Managers (user_name,type) VALUES('Jack_Mark','Manager')
+INSERT INTO Managers (user_name,type)
+VALUES('Jack_Mark','Manager');
 
-INSERT INTO Managers (user_name,type) VALUES('Mark_Jack','Regular Eployee')
+INSERT INTO Managers (user_name,type)
+VALUES('Mark_Jack','Regular Eployee');
 
+--RERGULARS INSERTIONS
+INSERT INTO RegularEmployees (user_name)
+VALUES('claire.carles');
+INSERT INTO RegularEmployees (user_name)
+VALUES('clark.maurine');
+INSERT INTO RegularEmployees (user_name)
+VALUES('wade.brandee');
+INSERT INTO RegularEmployees (user_name)
+VALUES('andra.kyla');
+INSERT INTO RegularEmployees (user_name)
+VALUES('rosannah.humphrey');
+INSERT INTO RegularEmployees (user_name)
+VALUES('marisa.lavender');
+INSERT INTO RegularEmployees (user_name)
+VALUES('elisabeth.aveline');
+INSERT INTO RegularEmployees (user_name)
+VALUES('sunny.debbie');
+INSERT INTO RegularEmployees (user_name)
+VALUES('coral.gaye');
+INSERT INTO RegularEmployees (user_name)
+VALUES('sherwood.alysa');
+INSERT INTO RegularEmployees (user_name)
+VALUES('van.krystal');
+INSERT INTO RegularEmployees (user_name)
+VALUES('cam.percival');
+INSERT INTO RegularEmployees (user_name)
+VALUES('mindy.adella');
+INSERT INTO RegularEmployees (user_name)
+VALUES('juliana.clover');
+INSERT INTO RegularEmployees (user_name)
+VALUES('wilburn.theresa');
+INSERT INTO RegularEmployees (user_name)
+VALUES('octavia.harlan');
+INSERT INTO RegularEmployees (user_name)
+VALUES('tracee.charlton');
+INSERT INTO RegularEmployees (user_name)
+VALUES('godfrey.love');
 
 
 --JOB SEEKER INSERTIONS
@@ -417,4 +537,9 @@ INSERT INTO Job_Seekers (user_name) VALUES ('Yousef.Mustafa')
 INSERT INTO Job_Seekers (user_name) VALUES ('Fayrouz.Hussain')
 
 INSERT INTO Job_Seekers (user_name) VALUES ('Dina.AlMasry')
+<<<<<<< HEAD
 
+||||||| merged common ancestors
+>>>>>>> eb64bbe76939d86c0291791a887def8d07826f5f
+=======
+>>>>>>> ca55ab7bd586db00f609892a9c2998b221c084b9
