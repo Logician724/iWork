@@ -882,11 +882,13 @@ GO
 
 GO
 
-CREATE PROC AllCompaniesAndDepartmentsSP
+CREATE PROC ViewCompanyAndItsDepartmentsSP
+@compnay_domain VARCHAR(150)
 AS 
 SELECT *
-FROM Companies c, Departments d
-WHERE c.domain_name = d.company_domain
+FROM Companies c INNER JOIN Departments d
+ON c.domain_name = d.company_domain 
+WHERE c.domain_name = @company_domain
 
 GO
 -- i tried to do this one but i seriously couldnt i am so sorry
