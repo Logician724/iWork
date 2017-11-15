@@ -768,11 +768,8 @@ INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 GO
-<<<<<<< HEAD
+
 CREATE PROC EditPersonalInfoSP --correct
-@username VARCHAR(30) , @password VARCHAR(30), @personalEmail VARCHAR(70), @birthDate DATETIME, @expYear INT, @firstName VARCHAR(25), @lastName VARCHAR(25)
-=======
-CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
 @password VARCHAR(30),
 @personalEmail VARCHAR(70),
@@ -780,7 +777,6 @@ CREATE PROC EditPersonalInfoSP
 @expYear INT,
 @firstName VARCHAR(25),
 @lastName VARCHAR(25)
->>>>>>> b467e20bf6d5deed831dda4bad6dedc03a2a5b6b
 AS
 UPDATE Users 
 SET
