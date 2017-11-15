@@ -420,7 +420,20 @@ GO
 
 
 
-
+GO
+CREATE PROC RespondToJobApplicationsSP
+@managerResponse VARCHAR(20)
+AS
+UPDATE Applications
+SET Applications.manager_response_app=@managerResponse
+WHERE Applications.hr_response_app = 'Accepted' AND EXISTS  
+     (
+	   SELECT *
+	   FROM Staff_Members SM INNER JOIN Managers M ON SM.user_name = M.user_name 
+	   INNER JOIN Applications A on A.manager_username=M.user_name 
+	   INNER JOIN Jobs J on J.department_code=A.department_code
+     )
+GO
 
 
 
