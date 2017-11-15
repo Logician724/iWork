@@ -49,58 +49,7 @@ VALUES('google.com','SRC-2837','Google Search handlers')
 
 
 --JOBS INSERTIONS
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES	('facebook.com','PHP-5019','MANAGERS PHP DEVELOPER',1/1/2014,'coding in facebook pages using PHP coding language on back end coding',
-3,10000,'coding in facebook with PHP',10,9)
 
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('facebook.com','JS-8938','MANAGERS JS DEVELOPER',1/1/2014,'coding in facebook pages using JS coding language on front end coding',
-3,15000,'coding in facebook with JS',10,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('facebook.com','BS-3291','MANAGERS BOOTSTRAP DEVELOPER',1/1/2014,'coding in facebook pages using BOOTSTRAP coding language on front end coding',
-3,15000,'coding in facebook with BOOTSTRAP',10,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','MRC-8738','MANAGERS MERCHANDISE MANAGING',19/11/2010,
-'Handling merchandise where from storage, quality check, and posting to customers',1,5000,
-'Handling merchandise in amazon',7,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','CSR-1263','MANAGERS CUSTOMER MANAGING',19/11/2010,
-'Handling customer where from complaints, Refunds, and quality check with the customers',1,7000,
-'Handling merchandise in amazon',7,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','WBST-2429','MANAGERS WEBSITE MANAGING',19/11/2010,
-'Handling website where from maintenance and making new websites',3,15000,
-'website handling in amazon with BOOTSTRAP',7,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('google.com','LOC-4729','MANAGERS LOCATION MANAGING',1/11/2010,
-'responsible for handling the location feature presented by google with maintenance and inventions',
-10,50000,'handling location feature google',10,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('google.com','MPS-2849','MANAGERS MAPS MANAGING',1/11/2010,
-'responsible for handling the maps feature presented by google with maintenance and inventions',
-3,50000,'handling maps feature google',10,9)
-
-INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
-min_years_experience,salary,short_description,vacancies,working_hours) 
-VALUES('google.com','SRC-2837','MANAGERS SEARCH MANAGING',1/11/2010,
-'responsible for handling the search feature presented by google with maintenance and inventions',
-3,50000,'handling search feature google',10,9)
-
-<<<<<<< HEAD
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES	('facebook.com','PHP-5019','Employee- PHP Developer','2/1/2010','coding in facebook pages using PHP coding language on back end coding',
@@ -152,8 +101,6 @@ VALUES('google.com','SRC-2837','Employee- Developer in Search Department','5/1/2
 'responsible for working for the search engine department presented by google with maintenance and contributions',
 3,50000,'working in search engine department google',6,8)
 
-||||||| merged common ancestors
-=======
 INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
  VALUES ('HR PHP Web Programmer','facebook.com','PHP-5019','1/1/2018','detailed description',
