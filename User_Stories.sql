@@ -238,7 +238,7 @@ ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name 
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
 
 GO
-CREATE PROC ViewApprovedJobAppSP
+CREATE PROC ViewApprovedJobAppSP  --Correct i guess  Hya wl 2 eli t7tha 
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150)
@@ -266,13 +266,13 @@ FROM Jobs j
 WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.company_domain = @companyDomain)
 
 GO
-CREATE PROC AssignRegularToProjectSP
-@userName VARCHAR(30),
+CREATE PROC AssignRegularToProjectSP  --Redo needed
+@userName VARCHAR(30), --remove username
 @projectName VARCHAR(100),
 @definingUser VARCHAR(30), --user name of the manager that defined the project--
 @regularUserName VARCHAR(30)
 AS
-IF EXISTS (
+IF EXISTS ( --Here WE NEED TO REMOVE EXISTS .. AND CHECK IF THEY BOTH WORK IN THE SAME DEPARTMENT .. ALSO CHECK THAT NO OTHER PROJECT IS ASSIGNED TO THIS EMPLOYEE 
 SELECT *
 FROM Staff_Members s1 INNER JOIN Staff_Members s2
 ON s1.user_name = s2.user_name
