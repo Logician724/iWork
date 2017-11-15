@@ -693,6 +693,27 @@ END --END IF EXISTS
 GO
 
 
+GO 
+CREATE PROC ViewRequestsSP
+@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150)
+AS
+IF EXISTS (
+SELECT*
+FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
+WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
+)
+BEGIN
+SELECT R.*
+FROM Requests R, Regular_Employees_Replace_Regular_Employees RE, Managers_Replace_Managers_In_Requests M, HR_Employees_Replace_HR_Employee HE
+WHERE (R.request_id=RE.request_id OR R.request_id=M.request_id OR R.request_id=HE.request_ID) AND R.manager_response_req='Accepted' AND (R.hr_response_req='Rejected' OR R.hr_response_req IS NULL)
+AND EXISTS (
+SELECT*
+FROM Staff_Members SM INNER JOIN Departments D ON SM.department_code=D.department_code AND SM.company_domain=D.company_domain
+WHERE D.department_code=@departmentCode AND D.company_domain=@companyDomain 
+          )
+END
+GO
+
 
 
 
