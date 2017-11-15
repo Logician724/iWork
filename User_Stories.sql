@@ -489,3 +489,40 @@ INSERT INTO Applications VALUES
 (NULL,NULL,NULL,NULL,NULL,NULL,@seeker_user_name,@job_title,@department_code,@company_domain)
 
 GO
+
+CREATE PROC ChooseJobFromAcceptedSP
+@seeker_username VARCHAR(30),
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150),
+@job_title VARCHAR(150),
+@day_off VARCHAR(10),
+@company_email VARCHAR(70)
+AS
+IF(	EXISTS(
+			SELECT * 
+			FROM Applications a
+			WHERE a.company_domain = @company_domain AND
+			a.department_code = @department_code AND
+			a.job_title = @job_title AND
+			a.seeker_username = @seeker_username AND
+			a.app_status = 'Accepted'
+			)
+	)	
+BEGIN
+DELETE FROM Job_Seekers 
+	WHERE Job_Seekers.user_name = @seeker_username
+DECLARE @salary INT
+SELECT @salary = salary
+	FROM Jobs
+	WHERE department_code = @department_code AND company_domain = @company_domain AND job_title = @job_title 
+INSERT INTO Staff_Members 
+	VALUES(@seeker_username,@day_off,30,@salary,@company_email,@job_title,@department_code,@company_domain)
+UPDATE Jobs 
+	SET vacancies = vacancies-1
+	WHERE Jobs.company_domain = @company_domain AND
+			Jobs.department_code = @department_code AND
+			Jobs.job_title = @job_title 
+
+END
+
+GO 
