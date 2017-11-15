@@ -429,7 +429,7 @@ INSERT INTO Business_Trip_Requests VALUES (@requestId,@tripDestination,@tripPurp
 
 
 GO
-CREATE FUNCTION  TOP3hours()
+/*CREATE FUNCTION  TOP3hours()
 RETURNS  @TOP3 TABLE 
 (
     
@@ -439,7 +439,7 @@ RETURNS  @TOP3 TABLE
 
 AS
 BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL)
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL
 
 insert into @myTable 
 SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R WHERE  R.user_name=A.user_name  GROUP BY R.user_name ORDER BY SUM(A.duration) desc
@@ -447,7 +447,7 @@ SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R
 insert into @TOP3 
 SELECT USER_NAME, sum FROM @mytable 
 return
-END
+END */
 
 GO
 CREATE FUNCTION  RegularsWithFixed()
@@ -473,6 +473,14 @@ END
 
 GO
 
+CREATE PROC ViewTop3RegularSp
+AS
+SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) FROM Attendances A ,DBO.RegularsWithFixed() R , Users U WHERE  R.user_name=A.user_name AND R.user_name=U.user_name GROUP BY first_name +' '+ last_name  ORDER BY SUM(A.duration) desc
+
+
+
+
+DROP PROC ViewTop3RegularSp;
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
 DROP PROC ReplaceRegularSP;
