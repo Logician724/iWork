@@ -160,6 +160,16 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
+CREATE PROC ViewAttendanceOfStaffSP
+@staffUserName VARCHAR(30),
+@year INT
+AS
+SELECT SUM(a.duration)
+FROM Attendances a
+WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
+GROUP BY MONTH(a.date)
+
+GO
 CREATE PROC ViewTasksInProjectSP
 @projectName VARCHAR(100),
 @userName VARCHAR(30)
@@ -328,7 +338,106 @@ UPDATE Managers_Assign_Tasks_To_Regulars
 SET Regular_user_name=@username
 WHERE @taskName=task_name AND @deadline=task_deadline AND @project=project_name 
 
+GO 
 
+Create PROC FindTypeOfReplacementSp @username VARCHAR(30),@username2 VARCHAR(30) ,@job VARCHAR(30) OUTPUT
+AS
+IF EXISTS ( SELECT USER_NAME FROM HR_Employees WHERE @userName =user_name ) AND EXISTS ( SELECT USER_NAME FROM HR_Employees WHERE @userName2 =user_name )   SELECT @job='hr'
+else if  EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @userName =user_name ) AND EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @userName2 =user_name )  SELECT @job='Manager'
+else if EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @userName =user_name ) AND EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @userName2 =user_name )  SELECT @job='Regular'
+
+GO
+
+CREATE PROC ReplaceHRSP
+
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
+AS
+--DECLARE @job VARCHAR(30)
+--EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+IF NOT EXISTS ( SELECT * FROM HR_Employees_Replace_HR_Employees h1,HR_Employees h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
+AND r.end_date=@endDate AND r.start_date=@startDate ) 
+INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+declare @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO HR_Employees_Replace_HR_Employees VALUES(@requestId,@replacementUserName,@userName)
+
+
+
+GO
+
+CREATE PROC ReplaceManagerSP
+
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
+AS
+--DECLARE @job VARCHAR(30)
+--EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+IF NOT EXISTS ( SELECT * FROM Managers_Replace_Managers_In_Requests h1,Managers h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
+AND r.end_date=@endDate AND r.start_date=@startDate ) 
+INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+declare @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Managers_Replace_Managers_In_Requests VALUES(@requestId,@replacementUserName,@userName)
+
+
+GO
+
+CREATE PROC ReplaceRegularSP
+
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
+AS
+--DECLARE @job VARCHAR(30)
+--EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+IF NOT EXISTS ( SELECT * FROM Regular_Employees_Replace_Regular_Employees h1,Regular_Employees h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
+AND r.end_date=@endDate AND r.start_date=@startDate ) 
+INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+declare @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Regular_Employees_Replace_Regular_Employees VALUES(@requestId,@replacementUserName,@userName)
+
+
+
+GO 
+CREATE PROC ApplyForLeaveRequestSP
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+AS 
+DECLARE @job VARCHAR(30)
+EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+if (@job='hr') begin  EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate  end
+else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  end
+else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
+DECLARE @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Leave_Requests VALUES (@requestId,@type)
+
+GO 
+CREATE PROC ApplyForBusinessRequestSP
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@tripDestination VARCHAR(150) ,
+@tripPurpose TEXT , @endDate DATETIME , @startDate DATETIME
+AS 
+DECLARE @job VARCHAR(30)
+EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+if (@job='hr') begin  EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate  end
+else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  end
+else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
+DECLARE @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Business_Trip_Requests VALUES (@requestId,@type)
+
+
+DROP PROC ApplyForLeaveRequestSP;
+DROP PROC ReplaceManagerSP;
+DROP PROC ReplaceRegularSP;
+
+DROP PROC ReplaceHRSP;
+
+
+
+
+
+
+DROP PROC ReplaceRegularSp;
+
+DROP PROC FindTypeOfReplacementSp;
 
 DROP PROC RemoveRegularFromProjectSp
 
@@ -742,7 +851,6 @@ ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.com
 WHERE s.user_name = @userName 
 RETURN (@workingHours - @duration)
 END
-GO
 
 GO
 CREATE FUNCTION CheckJobTitle
@@ -758,12 +866,7 @@ SET @returnedBit ='0'
 RETURN @returnedBit
 END
 
-
-
-
-
-
-
+GO
 DROP PROC AllCompaniesAndDepartmentsSP 
 DROP PROC CompaniesSalaryOrderedSP
 DROP PROC ChooseJobFromAcceptedSP
