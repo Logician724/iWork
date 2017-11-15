@@ -584,3 +584,25 @@ SELECT p.*
 	WHERE m.manager_user_name = @user_name
 
 GO
+
+CREATE PROC ManagerDecidingRequestSP
+@manager_username VARCHAR(50),
+@staff_username VARCHAR(50),
+@manager_response VARCHAR(10),
+@reason_of_disapproval TEXT
+AS
+
+BEGIN
+IF(@manager_response = 'Accepted')
+	SET @reason_of_disapproval = NULL
+END
+
+UPDATE Requests 
+	SET Requests.manager_response_req = @manager_response, Requests.reason_of_disapproval = @reason_of_disapproval, Requests.manager_user_name = @manager_username
+	WHERE (request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @staff_username)
+	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @staff_username)
+	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @staff_username)
+	) AND (SELECT s.department_code FROM Staff_Members s INNER JOIN Managers m ON s.user_name = m.user_name WHERE  s.user_name = @manager_username) 
+	= (SELECT s.deparmtnet_code FROM Staff_Members s WHERE s.user_name = @staff_username) 
+
+GO
