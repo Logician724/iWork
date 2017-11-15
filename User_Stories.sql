@@ -457,9 +457,8 @@ CREATE PROC CompaniesSalaryOrderedSP
 AS
 SELECT c.*
 FROM Companies c INNER JOIN 
-(SELECT AVG(salary) AS s, l AS company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
-ON c.domain_name = m. 
-ORDER BY m.s DESC
+(SELECT AVG(salary) AS s, Staff_Members.company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
+ON c.domain_name = m. company_domain
 
 GO
 
