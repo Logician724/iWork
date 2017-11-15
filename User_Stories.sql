@@ -268,7 +268,18 @@ UPDATE Managers_Assign_Tasks_To_Regulars
 SET Regular_user_name=@username
 WHERE @taskName=task_name AND @deadline=task_deadline AND @project=project_name 
 
+GO 
 
+Create PROC FindTypeOfReplacementSp @username VARCHAR(30),@username2 VARCHAR(30) ,@job VARCHAR(30) OUTPUT
+AS
+IF EXISTS ( SELECT USER_NAME FROM HR_Employees WHERE @user_name =user_name ) AND EXISTS ( SELECT USER_NAME FROM HR_Employees WHERE @user_name2 =user_name )   SELECT @job='hr'
+else if  EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @user_name =user_name ) AND EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @user_name2 =user_name )  SELECT @job='Manager'
+else if EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @user_name =user_name ) AND EXISTS ( SELECT USER_NAME FROM Regular_Employees WHERE @user_name2 =user_name )  SELECT @job='Regular'
+
+
+
+
+DROP PROC ReplaceRegularSp;
 
 DROP PROC RemoveRegularFromProjectSp
 
