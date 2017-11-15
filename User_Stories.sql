@@ -155,19 +155,19 @@ GO
 CREATE PROC SendEmailSP --Receiver Should Also have a row added to it
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
-@recepientUserName VARCHAR(30),
-@recepientEmail VARCHAR(70),
+@recipientUserName VARCHAR(30),
+@recipientEmail VARCHAR(70),
 @emailSubject VARCHAR(140),
 @emailBody TEXT
 AS 
 INSERT INTO Emails
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
 VALUES
-(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
+(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recipientEmail,@emailSubject,@emailBody)
 INSERT INTO Staff_Receives_Email
-(time_stamp,sender_user_name,recepient_username)
+(time_stamp,sender_user_name,recipient_username)
 VALUES
-(CURRENT_TIMESTAMP,@senderUserName,@recepientUserName)
+(CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
 
 GO
 CREATE PROC AddJobSP --How do we stop him from adding jobs in another department? take user_name of the hr as an input
@@ -363,7 +363,7 @@ CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30)
 AS
 SELECT E.*
 FROM Emails E inner Join Staff_Receives_EmailS R 
-ON E.sender_user_name=sender_user_name AND R.recepient_username=@username
+ON E.sender_user_name=sender_user_name AND R.recipient_username=@username
 
 
 GO

@@ -282,12 +282,12 @@ FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE CAS
 );
 
 CREATE TABLE Staff_Receives_Email(
-PRIMARY KEY(time_stamp,sender_user_name,recepient_username),
+PRIMARY KEY(time_stamp,sender_user_name,recipient_username),
 time_stamp DATETIME NOT NULL,
 sender_user_name VARCHAR(30) NOT NULL,
-recepient_username VARCHAR(30) NOT NULL,
+recipient_username VARCHAR(30) NOT NULL,
 FOREIGN KEY(time_stamp,sender_user_name) REFERENCES Emails(time_stamp,sender_user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
-FOREIGN KEY(recepient_username) REFERENCES Staff_Members(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
+FOREIGN KEY(recipient_username) REFERENCES Staff_Members(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
 );
 
 
