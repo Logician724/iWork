@@ -65,3 +65,37 @@ VALUES('google.com','MPS-2849','Google Maps handlers')
 INSERT INTO Departments (company_domain,department_code,name)
 VALUES('google.com','SRC-2837','Google Search handlers')
 
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('claire.carles','MyPassword2017','claireX@gmail.com','12/10/1995',5,'claire','carles');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('clark.maurine','coolPass168','clarky222@gmail.com','7/5/1992',7,'Clark','Maurine');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('wade.brandee','sakamotokun-japan','woodybrand@gmail.com','9/9/1993',9,'Wade','Brandee');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('andra.kyla','qwerty15690','androla334@gmail.com','8/7/1990',10,'Andra','Kyla');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('rosannah.humphrey','HisPasswordiseasy','rosyno4@gmail.com','9/10/1998',10,'Rosannah','Humprey');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('marisa.lavender','passuwadu','smartxd998@gmail.com','11/11/1987',10,'Marisa','Lavender');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('elisabeth.aveline','elipassword6698','sotired889@gmail.com','9/9/1991',8,'Elisabeth','Aveline');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('sunny.debbie','ghpass9978','sunshinedip@gmail.com','8/8/1988',13,'Sunny','Debbie');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('coral.gaye','coryhas998','coralbe88@gmail.com','8/7/1990',3,'Coral','Gaye');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('sherwood.alysa','sherryPass999','sherwood198@gmail.com','1/2/1991',4,'Sherwood','Alysa');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('van.krystal','vanyou778','vanny44@gmail.com','19/8/1993',5,'Van','Krystal');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('cam.percival','cammyouw2019','camerahere778@gmail.com','1/1/1990',8,'Cam','Percival');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('mindy.adella','mindyou7709','mindour445@gmail.com','2/4/1981',5,'Mindy','Adella');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('juliana.clover','juliyo6690','juli-killer@gmail.com','8/8/1988',9,'Juliana','Clover');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('wilburn.theresa','wilburnyxd88xdxd','willyburning@gmail.com','7/6/1984',3,'Wilburn','Theresa');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('octavia.harlan','octano88','octave9@gmail.com','7/6/1989',3,'Octavia','Harlen');
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('tracee.charlton','tracemexd1998','tracer.tracee882@gmail.com','8/8/1991',6,'Tracee','Charlton');
