@@ -409,6 +409,20 @@ DECLARE @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
 INSERT INTO Leave_Requests VALUES (@requestId,@type)
 
+GO 
+CREATE PROC ApplyForBusinessRequestSP
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@tripDestination VARCHAR(150) ,
+@tripPurpose TEXT , @endDate DATETIME , @startDate DATETIME
+AS 
+DECLARE @job VARCHAR(30)
+EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+if (@job='hr') begin  EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate  end
+else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  end
+else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
+DECLARE @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Business_Trip_Requests VALUES (@requestId,@type)
+
 
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
