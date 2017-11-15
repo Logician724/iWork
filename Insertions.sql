@@ -586,6 +586,27 @@ INSERT INTO RegularEmployees (user_name)
 VALUES('godfrey.love');
 
 
+INSERT INTO HR_Employees(user_name) VALUES ('salma.adel');
+INSERT INTO HR_Employees(user_name) VALUES ('yasmeen.sameh');
+INSERT INTO HR_Employees(user_name) VALUES ('hajer.haitham');
+INSERT INTO HR_Employees(user_name) VALUES ('mirna.alteer');
+INSERT INTO HR_Employees(user_name) VALUES ('sally.ramadan');
+INSERT INTO HR_Employees(user_name) VALUES ('firdous.ahmed');
+INSERT INTO HR_Employees(user_name) VALUES ('hadeel.mohamed');
+INSERT INTO HR_Employees(user_name) VALUES ('islam.osama');
+INSERT INTO HR_Employees(user_name) VALUES ('mohamed.osama');
+INSERT INTO HR_Employees(user_name) VALUES ('dana.debs');
+INSERT INTO HR_Employees(user_name) VALUES ('ahmed.hussain');
+INSERT INTO HR_Employees(user_name) VALUES ('amr.mohsen');
+INSERT INTO HR_Employees(user_name) VALUES ('dahlia.karass');
+INSERT INTO HR_Employees(user_name) VALUES ('ahmed.shehata');
+INSERT INTO HR_Employees(user_name) VALUES ('youmna.marzook');
+INSERT INTO HR_Employees(user_name) VALUES ('bonita.bon');
+INSERT INTO HR_Employees(user_name) VALUES ('basma.mohamed');
+INSERT INTO HR_Employees(user_name) VALUES ('salma.tarek');
+
+
+
 --JOB SEEKER INSERTIONS
 
 INSERT INTO Job_Seekers (user_name) VALUES ('Yousef.Mustafa')
