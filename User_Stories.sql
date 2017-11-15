@@ -526,3 +526,14 @@ UPDATE Jobs
 END
 
 GO 
+
+CREATE PROC DeletePendingRequestsSP
+@username VARCHAR(30)
+AS
+DELETE Requests
+	WHERE request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @username)
+	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @username)
+	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @username)
+	AND hr_response_req = NULL
+
+GO
