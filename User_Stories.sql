@@ -421,8 +421,35 @@ else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacement
 else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
 DECLARE @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
-INSERT INTO Business_Trip_Requests VALUES (@requestId,@type)
+INSERT INTO Business_Trip_Requests VALUES (@requestId,@tripDestination,@tripPurpose)
 
+
+
+
+
+
+GO
+CREATE FUNCTION  TOP3hours()
+RETURNS  @TOP3 TABLE 
+(
+    
+    user_name  VARCHAR(30) NOT NULL,
+    SUM INT  NOT NULL
+)
+
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL)
+
+insert into @myTable 
+SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R WHERE  R.user_name=A.user_name  GROUP BY R.user_name ORDER BY SUM(A.duration) desc
+
+insert into @TOP3 
+SELECT USER_NAME, sum FROM @mytable 
+return
+END
+
+GO
 
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
