@@ -452,3 +452,13 @@ FROM Companies c, Departments d
 WHERE c.domain_name = d.company_domain
 
 GO
+-- i tried to do this one but i seriously couldnt i am so sorry
+CREATE PROC CompaniesSalaryOrderedSP
+AS
+SELECT c.*
+FROM Companies c INNER JOIN 
+(SELECT AVG(salary) AS s, l AS company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
+ON c.domain_name = m. 
+ORDER BY m.s DESC
+
+GO
