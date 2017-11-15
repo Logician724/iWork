@@ -100,6 +100,57 @@ VALUES('google.com','SRC-2837','MANAGERS SEARCH MANAGING',1/11/2010,
 'responsible for handling the search feature presented by google with maintenance and inventions',
 3,50000,'handling search feature google',10,9)
 
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES	('facebook.com','PHP-5019','Employee- PHP Developer','2/1/2010','coding in facebook pages using PHP coding language on back end coding',
+3,10000,'coding in facebook with PHP',10,8)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('facebook.com','JS-8938','Employee- JS Developer','1/3/2012','coding in facebook pages using JS coding language on front end coding',
+3,15000,'coding in facebook with JS',2,8)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('facebook.com','BS-3291','Employee- BootStrap Developer','1/7/2007','coding in facebook pages using BOOTSTRAP coding language on front end coding',
+3,15000,'coding in facebook with BOOTSTRAP',7,8)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','MRC-8738','Employee- Merchandise Managing','5/12/2000',
+'Handling merchandise where from storage, quality check, and posting to customers',1,5000,
+'Handling merchandise in amazon',6,7)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','CSR-1263','Employee- Customer Managing','8/9/2017',
+'Handling customer where from complaints, Refunds, and quality check with the customers',1,7000,
+'Handling merchandise in amazon',8,7)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('amazon.com','WBST-2429','Employee- Website Developer','9/11/2010',
+'Developing website with doing maintenance and making new websites',3,15000,
+'website handling in amazon with BOOTSTRAP',1,7)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('google.com','LOC-4729','Employee- Developer in Location Department','12/8/2010',
+'responsible for working for the location department presented by google by doing maintenance and contributions',
+10,50000,'working in location department google',13,8)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES('google.com','MPS-2849','Employee- Developer in Maps Department','12/11/2011',
+'responsible for working for the maps department presented by google with applying maintenance and contributions',
+3,50000,'working in maps department google',25,8)
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours) 
+VALUES('google.com','SRC-2837','Employee- Developer in Search Department','5/1/2003',
+'responsible for working for the search engine department presented by google with maintenance and contributions',
+3,50000,'working in search engine department google',6,8)
+
 
 
 
@@ -370,4 +421,4 @@ INSERT INTO Job_Seekers (user_name) VALUES ('Yousef.Mustafa')
 INSERT INTO Job_Seekers (user_name) VALUES ('Fayrouz.Hussain')
 
 INSERT INTO Job_Seekers (user_name) VALUES ('Dina.AlMasry')
->>>>>>> eb64bbe76939d86c0291791a887def8d07826f5f
+
