@@ -546,3 +546,16 @@ SELECT a.*
 	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21
 
 GO
+
+CREATE PROC ViewNewApplicationsSP
+@seeker_username VARCHAR(30),
+@compnay_domain VARCHAR(150),
+@department_code VARCHAR(30),
+@job_title VARCHAR(150)
+AS
+SELECT *,a.score 
+	FROM Applications a INNER JOIN Job_Seekers js ON a.seeker_username = js.user_name INNER JOIN Jobs j 
+	ON a.company_domain = j.company_domain AND a.department_code = j.department_code 
+	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
+
+GO
