@@ -689,7 +689,6 @@ ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.com
 WHERE s.user_name = @userName 
 RETURN (@workingHours - @duration)
 END
-GO
 
 GO
 CREATE FUNCTION CheckJobTitle
@@ -705,12 +704,7 @@ SET @returnedBit ='0'
 RETURN @returnedBit
 END
 
-
-
-
-
-
-
+GO
 DROP PROC AllCompaniesAndDepartmentsSP 
 DROP PROC CompaniesSalaryOrderedSP
 DROP PROC ChooseJobFromAcceptedSP
