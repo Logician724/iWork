@@ -475,6 +475,42 @@ GO
 
 
 GO
+ALTER PROC EditJobInfoSP
+@hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
+@applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
+@vacancies INT=NULL , @workingHours INT=NULL 
+AS 
+--If the department is the HR Employee's Department, He/She can edit the info
+IF EXISTS (
+SELECT*
+FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
+WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
+)
+BEGIN --BEGIN IF EXISTS
+IF(@applicationDeadline IS NOT NULL)
+BEGIN UPDATE Jobs SET application_deadline= @applicationDeadline WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@detailedDescription IS NOT  NULL)
+BEGIN UPDATE Jobs SET detailed_description= @detailedDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@minYearsExperience IS NOT NULL)
+BEGIN UPDATE Jobs SET min_years_experience= @minYearsExperience WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@salary IS NOT NULL)
+BEGIN UPDATE Jobs SET salary = @salary WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@shortDescription IS NOT NULL)
+BEGIN UPDATE Jobs SET short_description = @shortDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@vacancies IS NOT NULL)
+BEGIN UPDATE Jobs SET vacancies= @vacancies WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+IF(@workingHours IS NOT NULL)
+BEGIN UPDATE Jobs SET working_hours = @workingHours WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+END --END IF EXISTS
+GO
+
+
+
+
+
+
+
+GO
 
 CREATE PROC AllCompaniesAndDepartmentsSP
 AS 
