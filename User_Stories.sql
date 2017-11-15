@@ -606,3 +606,14 @@ UPDATE Requests
 	= (SELECT s.deparmtnet_code FROM Staff_Members s WHERE s.user_name = @staff_username) 
 
 GO
+
+-- tihs part needs to be discussed because we might need to change something on the schema
+CREATE PROC ManagerCreateProjectSP
+@manager_username VARCHAR(30),
+@start_date DATETIME,
+@end_date DATETIME,
+@project_name VARCHAR(100)
+AS
+INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
+
+GO
