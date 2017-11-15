@@ -363,6 +363,41 @@ INSERT INTO HR_Employees_Replace_HR_Employees VALUES(@requestId,@replacementUser
 INSERT INTO Leave_Requests VALUES (@requestId,@type)
 
 
+GO
+
+CREATE PROC ReplaceManagerSP
+
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+AS
+--DECLARE @job VARCHAR(30)
+--EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+IF NOT EXISTS ( SELECT * FROM Managers_Replace_Managers_In_Requests h1,Managers h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
+AND r.end_date=@endDate AND r.start_date=@startDate ) 
+INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+declare @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Managers_Replace_Managers_In_Requests VALUES(@requestId,@replacementUserName,@userName)
+INSERT INTO Leave_Requests VALUES (@requestId,@type)
+
+GO
+
+CREATE PROC ReplaceRegularSP
+
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+AS
+--DECLARE @job VARCHAR(30)
+--EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+IF NOT EXISTS ( SELECT * FROM Regular_Employees_Replace_Regular_Employees h1,Regular_Employees h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
+AND r.end_date=@endDate AND r.start_date=@startDate ) 
+INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+declare @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
+INSERT INTO Regular_Employees_Replace_Regular_Employees VALUES(@requestId,@replacementUserName,@userName)
+INSERT INTO Leave_Requests VALUES (@requestId,@type)
+
+
+DROP PROC ReplaceRegularSP;
+
 DROP PROC ReplaceHRSP;
 
 
