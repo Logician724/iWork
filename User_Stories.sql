@@ -288,7 +288,7 @@ INSERT INTO Managers_Assign_Projects_To_Regulars
 VALUES (@userName,@regularUserName,@projectName)
 
 GO
-CREATE PROC AssignRegularToTaskSP
+CREATE PROC AssignRegularToTaskSP --Move On i guess there's issues
 @projectName VARCHAR(100),
 @userName VARCHAR(30),
 @regularUserName VARCHAR(30),
@@ -740,22 +740,22 @@ END
 
 -- And she ended here --
 
+
 GO
-CREATE PROC ViewCompaniesSP
+CREATE PROC ViewCompaniesSP --correct
 AS
 SELECT C.* , CP.phone
 FROM Companies C INNER JOIN  Companies_Phones CP
 ON  C.domain_name = CP.company_domain
 
 GO
-CREATE PROC SearchJobsSP
+CREATE PROC SearchJobsSP --correct
 @keywords TEXT
 AS
 SELECT J.* , C.name AS company_name, D.name AS department_name
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
-
 
 GO
 CREATE PROC EditPersonalInfoSP
