@@ -5,6 +5,7 @@ TRUNCATE TABLE Job_Seekers;
 TRUNCATE TABLE Staff_Members;
 TRUNCATE TABLE Departments;
 TRUNCATE TABLE Companies;
+TRUNCATE TABLE Users;
 
 -- COMPANIES INSERTIONS
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email) 
@@ -74,19 +75,19 @@ VALUES('facebook.com','BS-3291','Manager- Managing BootStrap Department','1/1/20
 
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','MRC-8738','Manager- Managing Merchandise Department','19/11/2010',
+VALUES('amazon.com','MRC-8738','Manager- Managing Merchandise Department','1/11/2010',
 'Manaing employees who are in  merchandise department who handle  storage, quality check, and posting to customers',1,5000,
 'Managing merchandise department in amazon',19,9)
 
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','CSR-1263','Manager- Managing Customer Department','19/11/2010',
+VALUES('amazon.com','CSR-1263','Manager- Managing Customer Department','2/11/2010',
 'Managing employees who work in customer department who handle complaints, Refunds, and quality check with the customers',1,7000,
 'Managing merchandise department in amazon',11,9)
 
 INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
 min_years_experience,salary,short_description,vacancies,working_hours)
-VALUES('amazon.com','WBST-2429','Manager- Managing Website Department','19/11/2010',
+VALUES('amazon.com','WBST-2429','Manager- Managing Website Department','3/11/2010',
 'Handling website where from maintenance and making new websites',3,15000,
 'Managing Website department in amazon ',7,9)
 
@@ -212,67 +213,67 @@ min_years_experience,salary,short_description,vacancies,working_hours)
 
 --USERS INSERTIONS
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
-VALUES('Mohamed_Ahmed','1234','Mohamed.Ahmed@hotmail.com','16/4/1990',5,'Mohamed','Ahmed');
+VALUES('Mohamed_Ahmed','1234','Mohamed.Ahmed@hotmail.com','1/4/1990',5,'Mohamed','Ahmed');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
-VALUES('Ahmed_Mohamed','1234','Ahmed.Mohamed@hotmail.com','18/5/1990',5,'Ahmed','Mohamed');
+VALUES('Ahmed_Mohamed','1234','Ahmed.Mohamed@hotmail.com','1/5/1990',5,'Ahmed','Mohamed');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Mahmoud_Ahmed','1234','Mahmoud.Ahmed@hotmail.com','19/7/1990',5,'Mahmoud','Ahmed');
+VALUES('Mahmoud_Ahmed','1234','Mahmoud.Ahmed@hotmail.com','1/7/1990',5,'Mahmoud','Ahmed');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
 VALUES('Ahmed_Mahmoud','1234','Ahmed.Mahmoud@hotmail.com','12/11/1990',5,'Ahmed','Mahmoud');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Mahmoud_Mohamed','1234','Mahmoud.Mohamed@hotmail.com','14/6/1990',5,'Mahmoud','Mohamed');
+VALUES('Mahmoud_Mohamed','1234','Mahmoud.Mohamed@hotmail.com','1/6/1990',5,'Mahmoud','Mohamed');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Mohamed_Mahmoud','1234','Mohamed.Mahmoud@hotmail.com','13/3/1990',5,'Mohamed','Mahmoud');
+VALUES('Mohamed_Mahmoud','1234','Mohamed.Mahmoud@hotmail.com','1/3/1990',5,'Mohamed','Mahmoud');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Joe_Matt','1234','Joe.Matt@hotmail.com','16/4/1980',15,'Joe','Matt');
+VALUES('Joe_Matt','1234','Joe.Matt@hotmail.com','1/4/1980',15,'Joe','Matt');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Matt_Joe','1234','Matt.Joe@hotmail.com','18/5/1980',15,'Matt','Joe');
+VALUES('Matt_Joe','1234','Matt.Joe@hotmail.com','8/5/1980',15,'Matt','Joe');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('John_Matt','1234','John.Matt@hotmail.com','19/7/1980',15,'John','Matt');
+VALUES('John_Matt','1234','John.Matt@hotmail.com','9/7/1980',15,'John','Matt');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Matt_John','1234','Matt.John@hotmail.com','12/11/1980',15,'Matt','John');
+VALUES('Matt_John','1234','Matt.John@hotmail.com','2/11/1980',15,'Matt','John');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Joe_John','1234','Joe.John@hotmail.com','14/6/1980',15,'Joe','John');
+VALUES('Joe_John','1234','Joe.John@hotmail.com','4/6/1980',15,'Joe','John');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('John_Joe','1234','John.Joe@hotmail.com','13/3/1980',15,'John','Joe');
+VALUES('John_Joe','1234','John.Joe@hotmail.com','3/3/1980',15,'John','Joe');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Bob_Mark','1234','Bob.Mark@hotmail.com','16/4/1970',25,'Bob','Mark');
+VALUES('Bob_Mark','1234','Bob.Mark@hotmail.com','6/4/1970',25,'Bob','Mark');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Mark_Bob','1234','Mark.Bob@hotmail.com','18/5/1970',25,'Mark','Bob');
+VALUES('Mark_Bob','1234','Mark.Bob@hotmail.com','8/5/1970',25,'Mark','Bob');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Jack_Bob','1234','Jack.Bob@hotmail.com','19/7/1970',25,'Jack','Bob');
+VALUES('Jack_Bob','1234','Jack.Bob@hotmail.com','9/7/1970',25,'Jack','Bob');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
 VALUES('Bob_Jack','1234','Bob.Jack@hotmail.com','12/11/1970',25,'Bob','Jack');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
-VALUES('Jack_Mark','1234','Joe.John@hotmail.com','14/6/1970',25,'Joe','John');
+VALUES('Jack_Mark','1234','Joe.John@hotmail.com','1/6/1970',25,'Joe','John');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES('Mark_Jack','1234','Mark.Jack@hotmail.com','13/3/1970',25,'Mark','Jack');
+VALUES('Mark_Jack','1234','Mark.Jack@hotmail.com','3/3/1970',25,'Mark','Jack');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES ('Yousef.Mustafa', 'WWE123','yousef.mustafa@gmail.com','12/11/1993',2,'Yousef', 'Mustafa'); 
+VALUES ('Yousef.Mustafa', 'WWE123','yousef.mustafa@gmail.com','2/11/1993',2,'Yousef', 'Mustafa'); 
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES ('Fayrouz.Hussain','02306FM','fayrouz.hussain@hotmail.com','06/23/1994',1,'Fayrouz','Hussain');
+VALUES ('Fayrouz.Hussain','02306FM','fayrouz.hussain@hotmail.com','6/23/1994',1,'Fayrouz','Hussain');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
-VALUES ('Dina.AlMasry','DMAm111','dinamohamed@gmail.com','11/1/1990',5,'Dina', 'AlMasry');
+VALUES ('Dina.AlMasry','DMAm111','dinamohamed@gmail.com','1/1/1990',5,'Dina', 'AlMasry');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) 
 VALUES ('mirna.alteer','mirna12321','mirna.alteer@yahoo.com','2/2/1992',1,'Mirna','Alteer');
@@ -350,7 +351,7 @@ INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_n
 VALUES ('sherwood.alysa','sherryPass999','sherwood198@gmail.com','1/2/1991',4,'Sherwood','Alysa');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
-VALUES ('van.krystal','vanyou778','vanny44@gmail.com','19/8/1993',5,'Van','Krystal');
+VALUES ('van.krystal','vanyou778','vanny44@gmail.com','1/8/1993',5,'Van','Krystal');
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
 VALUES ('cam.percival','cammyouw2019','camerahere778@gmail.com','1/1/1990',8,'Cam','Percival');
@@ -373,6 +374,14 @@ VALUES ('tracee.charlton','tracemexd1998','tracer.tracee882@gmail.com','8/8/1991
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
 VALUES ('godfrey.love','holypass12345','banme1998j@gmail.com','7/8/1991',6,'Godgfrey','Love');
 
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('gawwad.gooda','batata24242','gawwad1213@gmail.com','3/4/1991',6,'Gawwad','Gooda');
+
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('shadi.aly','kobs82572','shadi.aly1498@gmail.com','2/1/1990',6,'Shadi','Aly');
+
+INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES ('omar.mofti','tarabex1887654','omar.mofti242@gmail.com','9/4/1991',6,'Omar','Mofti');
 
 
 --STAFF MEMBERS INSERTIONS
@@ -452,7 +461,7 @@ INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,d
 VALUES ('elisabeth.aveline','Monday',13,6300,'Employee- Merchandise Managing','MRC-8738','amazon.com');
 
 INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
-VALUES ('sunny.debbie','Tuesday','Employee- Merchandise Managing','MRC-8738','amazon.com');
+VALUES ('sunny.debbie','Tuesday',30,9000,'Employee- Merchandise Managing','MRC-8738','amazon.com');
 
 INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
 VALUES ('coral.gaye','Wednesday',18,9000,'Employee- Customer Managing','CSR-1263','amazon.com');
@@ -484,60 +493,59 @@ VALUES('tracee.charlton','Monday',17,8000,'Employee- Developer in Search Departm
 INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
 VALUES('godfrey.love','Tuesday',21,10000,'Employee- Developer in Search Department','SRC-2837','google.com');
 
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('Dina.AlMasry','Saturday',3,4000,'HR- PHP Web Programmer','PHP-5019','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('salma.adel','Saturday',3,4000,'x','HR- PHP Web Programmer','PHP-5019','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('Fayrouz.Hussain','Saturday',2,4000,'HR- PHP Web Programmer','PHP-5019','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('yasmeen.sameh','Saturday',2,4000,'x','HR- PHP Web Programmer','PHP-5019','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('Yousef.Mustafa','Sunday',4,3000,'HR- Application Developer','BS-3291','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('hajer.haitham','Sunday',4,3000,'x','HR- Application Developer','BS-3291','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('mirna.alteer','Monday',1,3000,'HR- Application Developer','BS-3291','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('mirna.alteer','Monday',1,3000,'x','HR- Application Developer','BS-3291','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('sally.ramadan','Friday',1,5000,'HR- Developer','JS-8938','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('sally.ramadan','Friday',1,5000,'x','HR- Developer','JS-8938','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('firdous.ahmed','Tuesday',2,5000,'HR- Developer','JS-8938','facebook.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('firdous.ahmed','Tuesday',2,5000,'x','HR- Developer','JS-8938','facebook.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('hadeel.mohamed','Sunday',3,6000,'HR- Cashier','MRC-8738','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('hadeel.mohamed','Sunday',3,6000,'x','HR- Cashier','MRC-8738','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('islam.osama','Sunday',2,6000,'HR- Cashier','MRC-8738','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('islam.osama','Sunday',2,6000,'x','HR- Cashier','MRC-8738','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('mohamed.osama','Monday',2,8000,'HR- Customer Service','CSR-1263','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('mohamed.osama','Monday',2,8000,'x','HR- Customer Service','CSR-1263','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('dana.debs','Sunday',2,8000,'HR- Customer Service','CSR-1263','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('dana.debs','Sunday',2,8000,'x','HR- Customer Service','CSR-1263','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('ahmed.hussain','Sunday',1,15000,'HR- Web Developer','WBST-2429','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('ahmed.hussain','Sunday',1,15000,'x','HR- Web Developer','WBST-2429','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('amr.mohsen','Monday',1,15000,'HR- Web Developer','WBST-2429','amazon.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('amr.mohsen','Monday',1,15000,'x','HR- Web Developer','WBST-2429','amazon.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('dahlia.karass','Sunday',1,4000,'HR- Researcher','LOC-4729','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('dahlia.karass','Sunday',1,4000,'x','HR- Researcher','LOC-4729','google.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('ahmed.shehata','Sunday',1,4000,'HR- Researcher','LOC-4729','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('ahmed.shehata','Sunday',1,4000,'x','HR- Researcher','LOC-4729','google.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('youmna.marzook','Tuesday',2,30000,'HR- Designer','MPS-2849','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('youmna.marzook','Tuesday',2,30000,'x','HR- Designer','MPS-2849','google.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('bonita.bon','Tuesday',2,30000,'HR- Designer','MPS-2849','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('bonita.bon','Tuesday',2,30000,'x','HR- Designer','MPS-2849','google.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('basma.mohamed','Friday',2,4000,'HR- Search Engine Managing','SRC-2837','google.com');
 
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('basma.mohamed','Friday',2,4000,'x','HR- Search Engine Managing','SRC-2837','google.com');
-
-INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
-VALUES ('salma.tarek','Tuesday',2,4000,'x','HR- Search Engine Managing','SRC-2837','google.com');
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES ('salma.tarek','Tuesday',2,4000,'HR- Search Engine Managing','SRC-2837','google.com');
 
 
 
@@ -598,70 +606,89 @@ INSERT INTO Managers (user_name,type)
 VALUES('Mark_Jack','Regular Eployee');
 
 --RERGULARS INSERTIONS
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('claire.carles');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('clark.maurine');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('wade.brandee');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('andra.kyla');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('rosannah.humphrey');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('marisa.lavender');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('elisabeth.aveline');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('sunny.debbie');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('coral.gaye');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('sherwood.alysa');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('van.krystal');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('cam.percival');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('mindy.adella');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('juliana.clover');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('wilburn.theresa');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('octavia.harlan');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('tracee.charlton');
-INSERT INTO RegularEmployees (user_name)
+INSERT INTO Regular_Employees (user_name)
 VALUES('godfrey.love');
 
 
-INSERT INTO HR_Employees(user_name) VALUES ('salma.adel');
-INSERT INTO HR_Employees(user_name) VALUES ('yasmeen.sameh');
-INSERT INTO HR_Employees(user_name) VALUES ('hajer.haitham');
-INSERT INTO HR_Employees(user_name) VALUES ('mirna.alteer');
-INSERT INTO HR_Employees(user_name) VALUES ('sally.ramadan');
-INSERT INTO HR_Employees(user_name) VALUES ('firdous.ahmed');
-INSERT INTO HR_Employees(user_name) VALUES ('hadeel.mohamed');
-INSERT INTO HR_Employees(user_name) VALUES ('islam.osama');
-INSERT INTO HR_Employees(user_name) VALUES ('mohamed.osama');
-INSERT INTO HR_Employees(user_name) VALUES ('dana.debs');
-INSERT INTO HR_Employees(user_name) VALUES ('ahmed.hussain');
-INSERT INTO HR_Employees(user_name) VALUES ('amr.mohsen');
-INSERT INTO HR_Employees(user_name) VALUES ('dahlia.karass');
-INSERT INTO HR_Employees(user_name) VALUES ('ahmed.shehata');
-INSERT INTO HR_Employees(user_name) VALUES ('youmna.marzook');
-INSERT INTO HR_Employees(user_name) VALUES ('bonita.bon');
-INSERT INTO HR_Employees(user_name) VALUES ('basma.mohamed');
-INSERT INTO HR_Employees(user_name) VALUES ('salma.tarek');
+--HR_Employees insertions
+INSERT INTO HR_Employees(user_name) 
+VALUES ('Dina.AlMasry');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('Fayrouz.Hussain');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('Yousef.Mustafa');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('mirna.alteer');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('sally.ramadan');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('firdous.ahmed');
+INSERT INTO HR_Employees(user_name)
+VALUES ('hadeel.mohamed');
+INSERT INTO HR_Employees(user_name)
+VALUES ('islam.osama');
+INSERT INTO HR_Employees(user_name)
+VALUES ('mohamed.osama');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('dana.debs');
+INSERT INTO HR_Employees(user_name)
+VALUES ('ahmed.hussain');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('amr.mohsen');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('dahlia.karass');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('ahmed.shehata');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('youmna.marzook');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('bonita.bon');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('basma.mohamed');
+INSERT INTO HR_Employees(user_name) 
+VALUES ('salma.tarek');
 
 
 
 --JOB SEEKER INSERTIONS
 
-INSERT INTO Job_Seekers (user_name) VALUES ('Yousef.Mustafa')
-
-INSERT INTO Job_Seekers (user_name) VALUES ('Fayrouz.Hussain')
-
-INSERT INTO Job_Seekers (user_name) VALUES ('Dina.AlMasry')
-
+INSERT INTO Job_Seekers (user_name)
+VALUES ('gawwad.gooda');
+INSERT INTO Job_Seekers (user_name)
+VALUES ('shadi.aly');
+INSERT INTO Job_Seekers (user_name)
+VALUES ('omar.mofti');
