@@ -456,3 +456,234 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
+
+GO
+
+CREATE PROC AllCompaniesAndDepartmentsSP
+AS 
+SELECT *
+FROM Companies c, Departments d
+WHERE c.domain_name = d.company_domain
+
+GO
+-- i tried to do this one but i seriously couldnt i am so sorry
+CREATE PROC CompaniesSalaryOrderedSP
+AS
+SELECT c.*
+FROM Companies c INNER JOIN 
+(SELECT AVG(salary) AS s, Staff_Members.company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
+ON c.domain_name = m. company_domain
+
+GO
+
+CREATE PROC ApplyJobCheckSP
+@min_years_experience INT,
+@seeker_user_name VARCHAR(30),
+@job_title VARCHAR(150),
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150)
+AS
+IF(
+ EXISTS(
+SELECT *
+FROM Jobs j INNER JOIN Applications a
+ON j.company_domain = a.company_domain AND
+	j.department_code = a.department_code AND
+	j.job_title = a.job_title
+WHERE min_years_experience < @min_years_experience AND
+		a.job_title = @job_title AND
+		a.seeker_username = @seeker_user_name AND
+		a.company_domain = @company_domain AND
+		a.department_code = @department_code AND
+		app_status != 'pending'
+)
+)
+INSERT INTO Applications VALUES
+(NULL,NULL,NULL,NULL,NULL,NULL,@seeker_user_name,@job_title,@department_code,@company_domain)
+
+GO
+
+CREATE PROC ChooseJobFromAcceptedSP
+@seeker_username VARCHAR(30),
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150),
+@job_title VARCHAR(150),
+@day_off VARCHAR(10),
+@company_email VARCHAR(70)
+AS
+IF(	EXISTS(
+			SELECT * 
+			FROM Applications a
+			WHERE a.company_domain = @company_domain AND
+			a.department_code = @department_code AND
+			a.job_title = @job_title AND
+			a.seeker_username = @seeker_username AND
+			a.app_status = 'Accepted'
+			)
+	)	
+BEGIN
+DELETE FROM Job_Seekers 
+	WHERE Job_Seekers.user_name = @seeker_username
+DECLARE @salary INT
+SELECT @salary = salary
+	FROM Jobs
+	WHERE department_code = @department_code AND company_domain = @company_domain AND job_title = @job_title 
+INSERT INTO Staff_Members 
+	VALUES(@seeker_username,@day_off,30,@salary,@company_email,@job_title,@department_code,@company_domain)
+UPDATE Jobs 
+	SET vacancies = vacancies-1
+	WHERE Jobs.company_domain = @company_domain AND
+			Jobs.department_code = @department_code AND
+			Jobs.job_title = @job_title 
+
+END
+
+GO 
+
+CREATE PROC DeletePendingRequestsSP
+@username VARCHAR(30)
+AS
+DELETE Requests
+	WHERE request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @username)
+	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @username)
+	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @username)
+	AND hr_response_req = NULL
+
+GO
+
+CREATE PROC AnnouncementWithinTwentyDaysSP
+@company_domain VARCHAR(150)
+AS
+SELECT a.*
+	FROM Announcements a 
+	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21
+
+GO
+
+CREATE PROC ViewNewApplicationsSP
+@seeker_username VARCHAR(30),
+@compnay_domain VARCHAR(150),
+@department_code VARCHAR(30),
+@job_title VARCHAR(150)
+AS
+SELECT *,a.score 
+	FROM Applications a INNER JOIN Job_Seekers js ON a.seeker_username = js.user_name INNER JOIN Jobs j 
+	ON a.company_domain = j.company_domain AND a.department_code = j.department_code 
+	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
+
+GO
+
+CREATE PROC RegularShowAttendanceWithinPeriodSP
+@period1 DATETIME,
+@period2 DATETIME,
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150),
+@missing_hours INT
+AS
+-- missing hours is for many staff members so this implementation is not complete needs the function of missing missing hours
+SELECT a.start_time, a.leave_time, a.duration, @missing_hours
+	FROM Attendances a INNER JOIN Staff_Members s
+	ON a.user_name = s.user_name
+	WHERE s.company_domain = @company_domain AND s.department_code = @department_code AND a.date IN (@period1,@period2)
+
+GO
+
+CREATE PROC ManagerViewProjectInfoSP
+@user_name VARCHAR(50)
+AS
+SELECT p.*
+	FROM Managers_Assign_Projects_To_Regulars m INNER JOIN Projects p 
+	ON m.project_name = p.project_name
+	WHERE m.manager_user_name = @user_name
+
+GO
+
+CREATE PROC ManagerDecidingRequestSP
+@manager_username VARCHAR(50),
+@staff_username VARCHAR(50),
+@manager_response VARCHAR(10),
+@reason_of_disapproval TEXT
+AS
+
+BEGIN
+IF(@manager_response = 'Accepted')
+	SET @reason_of_disapproval = NULL
+END
+
+UPDATE Requests 
+	SET Requests.manager_response_req = @manager_response, Requests.reason_of_disapproval = @reason_of_disapproval, Requests.manager_user_name = @manager_username
+	WHERE (request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @staff_username)
+	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @staff_username)
+	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @staff_username)
+	) AND (SELECT s.department_code FROM Staff_Members s INNER JOIN Managers m ON s.user_name = m.user_name WHERE  s.user_name = @manager_username) 
+	= (SELECT s.deparmtnet_code FROM Staff_Members s WHERE s.user_name = @staff_username) 
+
+GO
+
+-- tihs part needs to be discussed because we might need to change something on the schema
+CREATE PROC ManagerCreateProjectSP
+@manager_username VARCHAR(30),
+@start_date DATETIME,
+@end_date DATETIME,
+@project_name VARCHAR(100)
+AS
+INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
+
+GO
+
+CREATE PROC ManagerReviewTaskSP
+@manager_user_name VARCHAR(50),
+@project_name VARCHAR(100),
+@tasks_name VARCHAR(30),
+@acceptance VARCHAR(10),
+@new_deadline DATETIME
+AS
+BEGIN
+IF(@acceptance='Accepted')
+	UPDATE Tasks
+		SET Tasks.status = 'Closed'
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+ELSE
+IF(@acceptance = 'Rejected')
+	BEGIN
+	DECLARE @description NVARCHAR(MAX), @comments NVARCHAR(MAX)
+	SELECT @description  = Tasks.description, @comments = Tasks.comments 
+		FROM Tasks
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+	DELETE Tasks
+		
+		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+	INSERT INTO Tasks VALUES(@new_deadline,@tasks_name,@project_name,@comments,@description,@acceptance)
+	END
+END
+
+GO
+
+CREATE FUNCTION MakeCompanyEmail
+( @seeker_user_name VARCHAR(30),
+@company_name VARCHAR(50)
+)
+RETURNS VARCHAR
+BEGIN
+DECLARE @email VARCHAR(70)
+SET @email =  @seeker_user_name+'@'+@company_name+'.com'
+RETURN @email
+END
+
+GO
+
+DROP PROC AllCompaniesAndDepartmentsSP 
+DROP PROC CompaniesSalaryOrderedSP
+DROP PROC ChooseJobFromAcceptedSP
+DROP PROC ApplyJobCheckSP
+DROP PROC DeletePendingRequestsSP
+DROP PROC AnnouncementWithinTwentyDaysSP
+DROP PROC ViewNewApplicationsSP
+DROP PROC RegularShowAttendanceWithinPeriodSP
+DROP PROC ManagerViewProjectInfoSP
+DROP PROC ManagerDecidingRequestSP
+DROP PROC ManagerCreateProjectSP
+DROP PROC ManagerReviewTaskSP
+DROP FUNCTION MakeCompanyEmail
+
+GO
