@@ -559,3 +559,18 @@ SELECT *,a.score
 	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
 
 GO
+
+CREATE PROC RegularShowAttendanceWithinPeriodSP
+@period1 DATETIME,
+@period2 DATETIME,
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150),
+@missing_hours INT
+AS
+-- missing hours is for many staff members so this implementation is not complete needs the function of missing missing hours
+SELECT a.start_time, a.leave_time, a.duration, @missing_hours
+	FROM Attendances a INNER JOIN Staff_Members s
+	ON a.user_name = s.user_name
+	WHERE s.company_domain = @company_domain AND s.department_code = @department_code AND a.date IN (@period1,@period2)
+
+GO
