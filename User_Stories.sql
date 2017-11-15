@@ -658,3 +658,19 @@ RETURN @email
 END
 
 GO
+
+DROP PROC AllCompaniesAndDepartmentsSP 
+DROP PROC CompaniesSalaryOrderedSP
+DROP PROC ChooseJobFromAcceptedSP
+DROP PROC ApplyJobCheckSP
+DROP PROC DeletePendingRequestsSP
+DROP PROC AnnouncementWithinTwentyDaysSP
+DROP PROC ViewNewApplicationsSP
+DROP PROC RegularShowAttendanceWithinPeriodSP
+DROP PROC ManagerViewProjectInfoSP
+DROP PROC ManagerDecidingRequestSP
+DROP PROC ManagerCreateProjectSP
+DROP PROC ManagerReviewTaskSP
+DROP FUNCTION MakeCompanyEmail
+
+GO
