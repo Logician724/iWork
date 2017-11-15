@@ -450,6 +450,28 @@ return
 END
 
 GO
+CREATE FUNCTION  RegularsWithFixed()
+RETURNS  @Fixed TABLE 
+(
+    
+    user_name  VARCHAR(30) NOT NULL
+    
+)
+
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+
+insert into @myTable 
+SELECT  R.user_name FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M WHERE  R.user_name=M.regular_user_name  AND t.project_name=m.project_name And T.deadline=M.task_deadline 
+AND T.name=M.task_name AND t.status='Fixed' And task_deadline>CONVERT(date, SYSDATETIMEOFFSET())
+
+insert into @Fixed
+SELECT USER_NAME FROM @mytable 
+return
+END
+
+GO
 
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
