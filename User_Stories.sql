@@ -1,6 +1,62 @@
 ﻿DROP PROC ViewDepartmentSP;
-DROP PROC ViewQuetionsInInterviewSP;
+DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
+DROP PROC ViewQuetionsInInterviewSP;
+DROP PROC DeletePendingApplicationSP;
+DROP PROC ViewYearlyAttendanceOfStaffSP;
+DROP PROC SendEmailSP;
+DROP PROC AddJobSP;
+DROP PROC AddQuestionSP;
+DROP PROC AddQuestionToJobSP;
+DROP PROC AddHrResponseSP;
+DROP PROC ViewAttendaceSP;
+DROP PROC ViewTasksInProjectSP;
+DROP PROC ViewApprovedJobAppSP;
+DROP PROC ViewSeekerInfoSP;
+DROP PROC ViewJobInfoSP;
+DROP PROC AssignRegularToProjectSP;
+DROP PROC AssignRegularToTaskSP;
+DROP PROC ViewEmployeesRequestsSP;
+DROP PROC ViewTop3RegularSp;
+DROP PROC ApplyForLeaveRequestSP;
+DROP PROC ReplaceManagerSP;
+DROP PROC ReplaceRegularSP;
+DROP PROC ReplaceHRSP;
+DROP PROC FindTypeOfReplacementSp;
+DROP PROC RemoveRegularFromProjectSp
+DROP PROC RegularFinalizesTaskSP;
+DROP PROC HRPostsAnnouncementSP 
+DROP PROC ViewReceivedEmailsSP;
+DROP PROC StaffCheckInSp;
+DROP PROC ViewJobInformationSP;
+DROP PROC ViewMyScoreSP;
+DROP PROC ViewCompanyAndItsDepartmentsSP;
+DROP PROC CompaniesSalaryOrderedSP;
+DROP PROC ChooseJobFromAcceptedSP;
+DROP PROC ApplyJobCheckSP;
+DROP PROC DeletePendingRequestsSP;
+DROP PROC AnnouncementWithinTwentyDaysSP;
+DROP PROC ViewNewApplicationsSP;
+DROP PROC RegularShowAttendanceWithinPeriodSP;
+DROP PROC ManagerViewProjectInfoSP;
+DROP PROC ManagerDecidingRequestSP;
+DROP PROC ManagerCreateProjectSP;
+DROP PROC ManagerReviewTaskSP;
+DROP PROC ViewCompanySP;
+DROP PROC SearchJobsSP;
+DROP PROC EditPersonalInfoSP;
+DROP PROC ViewJobStatusSP;
+DROP PROC CheckOutSP;
+DROP PROC ViewTasksSP;
+DROP PROC RespondToJobApplicationsSP;
+DROP PROC DefineTaskSP;
+DROP PROC ChangeTaskStatusSP;
+DROP PROC EditJobInfoSP;
+DROP PROC RegisterToWebsite;
+DROP PROC ApplyForBusinessRequestSP;
+DROP FUNCTION RegularsWithFixed;
+DROP FUNCTION MakeCompanyEmail;
+
 GO
 
 CREATE PROC ViewDepartmentSP
@@ -148,7 +204,7 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
-CREATE PROC HrResponseSP
+CREATE PROC AddHrResponseSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -160,7 +216,7 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
-CREATE PROC ViewAttendanceOfStaffSP
+CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
 AS
@@ -314,7 +370,6 @@ IN ( SELECT s.company_domain FROM Staff_Members s WHERE s.user_name=@username)
 AND j.department_code
 IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) --I KNOW IT LOOKS STUPID BUT I'M LAZY
 
-DROP PROC ViewJobInformationSP;
 GO
 CREATE PROC HRPostsAnnouncementSP 
 @username varchar(30),
@@ -401,10 +456,10 @@ Create PROC FindTypeOfReplacementSp
 @job VARCHAR(30) OUTPUT
 AS
 IF EXISTS
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM HR_Employees 
 WHERE @userName =user_name ) 
-AND EXISTS ( SELECT USER_NAME 
+AND EXISTS ( SELECT user_name 
 FROM HR_Employees 
 WHERE @userName2 =user_name ) 
 SELECT @job='hr'
@@ -412,21 +467,21 @@ SELECT @job='hr'
 
 
 ELSE IF  EXISTS
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName =user_name ) 
-AND EXISTS( SELECT USER_NAME
+AND EXISTS( SELECT user_name
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Manager'
 
 
 ELSE IF EXISTS 
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName =user_name )
 AND EXISTS 
-( SELECT USER_NAME 
+( SELECT user_name 
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Regular'
@@ -569,11 +624,6 @@ FROM Requests
 INSERT INTO Business_Trip_Requests 
 VALUES (@requestId,@tripDestination,@tripPurpose)
 
-
-
-
-
-
 GO
 /*CREATE FUNCTION  TOP3hours()
 RETURNS  @TOP3 TABLE 
@@ -599,11 +649,8 @@ GO
 CREATE FUNCTION  RegularsWithFixed()
 RETURNS  @Fixed TABLE 
 (
-    
-    user_name  VARCHAR(30) NOT NULL
-    
+    user_name  VARCHAR(30) NOT NULL   
 )
-
 AS
 BEGIN
 DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
@@ -642,11 +689,11 @@ CREATE PROC ViewEmployeesRequestsSP
 , @id int --View Single request at a time
 AS 
 if EXISTS 
-(SELECT USER_NAME 
+(SELECT user_name 
 FROM HR_Employees 
 WHERE @username=user_name) 
 BEGIN
-IF EXISTS (SELECT USER_NAME 
+IF EXISTS (SELECT user_name
 FROM HR_Employees 
 WHERE @ManagerUserName =user_name)
 SELECT *
@@ -656,7 +703,7 @@ UPDATE Requests
 SET hr_response_req=@response
 WHERE request_id=@id
 END
-ELSE if EXISTS (SELECT USER_NAME 
+ELSE if EXISTS (SELECT user_name 
 FROM Regular_Employees 
 WHERE @username=user_name) 
 BEGIN 
@@ -682,43 +729,7 @@ SET hr_response_req=@response
 WHERE request_id=@id 
 END
 
-
-DROP PROC ViewEmployeesRequestsSP;
-DROP PROC ViewTop3RegularSp;
-DROP PROC ApplyForLeaveRequestSP;
-DROP PROC ReplaceManagerSP;
-DROP PROC ReplaceRegularSP;
-
-DROP PROC ReplaceHRSP;
-
-
-
-
-
-
-DROP PROC ReplaceRegularSp;
-
-DROP PROC FindTypeOfReplacementSp;
-
-DROP PROC RemoveRegularFromProjectSp
-
-
-DROP PROC RegularFinalizesTaskSP;
-
-
-
-DROP PROC HRPostsAnnouncementSP 
-
-DROP PROC ViewReceivedEmailsSP;
-DROP PROC StaffCheckInSp;
-DROP PROC ViewMyInformationSP;
-DROP PROC ViewMyScoreSP;
-
-
-
-
 -- And she ended here --
-
 
 GO
 CREATE PROC ViewCompaniesSP
@@ -726,8 +737,6 @@ AS
 SELECT C.* , CP.phone
 FROM Companies C INNER JOIN  Companies_Phones CP
 ON  C.domain_name = CP.company_domain
-GO
-
 
 GO
 CREATE PROC SearchJobsSP
@@ -737,7 +746,6 @@ SELECT J.* , C.name AS company_name, D.name AS department_name
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
-GO
 
 
 GO
@@ -752,7 +760,6 @@ exp_year = @expYear,
 first_name = @firstName, 
 last_name = @lastName
 WHERE user_name = @username
-GO
 
 
 GO  --to be edited 
@@ -762,7 +769,6 @@ AS
 Select A.score, A.app_status
 FROM Applications A
 WHERE A.seeker_username=@username
-GO
 
 GO
 CREATE PROC CheckOutSP
@@ -776,7 +782,6 @@ SELECT *
 FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
 WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
  )
-GO
 
 
 GO
@@ -786,9 +791,6 @@ AS
 SELECT T.*
 FROM Task T inner join Project P on T.project_name = P.project_name
 WHERE T.project_name = @project AND T.status=@status
-GO
-
-
 
 GO
 CREATE PROC RespondToJobApplicationsSP
@@ -803,10 +805,6 @@ WHERE Applications.hr_response_app = 'Accepted' AND EXISTS
 	   INNER JOIN Applications A on A.manager_username=M.user_name 
 	   INNER JOIN Jobs J on J.department_code=A.department_code
      )
-GO
-
-
-
 
 GO 
 CREATE PROC DefineTaskSP
@@ -821,9 +819,6 @@ BEGIN
 INSERT INTO Tasks (project_name,deadline,name,status)
 VALUES (@projectName, @deadline, @taskName , @status)
 END
-GO
-
-
 
 GO 
 CREATE PROC ChangeTaskStatusSP
@@ -840,9 +835,6 @@ UPDATE Tasks
 SET Tasks.status =@status
 WHERE Tasks.name=@name AND Tasks.deadline=@deadline AND Tasks.project_name=@projectName AND Tasks.deadline<CURRENT_TIMESTAMP 
 END
-GO
-
-
 
 GO
 CREATE PROC EditJobInfoSP
@@ -872,7 +864,6 @@ BEGIN UPDATE Jobs SET vacancies= @vacancies WHERE job_title=@job_title AND depar
 IF(@workingHours IS NOT NULL)
 BEGIN UPDATE Jobs SET working_hours = @workingHours WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
 END --END IF EXISTS
-GO
 
 
 GO 
@@ -894,7 +885,8 @@ FROM Staff_Members SM INNER JOIN Departments D ON SM.department_code=D.departmen
 WHERE D.department_code=@departmentCode AND D.company_domain=@companyDomain 
           )
 END
-GO
+
+
 
 
 
@@ -904,12 +896,12 @@ GO
 GO
 
 CREATE PROC ViewCompanyAndItsDepartmentsSP
-@compnay_domain VARCHAR(150)
+@companyDomain VARCHAR(150)
 AS 
 SELECT *
 FROM Companies c INNER JOIN Departments d
 ON c.domain_name = d.company_domain 
-WHERE c.domain_name = @company_domain
+WHERE c.domain_name = @companyDomain
 
 GO
 -- i tried to do this one but i seriously couldnt i am so sorry
@@ -1062,10 +1054,9 @@ UPDATE Requests
 	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @staff_username)
 	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @staff_username)
 	) AND (SELECT s.department_code FROM Staff_Members s INNER JOIN Managers m ON s.user_name = m.user_name WHERE  s.user_name = @manager_username) 
-	= (SELECT s.deparmtnet_code FROM Staff_Members s WHERE s.user_name = @staff_username) 
+	= (SELECT s.department_code FROM Staff_Members s WHERE s.user_name = @staff_username) 
 
 GO
-
 -- tihs part needs to be discussed because we might need to change something on the schema
 CREATE PROC ManagerCreateProjectSP
 @manager_username VARCHAR(30),
@@ -1108,13 +1099,12 @@ CREATE FUNCTION MakeCompanyEmail
 ( @seeker_user_name VARCHAR(30),
 @company_name VARCHAR(50)
 )
-RETURNS VARCHAR
+RETURNS VARCHAR(70)
 BEGIN
 DECLARE @email VARCHAR(70)
 SET @email =  @seeker_user_name+'@'+@company_name+'.com'
 RETURN @email
 END
-GO
 
 
 GO
@@ -1149,20 +1139,3 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
-
-GO
-DROP PROC AllCompaniesAndDepartmentsSP 
-DROP PROC CompaniesSalaryOrderedSP
-DROP PROC ChooseJobFromAcceptedSP
-DROP PROC ApplyJobCheckSP
-DROP PROC DeletePendingRequestsSP
-DROP PROC AnnouncementWithinTwentyDaysSP
-DROP PROC ViewNewApplicationsSP
-DROP PROC RegularShowAttendanceWithinPeriodSP
-DROP PROC ManagerViewProjectInfoSP
-DROP PROC ManagerDecidingRequestSP
-DROP PROC ManagerCreateProjectSP
-DROP PROC ManagerReviewTaskSP
-DROP FUNCTION MakeCompanyEmail
-
-GO
