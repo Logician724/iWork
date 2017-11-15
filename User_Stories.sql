@@ -152,7 +152,7 @@ FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
 
 GO
-CREATE PROC SendEmailSP --Receiver Should Also have a row added to it
+CREATE PROC SendEmailSP --fixed
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
 @recipientUserName VARCHAR(30),
@@ -170,7 +170,8 @@ VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
 
 GO
-CREATE PROC AddJobSP --How do we stop him from adding jobs in another department? take user_name of the hr as an input
+CREATE PROC AddJobSP --fix
+@hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
@@ -182,10 +183,19 @@ CREATE PROC AddJobSP --How do we stop him from adding jobs in another department
 @vacancies INT,
 @workingHours INT
 AS
+IF EXISTS
+(
+SELECT hr.*
+FROM HR_Employees hr INNER JOIN Staff_Members sm
+ON hr.user_name = sm.user_name
+WHERE (hr.user_name = @hrUserName AND sm.department_code = @departmentCode AND sm.company_domain = @companyDomain )
+)
 INSERT INTO Jobs
 (job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
+ELSE
+PRINT 'You cannot add a job in a different department than yours.'
 
 GO
 CREATE PROC AddQuestionSP
