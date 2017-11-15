@@ -220,7 +220,7 @@ VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
 
-CREATE PROC AddHrResponseSP --Should be correct but..What if when we execute we give a wrong input ?? we have to options .. i think both r correct but a better one is not to leave the work for the user ... handle it with an if statement
+CREATE PROC AddHrResponseSP --fixed
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -769,10 +769,17 @@ where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR
 
 GO
 CREATE PROC EditPersonalInfoSP
-@username VARCHAR(30) , @password VARCHAR(30), @personalEmail VARCHAR(70), @birthDate DATETIME, @expYear INT, @firstName VARCHAR(25), @lastName VARCHAR(25)
+@username VARCHAR(30),
+@password VARCHAR(30),
+@personalEmail VARCHAR(70),
+@birthDate DATETIME,
+@expYear INT,
+@firstName VARCHAR(25),
+@lastName VARCHAR(25)
 AS
 UPDATE Users 
-SET password=@password, 
+SET
+password=@password, 
 personal_email=@personalEmail, 
 birth_date=@birthDate,
 exp_year = @expYear,
