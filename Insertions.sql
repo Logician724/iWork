@@ -100,6 +100,51 @@ VALUES('google.com','SRC-2837','MANAGERS SEARCH MANAGING',1/11/2010,
 'responsible for handling the search feature presented by google with maintenance and inventions',
 3,50000,'handling search feature google',10,9)
 
+INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR PHP Web Programmer','facebook.com','PHP-5019','1/1/2018','detailed description',
+2,4000,'short descriptions',10,8);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES ('HR BS-3291 Application Developer','facebook.com','BS-3291','1/5/2018','detailed description',
+2,3000,'short descriptions',5,10);
+
+INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR JS-8938 Developer','facebook.com','JS-8938','10/12/2017','We are looking for a skilled Web programmer to join our IT team. You’ll be responsible for designing, coding and improving our company web pages, programs and applications.',
+3,5000,'Produce fully functional programs writing clean, testable code',5,8);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+VALUES ('HR MRC-8738 Cashier','amazon.com','MRC-8738','1/3/2018','Receive payment by cash, check, credit cards, vouchers, or automatic debits.',
+5,6000,'Compute and record totals of transactions.',8,12);
+
+INSERT INTO Jobs(company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR CSR-1263 Customer Service','amazon.com','CSR-1263','12/30/2017','Assists with complaints, orders, errors, account questions, billing, cancelations, and other queries.',
+5,8000,'Resolve customer complaints via phone, email, mail, or social media.',4,12);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR WBST-2429 Web Developer','amazon.com','WBST-2429','1/11/2017','Write well designed, testable, efficient code by using best software development practices.
+Create website layout/user interface by using standard HTML/CSS practices. Integrate data from various back-end services and databases.',
+2,15000,'We are looking for an outstanding Web Developer to be responsible for the coding, innovative design and layout of our website.',6,10);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR LOC-4729 Researcher','google.com','LOC-4729','1/1/2018','Research across Google is advancing the state-of-the-art in almost every domain of computer science. The scale at which Google operates allows research teams integrated throughout Google to pursue work of strategic interest, and makes the innovation behind our products possible.',
+2,4000,'We tackle the most challenging problems in Computer Science and related fields',10,8);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES ('HR MPS-2849 Designer','google.com','MPS-2849','1/20/2018','Although the work is mostly studio-based, travel within the working day to meet clients may be required. Working away from home, however, is rare.',
+6,30000,'thinking creatively to produce new ideas and concepts and developing interactive design',13,6);
+
+INSERT INTO Jobs (company_domain,department_code,job_title,application_deadline,detailed_description,
+min_years_experience,salary,short_description,vacancies,working_hours)
+ VALUES  ('HR SRC-2837 Search Engine Managing','google.com','SRC-2837','1/12/2018','Execute tests, collect and analyze data and results, identify trends and insights in order to achieve maximum ROI in paid search campaigns',
+2,4000,'Research and implement search engine optimization recommendations',4,6);
 
 
 
