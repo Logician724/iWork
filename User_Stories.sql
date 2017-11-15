@@ -442,3 +442,13 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
+
+GO
+
+CREATE PROC AllCompaniesAndDepartmentsSP
+AS 
+SELECT *
+FROM Companies c, Departments d
+WHERE c.domain_name = d.company_domain
+
+GO
