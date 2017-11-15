@@ -142,7 +142,7 @@ DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
 GO
-CREATE PROC ViewAttendanceSP --attendence mktoba 3'lt XDs el mfrod de view my attendence
+CREATE PROC ViewAttendanceSP --correct
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
@@ -155,6 +155,7 @@ GO
 CREATE PROC SendEmailSP --Receiver Should Also have a row added to it
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
+@recepientUserName VARCHAR(30),
 @recepientEmail VARCHAR(70),
 @emailSubject VARCHAR(140),
 @emailBody TEXT
@@ -163,6 +164,10 @@ INSERT INTO Emails
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
 VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
+INSERT INTO Staff_Receives_Email
+(time_stamp,sender_user_name,recepient_username)
+VALUES
+(CURRENT_TIMESTAMP,@senderUserName,@recepientUserName)
 
 GO
 CREATE PROC AddJobSP --How do we stop him from adding jobs in another department? take user_name of the hr as an input
