@@ -574,3 +574,13 @@ SELECT a.start_time, a.leave_time, a.duration, @missing_hours
 	WHERE s.company_domain = @company_domain AND s.department_code = @department_code AND a.date IN (@period1,@period2)
 
 GO
+
+CREATE PROC ManagerViewProjectInfoSP
+@user_name VARCHAR(50)
+AS
+SELECT p.*
+	FROM Managers_Assign_Projects_To_Regulars m INNER JOIN Projects p 
+	ON m.project_name = p.project_name
+	WHERE m.manager_user_name = @user_name
+
+GO
