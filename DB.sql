@@ -175,9 +175,9 @@ FOREIGN KEY(task_name,task_deadline,project_name) REFERENCES Tasks(name,deadline
 CREATE TABLE Requests(
 request_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL , 
 end_date DATETIME NOT NULL,
-hr_response_req VARCHAR(20) NOT NULL,
+hr_response_req VARCHAR(20) NULL,
 hr_user_name VARCHAR(30) NULL,
-manager_response_req VARCHAR(20) NOT NULL,
+manager_response_req VARCHAR(20)  NULL,
 manager_user_name VARCHAR(30) NULL,
 --no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,--
 request_date DATETIME NOT NULL,
