@@ -350,7 +350,7 @@ GO
 
 CREATE PROC ReplaceHRSP
 
-@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
 AS
 --DECLARE @job VARCHAR(30)
 --EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
@@ -360,14 +360,14 @@ INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVER
 declare @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
 INSERT INTO HR_Employees_Replace_HR_Employees VALUES(@requestId,@replacementUserName,@userName)
-INSERT INTO Leave_Requests VALUES (@requestId,@type)
+
 
 
 GO
 
 CREATE PROC ReplaceManagerSP
 
-@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
 AS
 --DECLARE @job VARCHAR(30)
 --EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
@@ -377,13 +377,13 @@ INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVER
 declare @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
 INSERT INTO Managers_Replace_Managers_In_Requests VALUES(@requestId,@replacementUserName,@userName)
-INSERT INTO Leave_Requests VALUES (@requestId,@type)
+
 
 GO
 
 CREATE PROC ReplaceRegularSP
 
-@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+@userName VARCHAR(30), @replacementUserName VARCHAR(30), @endDate DATETIME , @startDate DATETIME
 AS
 --DECLARE @job VARCHAR(30)
 --EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
@@ -393,9 +393,25 @@ INSERT INTO Requests (end_date,request_date,start_date) VALUES( @endDate, CONVER
 declare @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
 INSERT INTO Regular_Employees_Replace_Regular_Employees VALUES(@requestId,@replacementUserName,@userName)
+
+
+
+GO 
+CREATE PROC ApplyForLeaveRequestSP
+@userName VARCHAR(30), @replacementUserName VARCHAR(30),@type VARCHAR(50), @endDate DATETIME , @startDate DATETIME
+AS 
+DECLARE @job VARCHAR(30)
+EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+if (@job='hr') begin  EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate  end
+else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  end
+else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
+DECLARE @requestId int
+SELECT @requestId= MAX(request_id) FROM Requests
 INSERT INTO Leave_Requests VALUES (@requestId,@type)
 
 
+DROP PROC ApplyForLeaveRequestSP;
+DROP PROC ReplaceManagerSP;
 DROP PROC ReplaceRegularSP;
 
 DROP PROC ReplaceHRSP;
