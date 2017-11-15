@@ -421,9 +421,88 @@ else if  (@job='Regular') begin  EXEC  ReplaceRegularSP @userName , @replacement
 else if (@job='Manager') begin  EXEC  ReplaceManagerSP @userName , @replacementUserName  , @endDate , @startDate  end
 DECLARE @requestId int
 SELECT @requestId= MAX(request_id) FROM Requests
-INSERT INTO Business_Trip_Requests VALUES (@requestId,@type)
+INSERT INTO Business_Trip_Requests VALUES (@requestId,@tripDestination,@tripPurpose)
 
 
+
+
+
+
+GO
+/*CREATE FUNCTION  TOP3hours()
+RETURNS  @TOP3 TABLE 
+(
+    
+    user_name  VARCHAR(30) NOT NULL,
+    SUM INT  NOT NULL
+)
+
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL
+
+insert into @myTable 
+SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R WHERE  R.user_name=A.user_name  GROUP BY R.user_name ORDER BY SUM(A.duration) desc
+
+insert into @TOP3 
+SELECT USER_NAME, sum FROM @mytable 
+return
+END */
+
+GO
+CREATE FUNCTION  RegularsWithFixed()
+RETURNS  @Fixed TABLE 
+(
+    
+    user_name  VARCHAR(30) NOT NULL
+    
+)
+
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+
+insert into @myTable 
+SELECT  R.user_name FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M WHERE  R.user_name=M.regular_user_name  AND t.project_name=m.project_name And T.deadline=M.task_deadline 
+AND T.name=M.task_name AND t.status='Fixed' And task_deadline>CONVERT(date, SYSDATETIMEOFFSET())
+
+insert into @Fixed
+SELECT USER_NAME FROM @mytable 
+return
+END
+
+GO
+
+CREATE PROC ViewTop3RegularSp
+AS
+SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) FROM Attendances A ,DBO.RegularsWithFixed() R , Users U WHERE  R.user_name=A.user_name AND R.user_name=U.user_name GROUP BY first_name +' '+ last_name  ORDER BY SUM(A.duration) desc
+
+GO
+CREATE PROC ViewEmployeesRequestsSP @username VARCHAR(30), @ManagerUserName VARCHAR(30) , @response VARCHAR(20), @id int --View Single request at a time
+AS 
+if EXISTS (SELECT USER_NAME FROM HR_Employees WHERE @username=user_name) BEGIN IF EXISTS (SELECT USER_NAME FROM HR_Employees WHERE @ManagerUserName =user_name)
+SELECT * From Requests R,HR_Employees_Replace_HR_Employees H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
+UPDATE Requests
+SET hr_response_req=@response
+WHERE request_id=@id
+END
+ELSE if EXISTS (SELECT USER_NAME FROM Regular_Employees WHERE @username=user_name) BEGIN 
+SELECT * From Requests R,Regular_Employees_Replace_Regular_Employees H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
+UPDATE Requests
+SET hr_response_req=@response
+WHERE request_id=@id 
+END
+
+ELSE BEGIN
+SELECT * From Requests R,Managers_Replace_Managers_In_Requests H WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
+UPDATE Requests
+SET hr_response_req=@response
+WHERE request_id=@id 
+END
+
+
+DROP PROC ViewEmployeesRequestsSP;
+DROP PROC ViewTop3RegularSp;
 DROP PROC ApplyForLeaveRequestSP;
 DROP PROC ReplaceManagerSP;
 DROP PROC ReplaceRegularSP;
