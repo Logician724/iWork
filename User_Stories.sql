@@ -537,3 +537,12 @@ DELETE Requests
 	AND hr_response_req = NULL
 
 GO
+
+CREATE PROC AnnouncementWithinTwentyDaysSP
+@company_domain VARCHAR(150)
+AS
+SELECT a.*
+	FROM Announcements a 
+	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21
+
+GO
