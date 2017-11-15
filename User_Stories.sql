@@ -59,7 +59,7 @@ DROP FUNCTION MakeCompanyEmail;
 
 GO
 
-CREATE PROC ViewDepartmentSP
+CREATE PROC ViewDepartmentSP --Missing Viewing all jobs in this department .. if you make a View jobs in department procedure .. make a third procedure that links both of them maybe?
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30)
 AS
@@ -69,7 +69,7 @@ WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentC
 
 GO
 
-CREATE PROC UserLoginSP
+CREATE PROC UserLoginSP --suspecious
 @userName VARCHAR(30),
 @password  VARCHAR(30)
 AS
@@ -120,7 +120,7 @@ END
 GO
 
 
-CREATE PROC ViewQuetionsInInterviewSP
+CREATE PROC ViewQuetionsInInterviewSP --correct
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
@@ -132,7 +132,7 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 
 GO
 
-CREATE PROC DeletePendingApplicationSP
+CREATE PROC DeletePendingApplicationSP --correct
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -142,30 +142,36 @@ DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
 GO
-CREATE PROC ViewAttendaceSP
+CREATE PROC ViewAttendanceSP --correct
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
 AS
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
 
 GO
-CREATE PROC SendEmailSP
+CREATE PROC SendEmailSP --fixed
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
-@recepientEmail VARCHAR(70),
+@recipientUserName VARCHAR(30),
+@recipientEmail VARCHAR(70),
 @emailSubject VARCHAR(140),
 @emailBody TEXT
 AS 
 INSERT INTO Emails
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
 VALUES
-(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
+(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recipientEmail,@emailSubject,@emailBody)
+INSERT INTO Staff_Receives_Email
+(time_stamp,sender_user_name,recipient_username)
+VALUES
+(CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
 
 GO
-CREATE PROC AddJobSP
+CREATE PROC AddJobSP --fix
+@hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
@@ -177,10 +183,19 @@ CREATE PROC AddJobSP
 @vacancies INT,
 @workingHours INT
 AS
+IF EXISTS
+(
+SELECT hr.*
+FROM HR_Employees hr INNER JOIN Staff_Members sm
+ON hr.user_name = sm.user_name
+WHERE (hr.user_name = @hrUserName AND sm.department_code = @departmentCode AND sm.company_domain = @companyDomain )
+)
 INSERT INTO Jobs
 (job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
+ELSE
+PRINT 'You cannot add a job in a different department than yours.'
 
 GO
 CREATE PROC AddQuestionSP
@@ -193,7 +208,7 @@ VALUES
 (@questionTitle,@answer)
 
 GO
-CREATE PROC AddQuestionToJobSP
+CREATE PROC AddQuestionToJobSP --check if the question is in the question list first .. just in case
 @questionID INT,
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -204,7 +219,8 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
-CREATE PROC AddHrResponseSP
+
+CREATE PROC AddHrResponseSP --Should be correct but..What if when we execute we give a wrong input ?? we have to options .. i think both r correct but a better one is not to leave the work for the user ... handle it with an if statement
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -216,6 +232,7 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
+--Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
 CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
@@ -226,7 +243,7 @@ WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.date)
 
 GO
-CREATE PROC ViewTasksInProjectSP
+CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
 @projectName VARCHAR(100),
 @userName VARCHAR(30)
 AS
@@ -356,7 +373,7 @@ CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30)
 AS
 SELECT E.*
 FROM Emails E inner Join Staff_Receives_EmailS R 
-ON E.sender_user_name=sender_user_name AND R.recepient_username=@username
+ON E.sender_user_name=sender_user_name AND R.recipient_username=@username
 
 
 GO
@@ -542,7 +559,7 @@ VALUES(@requestId,@replacementUserName,@userName)
 
 GO
 
-CREATE PROC ReplaceRegularSP
+CREATE PROC ReplaceRegularHelperSP --this is a helper procedure not like the one above
 
 @userName VARCHAR(30),
 @replacementUserName VARCHAR(30), 
@@ -583,7 +600,7 @@ EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate
 end
 else if  (@job='Regular') 
 begin  
-EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  
+EXEC  ReplaceRegularHelperSP @userName , @replacementUserName , @endDate , @startDate  
 end
 else if (@job='Manager')
 begin  
@@ -594,6 +611,8 @@ SELECT @requestId= MAX(request_id)
 FROM Requests
 INSERT INTO Leave_Requests
 VALUES (@requestId,@type)
+
+
 
 GO 
 CREATE PROC ApplyForBusinessRequestSP
@@ -612,7 +631,7 @@ EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate
 end
 else if  (@job='Regular')
 begin 
-EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  
+EXEC  ReplaceRegularHelperSP @userName , @replacementUserName , @endDate , @startDate  
 end
 else if (@job='Manager')
 begin 
