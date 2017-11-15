@@ -160,6 +160,16 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
+CREATE PROC ViewAttendanceOfStaffSP
+@staffUserName VARCHAR(30),
+@year INT
+AS
+SELECT SUM(a.duration)
+FROM Attendances a
+WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
+GROUP BY MONTH(a.date)
+
+GO
 CREATE PROC ViewTasksInProjectSP
 @projectName VARCHAR(100),
 @userName VARCHAR(30)
