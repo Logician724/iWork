@@ -1122,13 +1122,13 @@ END
 
 GO
 CREATE FUNCTION MakeCompanyEmail
-( @seeker_user_name VARCHAR(30),
-@company_name VARCHAR(50)
+( @userName VARCHAR(30),
+  @companyDomain VARCHAR(150)
 )
-RETURNS VARCHAR(70)
+RETURNS VARCHAR(180)
 BEGIN
-DECLARE @email VARCHAR(70)
-SET @email =  @seeker_user_name+'@'+@company_name+'.com'
+DECLARE @email VARCHAR(180)
+SET @email =  @userName+'@'+@companyDomain
 RETURN @email
 END
 
