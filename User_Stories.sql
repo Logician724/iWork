@@ -409,6 +409,20 @@ WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
 GO
 
 
+GO
+CREATE PROC ViewTasksSP
+@project VARCHAR(100), @status VARCHAR(10)
+AS 
+SELECT T.*
+FROM Task T inner join Project P on T.project_name = P.project_name
+WHERE T.project_name = @project AND T.status=@status
+GO
+
+
+
+
+
+
 
 CREATE FUNCTION GetMissingHours
 (
