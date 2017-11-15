@@ -455,6 +455,23 @@ GO
 
 
 
+GO 
+CREATE PROC ChangeTaskStatusSP
+@username VARCHAR(30), @status VARCHAR(10),@name VARCHAR(30), @deadline DATETIME , @projectname VARCHAR(100)
+AS
+IF EXISTS (
+SELECT *
+FROM Managers_Assign_Projects_To_Regulars M
+WHERE M.regular_user_name= @username AND M.project_name=@projectname 
+
+          )
+BEGIN 
+UPDATE Tasks 
+SET Tasks.status =@status
+WHERE Tasks.name=@name AND Tasks.deadline=@deadline AND Tasks.project_name=@projectName AND Tasks.deadline<CURRENT_TIMESTAMP 
+END
+GO
+
 
 
 GO
