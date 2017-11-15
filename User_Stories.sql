@@ -462,3 +462,30 @@ ON c.domain_name = m.
 ORDER BY m.s DESC
 
 GO
+
+CREATE PROC ApplyJobCheckSP
+@min_years_experience INT,
+@seeker_user_name VARCHAR(30),
+@job_title VARCHAR(150),
+@department_code VARCHAR(30),
+@company_domain VARCHAR(150)
+AS
+IF(
+ EXISTS(
+SELECT *
+FROM Jobs j INNER JOIN Applications a
+ON j.company_domain = a.company_domain AND
+	j.department_code = a.department_code AND
+	j.job_title = a.job_title
+WHERE min_years_experience < @min_years_experience AND
+		a.job_title = @job_title AND
+		a.seeker_username = @seeker_user_name AND
+		a.company_domain = @company_domain AND
+		a.department_code = @department_code AND
+		app_status != 'pending'
+)
+)
+INSERT INTO Applications VALUES
+(NULL,NULL,NULL,NULL,NULL,NULL,@seeker_user_name,@job_title,@department_code,@company_domain)
+
+GO
