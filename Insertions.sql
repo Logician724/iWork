@@ -434,6 +434,63 @@ INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,job_title,d
 VALUES('godfrey.love','Tuesday',21,10000,'leave','SRC-2837','google.com');
 
 
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('salma.adel','Saturday',3,4000,'x','HR PHP Web Programmer','PHP-5019','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('yasmeen.sameh','Saturday',2,4000,'x','HR PHP Web Programmer','PHP-5019','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('hajer.haitham','Sunday',4,3000,'x','HR BS-3291 Application Developer','BS-3291','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('mirna.alteer','Monday',1,3000,'x','HR BS-3291 Application Developer','BS-3291','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('sally.ramadan','Friday',1,5000,'x','HR JS-8938 Developer','JS-8938','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('firdous.ahmed','Tuesday',2,5000,'x','HR JS-8938 Developer','JS-8938','facebook.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('hadeel.mohamed','Sunday',3,6000,'x','HR MRC-8738 Cashier','MRC-8738','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('islam.osama','Sunday',2,6000,'x','HR MRC-8738 Cashier','MRC-8738','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('mohamed.osama','Monday',2,8000,'x','HR CSR-1263 Customer Service','CSR-1263','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('dana.debs','Sunday',2,8000,'x','HR CSR-1263 Customer Service','CSR-1263','amazon.com');
+
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('ahmed.hussain','Sunday',1,15000,'x','HR WBST-2429 Web Developer','WBST-2429','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('amr.mohsen','Monday',1,15000,'x','HR WBST-2429 Web Developer','WBST-2429','amazon.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('dahlia.karass','Sunday',1,4000,'x','HR LOC-4729 Researcher','LOC-4729','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('ahmed.shehata','Sunday',1,4000,'x','HR LOC-4729 Researcher','LOC-4729','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('youmna.marzook','Tuesday',2,30000,'x','HR MPS-2849 Designer','MPS-2849','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('bonita.bon','Tuesday',2,30000,'x','HR MPS-2849 Designer','MPS-2849','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('basma.mohamed','Friday',2,4000,'x','HR SRC-2837 Search Engine Managing','SRC-2837','google.com');
+
+INSERT INTO Staff_Members (user_name,day_off,no_annual_leaves,salary,company_email,job_title,department_code,company_domain)
+VALUES ('salma.tarek','Tuesday',2,4000,'x','HR SRC-2837 Search Engine Managing','SRC-2837','google.com');
+
+
+
 
 --MANAGERS INSERTIONS
 INSERT INTO Managers (user_name,type)
