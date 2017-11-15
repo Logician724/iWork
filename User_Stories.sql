@@ -3,7 +3,7 @@ DROP PROC ViewQuetionsInInterviewSP;
 DROP PROC UserLoginSP;
 GO
 
-CREATE PROC ViewDepartmentSP
+CREATE PROC ViewDepartmentSP --Missing Viewing all jobs in this department .. if you make a View jobs in department procedure .. make a third procedure that links both of them maybe?
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30)
 AS
@@ -13,7 +13,7 @@ WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentC
 
 GO
 
-CREATE PROC UserLoginSP
+CREATE PROC UserLoginSP --suspecious
 @userName VARCHAR(30),
 @password  VARCHAR(30)
 AS
@@ -64,7 +64,7 @@ END
 GO
 
 
-CREATE PROC ViewQuetionsInInterviewSP
+CREATE PROC ViewQuetionsInInterviewSP --correct
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
@@ -76,7 +76,7 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 
 GO
 
-CREATE PROC DeletePendingApplicationSP
+CREATE PROC DeletePendingApplicationSP --correct
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -86,17 +86,17 @@ DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
 GO
-CREATE PROC ViewAttendaceSP
+CREATE PROC ViewAttendaceSP --attendence mktoba 3'lt XDs el mfrod de view my attendence
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
 AS
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
 
 GO
-CREATE PROC SendEmailSP
+CREATE PROC SendEmailSP --Receiver Should Also have a row added to it
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
 @recepientEmail VARCHAR(70),
@@ -109,7 +109,7 @@ VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recepientEmail,@emailSubject,@emailBody)
 
 GO
-CREATE PROC AddJobSP
+CREATE PROC AddJobSP --How do we stop him from adding jobs in another department? take user_name of the hr as an input
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
@@ -137,7 +137,7 @@ VALUES
 (@questionTitle,@answer)
 
 GO
-CREATE PROC AddQuestionToJobSP
+CREATE PROC AddQuestionToJobSP --check if the question is in the question list first .. just in case
 @questionID INT,
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -148,7 +148,7 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
-CREATE PROC HrResponseSP
+CREATE PROC HrResponseSP --Should be correct but..What if when we execute we give a wrong input ?? we have to options .. i think both r correct but a better one is not to leave the work for the user ... handle it with an if statement
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -160,7 +160,7 @@ SET hr_response_app = @hrResponse
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
-CREATE PROC ViewAttendanceOfStaffSP
+CREATE PROC ViewAttendanceOfStaffSP  --Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
 @staffUserName VARCHAR(30),
 @year INT
 AS
@@ -170,7 +170,7 @@ WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.date)
 
 GO
-CREATE PROC ViewTasksInProjectSP
+CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
 @projectName VARCHAR(100),
 @userName VARCHAR(30)
 AS
@@ -487,7 +487,7 @@ VALUES(@requestId,@replacementUserName,@userName)
 
 GO
 
-CREATE PROC ReplaceRegularSP
+CREATE PROC ReplaceRegularHelperSP --this is a helper procedure not like the one above
 
 @userName VARCHAR(30),
 @replacementUserName VARCHAR(30), 
@@ -528,7 +528,7 @@ EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate
 end
 else if  (@job='Regular') 
 begin  
-EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  
+EXEC  ReplaceRegularHelperSP @userName , @replacementUserName , @endDate , @startDate  
 end
 else if (@job='Manager')
 begin  
@@ -539,6 +539,8 @@ SELECT @requestId= MAX(request_id)
 FROM Requests
 INSERT INTO Leave_Requests
 VALUES (@requestId,@type)
+
+
 
 GO 
 CREATE PROC ApplyForBusinessRequestSP
@@ -557,7 +559,7 @@ EXEC  ReplaceHrSP @userName , @replacementUserName  , @endDate , @startDate
 end
 else if  (@job='Regular')
 begin 
-EXEC  ReplaceRegularSP @userName , @replacementUserName , @endDate , @startDate  
+EXEC  ReplaceRegularHelperSP @userName , @replacementUserName , @endDate , @startDate  
 end
 else if (@job='Manager')
 begin 
