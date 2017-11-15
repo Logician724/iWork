@@ -645,3 +645,16 @@ IF(@acceptance = 'Rejected')
 END
 
 GO
+
+CREATE FUNCTION MakeCompanyEmail
+( @seeker_user_name VARCHAR(30),
+@company_name VARCHAR(50)
+)
+RETURNS VARCHAR
+BEGIN
+DECLARE @email VARCHAR(70)
+SET @email =  @seeker_user_name+'@'+@company_name+'.com'
+RETURN @email
+END
+
+GO
