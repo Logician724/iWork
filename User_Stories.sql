@@ -9,7 +9,7 @@ DROP PROC AddJobSP;
 DROP PROC AddQuestionSP;
 DROP PROC AddQuestionToJobSP;
 DROP PROC AddHrResponseSP;
-DROP PROC ViewAttendaceSP;
+DROP PROC ViewAttendanceSP;
 DROP PROC ViewTasksInProjectSP;
 DROP PROC ViewApprovedJobAppSP;
 DROP PROC ViewSeekerInfoSP;
@@ -30,8 +30,8 @@ DROP PROC ViewReceivedEmailsSP;
 DROP PROC StaffCheckInSp;
 DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
-DROP PROC ViewCompanyAndItsDepartmentsSP;
-DROP PROC CompaniesSalaryOrderedSP;
+DROP PROC ViewDepartmentsOfCompanySP;
+DROP PROC ViewCompaniesSalariesSP;
 DROP PROC ChooseJobFromAcceptedSP;
 DROP PROC ApplyJobCheckSP;
 DROP PROC DeletePendingRequestsSP;
@@ -55,7 +55,6 @@ DROP PROC EditJobInfoSP;
 DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
 DROP FUNCTION RegularsWithFixed;
-DROP FUNCTION MakeCompanyEmail;
 
 GO
 
@@ -66,6 +65,7 @@ AS
 SELECT d.*
 FROM Departments d
 WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentCode))
+
 
 GO
 
@@ -317,17 +317,17 @@ VALUES (@userName,@taskName,@taskDeadline,@projectName)
 
 -- Romy Was here too --
 GO 
-
-CREATE PROC ViewCompanySP 
-@companyName varchar(50),
-@companyAddress varchar(300),
-@companyType varchar(80)
-AS
-Select C.*
-From Companies C
-Where  C.name=@companyName 
-OR C.field =@companyType 
-OR C.address=@companyAddress 
+--a similar query already exists
+--CREATE PROC ViewCompanySP 
+--@companyName varchar(50),
+--@companyAddress varchar(300),
+--@companyType varchar(80)
+--AS
+--Select C.*
+--From Companies C
+--Where  C.name=@companyName 
+--OR C.field =@companyType 
+--OR C.address=@companyAddress 
 
 
 
@@ -919,8 +919,9 @@ END
 
 
 
--- User story no.3 View the info of a certain company along with the department info
+-- Users story no.3 View the info of a certain company along with the department info
 -- ViewCompanySP takes the companyDomain as input and returns the info of the target company
+
 GO
 
 CREATE PROC ViewCompanySP 
@@ -930,25 +931,28 @@ SELECT c.*
 FROM Companies c 
 WHERE (c.domain_name = @companyDomain)
 
--- User story no.3 View the info of a certain company along with the department info
--- ViewDepartmentsSP takes the company domain as input and displays the information of the all the departments in that company
+-- Users story no.3 View the info of a certain company along with the department info
+-- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
 GO
 
-CREATE PROC ViewDepartmentsSP
+CREATE PROC ViewDepartmentsOfCompanySP
 @companyDomain VARCHAR(150)
 AS
 SELECT d.*
 FROM Departments d
 WHERE (c.domain_name = @companyDomain AND d.company_domain = c.domain_name)
 
+--Users Story no.7 View the companies in the order of having the highest average salaries
+-- ViewCompaniesSalaries returns the average salary of all staff members grouped by the companies they are in while ordering those averages descendingly
 GO
--- i tried to do this one but i seriously couldnt i am so sorry
-CREATE PROC CompaniesSalaryOrderedSP --Why again ? you need to get staff members  working ini a certian department average's salary  group by company domain.. do join and check domain r the same
+
+CREATE PROC ViewCompaniesSalariesSP
 AS
-SELECT c.*
-FROM Companies c INNER JOIN 
-(SELECT AVG(salary) AS s, Staff_Members.company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
-ON c.domain_name = m. company_domain
+SELECT sm.company_domain, AVG(sm.salary) AS average_salary
+FROM Staff_Members sm
+GROUP BY (sm.company_domain)
+ORDER BY AVG(sm.salary) DESC
+
 
 GO
 
