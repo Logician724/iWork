@@ -763,3 +763,69 @@ INSERT INTO Attendances (user_name,date,start_time,leave_time)
 VALUES ('salma.tarek','2017-9-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
 VALUES ('salma.tarek','2017-6-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
+
+
+
+-- Projects INSERTIONS
+
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES ('Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed','2017-6-23','2017-9-23');
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES ('Project-732EVT search engine maintenance','Mark_Jack','2017-1-1','2017-3-9');
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES ('Project-8493QKL maintenance of game center BootStrap','Mahmoud_Mohamed','2017-3-31','2017-6-2');
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES ('Project-3284NMD upgrade of exterior of home page BootStrap','Mohamed_Mahmoud','2017-5-1','2017-8-3');
+
+
+
+
+-- Tasks INSERTIONS
+
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-7-13','Task 1','Project-5651AMU chat page developing BootStrap',
+		'Task should be done as quickly as possible','Inspection of requests from cleints','Open');
+
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-7-31','Task 2','Project-5651AMU chat page developing BootStrap',
+		'Task should be done as quickly as possible','Brain storming of new ideas to enhance the page','Open');
+
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-3-9','Task 4','Project-732EVT search engine maintenance',
+		'Task should be done as quickly as possible','Final procedures of maintenance','Open');
+
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-5-22','Task 3','Project-8493QKL maintenance of game center BootStrap',
+		'Task should be done as quickly as possible','Applying the agreed on protocol on maintenance','Open');
+
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-5-9','Task 1','Project-3284NMD upgrade of exterior of home page BootStrap',
+		'Task should be done as quickly as possible','Brain Storming about ideas to come up with a plan of upgrading','Open');
+
+
+
+
+-- Managers_Assign_Projects_to Regulars INSERTIONS
+
+INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
+VALUES ('cam.percival','Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed');
+INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
+VALUES ('godfrey.love','Project-732EVT search engine maintenance','Jack_Mark');
+INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
+VALUES ('cam.percival','Project-8493QKL maintenance of game center BootStrap','Mahmoud_Mohamed');
+INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
+VALUES ('cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap','Mahmoud_Mohamed');
+
+
+
+ -- Managers_Assign_Tasks_To Regulars INSERTIONS
+
+ INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ VALUES ('Mahmoud_Mohamed','cam.percival','Project-5651AMU chat page developing BootStrap','Task 1','2017-7-13');
+ INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ VALUES ('Mahmoud_Mohamed','cam.percival','Project-732EVT search engine maintenance','Task 4','2017-3-9');
+ INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ VALUES ('Jack_Mark','godfrey.love','Project-8493QKL maintenance of game center BootStrap','Task 3','2017-5-22');
+ INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ VALUES ('Jack_Mark','godfrey.love','Project-3284NMD upgrade of exterior of home page BootStrap','Task 1','2017-5-9');
+
