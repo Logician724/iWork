@@ -51,13 +51,18 @@ EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-501
 
 
 
-DROP PROC StaffCheckInSp
+DROP PROC StaffCheckInSp --Staff Checks in creates entity with without leave time handles staff memeber number 1 
 GO
 CREATE PROC StaffCheckInSp 
 @username VARCHAR(30)
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday')
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday') 
 
 INSERT INTO Attendances 
 (user_name,date,start_time )
+
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+
+
+
+EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
