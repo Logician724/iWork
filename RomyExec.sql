@@ -254,3 +254,11 @@ AS
 SELECT * 
 FROM USERS 
 WHERE user_name=@username
+DROP PROC ViewUserInfoSp;
+
+EXEC ViewUserInfoSp 'Ahmed_Mohamed'
+
+
+
+EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
+EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
