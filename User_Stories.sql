@@ -1,4 +1,5 @@
 ﻿
+DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
@@ -39,7 +40,6 @@ DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC ViewNewApplicationsSP;
 DROP PROC ViewAttendanceOfStaffSP;
-DROP PROC ManagerViewProjectInfoSP;
 DROP PROC ManagerDecidingRequestSP;
 DROP PROC ManagerCreateProjectSP;
 DROP PROC ManagerReviewTaskSP;
@@ -112,8 +112,8 @@ CREATE PROC ViewCompanySP
 AS 
 SELECT c.*
 FROM Companies c 
-WHERE (c.domain_name = @companyDomain)
 
+WHERE (c.domain_name = @companyDomain)
 -- Users story no.3 View the info of a certain company along with the department info
 -- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
 
@@ -949,13 +949,14 @@ ORDER BY SUM(A.duration) desc
 --1: Abdullah-
 GO
 
-CREATE PROC ManagerViewProjectInfoSP
-@user_name VARCHAR(50)
-AS
+CREATE PROC ViewProjectsOfEmployeeSP
+@userName VARCHAR(30)
+AS 
 SELECT p.*
-	FROM Managers_Assign_Projects_To_Regulars m INNER JOIN Projects p 
-	ON m.project_name = p.project_name
-	WHERE m.manager_user_name = @user_name
+FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr
+ON p.project_name = mapr.project_name
+WHERE mapr.regular_user_name = @userName
+
 
 --2: Reda----------------------------------------------------------------------------
 
