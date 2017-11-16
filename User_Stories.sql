@@ -240,6 +240,7 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 
 GO
 --Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
+-- User Story HR no.10
 CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
@@ -250,6 +251,7 @@ WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.date)
 
 GO
+-- User Story Regular Employee no.2
 CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
 @projectName VARCHAR(100),
 @userName VARCHAR(30)
