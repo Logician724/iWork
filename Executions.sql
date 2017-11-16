@@ -16,3 +16,9 @@ EXEC AddJobSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department','PHP-5
 				'Employees will handle testing codes produced by other coders in the department and debuging those codes',4,10000,
 				'Handling testing and debuging code in PHP Department',8,7
 
+EXEC AddQuestionSP 'Have you ever had a serious conflict in a previous employment?',1
+
+EXEC AddQuestionToJobSP 6,'Employee- Debuging Handling PHP Department','PHP-5019','facebook.com'
+
+EXEC AddHrResponseSP  'omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted'
+
