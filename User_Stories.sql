@@ -225,7 +225,7 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
--- User Story
+-- User Story HR no.5
 CREATE PROC AddHrResponseSP --fixed
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
