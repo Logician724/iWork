@@ -1,11 +1,11 @@
-﻿TRUNCATE TABLE HR_Employees;
-TRUNCATE TABLE Managers;
-TRUNCATE TABLE Regular_Employees;
-TRUNCATE TABLE Job_Seekers;
-TRUNCATE TABLE Staff_Members;
-TRUNCATE TABLE Departments;
-TRUNCATE TABLE Companies;
-TRUNCATE TABLE Users;
+﻿--TRUNCATE TABLE HR_Employees;
+--TRUNCATE TABLE Managers;
+--TRUNCATE TABLE Regular_Employees;
+--TRUNCATE TABLE Job_Seekers;
+--TRUNCATE TABLE Staff_Members;
+--TRUNCATE TABLE Departments;
+--TRUNCATE TABLE Companies;
+--TRUNCATE TABLE Users;
 
 -- COMPANIES INSERTIONS
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email) 

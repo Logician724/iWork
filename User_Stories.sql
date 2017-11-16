@@ -1,4 +1,5 @@
-﻿DROP PROC ViewDepartmentSP;
+﻿
+DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
 DROP PROC ViewQuetionsInInterviewSP;
@@ -9,7 +10,7 @@ DROP PROC AddJobSP;
 DROP PROC AddQuestionSP;
 DROP PROC AddQuestionToJobSP;
 DROP PROC AddHrResponseSP;
-DROP PROC ViewAttendaceSP;
+DROP PROC ViewAttendanceSP;
 DROP PROC ViewTasksInProjectSP;
 DROP PROC ViewApprovedJobAppSP;
 DROP PROC ViewSeekerInfoSP;
@@ -30,10 +31,10 @@ DROP PROC ViewReceivedEmailsSP;
 DROP PROC StaffCheckInSp;
 DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
-DROP PROC ViewCompanyAndItsDepartmentsSP;
-DROP PROC CompaniesSalaryOrderedSP;
-DROP PROC ChooseJobFromAcceptedSP;
-DROP PROC ApplyJobCheckSP;
+DROP PROC ViewDepartmentsOfCompanySP;
+DROP PROC ViewCompaniesSalariesSP;
+DROP PROC ChooseJobFromAcceptedAppSP;
+DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC AnnouncementWithinTwentyDaysSP;
 DROP PROC ViewNewApplicationsSP;
@@ -55,7 +56,6 @@ DROP PROC EditJobInfoSP;
 DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
 DROP FUNCTION RegularsWithFixed;
-DROP FUNCTION MakeCompanyEmail;
 
 GO
 
@@ -66,6 +66,7 @@ AS
 SELECT d.*
 FROM Departments d
 WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentCode))
+
 
 GO
 
@@ -317,17 +318,17 @@ VALUES (@userName,@taskName,@taskDeadline,@projectName)
 
 -- Romy Was here too --
 GO 
-
-CREATE PROC ViewCompanySP 
-@companyName varchar(50),
-@companyAddress varchar(300),
-@companyType varchar(80)
-AS
-Select C.*
-From Companies C
-Where  C.name=@companyName 
-OR C.field =@companyType 
-OR C.address=@companyAddress 
+--a similar query already exists
+--CREATE PROC ViewCompanySP 
+--@companyName varchar(50),
+--@companyAddress varchar(300),
+--@companyType varchar(80)
+--AS
+--Select C.*
+--From Companies C
+--Where  C.name=@companyName 
+--OR C.field =@companyType 
+--OR C.address=@companyAddress 
 
 
 
@@ -919,109 +920,164 @@ END
 
 
 
+-- Users story no.3 View the info of a certain company along with the department info
+-- ViewCompanySP takes the companyDomain as input and returns the info of the target company
 
 GO
 
-CREATE PROC ViewCompanyAndItsDepartmentsSP --WHY !!!!! WHY !!!!!!!!!! why the join ?
+CREATE PROC ViewCompanySP 
 @companyDomain VARCHAR(150)
 AS 
-SELECT *
-FROM Companies c INNER JOIN Departments d
-ON c.domain_name = d.company_domain 
-WHERE c.domain_name = @companyDomain
-
-GO
--- i tried to do this one but i seriously couldnt i am so sorry
-CREATE PROC CompaniesSalaryOrderedSP --Why again ? you need to get staff members  working ini a certian department average's salary  group by company domain.. do join and check domain r the same
-AS
 SELECT c.*
-FROM Companies c INNER JOIN 
-(SELECT AVG(salary) AS s, Staff_Members.company_domain FROM Staff_Members GROUP BY Staff_Members.company_domain) AS m 
-ON c.domain_name = m. company_domain
+FROM Companies c 
+WHERE (c.domain_name = @companyDomain)
 
+-- Users story no.3 View the info of a certain company along with the department info
+-- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
 GO
 
-CREATE PROC ApplyJobCheckSP --Too Many null ? the exists relation forces the seeker to only apply to jobs he applied in before ... needs to be redone
-@min_years_experience INT,
-@seeker_user_name VARCHAR(30),
-@job_title VARCHAR(150),
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150)
+CREATE PROC ViewDepartmentsOfCompanySP
+@companyDomain VARCHAR(150)
+AS
+SELECT d.*
+FROM Departments d
+WHERE (c.domain_name = @companyDomain AND d.company_domain = c.domain_name)
+
+--Users Story no.7 View the companies in the order of having the highest average salaries
+-- ViewCompaniesSalaries returns the average salary of all staff members grouped by the companies they are in while ordering those averages descendingly
+GO
+
+CREATE PROC ViewCompaniesSalariesSP
+AS
+SELECT sm.company_domain, AVG(sm.salary) AS average_salary
+FROM Staff_Members sm
+GROUP BY (sm.company_domain)
+ORDER BY AVG(sm.salary) DESC
+
+
+-- Job Seekers Story no.1 Apply for any job as long as I have the needed years of experience for the job. 
+-- ApplyForJobSP takes seeker user name and application info as inputs and checks that there is no application 
+-- for the same seeker that has a pending status for the same job, while checking that the seeker experience
+-- exceeds the min years of experience required by the job he applied for.
+GO
+
+CREATE PROC ApplyForJobSP 
+@seekerUserName VARCHAR(30),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
 AS
 IF(
- EXISTS(
+NOT EXISTS(
 SELECT *
-FROM Jobs j INNER JOIN Applications a
+FROM  Jobs j INNER JOIN Applications a
 ON j.company_domain = a.company_domain AND
 	j.department_code = a.department_code AND
 	j.job_title = a.job_title
-WHERE min_years_experience < @min_years_experience AND
-		a.job_title = @job_title AND
-		a.seeker_username = @seeker_user_name AND
-		a.company_domain = @company_domain AND
-		a.department_code = @department_code AND
-		app_status != 'pending'
+WHERE a.app_status = 'Pending' AND
+	  a.job_title = @jobTitle AND
+	  a.department_code = @departmentCode AND
+	  a.company_domain = @companyDomain AND
+	  a.seeker_username = @seekerUserName
 )
+AND 
+EXISTS(
+SELECT *
+FROM Jobs j INNER JOIN Users u
+ON u.exp_year >= j.min_years_experience
+WHERE u.user_name = @seekerUserName
 )
-INSERT INTO Applications VALUES
-(NULL,NULL,NULL,NULL,NULL,NULL,@seeker_user_name,@job_title,@department_code,@company_domain)
 
+)
+INSERT INTO Applications
+(seeker_username,job_title,department_code,company_domain)
+VALUES
+(@seekerUserName,@jobTitle,@departmentCode,@companyDomain)
+
+--Job Seekers Story no.5 Choose a job from the jobs I was accepted in
+-- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
+-- and the day off of choice and checks that the day off chosen is not friday. After that
+-- the job seeker is added as a staff member if he satisfies all the constraints, other than taht
+-- a statement is printed on the console requiring the user to revise his input values.
 GO
 
-CREATE PROC ChooseJobFromAcceptedSP --Mostly correct <3 
-@seeker_username VARCHAR(30),
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150),
-@job_title VARCHAR(150),
-@day_off VARCHAR(10),
-@company_email VARCHAR(70) --Why take as input it when we can concatinate 
+CREATE PROC ChooseJobFromAcceptedAppSP 
+@seekerUserName VARCHAR(30),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@jobTitle VARCHAR(150),
+@dayOff VARCHAR(10)
 AS
 IF(	EXISTS(
 			SELECT * 
 			FROM Applications a
-			WHERE a.company_domain = @company_domain AND
-			a.department_code = @department_code AND
-			a.job_title = @job_title AND
-			a.seeker_username = @seeker_username AND
+			WHERE a.company_domain = @companyDomain AND
+			a.department_code = @departmentCode AND
+			a.job_title = @jobTitle AND
+			a.seeker_username = @seekerUserName AND
 			a.app_status = 'Accepted'
 			)
+			AND
+			@dayOff != 'Friday'
 	)	
 BEGIN
 DELETE FROM Job_Seekers 
-	WHERE Job_Seekers.user_name = @seeker_username
+	WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
 SELECT @salary = salary
 	FROM Jobs
-	WHERE department_code = @department_code AND company_domain = @company_domain AND job_title = @job_title 
+	WHERE department_code = @departmentCode AND
+	company_domain = @companyDomain AND
+	job_title = @jobTitle
 INSERT INTO Staff_Members 
-	VALUES(@seeker_username,@day_off,30,@salary,@company_email,@job_title,@department_code,@company_domain)
+(user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES
+(@seekerUserName,@dayOff,30,@salary,@jobTitle,@departmentCode,@companyDomain)
 UPDATE Jobs 
-	SET vacancies = vacancies-1
-	WHERE Jobs.company_domain = @company_domain AND
-			Jobs.department_code = @department_code AND
-			Jobs.job_title = @job_title 
-
+SET vacancies = vacancies - 1
+WHERE Jobs.company_domain = @companyDomain AND
+		Jobs.department_code = @departmentCode AND
+		Jobs.job_title = @jobTitle
 END
 
+ELSE
+PRINT 'Error Occured, please check back your input values'
+
+
+--Regular Employees Story no.6 Delete any request that is still in the review process
+--DeletePendingRequestsSP takes the username of the employee as input and deletes all
+--his requests that have an hr_response_req attr value of Pending
 GO 
 
-CREATE PROC DeletePendingRequestsSP --in this you are deleting alllllllllllllllllll requests he applied to .. need to take input request id
-@username VARCHAR(30)
+CREATE PROC DeletePendingRequestsSP 
+@userName VARCHAR(30)
 AS
 DELETE Requests
-	WHERE request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @username)
-	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @username)
-	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @username)
-	AND hr_response_req = NULL --pending isn't null
+	WHERE request_id = 
+	(SELECT request_id 
+	FROM Regular_Employees_Replace_Regular_Employees r 
+	Where r.user_name_request_owner = @userName)
+	OR request_id = (
+	SELECT request_id 
+	FROM HR_Employees_Replace_HR_Employees h 
+	where h.user_name_request_owner = @userName)
+	OR request_id = (
+	SELECT request_id 
+	FROM Managers_Replace_Managers_In_Requests m 
+	WHERE m.user_name_request_owner = @userName)
+	AND hr_response_req = 'Pending'
+
 
 GO
 
-CREATE PROC AnnouncementWithinTwentyDaysSP --Just a tiny issue
-@company_domain VARCHAR(150)
+CREATE PROC ViewLatestAnnouncementsSP
+@userName VARCHAR(150) --review needed
 AS
 SELECT a.*
-	FROM Announcements a 
-	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21  --this will return the announcements in the past year when the difference <21
+	FROM Announcements a INNER JOIN StaffMember sm
+	ON sm.company_domain = a.company_domain
+	WHERE a.company_domain = sm.company_domain AND
+	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21 
 
 GO
 
