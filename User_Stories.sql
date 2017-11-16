@@ -223,13 +223,14 @@ GO
 
 CREATE PROC AddHrResponseSP --fixed
 @seekerUserName VARCHAR(30),
+@hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
 @hrResponse VARCHAR(20)
 AS
 UPDATE Applications
-SET hr_response_app = @hrResponse
+SET hr_response_app = @hrResponse , hr_username = @hrUserName
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
