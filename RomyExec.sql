@@ -24,13 +24,19 @@ DROP PROC ViewMyScoreSP ;
 GO 
 CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
 @username VARCHAR(3),
-@job VARCHAR(150)
+@job VARCHAR(150),
+@departmentCode VARCHAR(150),
+@CompanyDomain VARCHAR(150)
 
 AS 
 SELECT  score
 From  Applications 
 WHERE @username=seeker_username 
+AND @CompanyDomain=company_domain
 AND @job=job_title
+AND @departmentCode =department_code
+
+
 
 
 INSERT INTO Users (user_name,password,personal_email,birth_date,exp_year,first_name,last_name) --iNSERTION FOR TEST 
@@ -39,5 +45,6 @@ VALUES('hassan_hasannen','1234','Mohamed.Ahmed@hotmail.com','1/4/1990',5,'hassan
 VALUES ('hassan_hasannen'); 
 INSERT INTO Applications (seeker_username,job_title,department_code,company_domain,score) Values ('hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com',10) 
 
-EXEC ViewMyScoreSP  'hassan_hasannen','Manager- Managing PHP Department' --executiong ViewMyScore working 
+EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
+
 
