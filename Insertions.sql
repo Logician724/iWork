@@ -735,6 +735,9 @@ INSERT INTO Applications (score,app_status,seeker_username,job_title,department_
 VALUES (0,'Pending','shadi.aly','Manager- Managing PHP Department','PHP-5019','facebook.com');
 INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
 VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com');
+INSERT INTO Applications (seeker_username,job_title,department_code,company_domain,app_status) 
+VALUES ('shadi.aly','Employee- BootStrap Developer','BS-3291','facebook.com','Accepted');
+
 
 
 
