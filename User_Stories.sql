@@ -815,17 +815,26 @@ END --END IF EXISTS
 
 --4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
 GO
-
-CREATE PROC ViewNewApplicationsSP --Another tiny issue
-@seeker_username VARCHAR(30),
-@compnay_domain VARCHAR(150),
-@department_code VARCHAR(30),
-@job_title VARCHAR(150)
+CREATE PROC ViewNewApplicationsSP
+@hrUserName VARCHAR(30),
+@seeekerUserName VARCHAR(30),
+@companyDomain VARCHAR(150),
+@departmentCode VARCHAR(30),
+@jobTitle VARCHAR(150)
 AS
-SELECT *,a.score --select all will return a.score already 
-	FROM Applications a INNER JOIN Job_Seekers js ON a.seeker_username = js.user_name INNER JOIN Jobs j 
-	ON a.company_domain = j.company_domain AND a.department_code = j.department_code 
-	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
+IF EXISTS
+(
+SELECT *
+FROM Staff_Members sm INNER JOIN Departments d
+ON sm.department_code = d.department_code
+WHERE d.department_code = @departmentCode AND sm.user_name = @hrUserName
+)
+SELECT *
+FROM Applications a
+WHERE a.seeker_user_name = @seekerUserName AND
+a.jobTitle = @jobTitle AND
+a.depratment_code = @departmentCode AND
+a.company_domain = @companyDomain
 
 
 --5: Reda------------------------------------------------------------------------------------------------------------------------------------------------
