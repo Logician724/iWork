@@ -919,16 +919,27 @@ END
 
 
 
-
+-- User story no.3 View the info of a certain company along with the department info
+-- ViewCompanySP takes the companyDomain as input and returns the info of the target company
 GO
 
-CREATE PROC ViewCompanyAndItsDepartmentsSP --WHY !!!!! WHY !!!!!!!!!! why the join ?
+CREATE PROC ViewCompanySP 
 @companyDomain VARCHAR(150)
 AS 
-SELECT *
-FROM Companies c INNER JOIN Departments d
-ON c.domain_name = d.company_domain 
-WHERE c.domain_name = @companyDomain
+SELECT c.*
+FROM Companies c 
+WHERE (c.domain_name = @companyDomain)
+
+-- User story no.3 View the info of a certain company along with the department info
+-- ViewDepartmentsSP takes the company domain as input and displays the information of the all the departments in that company
+GO
+
+CREATE PROC ViewDepartmentsSP
+@companyDomain VARCHAR(150)
+AS
+SELECT d.*
+FROM Departments d
+WHERE (c.domain_name = @companyDomain AND d.company_domain = c.domain_name)
 
 GO
 -- i tried to do this one but i seriously couldnt i am so sorry
