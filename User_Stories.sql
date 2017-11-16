@@ -1,4 +1,5 @@
 ﻿
+DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
@@ -36,7 +37,6 @@ DROP PROC ViewCompaniesSalariesSP;
 DROP PROC ChooseJobFromAcceptedAppSP;
 DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
-DROP PROC AnnouncementWithinTwentyDaysSP;
 DROP PROC ViewNewApplicationsSP;
 DROP PROC RegularShowAttendanceWithinPeriodSP;
 DROP PROC ManagerViewProjectInfoSP;
@@ -55,6 +55,8 @@ DROP PROC ChangeTaskStatusSP;
 DROP PROC EditJobInfoSP;
 DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
+DROP PROC ViewRequestsSP;
+DROP PROC ViewLatestAnnouncementsSP;
 DROP FUNCTION RegularsWithFixed;
 
 
@@ -78,7 +80,7 @@ DROP FUNCTION RegularsWithFixed;
 
 --1: Gharam
 
-GO 
+--GO 
 --a similar query already exists
 --CREATE PROC ViewCompanySP 
 --@companyName varchar(50),
@@ -438,14 +440,6 @@ INSERT INTO Attendances
 (user_name,date,start_time )
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
 
-GO
-CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30)
-
-AS
-SELECT E.*
-FROM Emails E inner Join Staff_Receives_EmailS R 
-ON E.sender_user_name=sender_user_name AND R.recipient_username=@username
-
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
 GO
@@ -475,6 +469,7 @@ WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) 
 
 
 --4: Gharam--------------------------------------- 
+GO
 Create PROC FindTypeOfReplacementSp
 @username VARCHAR(30),
 @username2 VARCHAR(30) ,
@@ -895,6 +890,7 @@ END
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
+GO
 
 CREATE PROC RegularShowAttendanceWithinPeriodSP
 @period1 DATETIME,
@@ -912,6 +908,8 @@ SELECT a.start_time, a.leave_time, a.duration, @missing_hours
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
 --Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
+GO
+
 CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
@@ -1171,7 +1169,7 @@ s2.user_name = @regularUserName
 )
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
-VALUES (@manageUserName,@regularUserName,@projectName)
+VALUES (@managerUserName,@regularUserName,@projectName)
 --7: Gharam----------------------------------------------------------------------------------------------------------- 
 
 GO
