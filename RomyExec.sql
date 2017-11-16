@@ -133,3 +133,85 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 EXEC HRPostsAnnouncementSP 'ahmed.hussain','TEST','TEST','TEST' --executing HRPostsAnnouncementSP 
+------------------------Manager Defines project done by Abdullah ------------------------------
+DROP PROC ManagerCreateProjectSP;
+
+
+GO
+
+CREATE PROC ManagerCreateProjectSP
+@manager_username VARCHAR(30),
+@start_date DATETIME,
+@end_date DATETIME,
+@project_name VARCHAR(100)
+AS
+INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
+
+EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
+EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
+
+---------------------------------------------------------------------------------------------
+
+-------------------------Manager defines task done by Yasmine-------------------------------
+
+DROP PROC DefineTaskSP;
+
+GO 
+CREATE PROC DefineTaskSP --handles Defining tasks
+ @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30)  --@status VARCHAR(10) = 'Open'
+AS
+/*IF EXISTS ( 
+  SELECT *
+  FROM Manager M INNER JOIN Projects P on M.user_name = P.manager_user_name
+  WHERE @managerUsername = P.manager_user_name
+          )*/
+BEGIN 
+INSERT INTO Tasks (project_name,deadline,name,status)
+VALUES (@projectName, @deadline, @taskName ,'Open')
+END
+
+
+
+EXEC DefineTaskSP 'DATABASES','2012/04/06 12:23:45','M2'
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+
+------------------------------Manager Hires Regular in project  Originally by reda ----------------
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+
+
+
+DROP PROC RegularFinalizesTaskSP;
+
+GO
+CREATE PROC RegularFinalizesTaskSP
+@username VARCHAR(30) 
+,@taskName VARCHAR(30),
+@deadline DATETIME, 
+@project VARCHAR(100)
+AS 
+IF EXISTS  (SELECT M.task_name 
+FROM Managers_Assign_Tasks_To_Regulars M 
+WHERE @username=M.regular_user_name 
+AND @taskName=M.task_name 
+AND @deadline=M.task_deadline 
+AND @project=M.project_name) 
+AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+UPDATE Tasks
+SET status='Fixed'
+WHERE  @taskName=name
+AND @deadline=deadline 
+AND project_name=@project
+
