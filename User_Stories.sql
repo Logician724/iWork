@@ -262,6 +262,7 @@ ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name 
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
 
 GO
+-- User Story Manager no.3
 CREATE PROC ViewApprovedJobAppSP
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
