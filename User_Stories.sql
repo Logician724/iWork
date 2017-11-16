@@ -294,6 +294,12 @@ FROM Staff_Members s1 INNER JOIN Staff_Members s2
 ON s1.user_name = s2.user_name
 WHERE(s1.department_code = s2.department_code AND s1.user_name = @userName AND s2.user_name = @definingUser)
 )
+IF (
+SELECT COUNT(*)
+FROM Managers_Assign_Projects_To_Regulars mapr
+WHERE mapr.regular_user_name = @regularUserName
+) < 2
+
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
 VALUES (@userName,@regularUserName,@projectName)
