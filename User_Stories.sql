@@ -187,9 +187,10 @@ ORDER BY AVG(sm.salary) DESC
 --1. Reda
 GO
 
-CREATE PROC UserLoginSP --suspecious
+CREATE PROC UserLoginSP
 @userName VARCHAR(30),
-@password  VARCHAR(30)
+@password  VARCHAR(30),
+@type INT OUTPUT
 AS
 BEGIN
 IF
@@ -199,7 +200,7 @@ FROM Users u
 WHERE (u.user_name = @userName AND u.password = @password)
 )
 
-PRINT 'User not found'
+SET @type = 0;
 
 ELSE IF
 EXISTS ( 
@@ -207,7 +208,7 @@ SELECT s.*
 FROM Job_Seekers s
 WHERE (s.user_name = @userName)
 )
-PRINT 'Hello Seeker'
+SET @type = 1;
 
 ELSE IF
 EXISTS (
@@ -215,14 +216,14 @@ SELECT m.*
 FROM Managers m
 WHERE (m.user_name = @userName)
 )
-PRINT 'Hello Manager'
+SET @type = 2;
 ELSE IF
 EXISTS (
 SELECT h.*
 FROM HR_Employees h
 WHERE (h.user_name = @userName)
 )
-PRINT  'Hello HR'
+SET @type = 3;
 
 ELSE IF
 EXISTS (
@@ -230,7 +231,7 @@ SELECT r.*
 FROM Regular_Employees r
 WHERE (r.user_name = @userName)
 )
-PRINT 'Hello Employee'
+SET @type = 4;
 
 END
 
