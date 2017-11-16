@@ -157,17 +157,17 @@ EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES
 DROP PROC DefineTaskSP;
 
 GO 
-CREATE PROC DefineTaskSP --tasks can be defined by any manager don't need the exists condition Nor username as input
-@managerUsername VARCHAR(30) , @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30) , @status VARCHAR(10) = 'Open'
+CREATE PROC DefineTaskSP --handles Defining tasks
+ @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30)  --@status VARCHAR(10) = 'Open'
 AS
-IF EXISTS ( 
+/*IF EXISTS ( 
   SELECT *
   FROM Manager M INNER JOIN Projects P on M.user_name = P.manager_user_name
   WHERE @managerUsername = P.manager_user_name
-          )
+          )*/
 BEGIN 
 INSERT INTO Tasks (project_name,deadline,name,status)
-VALUES (@projectName, @deadline, @taskName , @status)
+VALUES (@projectName, @deadline, @taskName ,'Open')
 END
 
 
