@@ -33,7 +33,7 @@ DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
 DROP PROC ViewDepartmentsOfCompanySP;
 DROP PROC ViewCompaniesSalariesSP;
-DROP PROC ChooseJobFromAcceptedSP;
+DROP PROC ChooseJobFromAcceptedAppSP;
 DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC AnnouncementWithinTwentyDaysSP;
@@ -994,62 +994,90 @@ INSERT INTO Applications
 VALUES
 (@seekerUserName,@jobTitle,@departmentCode,@companyDomain)
 
+--Job Seekers Story no.5 Choose a job from the jobs I was accepted in
+-- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
+-- and the day off of choice and checks that the day off chosen is not friday. After that
+-- the job seeker is added as a staff member if he satisfies all the constraints, other than taht
+-- a statement is printed on the console requiring the user to revise his input values.
 GO
 
-CREATE PROC ChooseJobFromAcceptedSP --Mostly correct <3 
-@seeker_username VARCHAR(30),
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150),
-@job_title VARCHAR(150),
-@day_off VARCHAR(10),
-@company_email VARCHAR(70) --Why take as input it when we can concatinate 
+CREATE PROC ChooseJobFromAcceptedAppSP 
+@seekerUserName VARCHAR(30),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@jobTitle VARCHAR(150),
+@dayOff VARCHAR(10)
 AS
 IF(	EXISTS(
 			SELECT * 
 			FROM Applications a
-			WHERE a.company_domain = @company_domain AND
-			a.department_code = @department_code AND
-			a.job_title = @job_title AND
-			a.seeker_username = @seeker_username AND
+			WHERE a.company_domain = @companyDomain AND
+			a.department_code = @departmentCode AND
+			a.job_title = @jobTitle AND
+			a.seeker_username = @seekerUserName AND
 			a.app_status = 'Accepted'
 			)
+			AND
+			@dayOff != 'Friday'
 	)	
 BEGIN
 DELETE FROM Job_Seekers 
-	WHERE Job_Seekers.user_name = @seeker_username
+	WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
 SELECT @salary = salary
 	FROM Jobs
-	WHERE department_code = @department_code AND company_domain = @company_domain AND job_title = @job_title 
+	WHERE department_code = @departmentCode AND
+	company_domain = @companyDomain AND
+	job_title = @jobTitle
 INSERT INTO Staff_Members 
-	VALUES(@seeker_username,@day_off,30,@salary,@company_email,@job_title,@department_code,@company_domain)
+(user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES
+(@seekerUserName,@dayOff,30,@salary,@jobTitle,@departmentCode,@companyDomain)
 UPDATE Jobs 
-	SET vacancies = vacancies-1
-	WHERE Jobs.company_domain = @company_domain AND
-			Jobs.department_code = @department_code AND
-			Jobs.job_title = @job_title 
-
+SET vacancies = vacancies - 1
+WHERE Jobs.company_domain = @companyDomain AND
+		Jobs.department_code = @departmentCode AND
+		Jobs.job_title = @jobTitle
 END
 
+ELSE
+PRINT 'Error Occured, please check back your input values'
+
+
+--Regular Employees Story no.6 Delete any request that is still in the review process
+--DeletePendingRequestsSP takes the username of the employee as input and deletes all
+--his requests that have an hr_response_req attr value of Pending
 GO 
 
-CREATE PROC DeletePendingRequestsSP --in this you are deleting alllllllllllllllllll requests he applied to .. need to take input request id
-@username VARCHAR(30)
+CREATE PROC DeletePendingRequestsSP 
+@userName VARCHAR(30)
 AS
 DELETE Requests
-	WHERE request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @username)
-	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @username)
-	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @username)
-	AND hr_response_req = NULL --pending isn't null
+	WHERE request_id = 
+	(SELECT request_id 
+	FROM Regular_Employees_Replace_Regular_Employees r 
+	Where r.user_name_request_owner = @userName)
+	OR request_id = (
+	SELECT request_id 
+	FROM HR_Employees_Replace_HR_Employees h 
+	where h.user_name_request_owner = @userName)
+	OR request_id = (
+	SELECT request_id 
+	FROM Managers_Replace_Managers_In_Requests m 
+	WHERE m.user_name_request_owner = @userName)
+	AND hr_response_req = 'Pending'
+
 
 GO
 
-CREATE PROC AnnouncementWithinTwentyDaysSP --Just a tiny issue
-@company_domain VARCHAR(150)
+CREATE PROC ViewLatestAnnouncementsSP
+@userName VARCHAR(150) --review needed
 AS
 SELECT a.*
-	FROM Announcements a 
-	WHERE a.company_domain = @company_domain AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP)<21  --this will return the announcements in the past year when the difference <21
+	FROM Announcements a INNER JOIN StaffMember sm
+	ON sm.company_domain = a.company_domain
+	WHERE a.company_domain = sm.company_domain AND
+	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21 
 
 GO
 
