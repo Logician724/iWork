@@ -184,6 +184,32 @@ EXEC DefineTaskSP 'DATABASES','2012/04/06 12:23:45','M2'
 
 
 ------------------------------Manager Hires Regular in project  Originally by reda ----------------
+DROP PROC AssignRegularToProjectSP;
+
+GO
+CREATE PROC AssignRegularToProjectSP
+@projectName VARCHAR(100),
+@managerUserName VARCHAR(30),
+@regularUserName VARCHAR(30)
+AS
+IF (
+SELECT COUNT(*)
+FROM Managers_Assign_Projects_To_Regulars mapr
+WHERE mapr.regular_user_name = @regularUserName
+) < 2
+AND EXISTS
+(
+SELECT *
+FROM Staff_Members s1, Staff_Members s2
+WHERE (s1.user_name = s2.user_name AND
+s1.department_code = s2.department_code AND
+s1.user_name = @managerUserName AND
+s2.user_name = @regularUserName
+)
+)
+INSERT INTO Managers_Assign_Projects_To_Regulars
+(manager_user_name,regular_user_name,project_name)
+VALUES (@manageUserName,@regularUserName,@projectName)
 
 
 
@@ -215,3 +241,16 @@ WHERE  @taskName=name
 AND @deadline=deadline 
 AND project_name=@project
 
+
+
+---------------------Find type of replacement ----------------------------------
+
+---------------------------registered user 2 ----------------------------------
+GO
+Create PROC ViewUserInfoSp
+@userName VARCHAR(30)
+
+AS
+SELECT * 
+FROM USERS 
+WHERE user_name=@username
