@@ -58,7 +58,7 @@ DROP PROC ApplyForBusinessRequestSP;
 DROP FUNCTION RegularsWithFixed;
 
 GO
-
+-- User Story User no.4
 CREATE PROC ViewDepartmentSP --Missing Viewing all jobs in this department .. if you make a View jobs in department procedure .. make a third procedure that links both of them maybe?
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30)
@@ -69,7 +69,7 @@ WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentC
 
 
 GO
-
+-- User Story Registered User no.1
 CREATE PROC UserLoginSP --suspecious
 @userName VARCHAR(30),
 @password  VARCHAR(30)
@@ -120,7 +120,7 @@ END
 
 GO
 
-
+--User Story Job Seeker no.2
 CREATE PROC ViewQuetionsInInterviewSP --correct
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -132,7 +132,7 @@ ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
 GO
-
+--User Story Job Seeker no.6
 CREATE PROC DeletePendingApplicationSP --correct
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
@@ -143,6 +143,7 @@ DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
 
 GO
+--User Story Staff Member no.3
 CREATE PROC ViewAttendanceSP --correct
 @userName VARCHAR(30),
 @periodStart DATETIME,
@@ -153,6 +154,7 @@ FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
 
 GO
+-- User Story Staff Member no.7
 CREATE PROC SendEmailSP --fixed
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
@@ -171,6 +173,7 @@ VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
 
 GO
+-- User Story HR no.1
 CREATE PROC AddJobSP --fix
 @hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
@@ -199,6 +202,7 @@ ELSE
 PRINT 'You cannot add a job in a different department than yours.'
 
 GO
+-- User Story HR no.1
 CREATE PROC AddQuestionSP
 @questionTitle VARCHAR(700),
 @answer BIT
@@ -209,6 +213,7 @@ VALUES
 (@questionTitle,@answer)
 
 GO
+-- User Story HR no.1
 CREATE PROC AddQuestionToJobSP --check if the question is in the question list first .. just in case
 @questionID INT,
 @jobTitle VARCHAR(150),
@@ -220,7 +225,7 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 GO
-
+-- User Story
 CREATE PROC AddHrResponseSP --fixed
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
