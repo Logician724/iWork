@@ -22,3 +22,11 @@ EXEC AddQuestionToJobSP 6,'Employee- Debuging Handling PHP Department','PHP-5019
 
 EXEC AddHrResponseSP  'omar.mofti','Yousef.Mustafa','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted'
 
+EXEC ViewYearlyAttendanceOfStaffSP 'salma.tarek',2017
+
+EXEC ViewTasksInProjectSP 'Project-5651AMU chat page developing BootStrap','cam.percival'
+
+
+
+
+
