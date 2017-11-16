@@ -228,13 +228,14 @@ GO
 -- User Story HR no.5
 CREATE PROC AddHrResponseSP --fixed
 @seekerUserName VARCHAR(30),
+@hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
 @hrResponse VARCHAR(20)
 AS
 UPDATE Applications
-SET hr_response_app = @hrResponse
+SET hr_response_app = @hrResponse , hr_username = @hrUserName
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 
 GO
@@ -288,20 +289,28 @@ WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.com
 
 GO
 CREATE PROC AssignRegularToProjectSP
-@userName VARCHAR(30),
 @projectName VARCHAR(100),
-@definingUser VARCHAR(30), --user name of the manager that defined the project--
+@managerUserName VARCHAR(30),
 @regularUserName VARCHAR(30)
 AS
-IF EXISTS (
+IF (
+SELECT COUNT(*)
+FROM Managers_Assign_Projects_To_Regulars mapr
+WHERE mapr.regular_user_name = @regularUserName
+) < 2
+AND EXISTS
+(
 SELECT *
-FROM Staff_Members s1 INNER JOIN Staff_Members s2
-ON s1.user_name = s2.user_name
-WHERE(s1.department_code = s2.department_code AND s1.user_name = @userName AND s2.user_name = @definingUser)
+FROM Staff_Members s1, Staff_Members s2
+WHERE (s1.user_name = s2.user_name AND
+s1.department_code = s2.department_code AND
+s1.user_name = @managerUserName AND
+s2.user_name = @regularUserName
+)
 )
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
-VALUES (@userName,@regularUserName,@projectName)
+VALUES (@manageUserName,@regularUserName,@projectName)
 
 GO
 CREATE PROC AssignRegularToTaskSP
