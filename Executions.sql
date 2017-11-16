@@ -9,3 +9,4 @@ EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
 
 EXEC ViewCompaniesSalariesSP; --View companies ordered by their average salary
+EXEC ApplyForJobSP 'gawwad.gooda','Employee- BootStrap Developer','BS-3291','facebook.com'
