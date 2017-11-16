@@ -740,12 +740,26 @@ VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019'
 -- Attendances INSERTIONS
 
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
-VALUES ('salma.tarek','2017-8-19','2017-8-19 7:39:00','2017-8-19 16:15:15');
+VALUES ('salma.tarek','2017-1-19','2017-8-19 7:39:00','2017-8-19 16:15:15');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
-VALUES ('salma.tarek','2017-8-20','2017-8-20 7:45:53','2017-8-20 16:23:37');
+VALUES ('salma.tarek','2017-2-20','2017-8-20 7:45:53','2017-8-20 16:23:37');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
-VALUES ('salma.tarek','2017-8-21','2017-8-21 7:49:26','2017-8-21 16:12:28');
+VALUES ('salma.tarek','2017-3-21','2017-8-21 7:49:26','2017-8-21 16:12:28');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
-VALUES ('salma.tarek','2017-8-22','2017-8-22 7:43:36','2017-8-22 16:56:16');
+VALUES ('salma.tarek','2017-4-22','2017-8-22 7:43:36','2017-8-22 16:56:16');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
 VALUES ('salma.tarek','2017-8-23','2017-8-23 7:52:16','2017-8-23 16:45:33');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-10-19','2017-10-19 7:39:00','2017-10-19 16:12:24');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-11-20','2017-11-20 7:45:53','2017-11-20 16:46:7');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-12-21','2017-12-21 7:49:26','2017-12-21 16:2:8');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-5-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-7-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-9-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-6-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
