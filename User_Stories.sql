@@ -292,7 +292,16 @@ SELECT COUNT(*)
 FROM Managers_Assign_Projects_To_Regulars mapr
 WHERE mapr.regular_user_name = @regularUserName
 ) < 2
-
+AND EXISTS
+(
+SELECT *
+FROM Staff_Members s1, Staff_Members s2
+WHERE (s1.user_name = s2.user_name AND
+s1.department_code = s2.department_code AND
+s1.user_name = @managerUserName AND
+s2.user_name = @regularUserName
+)
+)
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
 VALUES (@manageUserName,@regularUserName,@projectName)
