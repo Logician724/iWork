@@ -127,7 +127,7 @@ CREATE PROC ViewQuetionsInInterviewSP --correct
 @companyDomain VARCHAR(150)
 AS
 SELECT q.question_title
-FROM Question q INNER JOIN Jobs_Have_Questions jq
+FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
