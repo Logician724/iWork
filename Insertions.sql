@@ -722,3 +722,14 @@ INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_d
 VALUES (4,'Manager- Managing PHP Department','PHP-5019','facebook.com');
 INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
 VALUES (5,'Manager- Managing PHP Department','PHP-5019','facebook.com');
+
+
+
+-- Application INSERTIONS
+
+INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
+VALUES (0,'Pending','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com')
+INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
+VALUES (0,'Pending','shadi.aly','Manager- Managing PHP Department','PHP-5019','facebook.com')
+INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
+VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com')
