@@ -23,7 +23,7 @@ EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/2012',10
 DROP PROC ViewMyScoreSP ;
 GO 
 CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
-@username VARCHAR(3),
+@username VARCHAR(30),
 @job VARCHAR(150),
 @departmentCode VARCHAR(150),
 @CompanyDomain VARCHAR(150)
@@ -48,3 +48,16 @@ INSERT INTO Applications (seeker_username,job_title,department_code,company_doma
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
 
+
+
+
+DROP PROC StaffCheckInSp
+GO
+CREATE PROC StaffCheckInSp 
+@username VARCHAR(30)
+AS
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday')
+
+INSERT INTO Attendances 
+(user_name,date,start_time )
+VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
