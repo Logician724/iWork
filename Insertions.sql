@@ -728,8 +728,24 @@ VALUES (5,'Manager- Managing PHP Department','PHP-5019','facebook.com');
 -- Application INSERTIONS
 
 INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
-VALUES (0,'Pending','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com')
+VALUES (0,'Pending','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com');
 INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
-VALUES (0,'Pending','shadi.aly','Manager- Managing PHP Department','PHP-5019','facebook.com')
+VALUES (0,'Pending','shadi.aly','Manager- Managing PHP Department','PHP-5019','facebook.com');
 INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
-VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com')
+VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com');
+
+
+
+
+-- Attendances INSERTIONS
+
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-8-19','2017-8-19 7:39:00','2017-8-19 16:15:15');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-8-20','2017-8-20 7:45:53','2017-8-20 16:23:37');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-8-21','2017-8-21 7:49:26','2017-8-21 16:12:28');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-8-22','2017-8-22 7:43:36','2017-8-22 16:56:16');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('salma.tarek','2017-8-23','2017-8-23 7:52:16','2017-8-23 16:45:33');
