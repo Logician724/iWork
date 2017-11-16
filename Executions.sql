@@ -34,3 +34,21 @@ EXEC ViewJobInfoSP 'Employee- Debuging Handling PHP Department','PHP-5019','face
 
 EXEC AssignRegularToProjectSP 'Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed','van.krystal'
 
+EXEC AssignRegularToTaskSP 'Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed','van.krystal','Task 1','2017-7-13'
+
+-- end of reda's procedures' executions
+
+-- start of gharam's procedures' executions
+
+EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
+
+EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
+
+EXEC ViewCompaniesSalariesSP; --View companies ordered by their average salary
+
+EXEC ApplyForJobSP 'gawwad.gooda','Employee- BootStrap Developer','BS-3291','facebook.com'
+
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Sunday' --Creates a referencing conflict 
+
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Friday ' --Works correctly returns error
+
