@@ -38,7 +38,7 @@ DROP PROC ChooseJobFromAcceptedAppSP;
 DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC ViewNewApplicationsSP;
-DROP PROC RegularShowAttendanceWithinPeriodSP;
+DROP PROC ViewAttendanceOfStaffSP;
 DROP PROC ManagerViewProjectInfoSP;
 DROP PROC ManagerDecidingRequestSP;
 DROP PROC ManagerCreateProjectSP;
@@ -459,7 +459,7 @@ CREATE PROC ViewAttendanceSP --correct
 AS
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
 
 --4: Gharam--------------------------------------- 
@@ -817,7 +817,7 @@ END --END IF EXISTS
 GO
 CREATE PROC ViewNewApplicationsSP
 @hrUserName VARCHAR(30),
-@seeekerUserName VARCHAR(30),
+@seekerUserName VARCHAR(30),
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30),
 @jobTitle VARCHAR(150)
@@ -831,9 +831,9 @@ WHERE d.department_code = @departmentCode AND sm.user_name = @hrUserName
 )
 SELECT *
 FROM Applications a
-WHERE a.seeker_user_name = @seekerUserName AND
-a.jobTitle = @jobTitle AND
-a.depratment_code = @departmentCode AND
+WHERE a.seeker_username = @seekerUserName AND
+a.job_title = @jobTitle AND
+a.department_code = @departmentCode AND
 a.company_domain = @companyDomain
 
 
@@ -895,18 +895,21 @@ END
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
 GO
 
-CREATE PROC RegularShowAttendanceWithinPeriodSP
-@period1 DATETIME,
-@period2 DATETIME,
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150),
-@missing_hours INT
+CREATE PROC ViewAttendanceOfStaffSP
+@hrUserName VARCHAR(30),
+@regularUserName VARCHAR(30),
+@periodStart DATETIME,
+@periodEnd DATETIME
 AS
--- missing hours is for many staff members so this implementation is not complete needs the function of missing missing hours
-SELECT a.start_time, a.leave_time, a.duration, @missing_hours
-	FROM Attendances a INNER JOIN Staff_Members s
-	ON a.user_name = s.user_name
-	WHERE s.company_domain = @company_domain AND s.department_code = @department_code AND a.date IN (@period1,@period2)
+IF EXISTS(
+SELECT *
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code
+WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
+)
+SELECT a.*
+FROM Attendances a
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
