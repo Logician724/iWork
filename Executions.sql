@@ -26,7 +26,11 @@ EXEC ViewYearlyAttendanceOfStaffSP 'salma.tarek',2017
 
 EXEC ViewTasksInProjectSP 'Project-5651AMU chat page developing BootStrap','cam.percival'
 
+EXEC ViewApprovedJobAppSP 'Manager- Managing PHP Department','PHP-5019','facebook.com'
 
+EXEC ViewSeekerInfoSP 'gawwad.gooda'
 
+EXEC ViewJobInfoSP 'Employee- Debuging Handling PHP Department','PHP-5019','facebook.com'
 
+EXEC AssignRegularToProjectSP 'Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed','van.krystal'
 
