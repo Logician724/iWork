@@ -1,4 +1,5 @@
-﻿DROP PROC ViewDepartmentSP;
+﻿
+DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
 DROP PROC ViewQuetionsInInterviewSP;
@@ -33,7 +34,7 @@ DROP PROC ViewMyScoreSP;
 DROP PROC ViewDepartmentsOfCompanySP;
 DROP PROC ViewCompaniesSalariesSP;
 DROP PROC ChooseJobFromAcceptedSP;
-DROP PROC ApplyJobCheckSP;
+DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC AnnouncementWithinTwentyDaysSP;
 DROP PROC ViewNewApplicationsSP;
@@ -954,32 +955,44 @@ GROUP BY (sm.company_domain)
 ORDER BY AVG(sm.salary) DESC
 
 
+-- Job Seekers Story no.1 Apply for any job as long as I have the needed years of experience for the job. 
+-- ApplyForJobSP takes seeker user name and application info as inputs and checks that there is no application 
+-- for the same seeker that has a pending status for the same job, while checking that the seeker experience
+-- exceeds the min years of experience required by the job he applied for.
 GO
 
-CREATE PROC ApplyJobCheckSP --Too Many null ? the exists relation forces the seeker to only apply to jobs he applied in before ... needs to be redone
-@min_years_experience INT,
-@seeker_user_name VARCHAR(30),
-@job_title VARCHAR(150),
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150)
+CREATE PROC ApplyForJobSP 
+@seekerUserName VARCHAR(30),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
 AS
 IF(
- EXISTS(
+NOT EXISTS(
 SELECT *
-FROM Jobs j INNER JOIN Applications a
+FROM  Jobs j INNER JOIN Applications a
 ON j.company_domain = a.company_domain AND
 	j.department_code = a.department_code AND
 	j.job_title = a.job_title
-WHERE min_years_experience < @min_years_experience AND
-		a.job_title = @job_title AND
-		a.seeker_username = @seeker_user_name AND
-		a.company_domain = @company_domain AND
-		a.department_code = @department_code AND
-		app_status != 'pending'
+WHERE a.app_status = 'Pending' AND
+	  a.job_title = @jobTitle AND
+	  a.department_code = @departmentCode AND
+	  a.company_domain = @companyDomain AND
+	  a.seeker_username = @seekerUserName
 )
+AND 
+EXISTS(
+SELECT *
+FROM Jobs j INNER JOIN Users u
+ON u.exp_year >= j.min_years_experience
+WHERE u.user_name = @seekerUserName
 )
-INSERT INTO Applications VALUES
-(NULL,NULL,NULL,NULL,NULL,NULL,@seeker_user_name,@job_title,@department_code,@company_domain)
+
+)
+INSERT INTO Applications
+(seeker_username,job_title,department_code,company_domain)
+VALUES
+(@seekerUserName,@jobTitle,@departmentCode,@companyDomain)
 
 GO
 
