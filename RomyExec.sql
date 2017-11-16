@@ -133,7 +133,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 EXEC HRPostsAnnouncementSP 'ahmed.hussain','TEST','TEST','TEST' --executing HRPostsAnnouncementSP 
-------------------------Manager Defines task done by Abdullah ------------------------------
+------------------------Manager Defines project done by Abdullah ------------------------------
 DROP PROC ManagerCreateProjectSP;
 
 
@@ -148,7 +148,7 @@ AS
 INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
 
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
-
+EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
 
 ---------------------------------------------------------------------------------------------
 
@@ -172,7 +172,7 @@ END
 
 
 
-
+EXEC DefineTaskSP 'DATABASES','2012/04/06 12:23:45','M2'
 
 
 
@@ -180,6 +180,17 @@ END
 
 
 --------------------------------------------------------------------------------------------
+
+
+
+------------------------------Manager Hires Regular in project  Originally by reda ----------------
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+
 
 
 DROP PROC RegularFinalizesTaskSP;
