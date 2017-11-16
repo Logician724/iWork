@@ -114,12 +114,13 @@ type VARCHAR(50) NOT NULL,
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
 CREATE TABLE Attendances(
 PRIMARY KEY (user_name,date),
 user_name VARCHAR(30) NOT NULL,
 date DATE NOT NULL,
 start_time DATETIME NOT NULL,
-leave_time DATETIME NOT NULL,
+leave_time DATETIME  NULL,
 duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
 missing_hours AS dbo.GetMissingHours(user_name,start_time,leave_time),
 FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
