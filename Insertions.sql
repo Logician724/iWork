@@ -692,3 +692,33 @@ INSERT INTO Job_Seekers (user_name)
 VALUES ('shadi.aly');
 INSERT INTO Job_Seekers (user_name)
 VALUES ('omar.mofti');
+
+
+
+-- Questions INSERTIONS
+
+INSERT INTO Questions (question_title,answer)
+VALUES ('Can you work under pressure?',1);
+INSERT INTO Questions (question_title,answer)
+VALUES ('Are you a goal-oriented employee?',1);
+INSERT INTO Questions (question_title,answer)
+VALUES ('Are you a team player?',1);
+INSERT INTO Questions (question_title,answer)
+VALUES ('Do you manage conflict well?',1);
+INSERT INTO Questions (question_title,answer)
+VALUES ('Are you okay with the amount of travel required for this position?',1);
+
+
+
+-- Jobs_Have_Questions INSERTIONS
+
+INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
+VALUES (1,'Manager- Managing PHP Department','PHP-5019','facebook.com');
+INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
+VALUES (2,'Manager- Managing PHP Department','PHP-5019','facebook.com');
+INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
+VALUES (3,'Manager- Managing PHP Department','PHP-5019','facebook.com');
+INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
+VALUES (4,'Manager- Managing PHP Department','PHP-5019','facebook.com');
+INSERT INTO Jobs_Have_Questions (question_id,job_title,department_code,company_domain)
+VALUES (5,'Manager- Managing PHP Department','PHP-5019','facebook.com');
