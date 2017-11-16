@@ -62,7 +62,54 @@ INSERT INTO Attendances
 (user_name,date,start_time )
 
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
-
+---------------------------------
 
 
 EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
+
+-------------------------------------------------------------------
+
+DROP PROC SendEmailSP
+
+GO
+CREATE PROC SendEmailSP --this is done by reda .. had to execute and test it to test mine .. the one next to this , Handles sending emails
+@senderUserName VARCHAR(30),
+@senderEmail VARCHAR(70),
+@recipientUserName VARCHAR(30),
+@recipientEmail VARCHAR(70),
+@emailSubject VARCHAR(140),
+@emailBody TEXT
+AS 
+INSERT INTO Emails
+(time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
+VALUES
+(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recipientEmail,@emailSubject,@emailBody)
+INSERT INTO Staff_Receives_Email
+(time_stamp,sender_user_name,recipient_username)
+VALUES
+(CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
+
+EXEC SendEmailSP 'Mohamed_Ahmed','Mohamed.Ahmed@hotmail.com','Ahmed_Mohamed','Ahmed.Mohamed@hotmail.com','0428080','29829840'
+
+
+
+
+
+
+--------------------------------------------------------------------
+
+DROP PROC ViewReceivedEmailsSP;
+
+GO
+CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handles as a staff member 8
+@username VARCHAR(30)
+
+AS
+SELECT E.*
+FROM Emails E inner Join Staff_Receives_Email R 
+ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
+
+
+EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
+
+
