@@ -273,6 +273,7 @@ FROM Applications a
 WHERE (a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @CompanyDomain AND a.hr_response_app='Accepted')
 
 GO
+
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
 AS
@@ -291,6 +292,7 @@ FROM Jobs j
 WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.company_domain = @companyDomain)
 
 GO
+-- User Story Manager no.6
 CREATE PROC AssignRegularToProjectSP
 @projectName VARCHAR(100),
 @managerUserName VARCHAR(30),
@@ -316,6 +318,7 @@ INSERT INTO Managers_Assign_Projects_To_Regulars
 VALUES (@manageUserName,@regularUserName,@projectName)
 
 GO
+-- User Story Manager no.9
 CREATE PROC AssignRegularToTaskSP
 @projectName VARCHAR(100),
 @userName VARCHAR(30),
