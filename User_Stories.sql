@@ -127,7 +127,7 @@ CREATE PROC ViewQuetionsInInterviewSP --correct
 @companyDomain VARCHAR(150)
 AS
 SELECT q.question_title
-FROM Question q INNER JOIN Jobs_Have_Questions jq
+FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
@@ -941,7 +941,7 @@ CREATE PROC ViewDepartmentsOfCompanySP
 AS
 SELECT d.*
 FROM Departments d
-WHERE (c.domain_name = @companyDomain AND d.company_domain = c.domain_name)
+WHERE (d.company_domain= @companyDomain)
 
 --Users Story no.7 View the companies in the order of having the highest average salaries
 -- ViewCompaniesSalaries returns the average salary of all staff members grouped by the companies they are in while ordering those averages descendingly
@@ -1077,7 +1077,7 @@ SELECT a.*
 	FROM Announcements a INNER JOIN StaffMember sm
 	ON sm.company_domain = a.company_domain
 	WHERE a.company_domain = sm.company_domain AND
-	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21 
+	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21	
 
 GO
 
@@ -1216,7 +1216,7 @@ RETURNS BIT
 AS
 BEGIN
 DECLARE @returnedBit BIT
-IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Regular%')
+IF(@jobTitle LIKE 'Manager%' OR @jobTitle LIKE 'HR%' OR @jobTitle LIKE 'Employee%')
 SET @returnedBit = '1'
 ELSE
 SET @returnedBit ='0'
