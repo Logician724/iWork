@@ -1329,22 +1329,14 @@ CREATE PROC ReviewTaskSP
 @newDeadline DATETIME
 AS
 BEGIN
-IF(@acceptance='Accepted')
+IF(@response='Accepted')
 	UPDATE Tasks
 		SET Tasks.status = 'Closed'
-		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
+		WHERE Tasks.name= @tasksName AND Tasks.project_name = @projectName 
 ELSE
-IF(@acceptance = 'Rejected')
-	BEGIN
-	DECLARE @description NVARCHAR(MAX), @comments NVARCHAR(MAX)
-	SELECT @description  = Tasks.description, @comments = Tasks.comments 
-		FROM Tasks
-		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
-	DELETE Tasks
-		
-		WHERE Tasks.name= @tasks_name AND Tasks.project_name = @project_name 
-	INSERT INTO Tasks VALUES(@new_deadline,@tasks_name,@project_name,@comments,@description,@acceptance)
-	END
+IF(@response = 'Rejected')
+	UPDATE Tasks
+		SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline;
 END
 
 
