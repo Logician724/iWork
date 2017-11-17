@@ -71,6 +71,8 @@ EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-501
 
 ----- Gharam exeucting here----
 EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap'
+
 
 DECLARE @job VARCHAR(30)
 
