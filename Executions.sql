@@ -69,3 +69,7 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian c
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa'
+
+EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department'
+
+EXEC ViewTop3RegularSp 
