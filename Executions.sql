@@ -4,8 +4,6 @@ DECLARE @type INT;
 EXEC  UserLoginSP 'Yousef.Mustafa','WWE123',@type OUTPUT
 PRINT @type
 
-EXEC ViewCompanySP 'facebook',' Palo Alto','computer marketing'
-
 EXEC ViewQuetionsInInterviewSP  'Manager- Managing PHP Department','PHP-5019','facebook.com'
 
 EXEC DeletePendingApplicationSP 'shadi.aly','Manager- Managing PHP Department','PHP-5019','facebook.com'
@@ -45,44 +43,77 @@ EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
 
-EXEC ViewCompaniesSalariesSP; --View companies ordered by their average salary
+EXEC ViewCompaniesSalariesSP --View companies ordered by their average salary
 
 EXEC ApplyForJobSP 'gawwad.gooda','Employee- BootStrap Developer','BS-3291','facebook.com'
 
 EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Sunday' --Creates a referencing conflict 
 
-EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Friday ' --Works correctly returns error
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Friday' --Works correctly returns error
 
-
-
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/2012',10,'Mohamed','Zaki' --executes RegisterToWebsite Using inputs
 
 EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
+
+EXEC DefineNewProject 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
+
+EXEC DefineNewProject 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
+
+EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
+
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
+
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
 
 EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
+
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
+
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
 
+EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
+
+EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department' -- working right
+
+EXEC ViewTop3RegularSp  -- shows a table but no values appear\\\\\\\\\\\\\\\\\\\\\\\\\
+
+EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- does not work yet compiles
+
+EXEC ViewEmployeesRequestsSP -- not tested yet
+
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page developing BootStrap' -- working right
+
+EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
 
 ----- Gharam exeucting here----
+EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap'
+
 
 DECLARE @job VARCHAR(30)
 
 EXEC FindTypeOfReplacementSp 'andra.kyla','cam.percival',@jOB
+
 EXEC FindTypeOfReplacementSp 'Ahmed_Mahmoud','Ahmed_Mohamed',@jOB
+
 EXEC FindTypeOfReplacementSp  'ahmed.hussain','ahmed.shehata' ,@JOB
+
 EXEC ReplaceManagerSP 'Ahmed_Mohamed','Bob_Jack','05/05/2018','01/01/2018'
+
 EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
+
 EXEC ReplaceRegularHelperSP 'cam.percival','claire.carles','05/05/2018','01/01/2018'
+
 EXEC ApplyForLeaveRequestSP 'cam.percival','claire.carles','Sick','05/05/2018','01/01/2018'
+
 EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/2018','01/01/2018'
 
 
 
 
 -----------
+
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As an registered/unregistered user, I should be able to ...”
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````

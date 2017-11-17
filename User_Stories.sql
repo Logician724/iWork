@@ -108,10 +108,10 @@ FROM Companies c
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC ViewCompaniesSP --correct
+CREATE PROC ViewCompaniesSP 
 AS
 SELECT C.* , CP.phone
-FROM Companies C INNER JOIN  Companies_Phones CP
+FROM Companies C INNER JOIN  Companies_Phones CP --Problem only returns the company information if it has a name
 ON  C.domain_name = CP.company_domain
 
 --3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ GO
 CREATE PROC SearchJobsSP --correct
 @keywords TEXT
 AS
-SELECT J.* , C.name AS company_name, D.name AS department_name
+SELECT J.* , C.name AS company_name, D.name AS department_name ---Remove the joins 
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
@@ -265,7 +265,7 @@ GO
 CREATE PROC EditPersonalInfoSP --correct
 @username VARCHAR(30),
 @password VARCHAR(30),
-@personalEmail VARCHAR(70),
+@personalEmail VARCHAR(70), --Make input nullifiable 
 @birthDate DATETIME,
 @expYear INT,
 @firstName VARCHAR(25),
@@ -280,6 +280,9 @@ exp_year = @expYear,
 first_name = @firstName, 
 last_name = @lastName
 WHERE user_name = @username
+
+
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -365,7 +368,7 @@ AND @departmentCode =department_code
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
-GO  --to be edited  ( Yes it do )
+GO  --to be edited  ( Yes it does )
 CREATE PROC ViewJobStatusSP
 @username VARCHAR(30)
 AS
@@ -447,7 +450,6 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam
-GO 
 
 GO
 CREATE PROC StaffCheckInSp 
@@ -925,7 +927,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC ViewRequestsSP
-@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150)
+@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150) --you don't need hr info for this .. don't need this number of joins
 AS
 IF EXISTS (
 SELECT*
@@ -1075,6 +1077,7 @@ END
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------
+--EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @username VARCHAR(30), 
@@ -1082,46 +1085,27 @@ CREATE PROC ViewEmployeesRequestsSP
 @response VARCHAR(20),
 @id int --View Single request at a time
 AS 
-if EXISTS 
+IF EXISTS 
 (SELECT user_name 
 FROM HR_Employees 
-WHERE @username=user_name) 
+WHERE @username=user_name)  AND NOT EXISTS (SELECT user_name
+FROM Managers
+WHERE @ManagerUserName =user_name AND type='HR')
 BEGIN
-IF EXISTS (SELECT user_name
-FROM HR_Employees 
-WHERE @ManagerUserName =user_name)
-SELECT *
-From Requests R,HR_Employees_Replace_HR_Employees H 
-WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id
+print 'HR can only replace Hr'
 END
-ELSE if EXISTS (SELECT user_name 
-FROM Regular_Employees 
-WHERE @username=user_name) 
-BEGIN 
-SELECT * 
-From Requests R,Regular_Employees_Replace_Regular_Employees H 
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+ELSE
+UPDATE Requests 
+SET manager_response_req=@response
+WHERE request_id=@id;
 
-ELSE 
-BEGIN
-SELECT 
-* From Requests R,Managers_Replace_Managers_In_Requests H
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+
+
+
+
+
+
+DROP PROC ViewEmployeesRequestsSP ;
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
 
 GO
