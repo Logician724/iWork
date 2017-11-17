@@ -1082,6 +1082,7 @@ END
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------
+--EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @username VARCHAR(30), 
@@ -1089,46 +1090,27 @@ CREATE PROC ViewEmployeesRequestsSP
 @response VARCHAR(20),
 @id int --View Single request at a time
 AS 
-if EXISTS 
+IF EXISTS 
 (SELECT user_name 
 FROM HR_Employees 
-WHERE @username=user_name) 
+WHERE @username=user_name)  AND NOT EXISTS (SELECT user_name
+FROM Managers
+WHERE @ManagerUserName =user_name AND type='HR')
 BEGIN
-IF EXISTS (SELECT user_name
-FROM HR_Employees 
-WHERE @ManagerUserName =user_name)
-SELECT *
-From Requests R,HR_Employees_Replace_HR_Employees H 
-WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id
+print 'HR can only replace Hr'
 END
-ELSE if EXISTS (SELECT user_name 
-FROM Regular_Employees 
-WHERE @username=user_name) 
-BEGIN 
-SELECT * 
-From Requests R,Regular_Employees_Replace_Regular_Employees H 
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+ELSE
+UPDATE Requests 
+SET manager_response_req=@response
+WHERE request_id=@id;
 
-ELSE 
-BEGIN
-SELECT 
-* From Requests R,Managers_Replace_Managers_In_Requests H
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+
+
+
+
+
+
+DROP PROC ViewEmployeesRequestsSP ;
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
 
 GO

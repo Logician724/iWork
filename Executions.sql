@@ -86,6 +86,7 @@ EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page develo
 EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
 
 ----- Gharam exeucting here----
+EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
 
 DECLARE @job VARCHAR(30)
 
