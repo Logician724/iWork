@@ -40,9 +40,6 @@ DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC ViewNewApplicationsSP;
 DROP PROC ViewAttendanceOfStaffSP;
-DROP PROC ManagerDecidingRequestSP;
-DROP PROC ManagerCreateProjectSP;
-DROP PROC ManagerReviewTaskSP;
 DROP PROC ViewCompanySP;
 DROP PROC SearchJobsSP;
 DROP PROC EditPersonalInfoSP;
@@ -60,6 +57,9 @@ DROP PROC ViewLatestAnnouncementsSP;
 DROP PROC SearchCompanyByNameSP;
 DROP PROC SearchCompanyByAddressSP;
 DROP PROC SearchCompanyByTypeSP;
+DROP PROC ViewUserInfoSP;
+DROP PROC DefineNewProject;
+DROP PROC ReviewTaskSP;
 DROP FUNCTION RegularsWithFixed;
 
 
@@ -250,7 +250,7 @@ END
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-Create PROC ViewUserInfoSp
+Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
 
 AS
@@ -540,7 +540,6 @@ GO
 
 
 
-DROP PROC REPLACEHRSP;
 
 GO
 CREATE PROC ReplaceHRSP
