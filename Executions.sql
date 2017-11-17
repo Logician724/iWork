@@ -84,19 +84,11 @@ EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-501
 
 --3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-GO 
-exec ViewCompanySP 'facebook.com'
-GO 
-exec ViewCompanySP 'google.com'
-GO 
-exec ViewCompanySP 'amazon.com'
+EXEC ViewCompanySP 'facebook.com'
 
-GO
-exec ViewDepartmentsOfCompanySP 'google.com'
-GO
-exec ViewDepartmentsOfCompanySP 'facebook.com'
-GO
-exec ViewDepartmentsOfCompanySP 'amazon.com'
+
+EXEC ViewDepartmentsOfCompanySP 'google.com'
+
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +104,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
 
-exec ViewCompaniesSalariesSP 
+EXEC ViewCompaniesSalariesSP 
 
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a registered user, I should be able to ...”
