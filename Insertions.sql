@@ -768,7 +768,20 @@ INSERT INTO Attendances (user_name,date,start_time,leave_time)
 VALUES ('salma.tarek','2017-9-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
 INSERT INTO Attendances (user_name,date,start_time,leave_time)
 VALUES ('salma.tarek','2017-6-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
-
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('claire.carles','2017-10-19','2017-10-19 7:39:00','2017-10-19 16:12:24');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('claire.carles','2017-11-20','2017-11-20 7:45:53','2017-11-20 16:46:7');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('claire.carles','2017-12-21','2017-12-21 7:49:26','2017-12-21 16:2:8');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('coral.gaye','2017-5-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('coral.gaye','2017-7-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('godfrey.love','2017-9-22','2017-5-22 7:43:36','2017-5-22 16:6:36');
+INSERT INTO Attendances (user_name,date,start_time,leave_time)
+VALUES ('godfrey.love','2017-6-23','2017-6-23 7:52:16','2017-6-23 16:4:23');
 
 
 -- Projects INSERTIONS
@@ -833,4 +846,6 @@ VALUES ('cam.percival','Project-3284NMD upgrade of exterior of home page BootStr
  VALUES ('Jack_Mark','godfrey.love','Project-8493QKL maintenance of game center BootStrap','Task 3','2017-5-22');
  INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
  VALUES ('Jack_Mark','godfrey.love','Project-3284NMD upgrade of exterior of home page BootStrap','Task 1','2017-5-9');
+
+
 

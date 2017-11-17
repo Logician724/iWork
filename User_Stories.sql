@@ -701,15 +701,17 @@ CREATE PROC SendEmailSP --fixed
 @recipientEmail VARCHAR(70),
 @emailSubject VARCHAR(140),
 @emailBody TEXT
-AS 
+AS
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 INSERT INTO Emails
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
 VALUES
-(CURRENT_TIMESTAMP,@senderUserName,@senderEmail,@recipientEmail,@emailSubject,@emailBody)
+(@timestamp,@senderUserName,@senderEmail,@recipientEmail,@emailSubject,@emailBody)
 INSERT INTO Staff_Receives_Email
 (time_stamp,sender_user_name,recipient_username)
 VALUES
-(CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
+(@timestamp,@senderUserName,@recipientUserName)
 
 --8: Gharam---------------------------------------------------------------------------------------------------
 
@@ -1319,12 +1321,12 @@ WHERE T.project_name = @project AND T.status=@status
 
 GO
 
-CREATE PROC ManagerReviewTaskSP
-@manager_user_name VARCHAR(50),
-@project_name VARCHAR(100),
-@tasks_name VARCHAR(30),
-@acceptance VARCHAR(10), 
-@new_deadline DATETIME
+CREATE PROC ReviewTaskSP
+@managerUserName VARCHAR(50),
+@projectName VARCHAR(100),
+@tasksName VARCHAR(30),
+@response VARCHAR(10), 
+@newDeadline DATETIME
 AS
 BEGIN
 IF(@acceptance='Accepted')
