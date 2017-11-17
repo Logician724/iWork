@@ -141,8 +141,8 @@ WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentC
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC RegisterToWebsite 
-@userName VARCHAR(30)  ,
+CREATE PROC RegisterToWebsite   -- Handles 5 in unregistered user
+@userName VARCHAR(30)  , --takes entity as input 
 @password VARCHAR(30) ,
 @personalEmail VARCHAR(70) ,
 @birthDate DATETIME ,
@@ -237,6 +237,18 @@ END
 
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+GO
+Create PROC ViewUserInfoSp
+@userName VARCHAR(30)
+
+AS
+SELECT * 
+FROM USERS 
+WHERE user_name=@username
+DROP PROC ViewUserInfoSp;
+
+EXEC ViewUserInfoSp 'Ahmed_Mohamed'
+
 
 
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -328,16 +340,20 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 --3: Gharam---------------------------------------------------------------------------------------------------------------------------
 
 GO 
-CREATE PROC ViewMyScoreSP 
-@username VARCHAR(3),
+CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
+@username VARCHAR(30),
 @job VARCHAR(150),
-@score INT OUTPUT
+@departmentCode VARCHAR(150),
+@CompanyDomain VARCHAR(150)
+
 AS 
-SELECT @score= score
+SELECT  score
 From  Applications 
 WHERE @username=seeker_username 
+AND @CompanyDomain=company_domain
 AND @job=job_title
-print @score
+AND @departmentCode =department_code
+
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
@@ -425,14 +441,19 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 --1: Gharam
 GO 
 
+GO
 CREATE PROC StaffCheckInSp 
 @username VARCHAR(30)
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday')
+IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday') 
 
 INSERT INTO Attendances 
 (user_name,date,start_time )
+
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+---------------------------------
+
+
 
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
@@ -691,13 +712,19 @@ VALUES
 (CURRENT_TIMESTAMP,@senderUserName,@recipientUserName)
 
 --8: Gharam---------------------------------------------------------------------------------------------------
+
+
 GO
-CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30)
+CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handles as a staff member 8
+@username VARCHAR(30)
 
 AS
 SELECT E.*
-FROM Emails E inner Join Staff_Receives_EmailS R 
-ON E.sender_user_name=sender_user_name AND R.recipient_username=@username
+FROM Emails E inner Join Staff_Receives_Email R 
+ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
+
+
+EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
 
 --9: Yasmine--------------------------------------------------
 
@@ -853,7 +880,7 @@ SET hr_response_app = @hrResponse , hr_username = @hrUserName
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
 --6: Gharam----------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC HRPostsAnnouncementSP 
+CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
 @username varchar(30),
 
 @title VARCHAR(280) ,
@@ -868,6 +895,8 @@ AND @username
 IN ( SELECT * FROM HR_Employees)
 INSERT INTO Announcements 
 VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
+
+
 
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
