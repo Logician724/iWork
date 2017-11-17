@@ -78,7 +78,9 @@ EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AM
 
 EXEC ViewEmployeesRequestsSP -- not tested yet
 
-EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page developing BootStrap'
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page developing BootStrap' -- working right
+
+EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
 
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As an registered/unregistered user, I should be able to ...”
