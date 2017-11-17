@@ -1,40 +1,15 @@
 ﻿-- Romy Started  fixing here
 --DROP PROC RegisterToWebsite;
-GO
-CREATE PROC RegisterToWebsite   -- Handles 5 in unregistered user
-@userName VARCHAR(30)  , --takes entity as input 
-@password VARCHAR(30) ,
-@personalEmail VARCHAR(70) ,
-@birthDate DATETIME ,
-@expYear INT ,
-@firstName VARCHAR(25) ,
-@lastName VARCHAR(25) 
-AS
-insert into Users
-Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+
 
 
 
 -- She eneded here 
-EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/2012',10,'Mohamed','Zaki' --executes RegisterToWebsite Using inputs
+
 
 
 
 DROP PROC ViewMyScoreSP ;
-GO 
-CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
-@username VARCHAR(30),
-@job VARCHAR(150),
-@departmentCode VARCHAR(150),
-@CompanyDomain VARCHAR(150)
-
-AS 
-SELECT  score
-From  Applications 
-WHERE @username=seeker_username 
-AND @CompanyDomain=company_domain
-AND @job=job_title
-AND @departmentCode =department_code
 
 
 
@@ -45,27 +20,13 @@ VALUES('hassan_hasannen','1234','Mohamed.Ahmed@hotmail.com','1/4/1990',5,'hassan
 VALUES ('hassan_hasannen'); 
 INSERT INTO Applications (seeker_username,job_title,department_code,company_domain,score) Values ('hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com',10) 
 
-EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
 
 
 
 
 DROP PROC StaffCheckInSp --Staff Checks in creates entity with without leave time handles staff memeber number 1 
-GO
-CREATE PROC StaffCheckInSp 
-@username VARCHAR(30)
-AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday') 
 
-INSERT INTO Attendances 
-(user_name,date,start_time )
-
-VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
----------------------------------
-
-
-EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
 
 -------------------------------------------------------------------
 
@@ -98,38 +59,6 @@ EXEC SendEmailSP 'Mohamed_Ahmed','Mohamed.Ahmed@hotmail.com','Ahmed_Mohamed','Ah
 
 --------------------------------------------------------------------
 
-DROP PROC ViewReceivedEmailsSP;
-
-GO
-CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handles as a staff member 8
-@username VARCHAR(30)
-
-AS
-SELECT E.*
-FROM Emails E inner Join Staff_Receives_Email R 
-ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
-
-
-EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
-
-
-DROP PROC HRPostsAnnouncementSP ;
-GO
-CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
-@username varchar(30),
-
-@title VARCHAR(280) ,
-@description TEXT ,
-@type VARCHAR(20) 
-AS
-DECLARE @domainName varchar(150)
-SELECT @domainName=company_domain
-FROM Staff_Members
-WHERE @username=user_name
-AND @username 
-IN ( SELECT * FROM HR_Employees)
-INSERT INTO Announcements 
-VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
 
 
 EXEC HRPostsAnnouncementSP 'ahmed.hussain','TEST','TEST','TEST' --executing HRPostsAnnouncementSP 
@@ -147,8 +76,7 @@ CREATE PROC ManagerCreateProjectSP
 AS
 INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
 
-EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
-EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
+
 
 ---------------------------------------------------------------------------------------------
 
@@ -246,19 +174,7 @@ AND project_name=@project
 ---------------------Find type of replacement ----------------------------------
 
 ---------------------------registered user 2 ----------------------------------
-GO
-Create PROC ViewUserInfoSp
-@userName VARCHAR(30)
-
-AS
-SELECT * 
-FROM USERS 
-WHERE user_name=@username
-DROP PROC ViewUserInfoSp;
-
-EXEC ViewUserInfoSp 'Ahmed_Mohamed'
 
 
 
-EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
-EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
+
