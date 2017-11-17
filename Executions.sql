@@ -70,6 +70,7 @@ EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-501
 
 
 ----- Gharam exeucting here----
+EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
 
 DECLARE @job VARCHAR(30)
 
