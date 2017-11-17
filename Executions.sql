@@ -69,7 +69,7 @@ EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
 
-EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
+EXEC ViewMyScoreSP 'shadi.aly','Employee- BootStrap Developer','BS-3291','facebook.com'--executiong ViewMyScore working 
 
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
 
@@ -77,13 +77,15 @@ EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Depart
 
 EXEC ViewTop3RegularSp  -- shows a table but no values appear\\\\\\\\\\\\\\\\\\\\\\\\\
 
-EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- does not work yet compiles
+EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-12', 'Project-5651AMU chat page developing BootStrap' -- does not work yet compiles
 
 EXEC ViewEmployeesRequestsSP -- not tested yet
 
 EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page developing BootStrap' -- working right
 
 EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
+
+
 
 ----- Gharam exeucting here----
 EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
@@ -105,6 +107,39 @@ EXEC ReplaceRegularHelperSP 'cam.percival','claire.carles','05/05/2018','01/01/2
 EXEC ApplyForLeaveRequestSP 'cam.percival','claire.carles','Sick','05/05/2018','01/01/2018'
 
 EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/2018','01/01/2018'
+
+--end of gharam's executions
+
+-- start of yasmin's executions
+
+
+EXEC ViewCompaniesSP -- not working
+
+EXEC SearchJobsSP 'managing' -- working right
+
+EXEC EditPersonalInfoSP 'cam.percival', 'balabizo','cam.percival@hotmail.com','1980-2-5',7,'cam','percival' -- working right
+
+EXEC ViewJobStatusSP 'shadi.aly' -- working right
+
+EXEC ViewJobStatusSP 'gawwad.gooda' -- same, working right
+
+EXEC CheckOutSP '2017-8-20 16:23:37', 'claire.carles' -- not working
+
+EXEC EditJobInfoSP 'basma.mohamed', 'HR- Search Engine Managing', 'SRC-2837', 'google.com','1/12/2017 3:00:00 AM', NULL, 4, 7000,NULL,6 , 7 -- working right
+
+EXEC ViewRequestsSP  -- not tested yet
+
+EXEC ChangeTaskStatusSP 'godfrey.love', 'Fixed','Task 1', '5/9/2017 12:00:00 AM' , 'Project-3284NMD upgrade of exterior of home page BootStrap' -- compiles but does not work
+
+EXEC RespondToJobApplicationsSP 'Accepted' -- does not do the right job
+
+EXEC DefineTaskSP 'Joe_John' , 'Project-3284NMD upgrade of exterior of home page BootStrap','5/11/2017 12:00:00 AM' , 'Task 2' -- typo error in user story where Managers is written Manager, compiles but doesnt work
+
+EXEC ViewTasksSP 'Project-5651AMU chat page developing BootStrap','Assigned' -- typo error in user story where Tasks is written Task and Projects is written Project, but it works correctly 
+
+-- end of yasmin's executions 
+
+
 
 
 
