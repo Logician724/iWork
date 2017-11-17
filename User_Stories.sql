@@ -114,9 +114,6 @@ SELECT C.* , CP.phone
 FROM Companies C INNER JOIN  Companies_Phones CP --Problem only returns the company information if it has a name
 ON  C.domain_name = CP.company_domain
 
-
-
-
 --3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
 GO
 
@@ -260,8 +257,6 @@ FROM USERS
 WHERE user_name=@username
 DROP PROC ViewUserInfoSp;
 
-EXEC ViewUserInfoSp 'Ahmed_Mohamed'
-
 
 
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -353,13 +348,13 @@ ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
 
---3: Gharam---------------------------------------------------------------------------------------------------------------------------
+--3: Gharam-------------------------------------------------------------------------------------------------------------------------
 
 GO 
 CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
 @username VARCHAR(30),
-@job VARCHAR(150),
-@departmentCode VARCHAR(150),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150)
 
 AS 
@@ -367,7 +362,7 @@ SELECT  score
 From  Applications 
 WHERE @username=seeker_username 
 AND @CompanyDomain=company_domain
-AND @job=job_title
+AND @jobTitle =job_title
 AND @departmentCode =department_code
 
 
@@ -1047,11 +1042,14 @@ AND @taskName=M.task_name
 AND @deadline=M.task_deadline 
 AND @project=M.project_name) 
 AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+BEGIN
 UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name
 AND @deadline=deadline 
 AND project_name=@project
+END
+
 
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1400,6 +1398,7 @@ SET @returnedBit ='0'
 RETURN @returnedBit
 END
 
+DROP FUNCTION RegularsWithFixed
 GO
 CREATE FUNCTION  RegularsWithFixed()
 RETURNS  @Fixed TABLE 

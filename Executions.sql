@@ -71,13 +71,13 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian c
 
 EXEC ViewMyScoreSP 'shadi.aly','Employee- BootStrap Developer','BS-3291','facebook.com'--executiong ViewMyScore working 
 
-EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
+EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\ -- Shows table in Romy's
 
 EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department' -- working right
 
 EXEC ViewTop3RegularSp  -- shows a table but no values appear\\\\\\\\\\\\\\\\\\\\\\\\\
 
-EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-12', 'Project-5651AMU chat page developing BootStrap' -- does not work yet compiles
+EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- Works but be careful with your taskdeadline date should be > today .. careful
 
 EXEC ViewEmployeesRequestsSP -- not tested yet
 
@@ -86,9 +86,10 @@ EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page develo
 EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
 
 
-
 ----- Gharam exeucting here----
-EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
+EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4 --Working
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap' --Working
+
 
 DECLARE @job VARCHAR(30)
 
@@ -152,8 +153,9 @@ EXEC ViewTasksSP 'Project-5651AMU chat page developing BootStrap','Assigned' -- 
 
 
 --1:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+EXEC SearchCompanyByNameSP 'face'
+EXEC SearchCompanyByTypeSP 'digital'
+EXEC SearchCompanyByAddressSP 'Pal'
 
 
 --2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -183,7 +185,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki'
 
 --6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -202,7 +204,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 --2:Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+EXEC ViewUserInfoSP 'claire.carles'
 
 
 --3:Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -222,7 +224,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --3:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com'
 
 --4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -242,7 +244,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC StaffCheckInSp 'claire.carles'
 
 
 
@@ -372,5 +374,3 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --12:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
