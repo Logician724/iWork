@@ -374,8 +374,7 @@ WHERE A.seeker_username=@username
 -- the job seeker is added as a staff member if he satisfies all the constraints, other than taht
 -- a statement is printed on the console requiring the user to revise his input values.
 GO
-
-CREATE PROC ChooseJobFromAcceptedAppSP 
+Create PROC ChooseJobFromAcceptedAppSP 
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
@@ -395,6 +394,12 @@ IF(	EXISTS(
 			@dayOff != 'Friday'
 	)	
 BEGIN
+DELETE FROM Applications
+    WHERE 
+	Applications.seeker_username=@seekerUserName 
+	AND Applications.company_domain=@companyDomain 
+	AND Applications.department_code=@departmentCode 
+	AND Applications.job_title=@jobTitle
 DELETE FROM Job_Seekers 
 	WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
