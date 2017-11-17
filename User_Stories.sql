@@ -96,11 +96,12 @@ DROP FUNCTION RegularsWithFixed;
 
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC ViewCompaniesSP --correct
+CREATE PROC ViewCompaniesSP 
 AS
 SELECT C.* , CP.phone
-FROM Companies C INNER JOIN  Companies_Phones CP
+FROM Companies C INNER JOIN  Companies_Phones CP --Problem only returns the company information if it has a name
 ON  C.domain_name = CP.company_domain
+
 
 
 
@@ -158,7 +159,7 @@ GO
 CREATE PROC SearchJobsSP --correct
 @keywords TEXT
 AS
-SELECT J.* , C.name AS company_name, D.name AS department_name
+SELECT J.* , C.name AS company_name, D.name AS department_name ---Remove the joins 
 FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
 INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
 where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
@@ -257,7 +258,7 @@ GO
 CREATE PROC EditPersonalInfoSP --correct
 @username VARCHAR(30),
 @password VARCHAR(30),
-@personalEmail VARCHAR(70),
+@personalEmail VARCHAR(70), --Make input nullifiable 
 @birthDate DATETIME,
 @expYear INT,
 @firstName VARCHAR(25),
@@ -272,6 +273,9 @@ exp_year = @expYear,
 first_name = @firstName, 
 last_name = @lastName
 WHERE user_name = @username
+
+
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -357,7 +361,7 @@ AND @departmentCode =department_code
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
-GO  --to be edited  ( Yes it do )
+GO  --to be edited  ( Yes it does )
 CREATE PROC ViewJobStatusSP
 @username VARCHAR(30)
 AS
@@ -439,7 +443,6 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam
-GO 
 
 GO
 CREATE PROC StaffCheckInSp 
@@ -918,7 +921,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC ViewRequestsSP
-@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150)
+@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150) --you don't need hr info for this .. don't need this number of joins
 AS
 IF EXISTS (
 SELECT*
