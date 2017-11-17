@@ -82,6 +82,19 @@ EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-501
 
 --3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+GO 
+exec ViewCompanySP 'facebook.com'
+GO 
+exec ViewCompanySP 'google.com'
+GO 
+exec ViewCompanySP 'amazon.com'
+
+GO
+exec ViewDepartmentsOfCompanySP 'google.com'
+GO
+exec ViewDepartmentsOfCompanySP 'facebook.com'
+GO
+exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
