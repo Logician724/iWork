@@ -515,10 +515,10 @@ SELECT @job='hr'
 
 ELSE IF  EXISTS
 ( SELECT user_name 
-FROM Regular_Employees 
+FROM Managers
 WHERE @userName =user_name ) 
 AND EXISTS( SELECT user_name
-FROM Regular_Employees 
+FROM Managers
 WHERE @userName2 =user_name )  
 SELECT @job='Manager'
 
@@ -532,9 +532,17 @@ AND EXISTS
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Regular'
+PRINT @JOB
+
+
 
 GO
 
+
+
+DROP PROC REPLACEHRSP;
+
+GO
 CREATE PROC ReplaceHRSP
 
 @userName VARCHAR(30),
@@ -542,10 +550,9 @@ CREATE PROC ReplaceHRSP
 @endDate DATETIME ,
 @startDate DATETIME
 AS
---DECLARE @job VARCHAR(30)
---EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+
 IF NOT EXISTS ( SELECT * FROM HR_Employees_Replace_HR_Employees h1,HR_Employees h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
-AND r.end_date=@endDate AND r.start_date=@startDate ) 
+AND r.end_date>=@endDate AND r.start_date<=@startDate ) 
 INSERT INTO Requests 
 (end_date,request_date,start_date) 
 VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
@@ -556,8 +563,10 @@ FROM Requests
 INSERT INTO HR_Employees_Replace_HR_Employees 
 VALUES(@requestId,@replacementUserName,@userName)
 
+EXEC ReplaceHRSP 'ahmed.hussain','ahmed.shehata' ,'05/05/2018','01/01/2018'
 
 
+DROP PROC  ReplaceManagerSP;
 GO
 
 CREATE PROC ReplaceManagerSP
@@ -567,24 +576,27 @@ CREATE PROC ReplaceManagerSP
 @endDate DATETIME ,
 @startDate DATETIME
 AS
---DECLARE @job VARCHAR(30)
---EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+
 IF NOT EXISTS 
 ( SELECT * 
 FROM Managers_Replace_Managers_In_Requests h1,Managers h2,Requests r 
 WHERE h1.user_name_request_owner=h2.user_name 
 AND r.request_id=h1.request_id
-AND r.end_date=@endDate AND r.start_date=@startDate ) 
+AND r.end_date<=@endDate AND r.start_date>=@startDate ) 
 
 INSERT INTO Requests 
-(end_date,request_date,start_date) 
-VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+(end_date,request_date,start_date,manager_response_req,hr_response_req) 
+VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate,'Accepted','Accepted')
 
 declare @requestId int
 SELECT @requestId= MAX(request_id) 
 FROM Requests
 INSERT INTO Managers_Replace_Managers_In_Requests
 VALUES(@requestId,@replacementUserName,@userName)
+
+DROP PROC ReplaceManagerSP 
+
+
 
 
 GO
@@ -612,6 +624,7 @@ SELECT @requestId= MAX(request_id)
 FROM Requests
 INSERT INTO Regular_Employees_Replace_Regular_Employees
 VALUES(@requestId,@replacementUserName,@userName)
+
 
 
 
@@ -644,6 +657,7 @@ VALUES (@requestId,@type)
 
 
 
+
 GO 
 CREATE PROC ApplyForBusinessRequestSP
 @userName VARCHAR(30),
@@ -673,7 +687,9 @@ FROM Requests
 INSERT INTO Business_Trip_Requests 
 VALUES (@requestId,@tripDestination,@tripPurpose)
 
-GO
+
+
+
 
 --5: Yasmine------------------------------------------
 
@@ -738,7 +754,6 @@ FROM Emails E inner Join Staff_Receives_Email R
 ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
 
 
-EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
 
 --9: Yasmine--------------------------------------------------
 
