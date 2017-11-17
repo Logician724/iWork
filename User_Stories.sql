@@ -1,4 +1,6 @@
 ﻿
+DROP PROC ViewProjectsOfEmployeeSP;
+DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
 DROP PROC UserLoginSP;
@@ -36,10 +38,8 @@ DROP PROC ViewCompaniesSalariesSP;
 DROP PROC ChooseJobFromAcceptedAppSP;
 DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
-DROP PROC AnnouncementWithinTwentyDaysSP;
 DROP PROC ViewNewApplicationsSP;
-DROP PROC RegularShowAttendanceWithinPeriodSP;
-DROP PROC ManagerViewProjectInfoSP;
+DROP PROC ViewAttendanceOfStaffSP;
 DROP PROC ManagerDecidingRequestSP;
 DROP PROC ManagerCreateProjectSP;
 DROP PROC ManagerReviewTaskSP;
@@ -55,6 +55,8 @@ DROP PROC ChangeTaskStatusSP;
 DROP PROC EditJobInfoSP;
 DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
+DROP PROC ViewRequestsSP;
+DROP PROC ViewLatestAnnouncementsSP;
 DROP FUNCTION RegularsWithFixed;
 
 
@@ -78,7 +80,7 @@ DROP FUNCTION RegularsWithFixed;
 
 --1: Gharam
 
-GO 
+--GO 
 --a similar query already exists
 --CREATE PROC ViewCompanySP 
 --@companyName varchar(50),
@@ -110,8 +112,8 @@ CREATE PROC ViewCompanySP
 AS 
 SELECT c.*
 FROM Companies c 
-WHERE (c.domain_name = @companyDomain)
 
+WHERE (c.domain_name = @companyDomain)
 -- Users story no.3 View the info of a certain company along with the department info
 -- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
 
@@ -185,9 +187,10 @@ ORDER BY AVG(sm.salary) DESC
 --1. Reda
 GO
 
-CREATE PROC UserLoginSP --suspecious
+CREATE PROC UserLoginSP
 @userName VARCHAR(30),
-@password  VARCHAR(30)
+@password  VARCHAR(30),
+@type INT OUTPUT
 AS
 BEGIN
 IF
@@ -197,7 +200,7 @@ FROM Users u
 WHERE (u.user_name = @userName AND u.password = @password)
 )
 
-PRINT 'User not found'
+SET @type = 0;
 
 ELSE IF
 EXISTS ( 
@@ -205,7 +208,7 @@ SELECT s.*
 FROM Job_Seekers s
 WHERE (s.user_name = @userName)
 )
-PRINT 'Hello Seeker'
+SET @type = 1;
 
 ELSE IF
 EXISTS (
@@ -213,14 +216,14 @@ SELECT m.*
 FROM Managers m
 WHERE (m.user_name = @userName)
 )
-PRINT 'Hello Manager'
+SET @type = 2;
 ELSE IF
 EXISTS (
 SELECT h.*
 FROM HR_Employees h
 WHERE (h.user_name = @userName)
 )
-PRINT  'Hello HR'
+SET @type = 3;
 
 ELSE IF
 EXISTS (
@@ -228,7 +231,7 @@ SELECT r.*
 FROM Regular_Employees r
 WHERE (r.user_name = @userName)
 )
-PRINT 'Hello Employee'
+SET @type = 4;
 
 END
 
@@ -431,14 +434,6 @@ INSERT INTO Attendances
 (user_name,date,start_time )
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
 
-GO
-CREATE PROC ViewReceivedEmailsSP @username VARCHAR(30)
-
-AS
-SELECT E.*
-FROM Emails E inner Join Staff_Receives_EmailS R 
-ON E.sender_user_name=sender_user_name AND R.recipient_username=@username
-
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
 GO
@@ -464,10 +459,11 @@ CREATE PROC ViewAttendanceSP --correct
 AS
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0) --Logic .. greater than one equal in each should be reversed , should also check year ,month
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
 
 --4: Gharam--------------------------------------- 
+GO
 Create PROC FindTypeOfReplacementSp
 @username VARCHAR(30),
 @username2 VARCHAR(30) ,
@@ -819,17 +815,26 @@ END --END IF EXISTS
 
 --4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
 GO
-
-CREATE PROC ViewNewApplicationsSP --Another tiny issue
-@seeker_username VARCHAR(30),
-@compnay_domain VARCHAR(150),
-@department_code VARCHAR(30),
-@job_title VARCHAR(150)
+CREATE PROC ViewNewApplicationsSP
+@hrUserName VARCHAR(30),
+@seekerUserName VARCHAR(30),
+@companyDomain VARCHAR(150),
+@departmentCode VARCHAR(30),
+@jobTitle VARCHAR(150)
 AS
-SELECT *,a.score --select all will return a.score already 
-	FROM Applications a INNER JOIN Job_Seekers js ON a.seeker_username = js.user_name INNER JOIN Jobs j 
-	ON a.company_domain = j.company_domain AND a.department_code = j.department_code 
-	WHERE j.department_code = @department_code AND j.company_domain  = @compnay_domain AND j.job_title = @job_title
+IF EXISTS
+(
+SELECT *
+FROM Staff_Members sm INNER JOIN Departments d
+ON sm.department_code = d.department_code
+WHERE d.department_code = @departmentCode AND sm.user_name = @hrUserName
+)
+SELECT *
+FROM Applications a
+WHERE a.seeker_username = @seekerUserName AND
+a.job_title = @jobTitle AND
+a.department_code = @departmentCode AND
+a.company_domain = @companyDomain
 
 
 --5: Reda------------------------------------------------------------------------------------------------------------------------------------------------
@@ -888,23 +893,29 @@ END
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
+GO
 
-CREATE PROC RegularShowAttendanceWithinPeriodSP
-@period1 DATETIME,
-@period2 DATETIME,
-@department_code VARCHAR(30),
-@company_domain VARCHAR(150),
-@missing_hours INT
+CREATE PROC ViewAttendanceOfStaffSP
+@hrUserName VARCHAR(30),
+@regularUserName VARCHAR(30),
+@periodStart DATETIME,
+@periodEnd DATETIME
 AS
--- missing hours is for many staff members so this implementation is not complete needs the function of missing missing hours
-SELECT a.start_time, a.leave_time, a.duration, @missing_hours
-	FROM Attendances a INNER JOIN Staff_Members s
-	ON a.user_name = s.user_name
-	WHERE s.company_domain = @company_domain AND s.department_code = @department_code AND a.date IN (@period1,@period2)
+IF EXISTS(
+SELECT *
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code
+WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
+)
+SELECT a.*
+FROM Attendances a
+WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
 --Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
+GO
+
 CREATE PROC ViewYearlyAttendanceOfStaffSP
 @staffUserName VARCHAR(30),
 @year INT
@@ -938,13 +949,14 @@ ORDER BY SUM(A.duration) desc
 --1: Abdullah-
 GO
 
-CREATE PROC ManagerViewProjectInfoSP
-@user_name VARCHAR(50)
-AS
+CREATE PROC ViewProjectsOfEmployeeSP
+@userName VARCHAR(30)
+AS 
 SELECT p.*
-	FROM Managers_Assign_Projects_To_Regulars m INNER JOIN Projects p 
-	ON m.project_name = p.project_name
-	WHERE m.manager_user_name = @user_name
+FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr
+ON p.project_name = mapr.project_name
+WHERE mapr.regular_user_name = @userName
+
 
 --2: Reda----------------------------------------------------------------------------
 
@@ -1164,7 +1176,7 @@ s2.user_name = @regularUserName
 )
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
-VALUES (@manageUserName,@regularUserName,@projectName)
+VALUES (@managerUserName,@regularUserName,@projectName)
 --7: Gharam----------------------------------------------------------------------------------------------------------- 
 
 GO
