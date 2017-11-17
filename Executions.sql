@@ -71,13 +71,13 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian c
 
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
-EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
+EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\ -- Shows table in Romy's
 
 EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department' -- working right
 
 EXEC ViewTop3RegularSp  -- shows a table but no values appear\\\\\\\\\\\\\\\\\\\\\\\\\
 
-EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- does not work yet compiles
+EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- Works but be careful with your taskdeadline date should be > today .. careful
 
 EXEC ViewEmployeesRequestsSP -- not tested yet
 
@@ -86,8 +86,8 @@ EXEC RemoveRegularFromProjectSp 'cam.percival','Project-5651AMU chat page develo
 EXEC ReplaceRegularSp 'claire.carles','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- working right
 
 ----- Gharam exeucting here----
-EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4
-EXEC RemoveRegularFromProjectSp 'cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap'
+EXEC ViewEmployeesRequestsSP  'cam.percival','Bob_Mark','Accepted',4 --Working
+EXEC RemoveRegularFromProjectSp 'cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap' --Working
 
 
 DECLARE @job VARCHAR(30)

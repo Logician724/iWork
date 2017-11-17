@@ -1047,11 +1047,14 @@ AND @taskName=M.task_name
 AND @deadline=M.task_deadline 
 AND @project=M.project_name) 
 AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+BEGIN
 UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name
 AND @deadline=deadline 
 AND project_name=@project
+END
+
 
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1400,6 +1403,7 @@ SET @returnedBit ='0'
 RETURN @returnedBit
 END
 
+DROP FUNCTION RegularsWithFixed
 GO
 CREATE FUNCTION  RegularsWithFixed()
 RETURNS  @Fixed TABLE 
