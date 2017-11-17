@@ -55,8 +55,6 @@ EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- 
 
 
 
-EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/2012',10,'Mohamed','Zaki' --executes RegisterToWebsite Using inputs
-
 
 EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
@@ -66,7 +64,6 @@ EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
-<<<<<<< HEAD
 
 
 ----- Gharam exeucting here----
@@ -86,15 +83,15 @@ EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/
 
 
 -----------
-=======
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As an registered/unregistered user, I should be able to ...”
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 
 --1:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+EXEC SearchCompanyByNameSP 'face'
+EXEC SearchCompanyByTypeSP 'digital'
+EXEC SearchCompanyByAddressSP 'Pal'
 
 
 --2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +121,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki'
 
 --6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -143,7 +140,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 --2:Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+EXEC ViewUserInfoSP 'claire.carles'
 
 
 --3:Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -163,7 +160,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --3:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com'
 
 --4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -313,5 +310,3 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --12:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------
-
->>>>>>> 5f1c8f20e498ac78b0b1179b17cd01dd99282ba6
