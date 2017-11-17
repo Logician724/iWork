@@ -40,9 +40,6 @@ DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC ViewNewApplicationsSP;
 DROP PROC ViewAttendanceOfStaffSP;
-DROP PROC ManagerDecidingRequestSP;
-DROP PROC ManagerCreateProjectSP;
-DROP PROC ManagerReviewTaskSP;
 DROP PROC ViewCompanySP;
 DROP PROC SearchJobsSP;
 DROP PROC EditPersonalInfoSP;
@@ -57,6 +54,12 @@ DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
 DROP PROC ViewRequestsSP;
 DROP PROC ViewLatestAnnouncementsSP;
+DROP PROC SearchCompanyByNameSP;
+DROP PROC SearchCompanyByAddressSP;
+DROP PROC SearchCompanyByTypeSP;
+DROP PROC ViewUserInfoSP;
+DROP PROC DefineNewProject;
+DROP PROC ReviewTaskSP;
 DROP FUNCTION RegularsWithFixed;
 
 
@@ -80,20 +83,29 @@ DROP FUNCTION RegularsWithFixed;
 
 --1: Gharam
 
---GO 
---a similar query already exists
---CREATE PROC ViewCompanySP 
---@companyName varchar(50),
---@companyAddress varchar(300),
---@companyType varchar(80)
---AS
---Select C.*
---From Companies C
---Where  C.name=@companyName 
---OR C.field =@companyType 
---OR C.address=@companyAddress 
+GO 
+CREATE PROC SearchCompanyByNameSP
+@keyWord VARCHAR(50)
+AS
+SELECT c.*
+FROM Companies c 
+WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
+GO
+CREATE PROC SearchCompanyByAddressSP
+@keyWord VARCHAR(300)
+AS
+SELECT c.*
+FROM Companies c
+WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
+GO
+CREATE PROC SearchCompanyByTypeSP
+@keyWord VARCHAR(50)
+AS
+SELECT c.*
+FROM Companies c
+WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC ViewCompaniesSP 
@@ -239,7 +251,7 @@ END
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-Create PROC ViewUserInfoSp
+Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
 
 AS
@@ -531,7 +543,6 @@ GO
 
 
 
-DROP PROC REPLACEHRSP;
 
 GO
 CREATE PROC ReplaceHRSP
