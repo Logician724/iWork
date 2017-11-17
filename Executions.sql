@@ -1,6 +1,8 @@
 ﻿EXEC ViewDepartmentSP  'facebook.com','PHP-5019'
 
-EXEC  UserLoginSP 'Yousef.Mustafa','1234'
+DECLARE @type INT;
+EXEC  UserLoginSP 'Yousef.Mustafa','WWE123',@type OUTPUT
+PRINT @type
 
 EXEC ViewCompanySP 'facebook',' Palo Alto','computer marketing'
 
