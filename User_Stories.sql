@@ -1,4 +1,4 @@
-﻿
+﻿DROP PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
@@ -1025,9 +1025,9 @@ END
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @username VARCHAR(30), 
-@ManagerUserName VARCHAR(30)
-, @response VARCHAR(20)
-, @id int --View Single request at a time
+@ManagerUserName VARCHAR(30),
+@response VARCHAR(20),
+@id int --View Single request at a time
 AS 
 if EXISTS 
 (SELECT user_name 
@@ -1062,7 +1062,7 @@ ELSE
 BEGIN
 SELECT 
 * From Requests R,Managers_Replace_Managers_In_Requests H
-WHERE R.request_id=H.request_id 
+WHERE R.request_id=H.request_id
 AND @username=h.user_name_request_owner 
 AND r.request_id=@id
 UPDATE Requests
@@ -1073,26 +1073,47 @@ END
 
 GO
 
-CREATE PROC ManagerDecidingRequestSP
-@manager_username VARCHAR(50),
-@staff_username VARCHAR(50),
-@manager_response VARCHAR(10),
-@reason_of_disapproval TEXT
+CREATE PROC AddManagerResponseToRequestSP
+@managerUserName VARCHAR(50),
+@staffUserName VARCHAR(50),
+@managerResponse VARCHAR(10),
+@reasonOfDisapproval TEXT
 AS
+IF EXISTS
+(
+SELECT *
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code
+WHERE sm1.user_name = @managerUserName AND sm2.user_name = @staffUserName
 
+)
 BEGIN
-IF(@manager_response = 'Accepted')
-	SET @reason_of_disapproval = NULL
-END
+IF(@managerResponse = 'Accepted')
+	SET @reasonOfDisapproval = NULL
+ELSE
 
 UPDATE Requests 
-	SET Requests.manager_response_req = @manager_response, Requests.reason_of_disapproval = @reason_of_disapproval, Requests.manager_user_name = @manager_username
-	WHERE (request_id = (SELECT request_id FROM Regular_Employees_Replace_Regular_Employees r Where r.user_name_request_owner = @staff_username)
-	OR request_id = (SELECT request_id FROM HR_Employees_Replace_HR_Employees h where h.user_name_request_owner = @staff_username)
-	OR request_id = (SELECT request_id FROM Managers_Replace_Managers_In_Requests m where m.user_name_request_owner = @staff_username)
-	) AND (SELECT s.department_code FROM Staff_Members s INNER JOIN Managers m ON s.user_name = m.user_name WHERE  s.user_name = @manager_username) 
-	= (SELECT s.department_code FROM Staff_Members s WHERE s.user_name = @staff_username)
-
+	SET Requests.manager_response_req = @managerResponse, Requests.reason_of_disapproval = @reasonOfDisapproval, Requests.manager_user_name = @managerUserName
+	WHERE (request_id =
+	(SELECT request_id
+	FROM Regular_Employees_Replace_Regular_Employees r
+	WHERE r.user_name_request_owner = @staffUserName)
+	OR request_id = 
+	(SELECT request_id 
+	FROM HR_Employees_Replace_HR_Employees h 
+	WHERE h.user_name_request_owner = @staffUserName)
+	OR request_id = (SELECT request_id 
+	FROM Managers_Replace_Managers_In_Requests m 
+	WHERE m.user_name_request_owner = @staffUserName)
+	) AND ((SELECT s.department_code 
+	FROM Staff_Members s INNER JOIN Managers m 
+	ON s.user_name = m.user_name 
+	WHERE  s.user_name = @managerUserName) 
+	= (
+	SELECT s.department_code 
+	FROM Staff_Members s 
+	WHERE s.user_name = @staffUserName))
+END
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1142,14 +1163,14 @@ WHERE Applications.hr_response_app = 'Accepted' AND EXISTS
 --5: Abdullah-------------------------------------------------------------------------------------------------------
 
 GO
--- tihs part needs to be discussed because we might need to change something on the schema
-CREATE PROC ManagerCreateProjectSP
-@manager_username VARCHAR(30),
-@start_date DATETIME,
-@end_date DATETIME,
-@project_name VARCHAR(100)
+CREATE PROC DefineNewProject
+@managerUserName VARCHAR(30),
+@startDate DATETIME,
+@endDate DATETIME,
+@projectName VARCHAR(100)
 AS
-INSERT Projects Values(@project_name,@manager_username,@start_date,@end_date)
+INSERT Projects (project_name,manager_user_name,start_date,end_date)
+Values(@projectName,@managerUserName,@startDate,@endDate)
 
 --6: Reda--------------------------------------------------------------------------------------------------------------
 
