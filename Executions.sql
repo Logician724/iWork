@@ -54,16 +54,18 @@ EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- 
 
 EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Friday ' --Works correctly returns error
 
-
-
 EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/2012',10,'Mohamed','Zaki' --executes RegisterToWebsite Using inputs
 
-
 EXEC StaffCheckInSp 'Mohamed_Mahmoud' --Making an exec for testing 
+
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DATABASES'
+
 EXEC ManagerCreateProjectSP 'Ahmed_Mohamed','05/11/2015','10/10/2016','DSD'
 
 EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
+
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
+
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
+EXEC ViewReceivedEmailsSP 'Yousef.Mustafa'
