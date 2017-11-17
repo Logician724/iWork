@@ -39,7 +39,6 @@ EXEC AssignRegularToTaskSP 'Project-5651AMU chat page developing BootStrap','Mah
 -- end of reda's procedures' executions
 
 -- start of gharam's procedures' executions
-
 EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
@@ -65,3 +64,22 @@ EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
+
+
+----- Gharam exeucting here----
+
+DECLARE @job VARCHAR(30)
+
+EXEC FindTypeOfReplacementSp 'andra.kyla','cam.percival',@jOB
+EXEC FindTypeOfReplacementSp 'Ahmed_Mahmoud','Ahmed_Mohamed',@jOB
+EXEC FindTypeOfReplacementSp  'ahmed.hussain','ahmed.shehata' ,@JOB
+EXEC ReplaceManagerSP 'Ahmed_Mohamed','Bob_Jack','05/05/2018','01/01/2018'
+EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
+EXEC ReplaceRegularHelperSP 'cam.percival','claire.carles','05/05/2018','01/01/2018'
+EXEC ApplyForLeaveRequestSP 'cam.percival','claire.carles','Sick','05/05/2018','01/01/2018'
+EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/2018','01/01/2018'
+
+
+
+
+-----------
