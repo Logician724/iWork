@@ -71,7 +71,12 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian c
 
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
+<<<<<<< HEAD
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\ -- Shows table in Romy's
+=======
+
+EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
+>>>>>>> c8291dbbb26ef2400a85efc9df122cfdb3aebe2c
 
 EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department' -- working right
 
@@ -119,8 +124,9 @@ EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/
 
 
 --1:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+EXEC SearchCompanyByNameSP 'face'
+EXEC SearchCompanyByTypeSP 'digital'
+EXEC SearchCompanyByAddressSP 'Pal'
 
 
 --2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -150,7 +156,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki'
 
 --6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -169,7 +175,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 --2:Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+EXEC ViewUserInfoSP 'claire.carles'
 
 
 --3:Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -189,7 +195,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --3:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com'
 
 --4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -209,7 +215,7 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC StaffCheckInSp 'claire.carles'
 
 
 
@@ -339,5 +345,3 @@ exec ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --12:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
