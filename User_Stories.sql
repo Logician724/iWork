@@ -866,8 +866,10 @@ END
 --8:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company. 
---The procedure take the username of the staff member as input. 
---
+--The procedure 
+-- takes the username of the staff member as input, returns 
+-- shows the emails of the username according to the primary keys of table Emails
+-- only if sender are in the same company as the receiver (handled with an Exists)
 
 
 GO
