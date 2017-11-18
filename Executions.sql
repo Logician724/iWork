@@ -355,7 +355,7 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
 --4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 DECLARE @operationStatus BIT 
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','8/7/2017','8/22/2017','','Barcelona','a company related business deal', @operationStatus OUTPUT
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @operationStatus OUTPUT
 PRINT @operationStatus
 DECLARE @operationStatus BIT
 EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @operationStatus OUTPUT
