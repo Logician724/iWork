@@ -740,7 +740,11 @@ SET @operationStatus = 1; --successful request application
 END
 --5: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---Staff Members User Stories No.5: The staff member checks 
+--Staff Members User Stories No.5: The staff member checks the status (respond of Manager and HR ) to the requests he/she applied for.
+--The procedure has 1 input, the username of the Staff member... 
+--As we have three tables for Staff member-applies-for-Request-relations, one for each of the Managers, HR_Employees, and Regular Employees, 
+--the procedure makes a union of those 3 tables and matches the Staff member's Username 
+-- to  whatever comes from the Union. 
 GO
 CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30)
