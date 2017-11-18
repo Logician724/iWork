@@ -1,4 +1,4 @@
-DROP PROC AddManagerResponseToRequestSP;
+﻿P PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
@@ -30,7 +30,7 @@ DROP PROC RemoveRegularFromProjectSp
 DROP PROC RegularFinalizesTaskSP;
 DROP PROC HRPostsAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
-DROP PROC StaffCheckInSp;
+DROP PROC CheckInSP;
 DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
 DROP PROC ViewDepartmentsOfCompanySP;
@@ -40,13 +40,10 @@ DROP PROC ApplyForJobSP;
 DROP PROC DeletePendingRequestsSP;
 DROP PROC ViewNewApplicationsSP;
 DROP PROC ViewAttendanceOfStaffSP;
-DROP PROC ManagerDecidingRequestSP;
-DROP PROC ManagerCreateProjectSP;
-DROP PROC ManagerReviewTaskSP;
 DROP PROC ViewCompanySP;
 DROP PROC SearchJobsSP;
 DROP PROC EditPersonalInfoSP;
-DROP PROC ViewJobStatusSP;
+DROP PROC ViewJobsStatusSP;
 DROP PROC CheckOutSP;
 DROP PROC ViewTasksSP;
 DROP PROC RespondToJobApplicationsSP;
@@ -57,8 +54,13 @@ DROP PROC RegisterToWebsite;
 DROP PROC ApplyForBusinessRequestSP;
 DROP PROC ViewRequestsSP;
 DROP PROC ViewLatestAnnouncementsSP;
-DROP FUNCTION RegularsWithFixed;
-
+DROP PROC SearchCompanyByNameSP;
+DROP PROC SearchCompanyByAddressSP;
+DROP PROC SearchCompanyByTypeSP;
+DROP PROC ViewUserInfoSP;
+DROP PROC DefineNewProject;
+DROP PROC ReviewTaskSP;
+DROP PROC ViewJobsWithVacancySP;
 
 
 
@@ -80,28 +82,39 @@ DROP FUNCTION RegularsWithFixed;
 
 --1: Gharam
 
---GO 
---a similar query already exists
---CREATE PROC ViewCompanySP 
---@companyName varchar(50),
---@companyAddress varchar(300),
---@companyType varchar(80)
---AS
---Select C.*
---From Companies C
---Where  C.name=@companyName 
---OR C.field =@companyType 
---OR C.address=@companyAddress 
-
-
---2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
-GO
-CREATE PROC ViewCompaniesSP --correct
+GO 
+CREATE PROC SearchCompanyByNameSP
+@keyWord VARCHAR(50)
 AS
-SELECT C.* , CP.phone
-FROM Companies C INNER JOIN  Companies_Phones CP
-ON  C.domain_name = CP.company_domain
+SELECT c.*
+FROM Companies c
+WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
+GO
+CREATE PROC SearchCompanyByAddressSP
+@keyWord VARCHAR(300)
+AS
+SELECT c.*
+FROM Companies c INNER JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
+WHERE c.address LIKE CONCAT('%',@keyWord,'%')
+
+GO
+CREATE PROC SearchCompanyByTypeSP
+@keyWord VARCHAR(50)
+AS
+SELECT c.*
+FROM Companies c INNER JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
+WHERE c.type LIKE CONCAT('%',@keyWord,'%')
+--2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
+
+GO
+CREATE PROC ViewCompaniesSP 
+AS
+SELECT C.*,  CP.phone
+FROM Companies C LEFT JOIN Companies_Phones CP
+ON C.domain_name = CP.company_domain
 
 
 --3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
@@ -128,40 +141,62 @@ WHERE (d.company_domain= @companyDomain)
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.4 view the info of jobs in a departments in a certain company that have vacancies in it
+-- The procedure takes the company domain and the department code as input and returns the info of the department
 GO
 
-CREATE PROC ViewDepartmentSP --Missing Viewing all jobs in this department .. if you make a View jobs in department procedure .. make a third procedure that links both of them maybe?
+CREATE PROC ViewDepartmentSP
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30)
 AS
 SELECT d.*
 FROM Departments d
 WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentCode))
-
+--The procedure takes the department code and company domain as input and return the info of all the jobs in that 
+--department that have vacancies greater than 0
+GO
+CREATE PROC ViewJobsWithVacancySP
+@companyDomain VARCHAR(150),
+@departmentCode VARCHAR(30)
+AS
+SELECT j.*
+FROM Jobs j
+WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain AND j.vacancies > 0
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC RegisterToWebsite   -- Handles 5 in unregistered user
-@userName VARCHAR(30)  , --takes entity as input 
+CREATE PROC RegisterToWebsite
+@userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
 @personalEmail VARCHAR(70) ,
 @birthDate DATETIME ,
 @expYear INT ,
 @firstName VARCHAR(25) ,
-@lastName VARCHAR(25) 
+@lastName VARCHAR(25),
+@operationStatus BIT OUTPUT
 AS
-insert into Users
-Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+IF NOT EXISTS
+(
+SELECT *
+FROM Users
+WHERE Users.user_name = @userName
+)
+BEGIN
+SET @operationStatus = 1; --successful registration
+INSERT INTO Users(user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+END
+ELSE
+SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC SearchJobsSP --correct
+CREATE PROC SearchJobsSP 
 @keywords TEXT
 AS
-SELECT J.* , C.name AS company_name, D.name AS department_name
-FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
-INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
-where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+SELECT j.* 
+FROM Jobs j
+where j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
@@ -185,6 +220,13 @@ ORDER BY AVG(sm.salary) DESC
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1. Reda
+--registered user story no.1 login to the website with your username and password and checks whether you are an existing user or and defines the type of the user
+-- the procedure takes the username and password as input and returns the an int variable as output with values as follow
+-- 0 --> not a user
+-- 1 --> job seeker
+-- 2 --> manager
+-- 3 --> hr
+-- 4 --> regular
 GO
 
 CREATE PROC UserLoginSP
@@ -238,7 +280,7 @@ END
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-Create PROC ViewUserInfoSp
+Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
 
 AS
@@ -247,14 +289,12 @@ FROM USERS
 WHERE user_name=@username
 DROP PROC ViewUserInfoSp;
 
-EXEC ViewUserInfoSp 'Ahmed_Mohamed'
-
 
 
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 
-CREATE PROC EditPersonalInfoSP --correct
+CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
 @password VARCHAR(30),
 @personalEmail VARCHAR(70),
@@ -263,15 +303,41 @@ CREATE PROC EditPersonalInfoSP --correct
 @firstName VARCHAR(25),
 @lastName VARCHAR(25)
 AS
+
+IF(@password IS NOT NULL)
 UPDATE Users 
 SET
-password=@password, 
-personal_email=@personalEmail, 
-birth_date=@birthDate,
-exp_year = @expYear,
-first_name = @firstName, 
+password=@password
+WHERE user_name = @username
+IF(@personalEmail IS NOT NULL)
+UPDATE Users 
+
+SET
+personal_email=@personalEmail
+WHERE user_name = @username
+IF(@birthDate IS NOT NULL)
+UPDATE Users 
+SET
+birth_date=@birthDate
+WHERE user_name = @username
+IF(@expYear IS NOT NULL)
+UPDATE Users 
+SET
+exp_year = @expYear
+WHERE user_name = @username
+IF(@firstName IS NOT NULL)
+UPDATE Users 
+SET
+first_name = @firstName
+WHERE user_name = @username
+IF(@lastName IS NOT NULL)
+UPDATE Users
+SET
 last_name = @lastName
 WHERE user_name = @username
+
+
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -290,10 +356,11 @@ CREATE PROC ApplyForJobSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
+@companyDomain VARCHAR(150),
+@operationStatus INT OUTPUT
 AS
 IF(
-NOT EXISTS(
+EXISTS(
 SELECT *
 FROM  Jobs j INNER JOIN Applications a
 ON j.company_domain = a.company_domain AND
@@ -304,29 +371,34 @@ WHERE a.app_status = 'Pending' AND
 	  a.department_code = @departmentCode AND
 	  a.company_domain = @companyDomain AND
 	  a.seeker_username = @seekerUserName
-)
-AND 
-EXISTS(
+))
+SET @operationStatus = 1; -- there is another application for the same job with pending status
+ELSE IF
+NOT EXISTS(
 SELECT *
 FROM Jobs j INNER JOIN Users u
 ON u.exp_year >= j.min_years_experience
-WHERE u.user_name = @seekerUserName
+WHERE u.user_name = @seekerUserName AND
+j.job_title = @jobTitle AND
+j.department_code = @departmentCode AND 
+j.company_domain = @companyDomain
 )
-
-)
+SET @operationStatus = 2; -- the seeker doesn't have enough exp
+ELSE
+BEGIN
 INSERT INTO Applications
 (seeker_username,job_title,department_code,company_domain)
 VALUES
 (@seekerUserName,@jobTitle,@departmentCode,@companyDomain)
-
+SET @operationStatus = 3; --successful application
+END
 
 --2:Reda-------------------------------------------------------------------------------------------------------------------------- 
-
-
+-- job seeker story no.2 view the interview questions related to the job I am applying for
+-- this procedure takes the job title, department code and company domain of the target job as input and
+-- returns all the titles of the interview questions related to that job.
 GO
-
-
-CREATE PROC ViewQuetionsInInterviewSP --correct
+CREATE PROC ViewQuetionsInInterviewSP
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
@@ -337,71 +409,79 @@ ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
 
---3: Gharam---------------------------------------------------------------------------------------------------------------------------
+--3: Gharam-------------------------------------------------------------------------------------------------------------------------
 
 GO 
 CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
 @username VARCHAR(30),
-@job VARCHAR(150),
-@departmentCode VARCHAR(150),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150)
-
 AS 
 SELECT  score
 From  Applications 
 WHERE @username=seeker_username 
 AND @CompanyDomain=company_domain
-AND @job=job_title
+AND @jobTitle =job_title
 AND @departmentCode =department_code
 
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
-GO  --to be edited  ( Yes it do )
-CREATE PROC ViewJobStatusSP
+GO 
+CREATE PROC ViewJobsStatusSP
 @username VARCHAR(30)
 AS
-Select A.score, A.app_status --Missing score and job title Don't we need to see these next to the JOB title maybe?
+Select A.job_title, A.department_code, A.company_domain, A.score, A.app_status
 FROM Applications A
 WHERE A.seeker_username=@username
 
 --5: Abdullah-----------------------------------------------------------------------------------------------------------------------------
-
-
 --Job Seekers Story no.5 Choose a job from the jobs I was accepted in
 -- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
--- and the day off of choice and checks that the day off chosen is not friday. After that
--- the job seeker is added as a staff member if he satisfies all the constraints, other than taht
--- a statement is printed on the console requiring the user to revise his input values.
+-- and the day off of choice as input and returns a int as output representing the result of the procedure as follows
+-- 0 --> This is not an accepted application
+-- 1 --> This chosen day off is friday
+-- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
+
 GO
 Create PROC ChooseJobFromAcceptedAppSP 
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
 @jobTitle VARCHAR(150),
-@dayOff VARCHAR(10)
+@dayOff VARCHAR(10),
+@operationStatus INT OUTPUT
 AS
-IF(	EXISTS(
-			SELECT * 
-			FROM Applications a
-			WHERE a.company_domain = @companyDomain AND
-			a.department_code = @departmentCode AND
-			a.job_title = @jobTitle AND
-			a.seeker_username = @seekerUserName AND
-			a.app_status = 'Accepted'
-			)
-			AND
-			@dayOff != 'Friday'
-	)	
+IF(NOT EXISTS
+(
+SELECT * 
+FROM Applications a
+WHERE a.company_domain = @companyDomain AND
+a.department_code = @departmentCode AND
+a.job_title = @jobTitle AND
+a.seeker_username = @seekerUserName AND
+a.app_status = 'Accepted'
+))
+SET @operationStatus = 0 --The chosen application is not an accepted one
+ELSE IF(@dayOff = 'Friday')
+SET @operationStatus = 1 --The chosen day off is friday
+ELSE
 BEGIN
+<<<<<<< HEAD
 DELETE FROM Applications
     WHERE 
 	Applications.seeker_username=@seekerUserName 
 	AND Applications.company_domain=@companyDomain 
 	AND Applications.department_code=@departmentCode 
 	AND Applications.job_title=@jobTitle
+||||||| merged common ancestors
+=======
+DELETE FROM Applications
+WHERE Applications.seeker_username = @seekerUserName
+>>>>>>> 5faac85ead5c5c5c5a317f7c8c7cea5a56a17962
 DELETE FROM Job_Seekers 
-	WHERE Job_Seekers.user_name = @seekerUserName
+WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
 SELECT @salary = salary
 	FROM Jobs
@@ -417,25 +497,35 @@ SET vacancies = vacancies - 1
 WHERE Jobs.company_domain = @companyDomain AND
 		Jobs.department_code = @departmentCode AND
 		Jobs.job_title = @jobTitle
+SET @operationStatus = 2 --Successful job choice
 END
-
-ELSE
-PRINT 'Error Occured, please check back your input values'
 
 
 --6: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
+-- and company domain, returns an output bit that specifies the following
+-- 0 --> unsuccessful operation//this application is not in the review process or this application does not exist
+-- 1 --> successful operation// the application specified has a status 'Pending' and was deleted as a result
 GO
-
-CREATE PROC DeletePendingApplicationSP --correct
+CREATE PROC DeletePendingApplicationSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
+@companyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS (
+SELECT *
+FROM Applications a
+WHERE a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @companyDomain AND a.seeker_username = @seekerUserName AND a.app_status = 'pending'
+)
+SET @operationStatus = 0 
+ELSE
+BEGIN
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
-
+SET @operationStatus = 1 
+END
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -443,16 +533,33 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1: Gharam---------------------------------
-GO 
+--1: Gharam
 
 GO
-CREATE PROC StaffCheckInSp 
-@username VARCHAR(30)
+CREATE PROC CheckInSP 
+@username VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday') 
+DECLARE @timestamp DATETIME
+DECLARE @dayOff VARCHAR(10)
+SET @timestamp = CURRENT_TIMESTAMP
 
+SELECT @dayOff = s.day_off
+FROM Staff_Members s
+WHERE s.user_name = @username 
+IF (EXISTS (
+SELECT user_name
+FROM Staff_Members
+WHERE Staff_Members.user_name = @username AND
+(
+(DATENAME(dw,GETDATE())='Friday') OR
+DATENAME(dw,GETDATE())=@dayOff)
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
 INSERT INTO Attendances 
+<<<<<<< HEAD
 (user_name,date,start_time )
 
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
@@ -460,32 +567,60 @@ VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_T
 
 
 
+||||||| merged common ancestors
+(user_name,date,start_time )
+
+VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+---------------------------------
+
+
+
+
+(user_name,start_time )
+VALUES(@username , @timestamp)
+SET @operationStatus = 1
+END
+
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC CheckOutSP --Correct but why did u do the join u can just check with the username
-@leaveTime DATETIME, @username VARCHAR(30)
+CREATE PROC CheckOutSP 
+@username VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
-UPDATE Attendances 
-SET    leave_time = @leaveTime
-WHERE  user_name=@username AND NOT EXISTS 
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
+IF( EXISTS 
 (
 SELECT *
-FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
-WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
- )
+FROM Attendances a INNER JOIN Staff_Members sm
+ON a.user_name = sm.user_name
+WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp)
+))
+SET @operationStatus=0 
+ELSE
+BEGIN
+UPDATE Attendances 
+SET    leave_time = @timestamp
+WHERE  user_name = @username AND CAST( Attendances.start_time AS DATE) = CAST(@timestamp AS DATE)
+SET @operationStatus = 1 
+END
 
 
 --3: Reda---------------------------------------------------------------------------------------------------------------
+-- staff member story no.3 View all my attendance records within certain period of time.
+-- The procedure takes the user name of the staff member that wants to view his attendance records as input
+-- and the dates over which he wants to check his attendance, and generates all the attendance records 
+-- in between those 2 dates. 
 GO
-CREATE PROC ViewAttendanceSP --correct
+CREATE PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
 AS
-SELECT a.*
+SELECT a.start_time, a.leave_time, a.duration, a.missing_hours
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 
 
 --4: Gharam-------------------------------------------------------------------------------------------------- 
@@ -508,10 +643,10 @@ SELECT @job='hr'
 
 ELSE IF  EXISTS
 ( SELECT user_name 
-FROM Regular_Employees 
+FROM Managers
 WHERE @userName =user_name ) 
 AND EXISTS( SELECT user_name
-FROM Regular_Employees 
+FROM Managers
 WHERE @userName2 =user_name )  
 SELECT @job='Manager'
 
@@ -525,9 +660,9 @@ AND EXISTS
 FROM Regular_Employees 
 WHERE @userName2 =user_name )  
 SELECT @job='Regular'
+PRINT @JOB
 
 GO
-
 CREATE PROC ReplaceHRSP
 
 @userName VARCHAR(30),
@@ -535,10 +670,9 @@ CREATE PROC ReplaceHRSP
 @endDate DATETIME ,
 @startDate DATETIME
 AS
---DECLARE @job VARCHAR(30)
---EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+
 IF NOT EXISTS ( SELECT * FROM HR_Employees_Replace_HR_Employees h1,HR_Employees h2,Requests r WHERE h1.user_name_request_owner=h2.user_name AND r.request_id=h1.request_id
-AND r.end_date=@endDate AND r.start_date=@startDate ) 
+AND r.end_date>=@endDate AND r.start_date<=@startDate ) 
 INSERT INTO Requests 
 (end_date,request_date,start_date) 
 VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
@@ -549,8 +683,10 @@ FROM Requests
 INSERT INTO HR_Employees_Replace_HR_Employees 
 VALUES(@requestId,@replacementUserName,@userName)
 
+EXEC ReplaceHRSP 'ahmed.hussain','ahmed.shehata' ,'05/05/2018','01/01/2018'
 
 
+DROP PROC  ReplaceManagerSP;
 GO
 
 CREATE PROC ReplaceManagerSP
@@ -560,24 +696,27 @@ CREATE PROC ReplaceManagerSP
 @endDate DATETIME ,
 @startDate DATETIME
 AS
---DECLARE @job VARCHAR(30)
---EXEC FindTypeOfReplacementSp  @userName , @replacementUserName , @job OUTPUT
+
 IF NOT EXISTS 
 ( SELECT * 
 FROM Managers_Replace_Managers_In_Requests h1,Managers h2,Requests r 
 WHERE h1.user_name_request_owner=h2.user_name 
 AND r.request_id=h1.request_id
-AND r.end_date=@endDate AND r.start_date=@startDate ) 
+AND r.end_date<=@endDate AND r.start_date>=@startDate ) 
 
 INSERT INTO Requests 
-(end_date,request_date,start_date) 
-VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate )
+(end_date,request_date,start_date,manager_response_req,hr_response_req) 
+VALUES( @endDate, CONVERT (date, SYSDATETIMEOFFSET() ), @startDate,'Accepted','Accepted')
 
 declare @requestId int
 SELECT @requestId= MAX(request_id) 
 FROM Requests
 INSERT INTO Managers_Replace_Managers_In_Requests
 VALUES(@requestId,@replacementUserName,@userName)
+
+DROP PROC ReplaceManagerSP 
+
+
 
 
 GO
@@ -605,6 +744,7 @@ SELECT @requestId= MAX(request_id)
 FROM Requests
 INSERT INTO Regular_Employees_Replace_Regular_Employees
 VALUES(@requestId,@replacementUserName,@userName)
+
 
 
 
@@ -637,6 +777,7 @@ VALUES (@requestId,@type)
 
 
 
+
 GO 
 CREATE PROC ApplyForBusinessRequestSP
 @userName VARCHAR(30),
@@ -666,9 +807,30 @@ FROM Requests
 INSERT INTO Business_Trip_Requests 
 VALUES (@requestId,@tripDestination,@tripPurpose)
 
-GO
 
---5: Yasmine------------------------------------------------------------------------------------------------------------------------
+
+--5: Yasmine------------------------------------------
+GO
+CREATE PROC ViewRequestsStatusSP
+@userName VARCHAR(30)
+AS
+SELECT r.hr_response_req, r.manager_response_req 
+FROM Requests r
+WHERE r.request_id = ANY(
+SELECT hrr.request_id 
+FROM HR_Employees_Replace_HR_Employees hrr
+WHERE hrr.user_name_request_owner = @userName
+UNION
+SELECT mmr.request_id
+FROM Managers_Replace_Managers_In_Requests mmr
+WHERE mmr.user_name_request_owner = @userName
+UNION
+SELECT rrr.request_id
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.user_name_request_owner = @userName
+) 
+
+
 
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -731,7 +893,6 @@ FROM Emails E inner Join Staff_Receives_Email R
 ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
 
 
-EXEC ViewReceivedEmailsSP 'Ahmed_Mohamed' --EXECUTING  ViewReceivedEmails
 
 --9: Yasmine--------------------------------------------------
 
@@ -820,9 +981,17 @@ IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) 
 --3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC EditJobInfoSP --Also needs editing
-@hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
-@applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
-@vacancies INT=NULL , @workingHours INT=NULL 
+@hrUsername VARCHAR(30),
+@job_title VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@applicationDeadline DATETIME=NULL,
+@detailedDescription TEXT=NULL,
+@minYearsExperience INT=NULL,
+@salary INT=NULL,
+@shortDescription TEXT=NULL,
+@vacancies INT=NULL , 
+@workingHours INT=NULL 
 AS 
 --If the department is the HR Employee's Department, He/She can edit the info
 IF EXISTS ( --We don't need this join we already have the HR username
@@ -908,7 +1077,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC ViewRequestsSP
-@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150)
+@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150) --you don't need hr info for this .. don't need this number of joins
 AS
 IF EXISTS (
 SELECT*
@@ -945,7 +1114,7 @@ WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
 )
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
@@ -958,21 +1127,52 @@ CREATE PROC ViewYearlyAttendanceOfStaffSP
 AS
 SELECT SUM(a.duration)
 FROM Attendances a
-WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
-GROUP BY MONTH(a.date)
+WHERE YEAR(a.start_time) = @year AND a.user_name = @staffUserName
+GROUP BY MONTH(a.start_time)
+
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
+CREATE FUNCTION  RegularsWithFixed()
+RETURNS  @Fixed TABLE 
+(
+    user_name  VARCHAR(30) NOT NULL   
+)
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+
+insert into @myTable 
+SELECT  R.user_name 
+FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
+WHERE  R.user_name=M.regular_user_name  
+AND t.project_name=m.project_name 
+And T.deadline=M.task_deadline 
+AND T.name=M.task_name AND t.status='Fixed' 
+And MONTH(t.deadline)=MONTH(getdate())
+
+insert into @Fixed
+SELECT USER_NAME 
+FROM @mytable 
+return
+END
+
+
+GO
+
+
 
 CREATE PROC ViewTop3RegularSp
 AS
-SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration)
+
+SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) 
 FROM Attendances A ,DBO.RegularsWithFixed() R , Users U 
-WHERE  R.user_name=A.user_name
+WHERE  R.user_name=A.user_name AND Month(a.leave_time)=MONTH(getdate())
 AND R.user_name=U.user_name
 GROUP BY first_name +' '+ last_name 
 ORDER BY SUM(A.duration) desc
+
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1023,11 +1223,14 @@ AND @taskName=M.task_name
 AND @deadline=M.task_deadline 
 AND @project=M.project_name) 
 AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+BEGIN
 UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name
 AND @deadline=deadline 
 AND project_name=@project
+END
+
 
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1058,6 +1261,7 @@ END
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------
+--EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @username VARCHAR(30), 
@@ -1065,46 +1269,27 @@ CREATE PROC ViewEmployeesRequestsSP
 @response VARCHAR(20),
 @id int --View Single request at a time
 AS 
-if EXISTS 
+IF EXISTS 
 (SELECT user_name 
 FROM HR_Employees 
-WHERE @username=user_name) 
+WHERE @username=user_name)  AND NOT EXISTS (SELECT user_name
+FROM Managers
+WHERE @ManagerUserName =user_name AND type='HR')
 BEGIN
-IF EXISTS (SELECT user_name
-FROM HR_Employees 
-WHERE @ManagerUserName =user_name)
-SELECT *
-From Requests R,HR_Employees_Replace_HR_Employees H 
-WHERE R.request_id=H.request_id AND @username=h.user_name_request_owner AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id
+print 'HR can only replace Hr'
 END
-ELSE if EXISTS (SELECT user_name 
-FROM Regular_Employees 
-WHERE @username=user_name) 
-BEGIN 
-SELECT * 
-From Requests R,Regular_Employees_Replace_Regular_Employees H 
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+ELSE
+UPDATE Requests 
+SET manager_response_req=@response
+WHERE request_id=@id;
 
-ELSE 
-BEGIN
-SELECT 
-* From Requests R,Managers_Replace_Managers_In_Requests H
-WHERE R.request_id=H.request_id
-AND @username=h.user_name_request_owner 
-AND r.request_id=@id
-UPDATE Requests
-SET hr_response_req=@response
-WHERE request_id=@id 
-END
+
+
+
+
+
+
+DROP PROC ViewEmployeesRequestsSP ;
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1380,6 +1565,8 @@ WHERE s.user_name = @userName
 RETURN (@workingHours - @duration)
 END
 
+
+
 GO
 CREATE FUNCTION CheckJobTitle
 (@jobTitle VARCHAR(150))
@@ -1393,35 +1580,9 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
-
 GO
-CREATE FUNCTION  RegularsWithFixed()
-RETURNS  @Fixed TABLE 
-(
-    user_name  VARCHAR(30) NOT NULL   
-)
-AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
-
-insert into @myTable 
-SELECT  R.user_name 
-FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
-WHERE  R.user_name=M.regular_user_name  
-AND t.project_name=m.project_name 
-And T.deadline=M.task_deadline 
-AND T.name=M.task_name AND t.status='Fixed' 
-And task_deadline>CONVERT(date, SYSDATETIMEOFFSET())
-
-insert into @Fixed
-SELECT USER_NAME 
-FROM @mytable 
-return
-END
 
 
-
-GO
 /*CREATE FUNCTION  TOP3hours()
 RETURNS  @TOP3 TABLE 
 (

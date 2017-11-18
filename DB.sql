@@ -77,8 +77,8 @@ FOREIGN KEY (user_name) REFERENCES Users(user_name) ON DELETE CASCADE ON UPDATE 
 CREATE TABLE Jobs(
 PRIMARY KEY (job_title,department_code,company_domain),
 job_title VARCHAR(150) NOT NULL,
-company_domain VARCHAR(150) NOT NULL ,
 department_code VARCHAR(30) NOT NULL, 
+company_domain VARCHAR(150) NOT NULL ,
 application_deadline DATETIME NOT NULL,
 detailed_description TEXT NOT NULL,
 min_years_experience INT NOT NULL,
@@ -116,9 +116,8 @@ FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON
 
 
 CREATE TABLE Attendances(
-PRIMARY KEY (user_name,date),
+PRIMARY KEY (user_name,start_time),
 user_name VARCHAR(30) NOT NULL,
-date DATE NOT NULL,
 start_time DATETIME NOT NULL,
 leave_time DATETIME  NULL,
 duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
@@ -250,7 +249,7 @@ FOREIGN KEY(company_domain) REFERENCES Companies(domain_name) ON DELETE NO ACTIO
 
 
 CREATE TABLE Applications (
-PRIMARY KEY(seeker_username,job_title,department_code,company_domain) ,
+PRIMARY KEY(seeker_username,job_title,department_code,company_domain,app_status) ,
 score INT NOT NULL DEFAULT 0,
 app_status VARCHAR(20) NOT NULL DEFAULT 'Pending',
 hr_response_app VARCHAR(20) NULL,
@@ -264,7 +263,6 @@ company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION ,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION ,
---debatable
 FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT CHK_app_status CHECK( app_status = 'Pending' OR app_status = 'Accepted' OR app_status = 'Rejected'),
 CONSTRAINT CHK_hr_response_app CHECK( hr_response_app = 'Accepted' OR hr_response_app = 'Rejected' OR hr_response_app = NULL),
