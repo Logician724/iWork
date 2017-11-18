@@ -10,6 +10,8 @@ EXEC ViewAttendanceSP 'salma.tarek','2017-8-20','2017-8-22'
 
 EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
 
+EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
+
 EXEC AddJobSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department','PHP-5019','facebook.com','2018-2-28',
 				'Employees will handle testing codes produced by other coders in the department and debuging those codes',4,10000,
 				'Handling testing and debuging code in PHP Department',8,7
@@ -354,15 +356,67 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
 
 --4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
-
+--successful applications
+GO
+DECLARE @status1 BIT
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017','','Moscow','Business deal with a russian DNS company', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyRegularForRequestSP 'juliana.clover','godfrey.love','6/6/2017','6/22/2017','leave request','Luxor','Vacation', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyHRForRequestSP 'basma.mohamed','amr.mohsen','6/5/2015','7/3/2015','leave request','Luxor','Vacation', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyHRForRequestSP 'amr.mohsen','dana.debs','11/2/2017','11/3/2017','leave request','','Sick', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','leave request','Malysia','Vacation', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017','','Cairo','Business trip ', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017','','Berlin','business trip ', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT 
+EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017','','Paris','Business trip ', @status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status0 BIT 
+EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @status0 OUTPUT
+PRINT @status0
+GO
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+EXEC ViewRequestsStatusSP 
 --6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 --7:Reda-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
+
+EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
 
 
 --8:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -381,7 +435,13 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 --1:Reda-----------------------------------------------------------------------------------------------------------------------------------------------
+DECLARE @status0 BIT
+EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','JS-8938','facebook.com','2017-12-12','you will be managing everything related to the facebook ad experience with our viewers on the platform',12,80000,'Manage facebook Ads',3,9, @status0 OUTPUT
+PRINT @status0
 
+DECLARE @status1 BIT
+EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','PHP-5019','facebook.com','2017-12-12','you will be managing everything related to the facebook ad experience with our viewers on the platform',12,80000,'Manage facebook Ads',3,9, @status1 OUTPUT
+PRINT @status1
 
 
 --2:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
