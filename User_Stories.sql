@@ -126,7 +126,7 @@ ON C.domain_name = CP.company_domain
 
 
 --3:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Users story no.3 views the information of a certain company along with the department info 
+-- Users story no.3 views the information of a certain company along with all of its departments info 
 GO
 -- The procedure takes the companyDomain as input and outputs the information of the company specified with the companyDomain
 CREATE PROC ViewCompanySP 
@@ -174,6 +174,10 @@ WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain 
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
+-- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
+-- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input 
+-- and outputs 1 if the user name is unique with respect to the database , and outputs 0 if the username matches with reprect to the database
+-- Where 1 indicates a successful register and 0 indicates a failed register
 CREATE PROC RegisterToWebsite
 @userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
