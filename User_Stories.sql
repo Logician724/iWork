@@ -933,6 +933,12 @@ VALUES
 
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
+--Staff Member user stories no.10:- 
+--Staff member can view the Announcement made in his company within the past 21 days
+--The procedure takes the staff member username as an input.
+--Gets the announcements that are in the same company as the Staff Member
+--Checks whether the date of the announcements is in difference less than 21 from the current time/date
+
 GO
 CREATE PROC ViewLatestAnnouncementsSP
 @userName VARCHAR(150)
