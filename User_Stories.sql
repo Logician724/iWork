@@ -405,7 +405,7 @@ VALUES
 SET @operationStatus = 3; --successful application
 END
 
---2:Reda-------------------------------------------------------------------------------------------------------------------------- 
+--2:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- job seeker story no.2 view the interview questions related to the job I am applying for
 -- this procedure takes the job title, department code and company domain of the target job as input and
 -- returns all the titles of the interview questions related to that job.
@@ -421,7 +421,7 @@ ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
 
---3: Gharam-------------------------------------------------------------------------------------------------------------------------
+--3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
 -- The Procedure takes userName,jobTitle, departmentCode and CompanyDomain as input and outputs the score of a certain application 
 GO 
@@ -439,7 +439,7 @@ AND @jobTitle =job_title
 AND @departmentCode =department_code
 
 
---4: Yasmine----------------------------------------------------------------------------------------------------------------------------
+--4: Yasmine----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Job Seeker User Stories no.4: The job seeker checks the status and score of each application he/she applied for.
 --The procedure takes the username of the jobseeker as input and shows the status of all applications, where their usernae equals the input
@@ -451,7 +451,7 @@ Select A.job_title, A.department_code, A.company_domain, A.score, A.app_status
 FROM Applications A
 WHERE A.seeker_username=@username
 
---5: Abdullah-----------------------------------------------------------------------------------------------------------------------------
+--5: Abdullah------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Job Seekers Story no.5 Choose a job from the jobs I was accepted in
 -- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
 -- and the day off of choice as input and returns a int as output representing the result of the procedure as follows
@@ -581,7 +581,7 @@ SET @operationStatus = 1
 END
 
 
---2: Yasmine------------------------------------------------------------------------------------------------------------------
+--2: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Staff Member user stories no.2: The procedure saves the leave time of the staff members. 
 --The procedure takes as input the staff member's username, if his/her dayoff equals the timestamp, the procedure return 0 (false) and we disregard the leave time. 
@@ -610,7 +610,7 @@ SET @operationStatus = 1
 END
 
 
---3: Reda---------------------------------------------------------------------------------------------------------------
+--3: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- staff member story no.3 View all my attendance records within certain period of time.
 -- The procedure takes the user name of the staff member that wants to view his attendance records as input
 -- and the dates over which he wants to check his attendance, and generates all the attendance records 
@@ -627,7 +627,7 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 
 
 
---4: Gharam-------------------------------------------------------------------------------------------------- 
+--4: Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
 GO
 CREATE PROC ApplyRegularForRequestSP
@@ -785,7 +785,7 @@ WHERE rrr.user_name_request_owner = @userName
 
 
 
---6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
+--6: Abdullah --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Regular Employees Story no.6 Delete any request that is still in the review process
 --DeletePendingRequestsSP takes the username of the employee as input and deletes all
@@ -811,7 +811,7 @@ DELETE Requests
 	AND hr_response_req = 'Pending'
 
 
---7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
+--7: Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --staff member story no.7 the procedure takes the email info as input and performs
 -- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
@@ -853,7 +853,7 @@ ELSE BEGIN
 SET @operationStatus=0 
 END 
 
---8:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------
+--8:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
 CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handled as a staff member
@@ -863,7 +863,7 @@ SELECT e.*
 FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
---9:Yasmine--------------------------------------------------
+--9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 GO
