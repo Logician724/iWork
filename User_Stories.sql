@@ -175,9 +175,9 @@ WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
 -- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
--- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input 
--- and outputs 1 if the user name is unique with respect to the database , and outputs 0 if the username matches with reprect to the database
--- Where 1 indicates a successful register and 0 indicates a failed register
+-- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input and outputs
+--  1 -->  username  unique with respect to the database , and a successful registration
+--  0 --> username not unique with reprect to the database, and a failed registration
 CREATE PROC RegisterToWebsite
 @userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
