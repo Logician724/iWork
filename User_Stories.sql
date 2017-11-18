@@ -80,31 +80,37 @@ DROP PROC ViewJobsWithVacancySP;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---1: Gharam
-
+--1: Gharam-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.1 views the info of companies with its name containing a key word
+-- The procedure takes a key word as input and returns the information of the companies containing the key word in its name
 GO 
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*
-FROM Companies c
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
 GO
+-- The procedure views the information of companies with its adress containing a key word
+-- The procedure takes a key word as input and returns the information of the companies containing the key word in its adress
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
-SELECT c.*
-FROM Companies c INNER JOIN Companies_Phones cp
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 GO
+-- The procedure views the information of companies with its type containing a key word
+-- The procedure takes a key word as input and returns the information of the companies containing the key word in its type
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*
-FROM Companies c INNER JOIN Companies_Phones cp
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
