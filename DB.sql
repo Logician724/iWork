@@ -9,7 +9,7 @@ DROP TABLE Questions;
 DROP TABLE Announcements;
 DROP TABLE Regular_Employees_Replace_Regular_Employees;
 DROP TABLE HR_Employees_Replace_HR_Employees;
-DROP TABLE Managers_Replace_Managers_In_Requests;
+DROP TABLE Managers_Replace_Managers;
 DROP TABLE Business_Trip_Requests;
 DROP TABLE Leave_Requests;
 DROP TABLE Requests;
@@ -179,10 +179,10 @@ hr_response_req VARCHAR(20) NULL,
 hr_user_name VARCHAR(30) NULL,
 manager_response_req VARCHAR(20)  NULL,
 manager_user_name VARCHAR(30) NULL,
---no_of_leave_days INT AS (TIMESTAMPDIFF(YEAR,end_date,start_date)) ,--
 request_date DATETIME NOT NULL,
-reason_of_disapproval TEXT NULL,
 start_date DATETIME NOT NULL,
+no_of_leave_days AS (dbo.NumberOfDays(request_id,start_date,end_date)),
+reason_of_disapproval TEXT NULL
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
 FOREIGN KEY (manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE NO ACTION,
 CONSTRAINT CHK_hr_respose_req CHECK(hr_response_req = 'Accepted' OR hr_response_req = 'Rejected' OR hr_response_req = NULL),
@@ -207,7 +207,7 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 
 
-CREATE TABLE Managers_Replace_Managers_In_Requests(
+CREATE TABLE Managers_Replace_Managers(
 request_id INT PRIMARY KEY NOT NULL,
 user_name_replacer VARCHAR(30) NULL,
 user_name_request_owner VARCHAR(30) NULL,

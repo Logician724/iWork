@@ -72,6 +72,7 @@ DROP PROC ViewRequestsStatusSP;
 -- Users story no.1 views the info of companies with its name containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its name
 GO 
+
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
@@ -80,9 +81,10 @@ FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
-GO
 -- The procedure views the information of companies with its adress containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its adress
+GO
+
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
@@ -91,9 +93,10 @@ FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
-GO
 -- The procedure views the information of companies with its type containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
+GO
+
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
@@ -161,11 +164,12 @@ FROM Jobs j
 WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain AND j.vacancies > 0
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
-GO
 -- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
 -- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input and outputs
 --  1 -->  username  unique with respect to the database , and a successful registration
 --  0 --> username not unique with reprect to the database, and a failed registration
+GO
+
 CREATE PROC RegisterToWebsite
 @userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
@@ -283,7 +287,8 @@ SET @type = 4;
 END
 
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- Users story user no.2 views the all the information of a user
+-- The procedure takes userName as input and outpus all the information of a user with his/her name matching the userName
 GO
 Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
@@ -417,9 +422,10 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 
 
 --3: Gharam-------------------------------------------------------------------------------------------------------------------------
-
+-- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
+-- The Procedure takes userName,jobTitle, departmentCode and CompanyDomain as input and outputs the score of a certain application 
 GO 
-CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
+CREATE PROC ViewMyScoreSP  
 @username VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -537,8 +543,15 @@ END
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam
-
+-- Users story staff member no.1 inserts a check-in attednace of a staff member 
+-- The procedure takes username as input and outputs operation status 0 or 1
+-- 0 -->  no attendance inserted
+-- 1 --> attendance inserted
+-- The procedure gets the staff member's day_off and then checks 
+--if the current day of check-in is friday or his/her day_off then no attendace will be inserted
+-- Else attendance will be inserted
 GO
+
 CREATE PROC CheckInSP 
 @username VARCHAR(30),
 @operationStatus BIT OUTPUT
@@ -629,19 +642,20 @@ CREATE PROC ApplyRegularForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
 IF EXISTS(
 SELECT *
 FROM Regular_Employees re
 WHERE re.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not a regular employee
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
@@ -670,19 +684,21 @@ CREATE PROC ApplyHRForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 IF EXISTS(
 SELECT *
 FROM HR_Employees hr
 WHERE hr.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not an HR employee
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
@@ -711,19 +727,21 @@ CREATE PROC ApplyManagerForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 IF EXISTS(
 SELECT *
 FROM Managers m
 WHERE m.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not manager
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
@@ -794,7 +812,8 @@ DELETE Requests
 
 
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
-
+--staff member story no.7 the procedure takes the email info as input and performs
+-- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
 CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
@@ -825,6 +844,7 @@ FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
+
 
 GO
 CREATE PROC ReplyToEmailsSP 
@@ -863,9 +883,8 @@ VALUES
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-
 CREATE PROC ViewLatestAnnouncementsSP
-@userName VARCHAR(150) --review needed
+@userName VARCHAR(150)
 AS
 SELECT a.*
 	FROM Announcements a INNER JOIN StaffMember sm
@@ -880,9 +899,9 @@ SELECT a.*
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Reda----------------------------------------------------------------------
-
+-- HR employee story no.1 Add a new job that belongs to my department
 GO
-CREATE PROC AddJobSP --fix
+CREATE PROC AddJobSP
 @hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -893,22 +912,25 @@ CREATE PROC AddJobSP --fix
 @salary INT,
 @shortDescription TEXT,
 @vacancies INT,
-@workingHours INT
+@workingHours INT,
+@operationStatus INT OUTPUT
 AS
-IF EXISTS
+IF NOT EXISTS
 (
 SELECT hr.*
 FROM HR_Employees hr INNER JOIN Staff_Members sm
 ON hr.user_name = sm.user_name
 WHERE (hr.user_name = @hrUserName AND sm.department_code = @departmentCode AND sm.company_domain = @companyDomain )
 )
+SET @operationStatus = 0; -- This HR employee is trying to add a job that is not in his department
+ELSE
+BEGIN
 INSERT INTO Jobs
 (job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
-ELSE
-PRINT 'You cannot add a job in a different department than yours.'
-
+SET @operationStatus = 1; --successful job addition 
+END
 GO
 CREATE PROC AddQuestionSP
 @questionTitle VARCHAR(700),
@@ -1544,43 +1566,47 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
-GO
-
-
-/*CREATE FUNCTION  TOP3hours()
-RETURNS  @TOP3 TABLE 
-(
-    
-    user_name  VARCHAR(30) NOT NULL,
-    SUM INT  NOT NULL
-)
-
-AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL
-
-insert into @myTable 
-SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R WHERE  R.user_name=A.user_name  GROUP BY R.user_name ORDER BY SUM(A.duration) desc
-
-insert into @TOP3 
-SELECT USER_NAME, sum FROM @mytable 
-return
-END */
-
 
 GO
-CREATE FUNCTION NumberOfDays(@startDate DATETIME , @endDate DATETIME, @dayOff varchar(15))
+CREATE FUNCTION NumberOfDays(@requestID INT,@startDate DATETIME , @endDate DATETIME)
 RETURNS INT
 AS
 BEGIN 
 DECLARE @totaldays INT
 DECLARE @weekenddays INT
 DECLARE @weekEndDay INT
+DECLARE @dayOff VARCHAR(10)
+DECLARE @userName VARCHAR(30)
+IF EXISTS(
+SELECT *
+FROM Managers_Replace_Managers
+WHERE request_id = @requestID
+)
+SELECT @userName = mrm.user_name_request_owner
+FROM Managers_Replace_Managers mrm
+WHERE mrm.request_id = @requestID
+ELSE IF EXISTS(
+SELECT *
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.request_id = @requestID
+)
+SELECT @userName = rrr.user_name_request_owner
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.request_id = @requestID
+ELSE IF EXISTS(
+SELECT *
+FROM HR_Employees_Replace_HR_Employees hrh
+WHERE hrh.request_id = @requestID
+)
+SELECT @userName = hrh.user_name_request_owner
+FROM HR_Employees_Replace_HR_Employees hrh
+WHERE hrh.request_id = @requestID
 
+SELECT @dayOff = sm.day_off
+FROM Staff_Members sm
+WHERE sm.user_name = @userName
 
-
-SET @weekEndDay= 
-CASE @dayOff 
+SET @weekEndDay = CASE @dayOff
 WHEN 'Saturday' THEN  0
 WHEN 'Sunday'   THEN  1 
 WHEN 'Monday'   THEN  2
