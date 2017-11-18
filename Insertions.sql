@@ -866,3 +866,14 @@ PRINT @status1
 DECLARE @status1 BIT
 EXEC SendEmailSP 'sally.ramadan','sally.ramadan@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 PRINT @status1
+
+
+
+-- Announcements INSERTIONS
+
+INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
+VALUES('2017-11-13','facebook.com','The new feature upgrade','Yousef.Mustafa','','event');
+INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
+VALUES('2017-11-15','facebook.com','Server crash in gaming webpage','sally.ramadan','','emergency');
+INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
+VALUES('2017-10-9','facebook.com','Birthday party for all employees in the month','mirna.alteer','','event');
