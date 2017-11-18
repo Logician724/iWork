@@ -281,6 +281,7 @@ END
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
+-- 
 Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
 
@@ -413,7 +414,9 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 --3: Gharam-------------------------------------------------------------------------------------------------------------------------
 
 GO 
-CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
+-- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
+-- The Procedure takes userName,jobTitle, departmentCode and CompanyDomain as input and outputs the score of a certain application 
+CREATE PROC ViewMyScoreSP  
 @username VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
