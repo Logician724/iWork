@@ -865,13 +865,31 @@ END
 
 --8:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+--Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company. 
+--The procedure take the username of the staff member as input. 
+--
+
+
 GO
-CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handled as a staff member
+ALTER PROC ViewReceivedEmailsSP 
 @username VARCHAR(30)
 AS
 SELECT e.*
 FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
+WHERE EXISTS (
+  
+SELECT*
+FROM Staff_Members sm 
+WHERE sm.user_name = @username 
+ AND  sm.company_domain = ANY(
+ SELECT sm1.company_domain
+ FROM Staff_Members sm1
+ WHERE sm1.user_name= e.sender_user_name
+ 
+                   )
+
+            )
 
 --9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
