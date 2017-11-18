@@ -825,7 +825,41 @@ FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
+
 GO
+CREATE PROC ReplyToEmailsSP 
+@recipientUsername VARCHAR(30),
+@timestamp DATETIME,
+@senderUsername VARCHAR(30),
+@emailSubject VARCHAR(140) = NULL,
+@emailBody TEXT = NULL
+AS 
+
+DECLARE @ts DATETIME
+SET @ts = CURRENT_TIMESTAMP
+DECLARE @senderEmail VARCHAR(70)
+DECLARE @recipientEmail VARCHAR(70)
+
+SELECT @senderEmail = sm.company_email 
+FROM Staff_Members sm
+WHERE sm.user_name=@senderUsername
+
+
+SELECT @recipientEmail = sm.company_email 
+FROM Staff_Members sm
+WHERE sm.user_name=@recipientUsername
+
+INSERT INTO Emails 
+(time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
+VALUES
+(@ts,@recipientUsername, @recipientEmail,@senderEmail,@emailSubject,@emailBody);
+
+INSERT INTO Staff_Receives_Email
+(time_stamp,sender_user_name,recipient_username)
+VALUES 
+(@ts,@recipientUsername,@senderUsername);
+
+
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
