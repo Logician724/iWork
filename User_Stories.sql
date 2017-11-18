@@ -629,6 +629,16 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 
 
 --4: Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+-- staff member story no.4 Apply for requests of both types: business trip and leave requests.
+-- The procedures take the request info as input and distinguish wether the insertion is for
+-- A leave request or a business trip request as follows
+-- in case the leave type input is not null the request is considered a leave request
+-- in case the leave type is kept null the request is considered a business trip request
+-- The procedures also return an operation status output this output is represented as follow
+-- 0 --> the replacer is not from the same type and request is not applable
+-- 1 --> successful request application
+
+--This procedure applies the above documented functionality on regular employees only
 GO
 CREATE PROC ApplyRegularForRequestSP
 @ownerUserName VARCHAR(30),
@@ -674,6 +684,7 @@ VALUES(@identity,@ownerUserName,@replacementUserName);
 SET @operationStatus = 1; --successful request application
 END
 
+--This procedure applies the above documented functionality for HR Employees only
 GO
 CREATE PROC ApplyHRForRequestSP
 @ownerUserName VARCHAR(30),
@@ -718,7 +729,7 @@ INSERT INTO HR_Employees_Replace_HR_Employees
 VALUES(@identity,@ownerUserName,@replacementUserName);
 SET @operationStatus = 1; --successful request application
 END
-
+--This procedure applies the above documented functionality on managers only
 GO
 CREATE PROC ApplyManagerForRequestSP
 @ownerUserName VARCHAR(30),
