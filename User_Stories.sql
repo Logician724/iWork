@@ -873,7 +873,7 @@ END
 
 
 GO
-ALTER PROC ViewReceivedEmailsSP 
+CREATE PROC ViewReceivedEmailsSP 
 @username VARCHAR(30)
 AS
 SELECT e.*
@@ -895,7 +895,16 @@ WHERE sm.user_name = @username
 
 --9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+--Staff Member User Stories no.9: The Staff memeber replies to a received email, and this email is added to the table Email. 
+--So the procedure has 5 inputs:-
+--@recipientUSername is the username of the staff member checking the received emails
+--@timestamp is the time at which the staff member received the email
+--@senderUSername is the one who sent the email to the staff member
+--The staff member will type the email subject in @emailSubject
+--the staff member will type the email body in @emailBody
+--then it gets the emails of both sender and receiver from the Staff Member Table
+--Finally we insert the input values in tables Emails and Staff_Receive_Email 
+--The time of the reply will then be the Current timesatamp
 GO
 CREATE PROC ReplyToEmailsSP 
 @recipientUsername VARCHAR(30),
@@ -950,9 +959,7 @@ SELECT a.*
 	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21	
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 --	“As an HR employee, I should be able to ...”
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Reda----------------------------------------------------------------------
