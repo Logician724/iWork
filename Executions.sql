@@ -404,6 +404,9 @@ EXEC ViewRequestsStatusSP
 
 --7:Reda-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
+
+EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
 
 
 --8:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
