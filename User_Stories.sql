@@ -468,18 +468,12 @@ ELSE IF(@dayOff = 'Friday')
 SET @operationStatus = 1 --The chosen day off is friday
 ELSE
 BEGIN
-<<<<<<< HEAD
 DELETE FROM Applications
     WHERE 
 	Applications.seeker_username=@seekerUserName 
 	AND Applications.company_domain=@companyDomain 
 	AND Applications.department_code=@departmentCode 
 	AND Applications.job_title=@jobTitle
-||||||| merged common ancestors
-=======
-DELETE FROM Applications
-WHERE Applications.seeker_username = @seekerUserName
->>>>>>> 5faac85ead5c5c5c5a317f7c8c7cea5a56a17962
 DELETE FROM Job_Seekers 
 WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
