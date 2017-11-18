@@ -441,6 +441,8 @@ AND @departmentCode =department_code
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
+--Job Seeker User Stories no.4: The job seeker checks the status and score of each application he/she applied for.
+--The procedure takes the username of the jobseeker as input and shows the status of all applications, where their usernae equals the input
 GO 
 CREATE PROC ViewJobsStatusSP
 @username VARCHAR(30)
