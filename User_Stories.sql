@@ -192,13 +192,17 @@ ELSE
 SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
+
+--Registered/Unregestered User stories no.6: The user searches for the jobs that have vacancies by giving the procedure a text. 
+-- The procedure checks if the job title or job description contains this text as keywords in the search.
+
 GO
 CREATE PROC SearchJobsSP 
 @keywords TEXT
 AS
 SELECT j.* 
 FROM Jobs j
-where j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
+WHERE j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
