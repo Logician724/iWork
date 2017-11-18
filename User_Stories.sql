@@ -1,4 +1,4 @@
-﻿DROP PROC AddManagerResponseToRequestSP;
+DROP PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
@@ -443,7 +443,7 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1: Gharam
+--1: Gharam---------------------------------
 GO 
 
 GO
@@ -456,7 +456,7 @@ INSERT INTO Attendances
 (user_name,date,start_time )
 
 VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
----------------------------------
+
 
 
 
@@ -488,7 +488,7 @@ FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
 
 
---4: Gharam--------------------------------------- 
+--4: Gharam-------------------------------------------------------------------------------------------------- 
 GO
 Create PROC FindTypeOfReplacementSp
 @username VARCHAR(30),
@@ -668,7 +668,7 @@ VALUES (@requestId,@tripDestination,@tripPurpose)
 
 GO
 
---5: Yasmine------------------------------------------
+--5: Yasmine------------------------------------------------------------------------------------------------------------------------
 
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1441,3 +1441,35 @@ insert into @TOP3
 SELECT USER_NAME, sum FROM @mytable 
 return
 END */
+
+
+GO
+CREATE FUNCTION NumberOfDays(@startDate DATETIME , @endDate DATETIME, @dayOff varchar(15))
+RETURNS INT
+AS
+BEGIN 
+DECLARE @totaldays INT
+DECLARE @weekenddays INT
+DECLARE @weekEndDay INT
+
+
+
+SET @weekEndDay= 
+CASE @dayOff 
+WHEN 'Saturday' THEN  0
+WHEN 'Sunday'   THEN  1 
+WHEN 'Monday'   THEN  2
+WHEN 'Tuesday'  THEN  3
+WHEN 'Wednesday'THEN  4
+WHEN 'Thursday' THEN  5
+ELSE 6
+END
+
+SET @totaldays = DATEDIFF(DAY, @startDate, @endDate) 
+SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) + 
+                       CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END + 
+                       CASE WHEN DATEPART(WEEKDAY, @endDate)   = 6 THEN 1 ELSE 0 END)
+			
+
+RETURN (@totaldays - @weekenddays)
+END
