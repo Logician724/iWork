@@ -1,5 +1,5 @@
 --put your creations in here
-USE iWork
+USE iWork;
 DROP TABLE Managers_Assign_Tasks_To_Regulars;
 DROP TABLE Managers_Assign_Projects_To_Regulars;
 DROP TABLE Tasks;

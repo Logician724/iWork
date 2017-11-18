@@ -171,11 +171,10 @@ EXEC ViewCompaniesSP
 
 --3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+GO
 EXEC ViewCompanySP 'facebook.com'
-
-
+GO
 EXEC ViewDepartmentsOfCompanySP 'google.com'
-
 GO
 EXEC ViewCompanySP 'facebook.com'
 GO 
@@ -183,17 +182,12 @@ EXEC ViewCompanySP 'google.com'
 GO 
 EXEC ViewCompanySP 'amazon.com'
 
-
-
-
 GO
 EXEC ViewDepartmentsOfCompanySP 'google.com'
 GO
 EXEC ViewDepartmentsOfCompanySP 'facebook.com'
 GO
 EXEC ViewDepartmentsOfCompanySP 'amazon.com'
-
-
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
