@@ -82,7 +82,7 @@ DROP PROC ViewJobsWithVacancySP;
 
 --1: Gharam-----------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.1 views the info of companies with its name containing a key word
--- The procedure takes a key word as input and returns the information of the companies containing the key word in its name
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its name
 GO 
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
@@ -94,7 +94,7 @@ WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
 GO
 -- The procedure views the information of companies with its adress containing a key word
--- The procedure takes a key word as input and returns the information of the companies containing the key word in its adress
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its adress
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
@@ -105,7 +105,7 @@ WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 GO
 -- The procedure views the information of companies with its type containing a key word
--- The procedure takes a key word as input and returns the information of the companies containing the key word in its type
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
@@ -125,21 +125,22 @@ FROM Companies C LEFT JOIN Companies_Phones CP
 ON C.domain_name = CP.company_domain
 
 
---3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
+--3:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.3 views the information of a certain company along with the department info 
 GO
-
+-- The procedure takes the companyDomain as input and outputs the information of the company specified with the companyDomain
 CREATE PROC ViewCompanySP 
 @companyDomain VARCHAR(150)
 AS 
-SELECT c.*
-FROM Companies c 
-
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE (c.domain_name = @companyDomain)
--- Users story no.3 View the info of a certain company along with the department info
--- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
+
 
 GO
 
+-- The procedure takes the companyDomain as input and outputs the information of all the departments in that company
 CREATE PROC ViewDepartmentsOfCompanySP
 @companyDomain VARCHAR(150)
 AS
