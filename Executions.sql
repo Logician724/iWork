@@ -10,6 +10,8 @@ EXEC ViewAttendanceSP 'salma.tarek','2017-8-20','2017-8-22'
 
 EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
 
+EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra'
+
 EXEC AddJobSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department','PHP-5019','facebook.com','2018-2-28',
 				'Employees will handle testing codes produced by other coders in the department and debuging those codes',4,10000,
 				'Handling testing and debuging code in PHP Department',8,7
@@ -354,48 +356,49 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
 
 --4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-DECLARE @operationStatus BIT 
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017','','Moscow','Business deal with a russian DNS company', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyRegularForRequestSP 'juliana.clover','godfrey.love','6/6/2017','6/22/2017','leave request','Luxor','Vacation', @operationStatus OUTPUT
-PRINT @operationStatus
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017','','Moscow','Business deal with a russian DNS company', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyRegularForRequestSP 'juliana.clover','godfrey.love','6/6/2017','6/22/2017','leave request','Luxor','Vacation', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
 
-DECLARE @operationStatus BIT 
-EXEC ApplyHRForRequestSP 'basma.mohamed','amr.mohsen','6/5/2015','7/3/2015','leave request','Luxor','Vacation', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017','','Paris','Business trip ', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyHRForRequestSP 'amr.mohsen','dana.debs','11/2/2017','11/3/2017','leave request','','Sick', @operationStatus OUTPUT
-PRINT @operationStatus
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyHRForRequestSP 'basma.mohamed','amr.mohsen','6/5/2015','7/3/2015','leave request','Luxor','Vacation', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017','','Paris','Business trip ', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyHRForRequestSP 'amr.mohsen','dana.debs','11/2/2017','11/3/2017','leave request','','Sick', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
 
-DECLARE @operationStatus BIT 
-EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','leave request','Malysia','Vacation', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017','','Cairo','Business trip ', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017','','Berlin','business trip ', @operationStatus OUTPUT
-PRINT @operationStatus
-DECLARE @operationStatus BIT 
-EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @operationStatus OUTPUT
-PRINT @operationStatus
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','leave request','Malysia','Vacation', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017','','Cairo','Business trip ', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017','','Berlin','business trip ', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
+DECLARE @sameEmployeeType BIT 
+EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @sameEmployeeType OUTPUT
+PRINT @sameEmployeeType
 
 
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+EXEC ViewRequestsStatusSP 
 --6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
