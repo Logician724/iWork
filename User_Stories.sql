@@ -821,10 +821,24 @@ CREATE PROC SendEmailSP
 @recipientUserName VARCHAR(30),
 @recipientEmail VARCHAR(70),
 @emailSubject VARCHAR(140),
-@emailBody TEXT
+@emailBody TEXT,
+@operationStatus BIT OUTPUT
 AS
 DECLARE @timestamp DATETIME
 SET @timestamp = CURRENT_TIMESTAMP
+
+IF EXISTS(
+ SELECT *
+ FROM Staff_Members 
+ WHERE Staff_Members.user_name=@senderUserName AND
+ Staff_Members.company_domain = ANY(
+ SELECT Staff_Members.company_domain
+ FROM Staff_Members
+ WHERE Staff_Members.user_name= @recipientUserName
+ )
+ )
+BEGIN 
+ 
 INSERT INTO Emails
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
 VALUES
@@ -833,8 +847,14 @@ INSERT INTO Staff_Receives_Email
 (time_stamp,sender_user_name,recipient_username)
 VALUES
 (@timestamp,@senderUserName,@recipientUserName)
+SET @operationStatus = 1 
+END
+ELSE BEGIN 
+SET @operationStatus=0 
+END 
 
---8: Gharam---------------------------------------------------------------------------------------------------
+--8:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------
+
 GO
 CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handled as a staff member
 @username VARCHAR(30)
@@ -843,7 +863,7 @@ SELECT e.*
 FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
---9: Yasmine--------------------------------------------------
+--9:Yasmine--------------------------------------------------
 
 
 GO
@@ -868,6 +888,7 @@ WHERE sm.user_name=@senderUsername
 SELECT @recipientEmail = sm.company_email 
 FROM Staff_Members sm
 WHERE sm.user_name=@recipientUsername
+
 
 INSERT INTO Emails 
 (time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
