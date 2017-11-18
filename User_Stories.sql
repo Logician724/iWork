@@ -643,7 +643,7 @@ AS
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM Regular_Employees re
 WHERE re.user_name = @ownerUserName
@@ -686,7 +686,7 @@ DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
 SET @timestamp = CURRENT_TIMESTAMP
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM HR_Employees hr
 WHERE hr.user_name = @ownerUserName
@@ -729,7 +729,7 @@ DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
 SET @timestamp = CURRENT_TIMESTAMP
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM Managers m
 WHERE m.user_name = @ownerUserName
@@ -784,7 +784,6 @@ WHERE rrr.user_name_request_owner = @userName
 ) 
 
 
-
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
 
 --Regular Employees Story no.6 Delete any request that is still in the review process
@@ -812,7 +811,8 @@ DELETE Requests
 
 
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
-
+--staff member story no.7 the procedure takes the email info as input and performs
+-- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
 CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
@@ -843,6 +843,41 @@ FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
+
+
+GO
+CREATE PROC ReplyToEmailsSP 
+@recipientUsername VARCHAR(30),
+@timestamp DATETIME,
+@senderUsername VARCHAR(30),
+@emailSubject VARCHAR(140) = NULL,
+@emailBody TEXT = NULL
+AS 
+
+DECLARE @ts DATETIME
+SET @ts = CURRENT_TIMESTAMP
+DECLARE @senderEmail VARCHAR(70)
+DECLARE @recipientEmail VARCHAR(70)
+
+SELECT @senderEmail = sm.company_email 
+FROM Staff_Members sm
+WHERE sm.user_name=@senderUsername
+
+
+SELECT @recipientEmail = sm.company_email 
+FROM Staff_Members sm
+WHERE sm.user_name=@recipientUsername
+
+INSERT INTO Emails 
+(time_stamp,sender_user_name,sender_email,recipient_email,email_subject,email_body)
+VALUES
+(@ts,@recipientUsername, @recipientEmail,@senderEmail,@emailSubject,@emailBody);
+
+INSERT INTO Staff_Receives_Email
+(time_stamp,sender_user_name,recipient_username)
+VALUES 
+(@ts,@recipientUsername,@senderUsername);
+
 
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1008,7 +1043,6 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 GO
 CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
 @username varchar(30),
-
 @title VARCHAR(280) ,
 @description TEXT ,
 @type VARCHAR(20) 
