@@ -955,9 +955,9 @@ AS
 SELECT a.*
 	FROM Announcements a INNER JOIN Staff_Members sm
 	ON sm.company_domain = a.company_domain
-	WHERE a.company_domain = sm.company_domain AND
-	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21	
-
+	WHERE a.company_domain = sm.company_domain 
+	AND  sm.user_name=@userName  
+	AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 --	“As an HR employee, I should be able to ...”
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
