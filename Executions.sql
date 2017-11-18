@@ -171,6 +171,11 @@ EXEC ViewCompaniesSP
 
 --3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+EXEC ViewCompanySP 'facebook.com'
+
+
+EXEC ViewDepartmentsOfCompanySP 'google.com'
+
 GO
 EXEC ViewCompanySP 'facebook.com'
 GO 
@@ -178,12 +183,16 @@ EXEC ViewCompanySP 'google.com'
 GO 
 EXEC ViewCompanySP 'amazon.com'
 
+
+
+
 GO
 EXEC ViewDepartmentsOfCompanySP 'google.com'
 GO
 EXEC ViewDepartmentsOfCompanySP 'facebook.com'
 GO
 EXEC ViewDepartmentsOfCompanySP 'amazon.com'
+
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -210,7 +219,9 @@ EXEC SearchJobsSP 'js'
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
+
 EXEC ViewCompaniesSalariesSP
+
 
 
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````

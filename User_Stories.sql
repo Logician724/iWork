@@ -1,4 +1,4 @@
-﻿DROP PROC AddManagerResponseToRequestSP;
+﻿P PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
@@ -114,6 +114,8 @@ FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
+--Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the 
+--table Companies_Phones to show also the phones available for each company. 
 
 GO
 CREATE PROC ViewCompaniesSP 
@@ -451,8 +453,7 @@ WHERE A.seeker_username=@username
 -- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
 
 GO
-
-CREATE PROC ChooseJobFromAcceptedAppSP 
+Create PROC ChooseJobFromAcceptedAppSP 
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
@@ -476,7 +477,11 @@ SET @operationStatus = 1 --The chosen day off is friday
 ELSE
 BEGIN
 DELETE FROM Applications
-WHERE Applications.seeker_username = @seekerUserName
+    WHERE 
+	Applications.seeker_username=@seekerUserName 
+	AND Applications.company_domain=@companyDomain 
+	AND Applications.department_code=@departmentCode 
+	AND Applications.job_title=@jobTitle
 DELETE FROM Job_Seekers 
 WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
@@ -529,6 +534,7 @@ END
 --“As a staff member, I should be able to ...”
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 --1: Gharam
 
 GO
@@ -555,10 +561,28 @@ SET @operationStatus = 0
 ELSE
 BEGIN
 INSERT INTO Attendances 
+<<<<<<< HEAD
+(user_name,date,start_time )
+
+VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+
+
+
+
+||||||| merged common ancestors
+(user_name,date,start_time )
+
+VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+---------------------------------
+
+
+
+
 (user_name,start_time )
 VALUES(@username , @timestamp)
 SET @operationStatus = 1
 END
+
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
 GO
@@ -601,7 +625,7 @@ FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 
 
---4: Gharam--------------------------------------- 
+--4: Gharam-------------------------------------------------------------------------------------------------- 
 GO
 Create PROC FindTypeOfReplacementSp
 @username VARCHAR(30),
@@ -787,8 +811,6 @@ VALUES (@requestId,@tripDestination,@tripPurpose)
 
 
 
-
-
 --5: Yasmine------------------------------------------
 GO
 CREATE PROC ViewRequestsStatusSP
@@ -809,6 +831,7 @@ SELECT rrr.request_id
 FROM Regular_Employees_Replace_Regular_Employees rrr
 WHERE rrr.user_name_request_owner = @userName
 ) 
+
 
 
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
@@ -1581,3 +1604,35 @@ insert into @TOP3
 SELECT USER_NAME, sum FROM @mytable 
 return
 END */
+
+
+GO
+CREATE FUNCTION NumberOfDays(@startDate DATETIME , @endDate DATETIME, @dayOff varchar(15))
+RETURNS INT
+AS
+BEGIN 
+DECLARE @totaldays INT
+DECLARE @weekenddays INT
+DECLARE @weekEndDay INT
+
+
+
+SET @weekEndDay= 
+CASE @dayOff 
+WHEN 'Saturday' THEN  0
+WHEN 'Sunday'   THEN  1 
+WHEN 'Monday'   THEN  2
+WHEN 'Tuesday'  THEN  3
+WHEN 'Wednesday'THEN  4
+WHEN 'Thursday' THEN  5
+ELSE 6
+END
+
+SET @totaldays = DATEDIFF(DAY, @startDate, @endDate) 
+SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) + 
+                       CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END + 
+                       CASE WHEN DATEPART(WEEKDAY, @endDate)   = 6 THEN 1 ELSE 0 END)
+			
+
+RETURN (@totaldays - @weekenddays)
+END
