@@ -211,7 +211,7 @@ EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019',
 
 
 --1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC StaffCheckInSp 'claire.carles'
 
 
 
