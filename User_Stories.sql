@@ -191,13 +191,17 @@ ELSE
 SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
+
+--Registered/Unregestered User stories no.6: The user searches for the jobs that have vacancies by giving the procedure a text. 
+-- The procedure checks if the job title or job description contains this text as keywords in the search.
+
 GO
 CREATE PROC SearchJobsSP 
 @keywords TEXT
 AS
 SELECT j.* 
 FROM Jobs j
-where j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
+WHERE j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
@@ -281,7 +285,9 @@ END
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
--- 
+-- Users story user no.2 views the all the information of a user
+-- The procedure takes userName as input and outpus all the information of a user with his/her name matching the userName
+
 Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
 
@@ -294,8 +300,10 @@ DROP PROC ViewUserInfoSp;
 
 
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
+--Registered User stories no.3:The user can edit his personal info.
+--The user chooses to edit certain info or all of them. If an input is null, no change will happen to the corresponding attribute. If the user entered a value. changes 
+--will be applied
 GO
-
 CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
 @password VARCHAR(30),
@@ -534,6 +542,8 @@ END
 --1: Gharam
 
 GO
+--
+--
 CREATE PROC CheckInSP 
 @username VARCHAR(30),
 @operationStatus BIT OUTPUT
@@ -781,7 +791,7 @@ DELETE Requests
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-CREATE PROC SendEmailSP --fixed
+CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
 @recipientUserName VARCHAR(30),
@@ -801,21 +811,16 @@ VALUES
 (@timestamp,@senderUserName,@recipientUserName)
 
 --8: Gharam---------------------------------------------------------------------------------------------------
-
-
 GO
-CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handles as a staff member 8
+CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handled as a staff member
 @username VARCHAR(30)
-
 AS
-SELECT E.*
-FROM Emails E inner Join Staff_Receives_Email R 
-ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
-
-
+SELECT e.*
+FROM Emails e INNER JOIN Staff_Receives_Email r
+ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
-
+GO
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1549,6 +1554,8 @@ END
 SET @totaldays = DATEDIFF(DAY, @startDate, @endDate) 
 SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) + 
                        CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END + 
+					   CASE WHEN DATEPART(WEEKDAY, @startDate) = 6 THEN 1 ELSE 0 END +
+					   CASE WHEN DATEPART(WEEKDAY, @endDate)   = @weekEndDay THEN 1 ELSE 0 END +
                        CASE WHEN DATEPART(WEEKDAY, @endDate)   = 6 THEN 1 ELSE 0 END)
 			
 
