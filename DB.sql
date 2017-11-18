@@ -273,8 +273,8 @@ CREATE TABLE Emails(
 PRIMARY KEY(time_stamp,sender_user_name),
 time_stamp DATETIME NOT NULL,
 sender_user_name VARCHAR(30) NOT NULL,
-sender_email VARCHAR(70) NOT NULL,
-recipient_email VARCHAR(70) NOT NULL,
+sender_email VARCHAR(180) NOT NULL,
+recipient_email VARCHAR(180) NOT NULL,
 email_subject VARCHAR(140) NULL,
 email_body TEXT NULL,
 FOREIGN KEY (sender_user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON UPDATE CASCADE
