@@ -569,6 +569,10 @@ END
 
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
+
+--Staff Member user stories no.2: The procedure saves the leave time of the staff members. 
+--The procedure takes as input the staff member's username, if his/her dayoff equals the timestamp, the procedure return 0 (false) and we disregard the leave time. 
+--Otherwise, the procedure sets the leavetime in the Attendance table to the timestamp and outputs 1 (true), meaning we regarded the leavetime.
 GO
 CREATE PROC CheckOutSP 
 @username VARCHAR(30),
@@ -734,7 +738,9 @@ INSERT INTO Managers_Replace_Managers
 VALUES(@identity,@ownerUserName,@replacementUserName);
 SET @operationStatus = 1; --successful request application
 END
---5: Yasmine------------------------------------------
+--5: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--Staff Members User Stories No.5: The staff member checks 
 GO
 CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30)
