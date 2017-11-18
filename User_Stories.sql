@@ -1,4 +1,4 @@
-﻿P PROC AddManagerResponseToRequestSP;
+﻿DROP PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ReplaceRegularHelperSP;
 DROP PROC ViewDepartmentSP;
@@ -560,25 +560,7 @@ DATENAME(dw,GETDATE())=@dayOff)
 SET @operationStatus = 0
 ELSE
 BEGIN
-INSERT INTO Attendances 
-<<<<<<< HEAD
-(user_name,date,start_time )
-
-VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
-
-
-
-
-||||||| merged common ancestors
-(user_name,date,start_time )
-
-VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
----------------------------------
-
-
-
-
-(user_name,start_time )
+INSERT INTO Attendances (user_name,start_time)
 VALUES(@username , @timestamp)
 SET @operationStatus = 1
 END
