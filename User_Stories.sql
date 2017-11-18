@@ -108,6 +108,8 @@ FROM Companies c INNER JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
+--Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the 
+--table Companies_Phones to show also the phones available for each company. 
 
 GO
 CREATE PROC ViewCompaniesSP 
