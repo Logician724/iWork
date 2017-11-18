@@ -839,9 +839,17 @@ IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) 
 --3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC EditJobInfoSP --Also needs editing
-@hrUsername VARCHAR(30), @job_title VARCHAR(150), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150),
-@applicationDeadline DATETIME=NULL, @detailedDescription TEXT=NULL, @minYearsExperience INT=NULL, @salary INT=NULL, @shortDescription TEXT=NULL,
-@vacancies INT=NULL , @workingHours INT=NULL 
+@hrUsername VARCHAR(30),
+@job_title VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@applicationDeadline DATETIME=NULL,
+@detailedDescription TEXT=NULL,
+@minYearsExperience INT=NULL,
+@salary INT=NULL,
+@shortDescription TEXT=NULL,
+@vacancies INT=NULL , 
+@workingHours INT=NULL 
 AS 
 --If the department is the HR Employee's Department, He/She can edit the info
 IF EXISTS ( --We don't need this join we already have the HR username
