@@ -1077,6 +1077,11 @@ INSERT INTO Jobs_Have_Questions
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
 --2: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
+--HR User Stories no.2: The procedures outputs informations about a Job in the HR's Department
+--The procedure takes as inputs the HR's username and the Jobtitle, department Code and Compnay name of the Job he/she wants to view 
+--If this job is not in the same department as the HR, then the procedure will output false.
+--Otherwise, the procedure outputs the information of this job (ture/1)
+
 
 GO
 CREATE PROC ViewJobInformationSP 
