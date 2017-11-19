@@ -813,13 +813,12 @@ FROM Emails e INNER JOIN Staff_Receives_Email r
 ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
-GO
+
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-
 CREATE PROC ViewLatestAnnouncementsSP
-@userName VARCHAR(150) --review needed
+@userName VARCHAR(150)
 AS
 SELECT a.*
 	FROM Announcements a INNER JOIN StaffMember sm
@@ -834,9 +833,9 @@ SELECT a.*
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Reda----------------------------------------------------------------------
-
+-- HR employee story no.1 Add a new job that belongs to my department
 GO
-CREATE PROC AddJobSP --fix
+CREATE PROC AddJobSP
 @hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -847,22 +846,25 @@ CREATE PROC AddJobSP --fix
 @salary INT,
 @shortDescription TEXT,
 @vacancies INT,
-@workingHours INT
+@workingHours INT,
+@operationStatus INT OUTPUT
 AS
-IF EXISTS
+IF NOT EXISTS
 (
 SELECT hr.*
 FROM HR_Employees hr INNER JOIN Staff_Members sm
 ON hr.user_name = sm.user_name
 WHERE (hr.user_name = @hrUserName AND sm.department_code = @departmentCode AND sm.company_domain = @companyDomain )
 )
+SET @operationStatus = 0; -- This HR employee is trying to add a job that is not in his department
+ELSE
+BEGIN
 INSERT INTO Jobs
 (job_title,department_code,company_domain,application_deadline,detailed_description,min_years_experience,salary,short_description,vacancies,working_hours)
 VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
-ELSE
-PRINT 'You cannot add a job in a different department than yours.'
-
+SET @operationStatus = 1; --successful job addition 
+END
 GO
 CREATE PROC AddQuestionSP
 @questionTitle VARCHAR(700),
@@ -1498,43 +1500,47 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
-GO
-
-
-/*CREATE FUNCTION  TOP3hours()
-RETURNS  @TOP3 TABLE 
-(
-    
-    user_name  VARCHAR(30) NOT NULL,
-    SUM INT  NOT NULL
-)
-
-AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL,SUM INT  NOT NULL
-
-insert into @myTable 
-SELECT TOP 3 R.user_name,SUM(A.duration) FROM Attendances A ,Regular_Employees R WHERE  R.user_name=A.user_name  GROUP BY R.user_name ORDER BY SUM(A.duration) desc
-
-insert into @TOP3 
-SELECT USER_NAME, sum FROM @mytable 
-return
-END */
-
 
 GO
-CREATE FUNCTION NumberOfDays(@startDate DATETIME , @endDate DATETIME, @dayOff varchar(15))
+CREATE FUNCTION NumberOfDays(@requestID INT,@startDate DATETIME , @endDate DATETIME)
 RETURNS INT
 AS
 BEGIN 
 DECLARE @totaldays INT
 DECLARE @weekenddays INT
 DECLARE @weekEndDay INT
+DECLARE @dayOff VARCHAR(10)
+DECLARE @userName VARCHAR(30)
+IF EXISTS(
+SELECT *
+FROM Managers_Replace_Managers
+WHERE request_id = @requestID
+)
+SELECT @userName = mrm.user_name_request_owner
+FROM Managers_Replace_Managers mrm
+WHERE mrm.request_id = @requestID
+ELSE IF EXISTS(
+SELECT *
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.request_id = @requestID
+)
+SELECT @userName = rrr.user_name_request_owner
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.request_id = @requestID
+ELSE IF EXISTS(
+SELECT *
+FROM HR_Employees_Replace_HR_Employees hrh
+WHERE hrh.request_id = @requestID
+)
+SELECT @userName = hrh.user_name_request_owner
+FROM HR_Employees_Replace_HR_Employees hrh
+WHERE hrh.request_id = @requestID
 
+SELECT @dayOff = sm.day_off
+FROM Staff_Members sm
+WHERE sm.user_name = @userName
 
-
-SET @weekEndDay= 
-CASE @dayOff 
+SET @weekEndDay = CASE @dayOff
 WHEN 'Saturday' THEN  0
 WHEN 'Sunday'   THEN  1 
 WHEN 'Monday'   THEN  2
