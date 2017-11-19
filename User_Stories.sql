@@ -68,31 +68,37 @@ DROP PROC ViewRequestsStatusSP;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---1: Gharam
-
+--1: Gharam-----------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.1 views the info of companies with its name containing a key word
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its name
 GO 
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*
-FROM Companies c
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
 GO
+-- The procedure views the information of companies with its adress containing a key word
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its adress
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
-SELECT c.*
-FROM Companies c INNER JOIN Companies_Phones cp
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 GO
+-- The procedure views the information of companies with its type containing a key word
+-- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*
-FROM Companies c INNER JOIN Companies_Phones cp
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,21 +113,22 @@ FROM Companies C LEFT JOIN Companies_Phones CP
 ON C.domain_name = CP.company_domain
 
 
---3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
+--3:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.3 views the information of a certain company along with all of its departments info 
 GO
-
+-- The procedure takes the companyDomain as input and outputs the information of the company specified with the companyDomain
 CREATE PROC ViewCompanySP 
 @companyDomain VARCHAR(150)
 AS 
-SELECT c.*
-FROM Companies c 
-
+SELECT c.*,cp.phone
+FROM Companies c LEFT JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE (c.domain_name = @companyDomain)
--- Users story no.3 View the info of a certain company along with the department info
--- ViewDepartmentsPfCompanySP takes the company domain as input and displays the information of the all the departments in that company
+
 
 GO
 
+-- The procedure takes the companyDomain as input and outputs the information of all the departments in that company
 CREATE PROC ViewDepartmentsOfCompanySP
 @companyDomain VARCHAR(150)
 AS
@@ -155,6 +162,10 @@ WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain 
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
+-- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
+-- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input and outputs
+--  1 -->  username  unique with respect to the database , and a successful registration
+--  0 --> username not unique with reprect to the database, and a failed registration
 CREATE PROC RegisterToWebsite
 @userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
@@ -180,13 +191,17 @@ ELSE
 SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
+
+--Registered/Unregestered User stories no.6: The user searches for the jobs that have vacancies by giving the procedure a text. 
+-- The procedure checks if the job title or job description contains this text as keywords in the search.
+
 GO
 CREATE PROC SearchJobsSP 
 @keywords TEXT
 AS
 SELECT j.* 
 FROM Jobs j
-where j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
+WHERE j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
@@ -282,7 +297,9 @@ DROP PROC ViewUserInfoSp;
 
 
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
-GO
+--Registered User stories no.3:The user can edit his personal info.
+--The user chooses to edit certain info or all of them. If an input is null, no change will happen to the corresponding attribute. If the user entered a value. changes 
+--will be applied
 
 CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
