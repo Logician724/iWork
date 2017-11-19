@@ -250,7 +250,7 @@ FOREIGN KEY(company_domain) REFERENCES Companies(domain_name) ON DELETE NO ACTIO
 
 
 CREATE TABLE Applications (
-PRIMARY KEY(seeker_username,job_title,department_code,company_domain) ,
+PRIMARY KEY(seeker_username,job_title,department_code,company_domain,app_status) ,
 score INT NOT NULL DEFAULT 0,
 app_status VARCHAR(20) NOT NULL DEFAULT 'Pending',
 hr_response_app VARCHAR(20) NULL,
