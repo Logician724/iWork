@@ -1189,7 +1189,12 @@ SET @operationStatus = 1
 END 
 
 --4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
---viewing seeker and job info are corvered already in the manager user stories. 
+
+--HR User Stories No.4: The HR can view new applications (that has no responses yet, basically 'Pending') for a specific job in his department.
+--The procedure take as inputs the HR's username and job title, department code, and company domain (primary keys for table job) he/she wants to view applications for.
+--So, the procedure firsr checks if this job is within the HR's departments.
+--If it's not, the procedure ouputs 0 (false), and The HR won't view it.
+--Otherwisem, the procedure shows All new Applications, and outputs 1 (true)
 GO
 CREATE PROC ViewNewApplicationsSP
 @hrUserName VARCHAR(30),
@@ -1202,7 +1207,7 @@ IF NOT EXISTS
 (
 SELECT *
 FROM Staff_Members sm
-WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName
+WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName --AND sm.company_domain=@companyDomain ??
 )
 SET @operationStatus = 0
 ELSE
