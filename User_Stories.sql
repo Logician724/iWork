@@ -523,19 +523,24 @@ END
 --“As a staff member, I should be able to ...”
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 --1: Gharam
 
 GO
 CREATE PROC StaffCheckInSP 
 @username VARCHAR(30)
 AS
-IF EXISTS ( SELECT user_name From Staff_Members where @username=@username AND DATENAME(dw,GETDATE())!='friday') 
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
+IF EXISTS (
+SELECT user_name
+FROM Staff_Members
+WHERE Staff_Members.user_name = @username AND
+DATENAME(dw,GETDATE())!='Friday') 
 
 INSERT INTO Attendances 
-(user_name,date,start_time )
+(user_name,start_time )
 
-VALUES(@username , CONVERT (date, SYSDATETIMEOFFSET()) ,CONVERT (time, CURRENT_TIMESTAMP)  ) --the rest will be handled by the query after this 
+VALUES(@username , @timestamp  )
 ---------------------------------
 
 
@@ -565,7 +570,7 @@ CREATE PROC ViewAttendanceSP --correct
 AS
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 
 
 --4: Gharam--------------------------------------- 
@@ -1047,7 +1052,7 @@ WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
 )
 SELECT a.*
 FROM Attendances a
-WHERE (DATEDIFF(DAY,@periodStart,a.date)>=0 AND DATEDIFF(DAY,@periodEnd,a.date) <=0)
+WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
@@ -1060,8 +1065,8 @@ CREATE PROC ViewYearlyAttendanceOfStaffSP
 AS
 SELECT SUM(a.duration)
 FROM Attendances a
-WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
-GROUP BY MONTH(a.date)
+WHERE YEAR(a.start_time) = @year AND a.user_name = @staffUserName
+GROUP BY MONTH(a.start_time)
 
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------

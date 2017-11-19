@@ -116,9 +116,8 @@ FOREIGN KEY (user_name) REFERENCES Staff_Members(user_name) ON DELETE CASCADE ON
 
 
 CREATE TABLE Attendances(
-PRIMARY KEY (user_name,date),
+PRIMARY KEY (user_name,start_time),
 user_name VARCHAR(30) NOT NULL,
-date DATE NOT NULL,
 start_time DATETIME NOT NULL,
 leave_time DATETIME  NULL,
 duration AS DATEPART(hour,leave_time)-DATEPART(hour,start_time),
