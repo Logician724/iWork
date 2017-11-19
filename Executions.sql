@@ -357,12 +357,15 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 DECLARE @operationStatus BIT 
 EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT
 EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017','','Moscow','Business deal with a russian DNS company', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyRegularForRequestSP 'juliana.clover','godfrey.love','6/6/2017','6/22/2017','leave request','Luxor','Vacation', @operationStatus OUTPUT
 PRINT @operationStatus
@@ -370,12 +373,15 @@ PRINT @operationStatus
 DECLARE @operationStatus BIT 
 EXEC ApplyHRForRequestSP 'basma.mohamed','amr.mohsen','6/5/2015','7/3/2015','leave request','Luxor','Vacation', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017','','Paris','Business trip ', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyHRForRequestSP 'amr.mohsen','dana.debs','11/2/2017','11/3/2017','leave request','','Sick', @operationStatus OUTPUT
 PRINT @operationStatus
@@ -383,16 +389,18 @@ PRINT @operationStatus
 DECLARE @operationStatus BIT 
 EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','leave request','Malysia','Vacation', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017','','Cairo','Business trip ', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017','','Berlin','business trip ', @operationStatus OUTPUT
 PRINT @operationStatus
+
 DECLARE @operationStatus BIT 
 EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @operationStatus OUTPUT
 PRINT @operationStatus
-
 
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -629,7 +629,6 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 
 
 --4: Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
 GO
 CREATE PROC ApplyRegularForRequestSP
 @ownerUserName VARCHAR(30),
@@ -644,6 +643,7 @@ AS
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 IF NOT EXISTS(
 SELECT *
 FROM Regular_Employees re
