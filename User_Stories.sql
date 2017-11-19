@@ -581,6 +581,9 @@ END
 
 --3: Reda---------------------------------------------------------------------------------------------------------------
 -- staff member story no.3 View all my attendance records within certain period of time.
+-- The procedure takes the user name of the staff member that wants to view his attendance records as input
+-- and the dates over which he wants to check his attendance, and generates all the attendance records 
+-- in between those 2 dates. 
 GO
 CREATE PROC ViewAttendanceSP
 @userName VARCHAR(30),
