@@ -1191,8 +1191,8 @@ END
 --4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
 
 --HR User Stories No.4: The HR can view new applications (that has no responses yet, basically 'Pending') for a specific job in his department.
---The procedure take as inputs the HR's username and job title, department code, and company domain (primary keys for table job) he/she wants to view applications for.
---So, the procedure firsr checks if this job is within the HR's departments.
+--The procedure takes as inputs the HR's username and job title, department code, and company domain (primary keys for table job) he/she wants to view applications for.
+--So, the procedure first checks if this job is within the HR's departments.
 --If it's not, the procedure ouputs 0 (false), and The HR won't view it.
 --Otherwisem, the procedure shows All new Applications, and outputs 1 (true)
 GO
@@ -1224,6 +1224,13 @@ SET @operationStatus = 1
 END
 
 --5: Reda------------------------------------------------------------------------------------------------------------------------------------------------
+--HR user stories no.5: HR can accept or reject Applications for jobs in his department.
+--The procedure takes as inputs the HR's username and the Job seeker username, jobtitle, department code, and company domain of the Application he/she
+--wants to respond to. The HR gives his/her response in @hrResponse
+--The procedure check first if the application is in a job in the HR's department.
+--If not, the HR can't respond to it, and the procedure returns 0 (false)
+--Otherwise, the procedure update the table Applications, adding the HR's response to column hr_response and returning 1 (true)
+
 GO
 CREATE PROC AddHrResponseSP
 @seekerUserName VARCHAR(30),
