@@ -72,6 +72,7 @@ DROP PROC ViewRequestsStatusSP;
 -- Users story no.1 views the info of companies with its name containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its name
 GO 
+
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
@@ -80,9 +81,10 @@ FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
-GO
 -- The procedure views the information of companies with its adress containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its adress
+GO
+
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
@@ -91,9 +93,10 @@ FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
-GO
 -- The procedure views the information of companies with its type containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
+GO
+
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
@@ -161,11 +164,12 @@ FROM Jobs j
 WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain AND j.vacancies > 0
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
-GO
 -- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
 -- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input and outputs
 --  1 -->  username  unique with respect to the database , and a successful registration
 --  0 --> username not unique with reprect to the database, and a failed registration
+GO
+
 CREATE PROC RegisterToWebsite
 @userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
@@ -283,7 +287,8 @@ SET @type = 4;
 END
 
 --2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- Users story user no.2 views the all the information of a user
+-- The procedure takes userName as input and outpus all the information of a user with his/her name matching the userName
 GO
 Create PROC ViewUserInfoSP
 @userName VARCHAR(30)
@@ -417,9 +422,10 @@ WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.
 
 
 --3: Gharam-------------------------------------------------------------------------------------------------------------------------
-
+-- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
+-- The Procedure takes userName,jobTitle, departmentCode and CompanyDomain as input and outputs the score of a certain application 
 GO 
-CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker 3
+CREATE PROC ViewMyScoreSP  
 @username VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
@@ -537,8 +543,15 @@ END
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam
-
+-- Users story staff member no.1 inserts a check-in attednace of a staff member 
+-- The procedure takes username as input and outputs operation status 0 or 1
+-- 0 -->  no attendance inserted
+-- 1 --> attendance inserted
+-- The procedure gets the staff member's day_off and then checks 
+--if the current day of check-in is friday or his/her day_off then no attendace will be inserted
+-- Else attendance will be inserted
 GO
+
 CREATE PROC CheckInSP 
 @username VARCHAR(30),
 @operationStatus BIT OUTPUT
