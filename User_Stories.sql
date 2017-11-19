@@ -648,11 +648,11 @@ SELECT *
 FROM Regular_Employees re
 WHERE re.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not a regular employee
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
@@ -691,11 +691,11 @@ SELECT *
 FROM HR_Employees hr
 WHERE hr.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not an HR employee
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
@@ -734,11 +734,11 @@ SELECT *
 FROM Managers m
 WHERE m.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not manager
-IF(@leaveType = NULL) 
+ELSE IF(@leaveType = NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-SET @requestType = 1 -- this is a leave request
 BEGIN
+SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
