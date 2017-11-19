@@ -643,7 +643,7 @@ AS
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM Regular_Employees re
 WHERE re.user_name = @ownerUserName
@@ -686,7 +686,7 @@ DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
 SET @timestamp = CURRENT_TIMESTAMP
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM HR_Employees hr
 WHERE hr.user_name = @ownerUserName
@@ -729,7 +729,7 @@ DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
 SET @timestamp = CURRENT_TIMESTAMP
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM Managers m
 WHERE m.user_name = @ownerUserName
@@ -782,7 +782,6 @@ SELECT rrr.request_id
 FROM Regular_Employees_Replace_Regular_Employees rrr
 WHERE rrr.user_name_request_owner = @userName
 ) 
-
 
 
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
@@ -1044,7 +1043,6 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 GO
 CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
 @username varchar(30),
-
 @title VARCHAR(280) ,
 @description TEXT ,
 @type VARCHAR(20) 
