@@ -1264,7 +1264,7 @@ END
 --HR user stories no.6:- The HR can post announcements to his/her company to inform the staff members about new updates
 --The procedure takes as inputs HR's username, and the entries to create an instance in the announcement table: title, description, type
 --We got the company domain name of the HR using his/her username.
---Then, insert into table Announcements a record with the title, description, type , given by the HR, and the company domain  
+--Then, insert into table Announcements a record with the title, description, type , given by the HR, and the company domain.  
 GO
 CREATE PROC HRPostsAnnouncementSP 
 @username varchar(30),
@@ -1284,25 +1284,37 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
+
 GO 
 CREATE PROC ViewRequestsSP
-@hrUsername VARCHAR(30), @departmentCode VARCHAR(30), @companyDomain VARCHAR(150) --you don't need hr info for this .. don't need this number of joins
+@hrUsername VARCHAR(30), 
+@departmentCode VARCHAR(30), 
+@companyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
 IF EXISTS (
-SELECT*
-FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
-WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
+SELECT *
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName
 )
 BEGIN
 SELECT R.*
 FROM Requests R, Regular_Employees_Replace_Regular_Employees RE, Managers_Replace_Managers M, HR_Employees_Replace_HR_Employee HE
-WHERE (R.request_id=RE.request_id OR R.request_id=M.request_id OR R.request_id=HE.request_ID) AND R.manager_response_req='Accepted' AND (R.hr_response_req='Rejected' OR R.hr_response_req IS NULL)
+WHERE (R.request_id=RE.request_id OR R.request_id=M.request_id OR R.request_id=HE.request_ID) 
+AND R.manager_response_req='Accepted' 
+AND (R.hr_response_req='Rejected' OR R.hr_response_req IS NULL)
 AND EXISTS (
 SELECT*
 FROM Staff_Members SM INNER JOIN Departments D ON SM.department_code=D.department_code AND SM.company_domain=D.company_domain
 WHERE D.department_code=@departmentCode AND D.company_domain=@companyDomain 
           )
+SET @operationStatus = 1
 END
+ELSE 
+SET @operationStatus = 0
+
+
+
 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
