@@ -60,7 +60,7 @@ DROP PROC SearchCompanyByTypeSP;
 DROP PROC ViewUserInfoSP;
 DROP PROC DefineNewProject;
 DROP PROC ReviewTaskSP;
-DROP PROC GetCompanyPhones;
+DROP PROC ViewJobsWithVacancySP;
 
 
 
@@ -141,40 +141,62 @@ WHERE (d.company_domain= @companyDomain)
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Users story no.4 view the info of jobs in a departments in a certain company that have vacancies in it
+-- The procedure takes the company domain and the department code as input and returns the info of the department
 GO
 
-CREATE PROC ViewDepartmentSP --Missing Viewing all jobs in this department .. if you make a View jobs in department procedure .. make a third procedure that links both of them maybe?
+CREATE PROC ViewDepartmentSP
 @companyDomain VARCHAR(150),
 @departmentCode VARCHAR(30)
 AS
 SELECT d.*
 FROM Departments d
 WHERE ((d.company_domain = @companyDomain) AND (d.department_code = @departmentCode))
-
+--The procedure takes the department code and company domain as input and return the info of all the jobs in that 
+--department that have vacancies greater than 0
+GO
+CREATE PROC ViewJobsWithVacancySP
+@companyDomain VARCHAR(150),
+@departmentCode VARCHAR(30)
+AS
+SELECT j.*
+FROM Jobs j
+WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain AND j.vacancies > 0
 
 --5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC RegisterToWebsite   -- Handles 5 in unregistered user
-@userName VARCHAR(30)  , --takes entity as input 
+CREATE PROC RegisterToWebsite
+@userName VARCHAR(30)  ,
 @password VARCHAR(30) ,
 @personalEmail VARCHAR(70) ,
 @birthDate DATETIME ,
 @expYear INT ,
 @firstName VARCHAR(25) ,
-@lastName VARCHAR(25) 
+@lastName VARCHAR(25),
+@operationStatus BIT OUTPUT
 AS
-insert into Users
-Values(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+IF NOT EXISTS
+(
+SELECT *
+FROM Users
+WHERE Users.user_name = @userName
+)
+BEGIN
+INSERT INTO Users(user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
+VALUES(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
+SET @operationStatus = 1; --successful registration
+END
+ELSE
+SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC SearchJobsSP --correct
 @keywords TEXT
 AS
-SELECT J.* , C.name AS company_name, D.name AS department_name ---Remove the joins 
-FROM Departments D INNER JOIN Companies C ON D.company_domain = C. domain_name
-INNER JOIN Jobs J on J.department_code = D.department_code AND J.company_domain=D.company_domain 
-where J.vacancies > 0 AND J.short_description LIKE CONCAT('%' ,@keywords,'%') OR  J.job_title LIKE CONCAT('%' ,@keywords,'%') 
+SELECT j.* 
+FROM Jobs j
+where j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------

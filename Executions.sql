@@ -157,39 +157,51 @@ EXEC ViewTasksSP 'Project-5651AMU chat page developing BootStrap','Assigned' -- 
 
 
 --1:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------
+GO
 EXEC SearchCompanyByNameSP 'face'
+GO
 EXEC SearchCompanyByTypeSP 'digital'
+GO
 EXEC SearchCompanyByAddressSP 'Pal'
 
 
 
 --2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GO
 EXEC ViewCompaniesSP
 
 
 --3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+GO
+EXEC ViewCompanySP 'facebook.com'
 GO 
-exec ViewCompanySP 'facebook.com'
+EXEC ViewCompanySP 'google.com'
 GO 
-exec ViewCompanySP 'google.com'
-GO 
-exec ViewCompanySP 'amazon.com'
+EXEC ViewCompanySP 'amazon.com'
 
 GO
-exec ViewDepartmentsOfCompanySP 'google.com'
+EXEC ViewDepartmentsOfCompanySP 'google.com'
 GO
-exec ViewDepartmentsOfCompanySP 'facebook.com'
+EXEC ViewDepartmentsOfCompanySP 'facebook.com'
 GO
-exec ViewDepartmentsOfCompanySP 'amazon.com'
+EXEC ViewDepartmentsOfCompanySP 'amazon.com'
 
 
 --4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+GO
+EXEC ViewDepartmentSP 'amazon.com', 'CSR-1263'
 
 
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--successful registration attempt
+GO
 EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki'
+--failed registration attempts
+GO
+DECLARE @operationStatus BIT;
+EXEC RegisterToWebsite 'claire.carles','fadsfda','claire@gmail.com','05/05/1990',10,'Claire','Carles',@operationStatus
+PRINT @operationStatus
 
 --6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
