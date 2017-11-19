@@ -543,7 +543,7 @@ SET @operationStatus = 0
 ELSE
 BEGIN
 INSERT INTO Attendances 
-(user_name,start_time )
+(user_name,start_time)
 VALUES(@username , @timestamp)
 SET @operationStatus = 1
 END
@@ -767,7 +767,7 @@ DELETE Requests
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-CREATE PROC SendEmailSP --fixed
+CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
 @senderEmail VARCHAR(70),
 @recipientUserName VARCHAR(30),
@@ -787,21 +787,16 @@ VALUES
 (@timestamp,@senderUserName,@recipientUserName)
 
 --8: Gharam---------------------------------------------------------------------------------------------------
-
-
 GO
-CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handles as a staff member 8
+CREATE PROC ViewReceivedEmailsSP --Returns a list of received emails handled as a staff member
 @username VARCHAR(30)
-
 AS
-SELECT E.*
-FROM Emails E inner Join Staff_Receives_Email R 
-ON E.sender_user_name=r.sender_user_name AND E.time_stamp=R.time_stamp AND R.recipient_username=@username
-
-
+SELECT e.*
+FROM Emails e INNER JOIN Staff_Receives_Email r
+ON e.sender_user_name = r.sender_user_name AND e.time_stamp = r.time_stamp AND r.recipient_username = @username
 
 --9: Yasmine--------------------------------------------------
-
+GO
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1535,6 +1530,8 @@ END
 SET @totaldays = DATEDIFF(DAY, @startDate, @endDate) 
 SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) + 
                        CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END + 
+					   CASE WHEN DATEPART(WEEKDAY, @startDate) = 6 THEN 1 ELSE 0 END +
+					   CASE WHEN DATEPART(WEEKDAY, @endDate)   = @weekEndDay THEN 1 ELSE 0 END +
                        CASE WHEN DATEPART(WEEKDAY, @endDate)   = 6 THEN 1 ELSE 0 END)
 			
 
