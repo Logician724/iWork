@@ -59,6 +59,7 @@ DROP PROC ApplyManagerForRequestSP;
 DROP PROC ApplyRegularForRequestSP;
 DROP PROC ApplyHRForRequestSP;
 DROP PROC ViewRequestsStatusSP;
+DROP PROC ReplyToEmailsSP;
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -656,7 +657,9 @@ SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
-SET @identity = SCOPE_IDENTITY();
+SELECT @identity = Requests.request_id
+FROM Requests
+WHERE Requests.request_date= @timestamp
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
 (request_id,trip_destination,trip_purpose)
@@ -699,7 +702,9 @@ SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
-SET @identity = SCOPE_IDENTITY();
+SELECT @identity = Requests.request_id
+FROM Requests
+WHERE Requests.request_date= @timestamp
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
 (request_id,trip_destination,trip_purpose)
@@ -742,7 +747,9 @@ SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
-SET @identity = SCOPE_IDENTITY();
+SELECT @identity = Requests.request_id
+FROM Requests
+WHERE Requests.request_date= @timestamp
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
 (request_id,trip_destination,trip_purpose)
@@ -886,7 +893,7 @@ CREATE PROC ViewLatestAnnouncementsSP
 @userName VARCHAR(150)
 AS
 SELECT a.*
-	FROM Announcements a INNER JOIN StaffMember sm
+	FROM Announcements a INNER JOIN Staff_Members sm
 	ON sm.company_domain = a.company_domain
 	WHERE a.company_domain = sm.company_domain AND
 	DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21	
