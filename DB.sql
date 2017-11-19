@@ -207,7 +207,7 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 
 
-CREATE TABLE Managers_Replace_Managers_In_Requests(
+CREATE TABLE Managers_Replace_Managers(
 request_id INT PRIMARY KEY NOT NULL,
 user_name_replacer VARCHAR(30) NULL,
 user_name_request_owner VARCHAR(30) NULL,
