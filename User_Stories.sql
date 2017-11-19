@@ -812,7 +812,8 @@ DELETE Requests
 
 
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------
-
+--staff member story no.7 the procedure takes the email info as input and performs
+-- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
 CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
