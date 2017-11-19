@@ -402,6 +402,7 @@ DECLARE @operationStatus BIT
 EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @operationStatus OUTPUT
 PRINT @operationStatus
 
+
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -427,7 +428,13 @@ PRINT @operationStatus
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 --1:Reda-----------------------------------------------------------------------------------------------------------------------------------------------
+DECLARE @status0 BIT
+EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','JS-8938','facebook.com','2017-12-12','you will be managing everything related to the facebook ad experience with our viewers on the platform',12,80000,'Manage facebook Ads',3,9, @status0 OUTPUT
+PRINT @status0
 
+DECLARE @status1 BIT
+EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','PHP-5019','facebook.com','2017-12-12','you will be managing everything related to the facebook ad experience with our viewers on the platform',12,80000,'Manage facebook Ads',3,9, @status1 OUTPUT
+PRINT @status1
 
 
 --2:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
