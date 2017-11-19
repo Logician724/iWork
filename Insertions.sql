@@ -874,5 +874,3 @@ INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,ty
 VALUES('2017-11-13','google.com','The new feature upgrade in google','ahmed.shehata','','event');
 INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
 VALUES('2017-11-3','google.com','The newest webpage upgrade in google','bonita.bon','','event');
-
-

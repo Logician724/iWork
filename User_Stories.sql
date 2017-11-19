@@ -23,7 +23,7 @@ DROP PROC ViewTop3RegularSp;
 DROP PROC ReplaceRegularSP;
 DROP PROC RemoveRegularFromProjectSp
 DROP PROC RegularFinalizesTaskSP;
-DROP PROC HRPostsAnnouncementSP 
+DROP PROC PostAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
 DROP PROC CheckInSP;
 DROP PROC ViewJobInformationSP;
@@ -1242,23 +1242,19 @@ SET @operationStatus = 1
 END
 --6: Gharam----------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
+CREATE PROC PostAnnouncementSP
 @username varchar(30),
-@title VARCHAR(280) ,
-@description TEXT ,
-@type VARCHAR(20) 
+@title VARCHAR(280),
+@description TEXT,
+@type VARCHAR(20)
 AS
 DECLARE @domainName varchar(150)
 SELECT @domainName=company_domain
 FROM Staff_Members
 WHERE @username=user_name
-AND @username 
-IN ( SELECT * FROM HR_Employees)
 INSERT INTO Announcements 
-VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
-
-
-
+(date,company_domain,type,hr_user_name,title,description)
+VALUES (CURRENT_TiMESTAMP,@domainName,@type,@username,@title,@description)
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC ViewRequestsSP

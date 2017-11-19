@@ -494,9 +494,7 @@ EXEC AddHrResponseSP 'shadi.aly','Fayrouz.Hussain','Manager- Managing PHP Depart
 PRINT @status1
 
 --6:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
+EXEC PostAnnouncementSP 'Fayrouz.Hussain','this is my first announcement','just chilling','fun'
 
 --7:Yasmine----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
