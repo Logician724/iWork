@@ -263,7 +263,6 @@ company_domain VARCHAR(150) NOT NULL,
 FOREIGN KEY (seeker_username) REFERENCES Job_Seekers(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
 FOREIGN KEY (manager_username) REFERENCES Managers(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION ,
 FOREIGN KEY (hr_username) REFERENCES HR_Employees(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION ,
---debatable
 FOREIGN KEY (job_title,department_code, company_domain) REFERENCES Jobs(job_title,department_code, company_domain ) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT CHK_app_status CHECK( app_status = 'Pending' OR app_status = 'Accepted' OR app_status = 'Rejected'),
 CONSTRAINT CHK_hr_response_app CHECK( hr_response_app = 'Accepted' OR hr_response_app = 'Rejected' OR hr_response_app = NULL),

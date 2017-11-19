@@ -634,13 +634,6 @@ WHERE @userName2 =user_name )
 SELECT @job='Regular'
 PRINT @JOB
 
-
-
-GO
-
-
-
-
 GO
 CREATE PROC ReplaceHRSP
 
@@ -791,6 +784,26 @@ VALUES (@requestId,@tripDestination,@tripPurpose)
 
 
 --5: Yasmine------------------------------------------
+GO
+CREATE PROC ViewRequestsStatusSP
+@userName VARCHAR(30)
+AS
+SELECT r.hr_response_req, r.manager_response_req 
+FROM Requests r
+WHERE r.request_id = ANY(
+SELECT hrr.request_id 
+FROM HR_Employees_Replace_HR_Employees hrr
+WHERE hrr.user_name_request_owner = @userName
+UNION
+SELECT mmr.request_id
+FROM Managers_Replace_Managers_In_Requests mmr
+WHERE mmr.user_name_request_owner = @userName
+UNION
+SELECT rrr.request_id
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.user_name_request_owner = @userName
+) 
+
 
 --6: Abdullah -------------------------------------------------------------------------------------------------------------------------------------------
 
