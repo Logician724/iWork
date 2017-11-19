@@ -39,6 +39,9 @@ EXEC AssignRegularToTaskSP 'Project-5651AMU chat page developing BootStrap','Mah
 -- end of reda's procedures' executions
 
 -- start of gharam's procedures' executions
+
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+Select * from DBO.RegularsWithFixed()  --getting top employees helper function
 EXEC ViewCompanySP 'facebook.com' --View CompanySp exection
 
 EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian company
@@ -71,18 +74,16 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com' --View departments in a certian c
 
 EXEC ViewMyScoreSP 'hassan_hasannen','Manager- Managing PHP Department','PHP-5019','facebook.com'--executiong ViewMyScore working 
 
-<<<<<<< HEAD
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\ -- Shows table in Romy's
-=======
+
 
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa' -- does not show the table \\\\\\\\\\\\\\\\
->>>>>>> c8291dbbb26ef2400a85efc9df122cfdb3aebe2c
 
 EXEC ViewJobInformationSP 'Dina.AlMasry','Employee- Debuging Handling PHP Department' -- working right
 
 EXEC ViewTop3RegularSp  -- shows a table but no values appear\\\\\\\\\\\\\\\\\\\\\\\\\
 
-EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- Works but be careful with your taskdeadline date should be > today .. careful
+EXEC RegularFinalizesTaskSP 'cam.percival','Task 1','2017-7-13', 'Project-5651AMU chat page developing BootStrap' -- Works but be careful with your taskdeadline date should be > today .. careful .. change computer date or put another execution
 
 EXEC ViewEmployeesRequestsSP -- not tested yet
 
@@ -127,6 +128,8 @@ EXEC ApplyForBusinessRequestSP 'Bob_Jack','Bob_Mark','Monaco','Chilling','05/05/
 EXEC SearchCompanyByNameSP 'face'
 EXEC SearchCompanyByTypeSP 'digital'
 EXEC SearchCompanyByAddressSP 'Pal'
+EXEC ViewTop3RegularSp --Works .. be careful with your inputs 
+
 
 
 --2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -216,9 +219,8 @@ EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019',
 
 --1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC StaffCheckInSp 'claire.carles'
-
-
-
+EXEC StaffCheckInSp  'godfrey.love'
+INSERT INTO Attendances VALUES('godfrey.love','8/19/2017','8/19/2017 07:39:00','8/19/2017 12:39:00')
 --2:Yasmine-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 

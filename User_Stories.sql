@@ -980,18 +980,52 @@ FROM Attendances a
 WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.date)
 
+
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
+CREATE FUNCTION  RegularsWithFixed()
+RETURNS  @Fixed TABLE 
+(
+    user_name  VARCHAR(30) NOT NULL   
+)
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+
+insert into @myTable 
+SELECT  R.user_name 
+FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
+WHERE  R.user_name=M.regular_user_name  
+AND t.project_name=m.project_name 
+And T.deadline=M.task_deadline 
+AND T.name=M.task_name AND t.status='Fixed' 
+And MONTH(t.deadline)=MONTH(getdate())
+
+insert into @Fixed
+SELECT USER_NAME 
+FROM @mytable 
+return
+END
+
+
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+Select * from DBO.RegularsWithFixed() 
+
+GO
+
+
 
 CREATE PROC ViewTop3RegularSp
 AS
-SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration)
+
+SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) 
 FROM Attendances A ,DBO.RegularsWithFixed() R , Users U 
-WHERE  R.user_name=A.user_name
+WHERE  R.user_name=A.user_name AND Month(a.leave_time)=MONTH(getdate())
 AND R.user_name=U.user_name
 GROUP BY first_name +' '+ last_name 
 ORDER BY SUM(A.duration) desc
+
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1384,6 +1418,9 @@ WHERE s.user_name = @userName
 RETURN (@workingHours - @duration)
 END
 
+DROP FUNCTION CheckJobTitle
+
+
 GO
 CREATE FUNCTION CheckJobTitle
 (@jobTitle VARCHAR(150))
@@ -1397,36 +1434,10 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
+GO
 
 DROP FUNCTION RegularsWithFixed
-GO
-CREATE FUNCTION  RegularsWithFixed()
-RETURNS  @Fixed TABLE 
-(
-    user_name  VARCHAR(30) NOT NULL   
-)
-AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
 
-insert into @myTable 
-SELECT  R.user_name 
-FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
-WHERE  R.user_name=M.regular_user_name  
-AND t.project_name=m.project_name 
-And T.deadline=M.task_deadline 
-AND T.name=M.task_name AND t.status='Fixed' 
-And task_deadline>CONVERT(date, SYSDATETIMEOFFSET())
-
-insert into @Fixed
-SELECT USER_NAME 
-FROM @mytable 
-return
-END
-
-
-
-GO
 /*CREATE FUNCTION  TOP3hours()
 RETURNS  @TOP3 TABLE 
 (
