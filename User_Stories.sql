@@ -30,7 +30,7 @@ DROP PROC RemoveRegularFromProjectSp
 DROP PROC RegularFinalizesTaskSP;
 DROP PROC HRPostsAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
-DROP PROC StaffCheckInSP;
+DROP PROC CheckInSP;
 DROP PROC ViewJobInformationSP;
 DROP PROC ViewMyScoreSP;
 DROP PROC ViewDepartmentsOfCompanySP;
@@ -526,49 +526,68 @@ END
 --1: Gharam
 
 GO
-CREATE PROC StaffCheckInSP 
-@username VARCHAR(30)
+CREATE PROC CheckInSP 
+@username VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
 DECLARE @timestamp DATETIME
+DECLARE @dayOff VARCHAR(10)
 SET @timestamp = CURRENT_TIMESTAMP
-IF EXISTS (
+
+SELECT @dayOff = s.day_off
+FROM Staff_Members s
+WHERE s.user_name = @username 
+IF (EXISTS (
 SELECT user_name
 FROM Staff_Members
 WHERE Staff_Members.user_name = @username AND
-DATENAME(dw,GETDATE())!='Friday') 
-
+(
+(DATENAME(dw,GETDATE())='Friday') OR
+DATENAME(dw,GETDATE())=@dayOff)
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
 INSERT INTO Attendances 
 (user_name,start_time )
-
-VALUES(@username , @timestamp  )
----------------------------------
-
-
-
+VALUES(@username , @timestamp)
+SET @operationStatus = 1
+END
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC CheckOutSP --Correct but why did u do the join u can just check with the username
-@leaveTime DATETIME, @username VARCHAR(30)
+CREATE PROC CheckOutSP 
+@username VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
-UPDATE Attendances 
-SET    leave_time = @leaveTime
-WHERE  user_name=@username AND NOT EXISTS 
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
+IF( EXISTS 
 (
 SELECT *
-FROM Staff_Members S inner Join Attendances A on A.user_name=S.user_name
-WHERE A.user_name=@username AND S.day_off = day(@leaveTime)
- )
+FROM Attendances a INNER JOIN Staff_Members sm
+ON a.user_name = sm.user_name
+WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp)
+))
+SET @operationStatus=0 
+ELSE
+BEGIN
+UPDATE Attendances 
+SET    leave_time = @timestamp
+WHERE  user_name = @username AND CAST( Attendances.start_time AS DATE) = CAST(@timestamp AS DATE)
+SET @operationStatus = 1 
+END
 
 
 --3: Reda---------------------------------------------------------------------------------------------------------------
+-- staff member story no.3 View all my attendance records within certain period of time.
 GO
-CREATE PROC ViewAttendanceSP --correct
+CREATE PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME
 AS
-SELECT a.*
+SELECT a.start_time, a.leave_time, a.duration, a.missing_hours
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
 

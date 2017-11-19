@@ -333,12 +333,17 @@ PRINT @status1
 
 
 --1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EXEC StaffCheckInSp 'claire.carles'
-EXEC StaffCheckInSp  'godfrey.love'
-INSERT INTO Attendances VALUES('godfrey.love','8/19/2017','8/19/2017 07:39:00','8/19/2017 12:39:00')
+--to display the case where the output indicates that the check in is disregarded please change the local clock on you PC to Friday or choose a staff member
+--whose day off is equal to today
+GO
+DECLARE @status1 BIT
+EXEC CheckInSP 'claire.carles', @status1 OUTPUT
+PRINT @status1
 --2:Yasmine-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+-- to display the case where the output indicates that the check out is disregarded please change the local clock on you PC to Friday or choose a staff member
+DECLARE @status1 BIT
+EXEC CheckOutSP 'claire.carles', @status1 OUTPUT
+PRINT @status1
 --3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
