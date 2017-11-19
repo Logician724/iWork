@@ -22,7 +22,13 @@ INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
 VALUES('amazon.com','amazon','Beacon Hill neighborhood','computer marketing',
 		'digital marketing','sell to all humanity','amazon@amazon.com');
 
-
+--COMPANIES PHONES INSERTIONS
+INSERT INTO Companies_Phones(company_domain,phone)
+VALUES ('facebook.com','1599965467')
+INSERT INTO Companies_Phones(company_domain,phone)
+VALUES ('google.com','155485309')
+INSERT INTO Companies_Phones(company_domain,phone)
+VALUES('amazon.com','61549612354')
 
 
 --DEPARTMENTS INSERTIONS

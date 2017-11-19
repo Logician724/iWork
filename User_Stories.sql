@@ -60,8 +60,7 @@ DROP PROC SearchCompanyByTypeSP;
 DROP PROC ViewUserInfoSP;
 DROP PROC DefineNewProject;
 DROP PROC ReviewTaskSP;
-DROP FUNCTION RegularsWithFixed;
-
+DROP PROC GetCompanyPhones;
 
 
 
@@ -88,7 +87,7 @@ CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
 SELECT c.*
-FROM Companies c 
+FROM Companies c
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
 GO
@@ -96,7 +95,8 @@ CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
 SELECT c.*
-FROM Companies c
+FROM Companies c INNER JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 GO
@@ -104,15 +104,18 @@ CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
 SELECT c.*
-FROM Companies c
+FROM Companies c INNER JOIN Companies_Phones cp
+ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
+
 GO
 CREATE PROC ViewCompaniesSP 
 AS
-SELECT C.* , CP.phone
-FROM Companies C INNER JOIN  Companies_Phones CP --Problem only returns the company information if it has a name
-ON  C.domain_name = CP.company_domain
+SELECT C.*,  CP.phone
+FROM Companies C LEFT JOIN Companies_Phones CP
+ON C.domain_name = CP.company_domain
+
 
 --3:Abdullah------------------------------------------------------------------------------------------------------------------------------------
 GO
@@ -988,18 +991,49 @@ FROM Attendances a
 WHERE YEAR(a.date) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.date)
 
+
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
+CREATE FUNCTION  RegularsWithFixed()
+RETURNS  @Fixed TABLE 
+(
+    user_name  VARCHAR(30) NOT NULL   
+)
+AS
+BEGIN
+DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
+
+insert into @myTable 
+SELECT  R.user_name 
+FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
+WHERE  R.user_name=M.regular_user_name  
+AND t.project_name=m.project_name 
+And T.deadline=M.task_deadline 
+AND T.name=M.task_name AND t.status='Fixed' 
+And MONTH(t.deadline)=MONTH(getdate())
+
+insert into @Fixed
+SELECT USER_NAME 
+FROM @mytable 
+return
+END
+
+
+GO
+
+
 
 CREATE PROC ViewTop3RegularSp
 AS
-SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration)
+
+SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) 
 FROM Attendances A ,DBO.RegularsWithFixed() R , Users U 
-WHERE  R.user_name=A.user_name
+WHERE  R.user_name=A.user_name AND Month(a.leave_time)=MONTH(getdate())
 AND R.user_name=U.user_name
 GROUP BY first_name +' '+ last_name 
 ORDER BY SUM(A.duration) desc
+
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1050,11 +1084,14 @@ AND @taskName=M.task_name
 AND @deadline=M.task_deadline 
 AND @project=M.project_name) 
 AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+BEGIN
 UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name
 AND @deadline=deadline 
 AND project_name=@project
+END
+
 
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1389,6 +1426,8 @@ WHERE s.user_name = @userName
 RETURN (@workingHours - @duration)
 END
 
+
+
 GO
 CREATE FUNCTION CheckJobTitle
 (@jobTitle VARCHAR(150))
@@ -1402,35 +1441,9 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
-
 GO
-CREATE FUNCTION  RegularsWithFixed()
-RETURNS  @Fixed TABLE 
-(
-    user_name  VARCHAR(30) NOT NULL   
-)
-AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
-
-insert into @myTable 
-SELECT  R.user_name 
-FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
-WHERE  R.user_name=M.regular_user_name  
-AND t.project_name=m.project_name 
-And T.deadline=M.task_deadline 
-AND T.name=M.task_name AND t.status='Fixed' 
-And task_deadline>CONVERT(date, SYSDATETIMEOFFSET())
-
-insert into @Fixed
-SELECT USER_NAME 
-FROM @mytable 
-return
-END
 
 
-
-GO
 /*CREATE FUNCTION  TOP3hours()
 RETURNS  @TOP3 TABLE 
 (
