@@ -220,6 +220,13 @@ ORDER BY AVG(sm.salary) DESC
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1. Reda
+--registered user story no.1 login to the website with your username and password and checks whether you are an existing user or and defines the type of the user
+-- the procedure takes the username and password as input and returns the an int variable as output with values as follow
+-- 0 --> not a user
+-- 1 --> job seeker
+-- 2 --> manager
+-- 3 --> hr
+-- 4 --> regular
 GO
 
 CREATE PROC UserLoginSP

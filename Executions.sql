@@ -1,8 +1,6 @@
 ﻿EXEC ViewDepartmentSP  'facebook.com','PHP-5019'
 
-DECLARE @type INT;
-EXEC  UserLoginSP 'Yousef.Mustafa','WWE123',@type OUTPUT
-PRINT @type
+
 
 EXEC ViewQuetionsInInterviewSP  'Manager- Managing PHP Department','PHP-5019','facebook.com'
 
@@ -216,8 +214,34 @@ PRINT @operationStatus
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 --1:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------
+--Non user registration
+GO
+DECLARE @type0 INT;
+EXEC UserLoginSP 'korusaki.ichigo','korosu2017',@type0 OUTPUT
+PRINT @type0
 
+--seeker registration
+GO
+DECLARE @type1 INT;
+EXEC UserLoginSP 'gawwad.gooda','batata24242',@type1 OUTPUT
+PRINT @type1
+--manager registration
+GO
+DECLARE @type2 INT;
+EXEC UserLoginSP 'Mohamed_Ahmed','1234',@type2 OUTPUT
+PRINT @type2
 
+--hr registration
+GO
+DECLARE @type3 INT;
+EXEC  UserLoginSP 'Yousef.Mustafa','WWE123',@type3 OUTPUT
+PRINT @type3
+
+--regular registration
+GO
+DECLARE @type4 INT;
+EXEC UserLoginSP 'claire.carles','MyPassword2017',@type4 OUTPUT
+PRINT @type4 
 --2:Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 EXEC ViewUserInfoSP 'claire.carles'
