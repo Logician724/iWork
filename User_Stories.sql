@@ -43,7 +43,7 @@ DROP PROC ViewAttendanceOfStaffSP;
 DROP PROC ViewCompanySP;
 DROP PROC SearchJobsSP;
 DROP PROC EditPersonalInfoSP;
-DROP PROC ViewJobStatusSP;
+DROP PROC ViewJobsStatusSP;
 DROP PROC CheckOutSP;
 DROP PROC ViewTasksSP;
 DROP PROC RespondToJobApplicationsSP;
@@ -394,12 +394,11 @@ SET @operationStatus = 3; --successful application
 END
 
 --2:Reda-------------------------------------------------------------------------------------------------------------------------- 
-
-
+-- job seeker story no.2 view the interview questions related to the job I am applying for
+-- this procedure takes the job title, department code and company domain of the target job as input and
+-- returns all the titles of the interview questions related to that job.
 GO
-
-
-CREATE PROC ViewQuetionsInInterviewSP --correct
+CREATE PROC ViewQuetionsInInterviewSP
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
@@ -418,7 +417,6 @@ CREATE PROC ViewMyScoreSP  --finds the score of a certian job handles job seeker
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150)
-
 AS 
 SELECT  score
 From  Applications 
@@ -430,22 +428,22 @@ AND @departmentCode =department_code
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
-GO  --to be edited  ( Yes it does )
-CREATE PROC ViewJobStatusSP
+GO 
+CREATE PROC ViewJobsStatusSP
 @username VARCHAR(30)
 AS
-Select A.score, A.app_status --Missing score and job title Don't we need to see these next to the JOB title maybe?
+Select A.job_title, A.department_code, A.company_domain, A.score, A.app_status
 FROM Applications A
 WHERE A.seeker_username=@username
 
 --5: Abdullah-----------------------------------------------------------------------------------------------------------------------------
-
-
 --Job Seekers Story no.5 Choose a job from the jobs I was accepted in
 -- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
--- and the day off of choice and checks that the day off chosen is not friday. After that
--- the job seeker is added as a staff member if he satisfies all the constraints, other than taht
--- a statement is printed on the console requiring the user to revise his input values.
+-- and the day off of choice as input and returns a int as output representing the result of the procedure as follows
+-- 0 --> This is not an accepted application
+-- 1 --> This chosen day off is friday
+-- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
+
 GO
 
 CREATE PROC ChooseJobFromAcceptedAppSP 
@@ -453,23 +451,28 @@ CREATE PROC ChooseJobFromAcceptedAppSP
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
 @jobTitle VARCHAR(150),
-@dayOff VARCHAR(10)
+@dayOff VARCHAR(10),
+@operationStatus INT OUTPUT
 AS
-IF(	EXISTS(
-			SELECT * 
-			FROM Applications a
-			WHERE a.company_domain = @companyDomain AND
-			a.department_code = @departmentCode AND
-			a.job_title = @jobTitle AND
-			a.seeker_username = @seekerUserName AND
-			a.app_status = 'Accepted'
-			)
-			AND
-			@dayOff != 'Friday'
-	)	
+IF(NOT EXISTS
+(
+SELECT * 
+FROM Applications a
+WHERE a.company_domain = @companyDomain AND
+a.department_code = @departmentCode AND
+a.job_title = @jobTitle AND
+a.seeker_username = @seekerUserName AND
+a.app_status = 'Accepted'
+))
+SET @operationStatus = 0 --The chosen application is not an accepted one
+ELSE IF(@dayOff = 'Friday')
+SET @operationStatus = 1 --The chosen day off is friday
+ELSE
 BEGIN
+DELETE FROM Applications
+WHERE Applications.seeker_username = @seekerUserName
 DELETE FROM Job_Seekers 
-	WHERE Job_Seekers.user_name = @seekerUserName
+WHERE Job_Seekers.user_name = @seekerUserName
 DECLARE @salary INT
 SELECT @salary = salary
 	FROM Jobs
@@ -485,25 +488,34 @@ SET vacancies = vacancies - 1
 WHERE Jobs.company_domain = @companyDomain AND
 		Jobs.department_code = @departmentCode AND
 		Jobs.job_title = @jobTitle
+SET @operationStatus = 2 --Successful job choice
 END
-
-ELSE
-PRINT 'Error Occured, please check back your input values'
 
 
 --6: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
+-- and company domain and deletes any application with those attributes with a condition that the attr app_status is pending.
 GO
 
-CREATE PROC DeletePendingApplicationSP --correct
+CREATE PROC DeletePendingApplicationSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
+@companyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS (
+SELECT *
+FROM Applications a
+WHERE a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @companyDomain AND a.seeker_username = @seekerUserName AND a.app_status = 'pending'
+)
+SET @operationStatus = 0 --unsuccessful operation//this application is not in the review process or this application does not exist
+ELSE
+BEGIN
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
-
+SET @operationStatus = 1 --successful operation
+END
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 

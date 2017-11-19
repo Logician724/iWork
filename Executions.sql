@@ -258,6 +258,8 @@ EXEC EditPersonalInfoSP 'claire.carles','changedPassword2017','chill2017@gmail.c
 --change years of experience
 EXEC EditPersonalInfoSP 'claire.carles',NULL,NULL,NULL,7,NULL,NULL
 --all permurations can be run, please consult User_Stories.sql for documentation
+
+
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a job seeker, I should be able to ...”
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
@@ -282,22 +284,47 @@ EXEC ApplyForJobSP 'omar.mofti','Employee- Customer Managing','CSR-1263','amazon
 PRINT @status3
 
 --2:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
+GO
+EXEC ViewQuetionsInInterviewSP 'Manager- Managing PHP Department','PHP-5019','facebook.com'
 
 
 --3:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GO
 EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com'
 
 --4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+GO
+EXEC ViewJobsStatusSP 'shadi.aly'
 
 --5:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--unsuccessful operation//application is not an accpeted one
+GO
+DECLARE @status0 INT
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','PHP-5019','facebook.com', 'Manager- Managing PHP Department','Sunday',@status0 OUTPUT
+PRINT @status0
 
+--unsuccessful operation//chosen day off is Friday
+GO
+DECLARE @status1 INT
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly','BS-3291','facebook.com','Employee- BootStrap Developer','Friday',@status1 OUTPUT
+PRINT @status1
 
+--successful operation//The seeker is now a staff member in his desired job.
+GO
+DECLARE @status2 INT
+EXEC ChooseJobFromAcceptedAppSP 'shadi.aly', 'BS-3291', 'facebook.com','Employee- BootStrap Developer','Sunday',@status2 OUTPUT
+PRINT @status2
 --6:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+--unsuccessful deletion// this application is not in the review process or it doesn't exist
+GO
+DECLARE @status0 BIT
+EXEC DeletePendingApplicationSP 'shadi.aly', 'Employee- BootStrap Developer', 'BS-3291', 'facebook.com',@status0 OUTPUT
+PRINT @status0
+--successful deletion
+GO
+DECLARE @status1 BIT
+EXEC DeletePendingApplicationSP 'shadi.aly', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com',@status1 OUTPUT
+PRINT @status1
 
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a staff member, I should be able to ...”
