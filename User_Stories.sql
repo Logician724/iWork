@@ -1,4 +1,4 @@
-﻿DROP PROC AddManagerResponseToRequestSP;
+DROP PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
@@ -1259,9 +1259,14 @@ Applications.department_code = @departmentCode AND
 Applications.company_domain = @companyDomain)
 SET @operationStatus = 1
 END
---6: Gharam----------------------------------------------------------------------------------------------------------------------------
+--6: Gharam------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--HR user stories no.6:- The HR can post announcements to his/her company to inform the staff members about new updates
+--The procedure takes as inputs HR's username, and the entries to create an instance in the announcement table: title, description, type
+--We got the company domain name of the HR using his/her username.
+--Then, insert into table Announcements a record with the title, description, type , given by the HR, and the company domain  
 GO
-CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
+CREATE PROC HRPostsAnnouncementSP 
 @username varchar(30),
 @title VARCHAR(280) ,
 @description TEXT ,
