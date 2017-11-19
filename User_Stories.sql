@@ -629,6 +629,7 @@ CREATE PROC ApplyRegularForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
 IF EXISTS(
 SELECT *
 FROM Regular_Employees re
@@ -640,8 +641,8 @@ ELSE
 SET @requestType = 1 -- this is a leave request
 BEGIN
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
@@ -670,6 +671,8 @@ CREATE PROC ApplyHRForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 IF EXISTS(
 SELECT *
 FROM HR_Employees hr
@@ -681,8 +684,8 @@ ELSE
 SET @requestType = 1 -- this is a leave request
 BEGIN
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
@@ -711,6 +714,8 @@ CREATE PROC ApplyManagerForRequestSP
 AS
 DECLARE @identity INT
 DECLARE @requestType BIT
+DECLARE @timestamp DATETIME
+SET @timestamp = CURRENT_TIMESTAMP
 IF EXISTS(
 SELECT *
 FROM Managers m
@@ -722,8 +727,8 @@ ELSE
 SET @requestType = 1 -- this is a leave request
 BEGIN
 INSERT INTO Requests
-(start_date,end_date)
-VALUES(@startDate,@endDate)
+(start_date,end_date,request_date)
+VALUES(@startDate,@endDate,@timestamp)
 SET @identity = SCOPE_IDENTITY();
 IF(@requestType = 0)
 INSERT INTO Business_Trip_Requests
