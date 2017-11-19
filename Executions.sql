@@ -194,19 +194,23 @@ EXEC ViewDepartmentSP 'amazon.com', 'CSR-1263'
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --successful registration attempt
 GO
-EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki'
---failed registration attempts
+DECLARE @operationStatus BIT
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki',@operationStatus OUTPUT
+PRINT @operationStatus
+
+--failed registration attempt
 GO
 DECLARE @operationStatus BIT;
-EXEC RegisterToWebsite 'claire.carles','fadsfda','claire@gmail.com','05/05/1990',10,'Claire','Carles',@operationStatus
+EXEC RegisterToWebsite 'claire.carles','fadsfda','claire@gmail.com','05/05/1990',10,'Claire','Carles',@operationStatus OUTPUT
 PRINT @operationStatus
 
 --6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+GO
+EXEC SearchJobsSP 'js'
 
 
 --7:Abdullah----------------------------------------------------------------------------------------------------------------------------
-
+EXEC ViewCompaniesSalariesSP
 
 
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
@@ -248,8 +252,12 @@ EXEC ViewUserInfoSP 'claire.carles'
 
 
 --3:Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--change  password and email
 
-
+EXEC EditPersonalInfoSP 'claire.carles','changedPassword2017','chill2017@gmail.com',NULL,NULL,NULL,NULL
+--change years of experience
+EXEC EditPersonalInfoSP 'claire.carles',NULL,NULL,NULL,7,NULL,NULL
+--all permurations can be run, please consult User_Stories.sql for documentation
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a job seeker, I should be able to ...”
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
@@ -257,7 +265,21 @@ EXEC ViewUserInfoSP 'claire.carles'
 
 
 --1:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful job application//There is another application for the same job that is pending
+GO
+DECLARE @status1 INT
+EXEC ApplyForJobSP 'shadi.aly', 'Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
+PRINT @status1
+--unsuccessful job application//Seeker doesn't have enough years of exp
+GO
+DECLARE @status2 INT;
+EXEC ApplyForJobSP 'shadi.aly','Manager- Managing Location Department','LOC-4729', 'google.com',@status2 OUTPUT
+PRINT @status2;
+--successful job application
+GO
+DECLARE @status3 INT
+EXEC ApplyForJobSP 'omar.mofti','Employee- Customer Managing','CSR-1263','amazon.com',@status3 OUTPUT
+PRINT @status3
 
 --2:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 

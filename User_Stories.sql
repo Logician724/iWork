@@ -182,16 +182,16 @@ FROM Users
 WHERE Users.user_name = @userName
 )
 BEGIN
+SET @operationStatus = 1; --successful registration
 INSERT INTO Users(user_name,password,personal_email,birth_date,exp_year,first_name,last_name)
 VALUES(@username,@password,@personalEmail,@birthDate,@expYear,@firstName,@lastName)
-SET @operationStatus = 1; --successful registration
 END
 ELSE
 SET @operationStatus = 0; --failed registration
 
 --6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC SearchJobsSP --correct
+CREATE PROC SearchJobsSP 
 @keywords TEXT
 AS
 SELECT j.* 
@@ -294,22 +294,45 @@ DROP PROC ViewUserInfoSp;
 --3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 
-CREATE PROC EditPersonalInfoSP --correct
+CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
 @password VARCHAR(30),
-@personalEmail VARCHAR(70), --Make input nullifiable 
+@personalEmail VARCHAR(70),
 @birthDate DATETIME,
 @expYear INT,
 @firstName VARCHAR(25),
 @lastName VARCHAR(25)
 AS
+
+IF(@password IS NOT NULL)
 UPDATE Users 
 SET
-password=@password, 
-personal_email=@personalEmail, 
-birth_date=@birthDate,
-exp_year = @expYear,
-first_name = @firstName, 
+password=@password
+WHERE user_name = @username
+IF(@personalEmail IS NOT NULL)
+UPDATE Users 
+
+SET
+personal_email=@personalEmail
+WHERE user_name = @username
+IF(@birthDate IS NOT NULL)
+UPDATE Users 
+SET
+birth_date=@birthDate
+WHERE user_name = @username
+IF(@expYear IS NOT NULL)
+UPDATE Users 
+SET
+exp_year = @expYear
+WHERE user_name = @username
+IF(@firstName IS NOT NULL)
+UPDATE Users 
+SET
+first_name = @firstName
+WHERE user_name = @username
+IF(@lastName IS NOT NULL)
+UPDATE Users
+SET
 last_name = @lastName
 WHERE user_name = @username
 
@@ -333,10 +356,11 @@ CREATE PROC ApplyForJobSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
+@companyDomain VARCHAR(150),
+@operationStatus INT OUTPUT
 AS
 IF(
-NOT EXISTS(
+EXISTS(
 SELECT *
 FROM  Jobs j INNER JOIN Applications a
 ON j.company_domain = a.company_domain AND
@@ -347,21 +371,27 @@ WHERE a.app_status = 'Pending' AND
 	  a.department_code = @departmentCode AND
 	  a.company_domain = @companyDomain AND
 	  a.seeker_username = @seekerUserName
-)
-AND 
-EXISTS(
+))
+SET @operationStatus = 1; -- there is another application for the same job with pending status
+ELSE IF
+NOT EXISTS(
 SELECT *
 FROM Jobs j INNER JOIN Users u
 ON u.exp_year >= j.min_years_experience
-WHERE u.user_name = @seekerUserName
+WHERE u.user_name = @seekerUserName AND
+j.job_title = @jobTitle AND
+j.department_code = @departmentCode AND 
+j.company_domain = @companyDomain
 )
-
-)
+SET @operationStatus = 2; -- the seeker doesn't have enough exp
+ELSE
+BEGIN
 INSERT INTO Applications
 (seeker_username,job_title,department_code,company_domain)
 VALUES
 (@seekerUserName,@jobTitle,@departmentCode,@companyDomain)
-
+SET @operationStatus = 3; --successful application
+END
 
 --2:Reda-------------------------------------------------------------------------------------------------------------------------- 
 
