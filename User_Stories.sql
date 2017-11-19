@@ -435,6 +435,8 @@ AND @departmentCode =department_code
 
 --4: Yasmine----------------------------------------------------------------------------------------------------------------------------
 
+--Job Seeker User Stories no.4: The job seeker checks the status and score of each application he/she applied for.
+--The procedure takes the username of the jobseeker as input and shows the status of all applications, where their usernae equals the input
 GO 
 CREATE PROC ViewJobsStatusSP
 @username VARCHAR(30)
@@ -567,6 +569,10 @@ END
 
 
 --2: Yasmine------------------------------------------------------------------------------------------------------------------
+
+--Staff Member user stories no.2: The procedure saves the leave time of the staff members. 
+--The procedure takes as input the staff member's username, if his/her dayoff equals the timestamp, the procedure return 0 (false) and we disregard the leave time. 
+--Otherwise, the procedure sets the leavetime in the Attendance table to the timestamp and outputs 1 (true), meaning we regarded the leavetime.
 GO
 CREATE PROC CheckOutSP 
 @username VARCHAR(30),
@@ -732,7 +738,13 @@ INSERT INTO Managers_Replace_Managers
 VALUES(@identity,@ownerUserName,@replacementUserName);
 SET @operationStatus = 1; --successful request application
 END
---5: Yasmine------------------------------------------
+--5: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--Staff Members User Stories No.5: The staff member checks the status (respond of Manager and HR ) to the requests he/she applied for.
+--The procedure has 1 input, the username of the Staff member... 
+--As we have three tables for Staff member-applies-for-Request-relations, one for each of the Managers, HR_Employees, and Regular Employees, 
+--the procedure makes a union of those 3 tables and matches the Staff member's Username 
+-- to  whatever comes from the Union. 
 GO
 CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30)
