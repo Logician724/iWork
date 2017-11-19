@@ -870,3 +870,7 @@ INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,ty
 VALUES('2017-11-15','facebook.com','Server crash in gaming webpage','sally.ramadan','','emergency');
 INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
 VALUES('2017-10-9','facebook.com','Birthday party for all employees in the month','mirna.alteer','','event');
+INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
+VALUES('2017-11-13','google.com','The new feature upgrade in google','ahmed.shehata','','event');
+INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
+VALUES('2017-11-3','google.com','The newest webpage upgrade in google','bonita.bon','','event');
