@@ -23,7 +23,7 @@ DROP PROC ViewTop3RegularSp;
 DROP PROC ReplaceRegularSP;
 DROP PROC RemoveRegularFromProjectSp
 DROP PROC RegularFinalizesTaskSP;
-DROP PROC PostAnnouncementSP 
+DROP PROC HRPostsAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
 DROP PROC CheckInSP;
 DROP PROC ViewJobInformationSP;
@@ -1110,13 +1110,20 @@ j.company_domain = @companyDomain
 SET @operationStatus = 1
 END
 --3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
+--HR User Stories no.3:- In this procedure, HR can edit Job info in his/her department.
+--The procedure takes as inputs the Username of the HR, the jobtitle,departmentCode, and company domain (primary keys) of the job he/she wants to edit.
+--Then, The HR has the choice to give any of the following inputs to be updated in the table:-
+--1.application Deadline  2.detailed Description  3.min Years Experience 4.salary 5.shortDescription 6.vacancies 7. working Hours
+--If the HR didn't add values for certain inputs, their corresponding attributes won't change
+--If the job is not in the department of the HR, the procedure return false(0), and the HR can't edit it 
+--Otherwise , the procedure updates the table jobs according to the given inputs, returning true (1) 
 GO
 CREATE PROC EditJobInfoSP
 @hrUsername VARCHAR(30),
 @job_title VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
-@applicationDeadline DATETIME = NULL,
+@applicationDeadline DATETIME =NULL,
 @detailedDescription TEXT = NULL,
 @minYearsExperience INT = NULL,
 @salary INT = NULL,
@@ -1242,19 +1249,23 @@ SET @operationStatus = 1
 END
 --6: Gharam----------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC PostAnnouncementSP
+CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
 @username varchar(30),
-@title VARCHAR(280),
-@description TEXT,
-@type VARCHAR(20)
+@title VARCHAR(280) ,
+@description TEXT ,
+@type VARCHAR(20) 
 AS
 DECLARE @domainName varchar(150)
 SELECT @domainName=company_domain
 FROM Staff_Members
 WHERE @username=user_name
+AND @username 
+IN ( SELECT * FROM HR_Employees)
 INSERT INTO Announcements 
-(date,company_domain,type,hr_user_name,title,description)
-VALUES (CURRENT_TiMESTAMP,@domainName,@type,@username,@title,@description)
+VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@description,@type)
+
+
+
 --7: Yasmine---------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC ViewRequestsSP
