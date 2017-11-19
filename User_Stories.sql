@@ -300,7 +300,7 @@ DROP PROC ViewUserInfoSp;
 --Registered User stories no.3:The user can edit his personal info.
 --The user chooses to edit certain info or all of them. If an input is null, no change will happen to the corresponding attribute. If the user entered a value. changes 
 --will be applied
-
+GO
 CREATE PROC EditPersonalInfoSP
 @username VARCHAR(30),
 @password VARCHAR(30),
