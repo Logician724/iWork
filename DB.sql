@@ -1,5 +1,5 @@
 --put your creations in here
-USE iWork
+USE iWork;
 DROP TABLE Managers_Assign_Tasks_To_Regulars;
 DROP TABLE Managers_Assign_Projects_To_Regulars;
 DROP TABLE Tasks;
@@ -207,7 +207,7 @@ FOREIGN KEY (request_id) REFERENCES Requests ON DELETE CASCADE ON UPDATE CASCADE
 
 
 
-CREATE TABLE Managers_Replace_Managers(
+CREATE TABLE Managers_Replace_Managers_In_Requests(
 request_id INT PRIMARY KEY NOT NULL,
 user_name_replacer VARCHAR(30) NULL,
 user_name_request_owner VARCHAR(30) NULL,
