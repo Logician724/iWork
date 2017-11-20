@@ -1468,6 +1468,12 @@ SET @operationStatus = 1
 END
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
+
+--HR user stories no.11:- 
+--View names of the top 3 high achievers in my department. A high achiever is a regular employee
+--who stayed the longest hours in the company for a certain month and all tasks assigned to him/her with deadline within this month are fixed.
+--The procedure order the records descendignly by the duration, selecting the staff member that has a Tasks status 'Fixed'  
+
 GO
 CREATE PROC ViewTop3RegularSP
 AS
@@ -1485,6 +1491,7 @@ INNER JOIN Users u
 ON Regulars_Have_Fixed_Tasks.user_name = u.user_name 
 WHERE MONTH(a.start_time) = MONTH(GETDATE())
 GROUP BY first_name + ' '+ last_name
+ORDER By SUM(a.duration) desc
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --“As a regular employee, I should be able to ...”
