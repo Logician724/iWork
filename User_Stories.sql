@@ -1608,32 +1608,12 @@ END
 --EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
 GO
 CREATE PROC ViewEmployeesRequestsSP 
-@username VARCHAR(30), 
-@ManagerUserName VARCHAR(30),
+@managerUserName VARCHAR(30),
 @response VARCHAR(20),
-@id int --View Single request at a time
-AS 
-IF EXISTS 
-(SELECT user_name 
-FROM HR_Employees 
-WHERE @username=user_name)  AND NOT EXISTS (SELECT user_name
-FROM Managers
-WHERE @ManagerUserName =user_name AND type='HR')
-BEGIN
-print 'HR can only replace Hr'
-END
-ELSE
-UPDATE Requests 
-SET manager_response_req=@response
-WHERE request_id=@id;
+@id INT,
+@operationStatus INT OUTPUT
+AS
 
-
-
-
-
-
-
-DROP PROC ViewEmployeesRequestsSP ;
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1900,13 +1880,19 @@ CREATE FUNCTION GetMissingHours
 RETURNS INT
 BEGIN
 
-DECLARE @workingHours INT, @duration INT
+DECLARE @workingHours INT
+DECLARE @duration INT
+DECLARE @missingHours INT
 SET @duration = DATEPART(HOUR,@leaveTime) - DATEPART(HOUR,@startTime)
 SELECT @workingHours = j.working_hours
 FROM Staff_Members s INNER JOIN Jobs j
 ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
 WHERE s.user_name = @userName 
-RETURN (@workingHours - @duration)
+IF( (@workingHours - @duration) < 0)
+SET @missingHours = 0
+ELSE
+SET @missingHours = @workingHours - @duration
+RETURN @missingHours
 END
 
 
