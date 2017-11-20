@@ -354,49 +354,8 @@ PRINT @status1
 --3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
-
 --4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
---successful request applications
-GO
-DECLARE @status1 BIT
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22',NULL,'Barcelona','a company related business deal', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/2017','leave request','North Coast','family vacation', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017',NULL,'Moscow','Business deal with a russian DNS company', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyRegularForRequestSP 'juliana.clover','godfrey.love','6/6/2017','6/22/2017','leave request','Luxor','Vacation', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyHRForRequestSP 'basma.mohamed','amr.mohsen','6/5/2015','7/3/2015','leave request','Luxor','Vacation', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyHRForRequestSP 'amr.mohsen','dana.debs','11/2/2017','11/3/2017','leave request','','Sick', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','leave request','Malysia','Vacation', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017',NULL,'Cairo','Business trip ', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017',NULL,'Berlin','business trip ', @status1 OUTPUT
-PRINT @status1
-GO
-DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave request','','Sick', @status1 OUTPUT
-PRINT @status1
+--successful request application
 GO
 DECLARE @status1 BIT 
 EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017',NULL,'Paris','Business trip ', @status1 OUTPUT
@@ -404,14 +363,12 @@ PRINT @status1
 --unsuccessful request application
 GO
 DECLARE @status0 BIT 
-EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @status0 OUTPUT
+EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','sick leave','','', @status0 OUTPUT
 PRINT @status0
 GO
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
---kindly run Apply for request executions first
 EXEC ViewRequestsStatusSP 'claire.carles'
 --6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
---kindly run Apply for reqeust executions first
 EXEC DeletePendingRequestsSP 'claire.carles'
 
 --7:Reda-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -573,7 +530,8 @@ PRINT @status1
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 --1:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--HR Manger View
+EXEC ViewEmployeesRequestsSP 'Ahmed_Mahmoud','JS-8938','facebook.com'
 
 --2:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
