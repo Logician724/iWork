@@ -182,7 +182,7 @@ manager_user_name VARCHAR(30) NULL,
 request_date DATETIME NOT NULL,
 start_date DATETIME NOT NULL,
 no_of_leave_days AS (dbo.NumberOfDays(request_id,start_date,end_date)),
-reason_of_disapproval TEXT NULL
+reason_of_disapproval NVARCHAR(MAX) NULL
 FOREIGN KEY (hr_user_name) REFERENCES HR_Employees(user_name) ON DELETE NO ACTION ON UPDATE NO ACTION,
 FOREIGN KEY (manager_user_name) REFERENCES Managers(user_name) ON DELETE SET NULL ON UPDATE NO ACTION,
 CONSTRAINT CHK_hr_respose_req CHECK(hr_response_req = 'Accepted' OR hr_response_req = 'Rejected' OR hr_response_req = NULL),

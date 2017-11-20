@@ -199,9 +199,9 @@ EXEC ViewDepartmentSP 'amazon.com', 'CSR-1263'
 --5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --successful registration attempt
 GO
-DECLARE @operationStatus BIT
-EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki',@operationStatus OUTPUT
-PRINT @operationStatus
+DECLARE @status1 BIT
+EXEC RegisterToWebsite 'Mohamed_Zaki','123455','Zaki@guc.edu.eg','05/05/1990',10,'Mohamed','Zaki',@status1 OUTPUT
+PRINT @status1
 
 --failed registration attempt
 GO
@@ -497,7 +497,9 @@ PRINT @status1
 EXEC PostAnnouncementSP 'Fayrouz.Hussain','this is my first announcement','just chilling','fun'
 
 --7:Yasmine----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+DECLARE @status1 BIT
+EXEC ViewRequestsSP 'Fayrouz.Hussain','PHP-5019','facebook.com',@status1
+PRINT @status1
 
 --8:Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
