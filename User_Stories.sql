@@ -785,7 +785,7 @@ GO
 CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30)
 AS
-SELECT r.hr_response_req, r.manager_response_req 
+SELECT r.request_id, r.hr_response_req, r.manager_response_req 
 FROM Requests r
 WHERE r.request_id = ANY(
 SELECT hrr.request_id 
@@ -793,7 +793,7 @@ FROM HR_Employees_Replace_HR_Employees hrr
 WHERE hrr.user_name_request_owner = @userName
 UNION
 SELECT mmr.request_id
-FROM Managers_Replace_Managers_In_Requests mmr
+FROM Managers_Replace_Managers mmr
 WHERE mmr.user_name_request_owner = @userName
 UNION
 SELECT rrr.request_id
@@ -827,7 +827,7 @@ DELETE Requests
 	where h.user_name_request_owner = @userName)
 	OR request_id = (
 	SELECT request_id 
-	FROM Managers_Replace_Managers_In_Requests m 
+	FROM Managers_Replace_Managers m 
 	WHERE m.user_name_request_owner = @userName)
 	AND hr_response_req = 'Pending'
 
@@ -1146,7 +1146,7 @@ WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
 )
 BEGIN
 SELECT R.*
-FROM Requests R, Regular_Employees_Replace_Regular_Employees RE, Managers_Replace_Managers_In_Requests M, HR_Employees_Replace_HR_Employee HE
+FROM Requests R, Regular_Employees_Replace_Regular_Employees RE, Managers_Replace_Managers M, HR_Employees_Replace_HR_Employee HE
 WHERE (R.request_id=RE.request_id OR R.request_id=M.request_id OR R.request_id=HE.request_ID) AND R.manager_response_req='Accepted' AND (R.hr_response_req='Rejected' OR R.hr_response_req IS NULL)
 AND EXISTS (
 SELECT*
@@ -1384,7 +1384,7 @@ UPDATE Requests
 	FROM HR_Employees_Replace_HR_Employees h 
 	WHERE h.user_name_request_owner = @staffUserName)
 	OR request_id = (SELECT request_id 
-	FROM Managers_Replace_Managers_In_Requests m 
+	FROM Managers_Replace_Managers m 
 	WHERE m.user_name_request_owner = @staffUserName)
 	) AND ((SELECT s.department_code 
 	FROM Staff_Members s INNER JOIN Managers m 
