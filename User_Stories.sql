@@ -1557,7 +1557,9 @@ SET @operationStatus = 0
 --Regular Emloyees User Stories no.3:-
 --After finalizing a task, I can change the status of this task to ‘Fixed’ as long as it did not pass the deadline.
 --The procedure takes as inputs username of the regular employee and the task name and deadline and project name (Primary Keys of the Tasks Table).
---
+--The Procedure 1st checks if the deadline of the task did not pass, 
+--If it did pass , the procedure outputs false (0)
+--Otherwise, it changes the status of the procedure to 'Fixed', returning true (1).
 GO
 CREATE PROC FinalizeTaskSP
 @username VARCHAR(30),
@@ -1584,6 +1586,7 @@ AND @deadline=deadline
 AND project_name=@projectName
 SET @operationStatus = 1
 END
+
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
 GO 
