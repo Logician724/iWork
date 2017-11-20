@@ -60,7 +60,7 @@ DROP PROC ApplyRegularForRequestSP;
 DROP PROC ApplyHRForRequestSP;
 DROP PROC ViewRequestsStatusSP;
 DROP PROC ReplyToEmailsSP;
-
+DROP PROC ShowRequestInfoSP;
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1287,7 +1287,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 GO 
 CREATE PROC ViewRequestsSP
-@hrUsername VARCHAR(30), 
+@hrUsername VARCHAR(30),
 @departmentCode VARCHAR(30), 
 @companyDomain VARCHAR(150),
 @operationStatus BIT OUTPUT
@@ -1295,27 +1295,57 @@ AS
 IF EXISTS (
 SELECT *
 FROM Staff_Members sm
-WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName
+WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName 
 )
 BEGIN
-SELECT R.*
-FROM Requests R, Regular_Employees_Replace_Regular_Employees RE, Managers_Replace_Managers M, HR_Employees_Replace_HR_Employee HE
-WHERE (R.request_id=RE.request_id OR R.request_id=M.request_id OR R.request_id=HE.request_ID) 
-AND R.manager_response_req='Accepted' 
-AND (R.hr_response_req='Rejected' OR R.hr_response_req IS NULL)
-AND EXISTS (
-SELECT*
-FROM Staff_Members SM INNER JOIN Departments D ON SM.department_code=D.department_code AND SM.company_domain=D.company_domain
-WHERE D.department_code=@departmentCode AND D.company_domain=@companyDomain 
-          )
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,mrm.user_name_request_owner,mrm.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Managers_Replace_Managers mrm 
+ON r.request_id = mrm.request_id
+WHERE mrm.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+)
+UNION
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,hrh.user_name_request_owner,hrh.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hrh
+ON r.request_id = hrh.request_id
+WHERE hrh.user_name_request_owner IN(
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+)
+UNION
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,rrr.user_name_request_owner,rrr.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Regular_Employees_Replace_Regular_Employees rrr
+ON r.request_id = rrr.request_id
+WHERE rrr.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+)
 SET @operationStatus = 1
 END
 ELSE 
 SET @operationStatus = 0
 
 
-
-
+GO
+CREATE PROC ShowRequestInfoSP
+@hrUserName VARCHAR(30),
+@requestID INT
+AS
+IF EXISTS(
+SELECT *
+FROM Leave_Requests
+WHERE Leave_Requests.request_id = @requestID
+)
+SELECT type
+FROM Leave_Requests
+WHERE request_id = @requestID
+ELSE 
+SELECT trip_purpose, trip_destination
+FROM Business_Trip_Requests 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
 
