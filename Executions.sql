@@ -435,9 +435,11 @@ PRINT @status1
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa'
 
 --9:Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--the timestamp is dependent on when the insertions of the emails are handled. In order to test please run view received emails and get the email timestamp first to plug in
+-- the procedure. At the time of insertion this procedure worked correctly
+EXEC ReplyToEmailsSP 'Yousef.Mustafa', '2017-11-20 13:54:06.140','andra.kyla','',''
 --10:Abullah------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC ViewLatestAnnouncementsSP 'claire.carles'
 
 
 

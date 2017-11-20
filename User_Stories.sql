@@ -885,9 +885,9 @@ DELETE FROM Requests
 GO
 CREATE PROC SendEmailSP
 @senderUserName VARCHAR(30),
-@senderEmail VARCHAR(70),
+@senderEmail VARCHAR(180),
 @recipientUserName VARCHAR(30),
-@recipientEmail VARCHAR(70),
+@recipientEmail VARCHAR(180),
 @emailSubject VARCHAR(140),
 @emailBody TEXT,
 @operationStatus BIT OUTPUT
@@ -963,14 +963,13 @@ CREATE PROC ReplyToEmailsSP
 @recipientUsername VARCHAR(30),
 @timestamp DATETIME,
 @senderUsername VARCHAR(30),
-@emailSubject VARCHAR(140) = NULL,
-@emailBody TEXT = NULL
+@emailSubject VARCHAR(140) = '',
+@emailBody TEXT = ''
 AS 
-
 DECLARE @ts DATETIME
 SET @ts = CURRENT_TIMESTAMP
-DECLARE @senderEmail VARCHAR(70)
-DECLARE @recipientEmail VARCHAR(70)
+DECLARE @senderEmail VARCHAR(180)
+DECLARE @recipientEmail VARCHAR(180)
 
 SELECT @senderEmail = sm.company_email 
 FROM Staff_Members sm
