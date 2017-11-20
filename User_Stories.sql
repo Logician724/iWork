@@ -1016,6 +1016,9 @@ SELECT a.*
 
 --1: Reda----------------------------------------------------------------------
 -- HR employee story no.1 Add a new job that belongs to my department
+-- AddJobSP takes the all the job related info as input, checks whether
+-- the hr employee is adding a job to the same company as his or not
+-- and when the check is true a new job is inserted with the input info
 GO
 CREATE PROC AddJobSP
 @hrUserName VARCHAR(30),
@@ -1047,6 +1050,8 @@ VALUES
 (@jobTitle,@departmentCode,@companyDomain,@applicationDeadline,@detailedDescription,@minYearsExperience,@salary,@shortDescription,@vacancies,@workingHours)
 SET @operationStatus = 1; --successful job addition 
 END
+-- AddQustionSP taeks the question title and its answer as input, 
+-- and insert a new question record with this info to the Questions table
 GO
 CREATE PROC AddQuestionSP
 @questionTitle VARCHAR(700),
@@ -1057,6 +1062,9 @@ INSERT INTO Questions
 VALUES
 (@questionTitle,@answer)
 
+-- AddQuestionToJobSP takes the job info and the target question id as input  inserts the
+-- this info to the Job_Have_Questions as input to link the job with the target question in
+-- that table
 GO
 CREATE PROC AddQuestionToJobSP --check if the question is in the question list first .. just in case
 @questionID INT,
@@ -1071,24 +1079,34 @@ VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 --2: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-CREATE PROC ViewJobInformationSP @username VARCHAR(30),@jobTitle VARCHAR(150)
+CREATE PROC ViewJobInformationSP 
+@username VARCHAR(30),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
-SELECT j.*
+IF( NOT EXISTS
+(
+SELECT *
+FROM Staff_Members
+WHERE Staff_Members.user_name = @username AND
+Staff_Members.department_code = @departmentCode
+AND Staff_Members.company_domain =@companyDomain
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
+SELECT *
 FROM Jobs j
-WHERE j.job_title=@jobTitle AND 
-j.company_domain 
-IN (
-SELECT s.company_domain
-FROM Staff_Members s
-WHERE s.user_name=@username) 
-AND j.department_code
-IN (
-SELECT s.department_code
-FROM Staff_Members s
-WHERE s.user_name=@username)
+WHERE j.job_title = @jobTitle AND
+j.department_code = @departmentCode AND
+j.company_domain = @companyDomain
+SET @operationStatus = 1
+END
 --3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC EditJobInfoSP --Also needs editing
+CREATE PROC EditJobInfoSP
 @hrUsername VARCHAR(30),
 @job_title VARCHAR(150),
 @departmentCode VARCHAR(30),

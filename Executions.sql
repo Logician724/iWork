@@ -442,7 +442,6 @@ EXEC ReplyToEmailsSP 'Yousef.Mustafa', '2017-11-20 13:54:06.140','andra.kyla',''
 EXEC ViewLatestAnnouncementsSP 'claire.carles'
 
 
-
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --	“As an HR employee, I should be able to ...”
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
@@ -458,7 +457,14 @@ PRINT @status1
 
 
 --2:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful view//job is not in the department
+DECLARE @status0 BIT
+EXEC ViewJobInformationSP 'Fayrouz.Hussain', 'Manager- Managing JS Department','JS-8938','facebook.com',@status0 OUTPUT
+PRINT @status0
+--successful view
+DECLARE @status1 BIT
+EXEC ViewJobInformationSP 'Fayrouz.Hussain', 'Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
+PRINT @status1
 --3:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
 
 --4:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
