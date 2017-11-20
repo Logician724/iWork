@@ -1384,7 +1384,7 @@ IF(@hrResponse = 'Accepted')
 BEGIN
 SELECT @noOfLeaveDays = no_of_leave_days 
 FROM Requests
-WHERE request_id = @requestID
+WHERE request_id = @requestIDgi
 UPDATE Staff_Members
 SET no_annual_leaves = no_annual_leaves - @noOfLeaveDays
 WHERE Staff_Members.user_name IN(
@@ -1522,7 +1522,7 @@ ON p.project_name = mapr.project_name
 WHERE mapr.regular_user_name = @userName
 
 
---2: Reda----------------------------------------------------------------------------
+--2:Reda----------------------------------------------------------------------------
 
 --Regular Employees User Stories No.2:- 
 --The regular employee can view tasks in a certain project assigned to him/her
@@ -1552,8 +1552,12 @@ ELSE
 SET @operationStatus = 0
 
 
---3: Gharam------------------------------------------------------------------------------------
+--3:Gharam------------------------------------------------------------------------------------
 
+--Regular Emloyees User Stories no.3:-
+--After finalizing a task, I can change the status of this task to ‘Fixed’ as long as it did not pass the deadline.
+--The procedure takes as inputs username of the regular employee and the task name and deadline and project name (Primary Keys of the Tasks Table).
+--
 GO
 CREATE PROC FinalizeTaskSP
 @username VARCHAR(30),
@@ -1569,7 +1573,7 @@ WHERE @username=m.regular_user_name
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
 AND @projectName = m.project_name 
-AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0)
+AND DATEDIFF(DAY,CURRENT_TIMESTAMP,@deadline) >= 0)
 SET @operationStatus = 0
 ELSE
 BEGIN
