@@ -1479,12 +1479,23 @@ WHERE mapr.regular_user_name = @userName
 GO
 CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
 @projectName VARCHAR(100),
-@userName VARCHAR(30)
+@userName VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
-SELECT t.*
+IF EXISTS ( --If this regular employee has tasks in this project 
+SELECT *
+FROM Managers_Assign_Tasks_To_Regulars mar
+WHERE mar.regular_user_name=@userName AND mar.project_name=@projectName
+           )
+BEGIN
+SELECT t.*,mar.regular_user_name
 FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
 ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
+SET @operationStatus = 1
+END
+ELSE 
+SET @operationStatus = 0
 
 
 --3: Gharam------------------------------------------------------------------------------------
