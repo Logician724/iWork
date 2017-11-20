@@ -1457,13 +1457,19 @@ ORDER BY SUM(A.duration) desc
 
 
 --1: Abdullah-
-GO
 
+--Regular Emplyees User Stories no.1: 
+--The regular employe can view all projects assigned to him/her with their info.
+--The procedure simply takes the regular username as input.
+--it then selects from the Project table and the Assigning table for Regular Employees
+--and displays the records for the regular employee
+
+GO
 CREATE PROC ViewProjectsOfEmployeeSP
 @userName VARCHAR(30)
 AS 
 SELECT p.*
-FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr
+FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr 
 ON p.project_name = mapr.project_name
 WHERE mapr.regular_user_name = @userName
 
