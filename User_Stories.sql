@@ -22,7 +22,6 @@ DROP PROC ViewEmployeesRequestsSP;
 DROP PROC ViewTop3RegularSp;
 DROP PROC ReplaceRegularSP;
 DROP PROC RemoveRegularFromProjectSp
-DROP PROC RegularFinalizesTaskSP;
 DROP PROC HRPostsAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
 DROP PROC CheckInSP;
@@ -62,6 +61,7 @@ DROP PROC ViewRequestsStatusSP;
 DROP PROC ReplyToEmailsSP;
 DROP PROC ShowRequestInfoSP;
 DROP PROC RespondHRToRequestSP;
+DROP PROC FinalizeTaskSP;
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --“As an registered/unregistered user, I should be able to ...”
@@ -1548,8 +1548,8 @@ FROM Managers_Assign_Tasks_To_Regulars m
 WHERE @username=m.regular_user_name 
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
-AND @projectName = m.project_name) 
-AND DATEDIFF(DAY,@deadline,CURRENT_TIMESTAMP)>=0
+AND @projectName = m.project_name 
+AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0)
 SET @operationStatus = 0
 ELSE
 BEGIN
@@ -1564,18 +1564,31 @@ END
 
 GO 
 CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
-@username VARCHAR(30), @status VARCHAR(10),@name VARCHAR(30), @deadline DATETIME , @projectname VARCHAR(100)
+@username VARCHAR(30),
+@status VARCHAR(10),
+@taskName VARCHAR(30),
+@deadline DATETIME ,
+@projectName VARCHAR(100),
+@operationStatus BIT OUTPUT
 AS
-IF EXISTS (
+IF NOT EXISTS  (
 SELECT *
-FROM Managers_Assign_Projects_To_Regulars M
-WHERE M.regular_user_name= @username AND M.project_name=@projectname 
-
-          )
+FROM Managers_Assign_Tasks_To_Regulars m
+WHERE @username=m.regular_user_name 
+AND @taskName = m.task_name 
+AND @deadline = m.task_deadline 
+AND @projectName = m.project_name 
+AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0)
+SET @operationStatus =0
+ELSE
 BEGIN 
 UPDATE Tasks 
 SET Tasks.status =@status
-WHERE Tasks.name=@name AND Tasks.deadline=@deadline AND Tasks.project_name=@projectName AND Tasks.deadline<CURRENT_TIMESTAMP 
+WHERE Tasks.name=@name
+AND Tasks.deadline=@deadline 
+AND Tasks.project_name=@projectName 
+AND Tasks.deadline < CURRENT_TIMESTAMP 
+SET @operationStatus = 1
 END
 
 

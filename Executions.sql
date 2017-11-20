@@ -555,7 +555,7 @@ EXEC FinalizeTaskSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-5651
 PRINT @status0
 --successful task edit
 DECLARE @status1 BIT
-EXEC FinalizeTaskSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-3284NMD upgrade of exterior of home page BootStrap',@status1 OUTPUT
+EXEC FinalizeTaskSP 'godfrey.love','Task 1','12/30/2017 12:00:00 AM','Project-3284NMD upgrade of exterior of home page BootStrap',@status1 OUTPUT
 PRINT @status1
 
 --4: Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
