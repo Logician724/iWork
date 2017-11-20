@@ -1293,7 +1293,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 --We select info that we want to display from the Requests table. 
 --The procedure shows info from three tables: HR_Employees_Replace_HR_Employees, Regular_Employees_Replace_Regular_Employees,and Managers_Replace_Managers 
 --Each represents the requests info for HR, Regular, and Manager, respectively.
---The procedure also filters out requests are for staff members not in the HR's department.
+--The procedure also filters out requests that are for staff members not in the HR's department, and selects requests that are accepted bt the manager only.
 --After knowing the request ID's, the HR can then view the Request info based on whether it is a Business trip request or a leave request.
 --If it's a leave request, the HR views its type
 --If it's a trip purpose request, The HR views its trip purpose and destination
@@ -1360,7 +1360,9 @@ SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
-GO
+
+
+
 CREATE PROC RespondHRToRequestSP
 @hrUserName VARCHAR(30),
 @requestID INT,
@@ -1432,7 +1434,13 @@ END
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
---Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
+--HR user stories no.10:- 
+--The HR can view the total number of hours for any staff member in my department in each month of a certain year.
+--The procedure takes as inputs the HR's username, Staff Member's username, and the year he/she wants to view records for.
+--The procedure first checks that the HR username and Staff Member username are in the same department.
+--If not the procedure outputs false. (0)
+--Otherwise, we group by the month, and sum the working hours for the staff member in each month, returning true (1).
+
 GO
 
 CREATE PROC ViewYearlyAttendanceOfStaffSP
@@ -1595,10 +1603,7 @@ END
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 --“As a manager, I should be able to ...”
-
-
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------
