@@ -1361,7 +1361,12 @@ FROM Business_Trip_Requests
 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
-
+--HR user stories No.8: The HR give the final respond for the requests, and takes into
+--consideration that if the duration of the request includes the staff member’s weekly day-off and/or
+--Friday, they should not be counted as annual leaves.
+--So the procedure takes as inputs the HR username, the requestID , and the HR response. 
+--The procedure 1st check if the requests  are accepted by the manager only. 
+--Then, we check if the HR response accepted the Request. If yes we'll update the requests table and the annual leaves. 
 
 CREATE PROC RespondHRToRequestSP
 @hrUserName VARCHAR(30),
