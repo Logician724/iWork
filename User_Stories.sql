@@ -1366,6 +1366,12 @@ FROM Business_Trip_Requests
 
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
 
+--HR user stories no.9:-
+--The HR can view the attendance records of any staff member in my department (check-in time, check-out time,
+--duration, missing hours) within a certain period of time.
+--The procedure takes as inputs the HR's username, and the username of the Regular employee whose attendance will be viewed, and the start and end period of the attendance
+--records. 
+
 GO
 CREATE PROC ViewAttendanceOfStaffSP
 @hrUserName VARCHAR(30),
