@@ -808,7 +808,7 @@ WHERE rrr.user_name_request_owner = @userName
 
 
 --6: Abdullah --------------------------------------------------------------------------------------------------------------------------------------------------------------
---Regular Employees Story no.6 Delete any request that is still in the review process
+--staff member Story no.6 Delete any request that is still in the review process
 --DeletePendingRequestsSP takes the username of the employee as input and deletes all
 --his requests that have an hr_response_req attr value of NULL
 GO 
@@ -816,27 +816,30 @@ GO
 CREATE PROC DeletePendingRequestsSP 
 @userName VARCHAR(30)
 AS
+--first delete the replacement part of the request
+--in case the user is a manager
 DELETE FROM Managers_Replace_Managers
 WHERE (user_name_request_owner = @userName AND
 Managers_Replace_Managers.request_id = ANY(
 SELECT Requests.request_id
 FROM Requests
 WHERE hr_response_req IS NULL))
-
+--in case the user is a regular employee
 DELETE FROM Regular_Employees_Replace_Regular_Employees
 WHERE (user_name_request_owner = @userName AND
 Regular_Employees_Replace_Regular_Employees.request_id = ANY(
 SELECT Requests.request_id
 FROM Requests
 WHERE hr_response_req IS NULL))
-
+--in case the user is an HR employee
 DELETE FROM HR_Employees_Replace_HR_Employees
 WHERE (user_name_request_owner = @userName AND
 HR_Employees_Replace_HR_Employees.request_id = ANY(
 SELECT Requests.request_id
 FROM Requests
 WHERE hr_response_req = NULL))
-
+--Then delete the request sub-type whenever its ID is not available anywhere in the replacement tables
+--in case part of the target requests is leave requests
 DELETE FROM Leave_Requests
 WHERE NOT( request_id = ANY(
 	SELECT request_id
@@ -850,7 +853,7 @@ WHERE NOT( request_id = ANY(
 	SELECT request_id
 	FROM HR_Employees_Replace_HR_Employees
 	))
-
+--in case part of the target requests is business trip requests 
 DELETE FROM Business_Trip_Requests
 WHERE NOT(request_id = ANY(
 	SELECT request_id
@@ -864,7 +867,7 @@ WHERE NOT(request_id = ANY(
 	SELECT request_id
 	FROM HR_Employees_Replace_HR_Employees
 	))
-
+--then delete all the requests that don't have equivalent IDS is either the leave or business trip request tables
 DELETE FROM Requests
 	WHERE NOT (request_id = ANY(
 	SELECT request_id
@@ -943,11 +946,7 @@ WHERE sm.user_name = @username
  SELECT sm1.company_domain
  FROM Staff_Members sm1
  WHERE sm1.user_name= e.sender_user_name
- 
-                   )
-
-            )
-
+ ))
 --9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Staff Member User Stories no.9: The Staff memeber replies to a received email, and this email is added to the table Email. 
 --So the procedure has 5 inputs:-
@@ -996,7 +995,7 @@ VALUES
 
 --10: Abullah------------------------------------------------------------------------------------------------------------------------------------------------
 
---Staff Member user stories no.10:- 
+--Staff Member user story no.10:- 
 --Staff member can view the Announcement made in his company within the past 21 days
 --The procedure takes the staff member username as an input.
 --Gets the announcements that are in the same company as the Staff Member
