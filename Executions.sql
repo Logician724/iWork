@@ -356,10 +356,10 @@ EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
 
 --4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
---successful applications
+--successful request applications
 GO
 DECLARE @status1 BIT
-EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22','','Barcelona','a company related business deal', @status1 OUTPUT
+EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','2017-8-7','2017-8-22',NULL,'Barcelona','a company related business deal', @status1 OUTPUT
 PRINT @status1
 GO
 DECLARE @status1 BIT 
@@ -367,7 +367,7 @@ EXEC ApplyRegularForRequestSP 'claire.carles','clark.maurine','9/22/2017','10/2/
 PRINT @status1
 GO
 DECLARE @status1 BIT 
-EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017','','Moscow','Business deal with a russian DNS company', @status1 OUTPUT
+EXEC ApplyRegularForRequestSP 'godfrey.love','juliana.clover','3/9/2017','3/16/2017',NULL,'Moscow','Business deal with a russian DNS company', @status1 OUTPUT
 PRINT @status1
 GO
 DECLARE @status1 BIT 
@@ -387,11 +387,11 @@ EXEC ApplyManagerForRequestSP 'Bob_Jack','Bob_Mark','11/2/2017','12/3/2017','lea
 PRINT @status1
 GO
 DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017','','Cairo','Business trip ', @status1 OUTPUT
+EXEC ApplyManagerForRequestSP 'Jack_Mark','Jack_Bob','5/2/2017','5/5/2017',NULL,'Cairo','Business trip ', @status1 OUTPUT
 PRINT @status1
 GO
 DECLARE @status1 BIT 
-EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017','','Berlin','business trip ', @status1 OUTPUT
+EXEC ApplyManagerForRequestSP 'Bob_Mark','Jack_Mark','7/2/2017','8/30/2017',NULL,'Berlin','business trip ', @status1 OUTPUT
 PRINT @status1
 GO
 DECLARE @status1 BIT 
@@ -399,26 +399,28 @@ EXEC ApplyManagerForRequestSP 'Jack_Bob','Bob_Jack','1/2/2017','1/4/2017','leave
 PRINT @status1
 GO
 DECLARE @status1 BIT 
-EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017','','Paris','Business trip ', @status1 OUTPUT
+EXEC ApplyHRForRequestSP 'ahmed.hussain','basma.mohamed','2/18/2017','3/10/2017',NULL,'Paris','Business trip ', @status1 OUTPUT
 PRINT @status1
+--unsuccessful request application
 GO
 DECLARE @status0 BIT 
 EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','leave request','','', @status0 OUTPUT
 PRINT @status0
 GO
 --5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-EXEC ViewRequestsStatusSP 
+--kindly run Apply for request executions first
+EXEC ViewRequestsStatusSP 'claire.carles'
 --6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--kindly run Apply for reqeust executions first
+EXEC DeletePendingRequestsSP 'claire.carles'
 
 --7:Reda-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
- DECLARE @status1 BIT
- EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
- PRINT @status1
+DECLARE @status1 BIT
+EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
+PRINT @status1
 
- DECLARE @status1 BIT
+DECLARE @status1 BIT
 EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 PRINT @status1
 

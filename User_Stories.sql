@@ -659,10 +659,11 @@ SELECT *
 FROM Regular_Employees re
 WHERE re.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not a regular employee
-ELSE IF(@leaveType = NULL) 
+ELSE
+BEGIN
+IF(@leaveType IS NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-BEGIN
 SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
@@ -705,10 +706,11 @@ SELECT *
 FROM HR_Employees hr
 WHERE hr.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not an HR employee
-ELSE IF(@leaveType = NULL) 
-SET @requestType = 0 --this is a business trip request
 ELSE 
 BEGIN
+IF(@leaveType IS NULL) 
+SET @requestType = 0 --this is a business trip request
+ELSE 
 SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
@@ -750,10 +752,11 @@ SELECT *
 FROM Managers m
 WHERE m.user_name = @ownerUserName
 )SET @operationStatus = 0; -- your replacer is not manager
-ELSE IF(@leaveType = NULL) 
+ELSE
+BEGIN
+IF(@leaveType IS NULL) 
 SET @requestType = 0 --this is a business trip request
 ELSE 
-BEGIN
 SET @requestType = 1 -- this is a leave request
 INSERT INTO Requests
 (start_date,end_date,request_date)
@@ -805,35 +808,76 @@ WHERE rrr.user_name_request_owner = @userName
 
 
 --6: Abdullah --------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 --Regular Employees Story no.6 Delete any request that is still in the review process
 --DeletePendingRequestsSP takes the username of the employee as input and deletes all
---his requests that have an hr_response_req attr value of Pending
+--his requests that have an hr_response_req attr value of NULL
 GO 
 
 CREATE PROC DeletePendingRequestsSP 
 @userName VARCHAR(30)
 AS
-DELETE Requests
-	WHERE request_id = 
-	(SELECT request_id 
-	FROM Regular_Employees_Replace_Regular_Employees r 
-	Where r.user_name_request_owner = @userName)
-	OR request_id = (
-	SELECT request_id 
-	FROM HR_Employees_Replace_HR_Employees h 
-	where h.user_name_request_owner = @userName)
-	OR request_id = (
-	SELECT request_id 
-	FROM Managers_Replace_Managers m 
-	WHERE m.user_name_request_owner = @userName)
-	AND hr_response_req = 'Pending'
+DELETE FROM Managers_Replace_Managers
+WHERE (user_name_request_owner = @userName AND
+Managers_Replace_Managers.request_id = ANY(
+SELECT Requests.request_id
+FROM Requests
+WHERE hr_response_req IS NULL))
+
+DELETE FROM Regular_Employees_Replace_Regular_Employees
+WHERE (user_name_request_owner = @userName AND
+Regular_Employees_Replace_Regular_Employees.request_id = ANY(
+SELECT Requests.request_id
+FROM Requests
+WHERE hr_response_req IS NULL))
+
+DELETE FROM HR_Employees_Replace_HR_Employees
+WHERE (user_name_request_owner = @userName AND
+HR_Employees_Replace_HR_Employees.request_id = ANY(
+SELECT Requests.request_id
+FROM Requests
+WHERE hr_response_req = NULL))
+
+DELETE FROM Leave_Requests
+WHERE NOT( request_id = ANY(
+	SELECT request_id
+	FROM Managers_Replace_Managers
+	)
+	OR request_id = ANY(
+	SELECT request_id
+	FROM Regular_Employees_Replace_Regular_Employees
+	)
+	OR request_id = ANY(
+	SELECT request_id
+	FROM HR_Employees_Replace_HR_Employees
+	))
+
+DELETE FROM Business_Trip_Requests
+WHERE NOT(request_id = ANY(
+	SELECT request_id
+	FROM Managers_Replace_Managers
+	)
+	OR request_id = ANY(
+	SELECT request_id
+	FROM Regular_Employees_Replace_Regular_Employees
+	)
+	OR request_id = ANY(
+	SELECT request_id
+	FROM HR_Employees_Replace_HR_Employees
+	))
+
+DELETE FROM Requests
+	WHERE NOT (request_id = ANY(
+	SELECT request_id
+	FROM Leave_Requests
+	)
+	OR request_id = ANY(
+	SELECT request_id
+	FROM Business_Trip_Requests
+	))
 
 
 --7: Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
---staff member story no.7 the procedure takes the email info as input and performs
+-- staff member story no.7 the procedure takes the email info as input and performs
 -- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
 CREATE PROC SendEmailSP
@@ -876,8 +920,8 @@ END
 
 --8:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company. 
---The procedure 
+-- Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company. 
+-- The procedure 
 -- takes the username of the staff member as input, returns 
 -- shows the emails of the username according to the primary keys of table Emails
 -- only if sender are in the same company as the receiver (handled with an Exists)
@@ -905,7 +949,6 @@ WHERE sm.user_name = @username
             )
 
 --9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 --Staff Member User Stories no.9: The Staff memeber replies to a received email, and this email is added to the table Email. 
 --So the procedure has 5 inputs:-
 --@recipientUSername is the username of the staff member checking the received emails
@@ -1401,7 +1444,7 @@ GO
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
 AS
-SELECT s.*
+SELECT s.*	
 FROM Job_Seekers s
 WHERE (s.user_name = @seekerUserName)
 

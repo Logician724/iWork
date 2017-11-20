@@ -855,7 +855,7 @@ VALUES ('cam.percival','Project-3284NMD upgrade of exterior of home page BootStr
 
 
  -- Emails INSERTIONS
- DECLARE @status1 BIT
+DECLARE @status1 BIT
 EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 EXEC SendEmailSP 'sally.ramadan','sally.ramadan@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
@@ -874,3 +874,5 @@ INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,ty
 VALUES('2017-11-13','google.com','The new feature upgrade in google','ahmed.shehata','','event');
 INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
 VALUES('2017-11-3','google.com','The newest webpage upgrade in google','bonita.bon','','event');
+
+
