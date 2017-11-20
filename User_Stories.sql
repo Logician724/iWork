@@ -1476,8 +1476,14 @@ WHERE mapr.regular_user_name = @userName
 
 --2: Reda----------------------------------------------------------------------------
 
+--Regular Employees User Stories No.2:- 
+--The regular employee can view tasks in a certain project assigned to him/her
+--The procedure takes as inputs the username of the regular employee and the name of the project he/she wants to view tasks for
+--If the regular employee does not have tasks in this project ,, the procedure outputs false (0)
+--Otherwise, the regular employee can view the info
+
 GO
-CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
+CREATE PROC ViewTasksInProjectSP 
 @projectName VARCHAR(100),
 @userName VARCHAR(30),
 @operationStatus BIT OUTPUT
@@ -1488,7 +1494,7 @@ FROM Managers_Assign_Tasks_To_Regulars mar
 WHERE mar.regular_user_name=@userName AND mar.project_name=@projectName
            )
 BEGIN
-SELECT t.*,mar.regular_user_name
+SELECT t.*
 FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
 ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
