@@ -1077,9 +1077,15 @@ SELECT j.*
 FROM Jobs j
 WHERE j.job_title=@jobTitle AND 
 j.company_domain 
-IN ( SELECT s.company_domain FROM Staff_Members s WHERE s.user_name=@username) 
+IN (
+SELECT s.company_domain
+FROM Staff_Members s
+WHERE s.user_name=@username) 
 AND j.department_code
-IN ( SELECT s.department_code FROM Staff_Members s WHERE s.user_name=@username) --I KNOW IT LOOKS STUPID BUT I'M LAZY
+IN (
+SELECT s.department_code
+FROM Staff_Members s
+WHERE s.user_name=@username)
 --3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC EditJobInfoSP --Also needs editing
