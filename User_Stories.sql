@@ -1561,33 +1561,36 @@ AND project_name=@projectName
 SET @operationStatus = 1
 END
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
-
 GO 
 CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
 @username VARCHAR(30),
-@status VARCHAR(10),
 @taskName VARCHAR(30),
-@deadline DATETIME ,
+@deadline DATETIME,
 @projectName VARCHAR(100),
 @operationStatus BIT OUTPUT
 AS
-IF NOT EXISTS  (
+IF NOT EXISTS (
 SELECT *
-FROM Managers_Assign_Tasks_To_Regulars m
-WHERE @username=m.regular_user_name 
+FROM Managers_Assign_Tasks_To_Regulars m INNER JOIN Tasks t
+ON t.name = m.task_name
+AND t.deadline = m.task_deadline
+AND t.project_name = m.project_name
+WHERE @username = m.regular_user_name 
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
 AND @projectName = m.project_name 
-AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0)
+AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
+AND t.status = 'Fixed')
 SET @operationStatus =0
 ELSE
 BEGIN 
 UPDATE Tasks 
-SET Tasks.status =@status
-WHERE Tasks.name=@name
+SET Tasks.status ='Assigned'
+WHERE Tasks.name=@taskName
 AND Tasks.deadline=@deadline 
 AND Tasks.project_name=@projectName 
-AND Tasks.deadline < CURRENT_TIMESTAMP 
+AND Tasks.status = 'Fixed'
+AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
 SET @operationStatus = 1
 END
 
