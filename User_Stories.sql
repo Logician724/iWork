@@ -1589,6 +1589,7 @@ END
 
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
+
 --Regular Employees User Stories no.4:- 
 --Work on the task again (a task that was assigned to me before). I can change the status of this
 --task from ‘Fixed’ to ‘Assigned’ as long as the deadline did not pass and it was not reviewed by the manager yet.
@@ -1601,31 +1602,33 @@ END
 GO 
 CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
 @username VARCHAR(30),
-@status VARCHAR(10),
 @taskName VARCHAR(30),
-@deadline DATETIME ,
+@deadline DATETIME,
 @projectName VARCHAR(100),
 @operationStatus BIT OUTPUT
 AS
-IF NOT EXISTS  (
+IF NOT EXISTS (
 SELECT *
-FROM Managers_Assign_Tasks_To_Regulars m
-WHERE @username=m.regular_user_name 
+FROM Managers_Assign_Tasks_To_Regulars m INNER JOIN Tasks t
+ON t.name = m.task_name
+AND t.deadline = m.task_deadline
+AND t.project_name = m.project_name
+WHERE @username = m.regular_user_name 
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
 AND @projectName = m.project_name 
 AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
-               
-               )
+AND t.status = 'Fixed')
 SET @operationStatus =0
 ELSE
 BEGIN 
 UPDATE Tasks 
-SET Tasks.status =@status
-WHERE Tasks.name=@name
+SET Tasks.status ='Assigned'
+WHERE Tasks.name=@taskName
 AND Tasks.deadline=@deadline 
 AND Tasks.project_name=@projectName 
-AND Tasks.deadline < CURRENT_TIMESTAMP 
+AND Tasks.status = 'Fixed'
+AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
 SET @operationStatus = 1
 END
 
@@ -1640,32 +1643,12 @@ END
 --EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
 GO
 CREATE PROC ViewEmployeesRequestsSP 
-@username VARCHAR(30), 
-@ManagerUserName VARCHAR(30),
+@managerUserName VARCHAR(30),
 @response VARCHAR(20),
-@id int --View Single request at a time
-AS 
-IF EXISTS 
-(SELECT user_name 
-FROM HR_Employees 
-WHERE @username=user_name)  AND NOT EXISTS (SELECT user_name
-FROM Managers
-WHERE @ManagerUserName =user_name AND type='HR')
-BEGIN
-print 'HR can only replace Hr'
-END
-ELSE
-UPDATE Requests 
-SET manager_response_req=@response
-WHERE request_id=@id;
+@id INT,
+@operationStatus INT OUTPUT
+AS
 
-
-
-
-
-
-
-DROP PROC ViewEmployeesRequestsSP ;
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
 
 GO
@@ -1932,13 +1915,19 @@ CREATE FUNCTION GetMissingHours
 RETURNS INT
 BEGIN
 
-DECLARE @workingHours INT, @duration INT
+DECLARE @workingHours INT
+DECLARE @duration INT
+DECLARE @missingHours INT
 SET @duration = DATEPART(HOUR,@leaveTime) - DATEPART(HOUR,@startTime)
 SELECT @workingHours = j.working_hours
 FROM Staff_Members s INNER JOIN Jobs j
 ON s.job_title = j.job_title AND s.department_code = j.department_code AND s.company_domain = j.company_domain
 WHERE s.user_name = @userName 
-RETURN (@workingHours - @duration)
+IF( (@workingHours - @duration) < 0)
+SET @missingHours = 0
+ELSE
+SET @missingHours = @workingHours - @duration
+RETURN @missingHours
 END
 
 
