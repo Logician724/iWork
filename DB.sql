@@ -192,7 +192,8 @@ CONSTRAINT CHK_manager_response_req CHECK(manager_response_req = 'Accepted' OR m
 CREATE TABLE Leave_Requests(
 request_id INT PRIMARY KEY NOT NULL,
 type VARCHAR(50) NOT NULL,
-FOREIGN KEY (request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (request_id) REFERENCES Requests(request_id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT CHK_TYPE CHECK(type = 'sick leave' OR type = 'accidental leave' OR type = 'annual leave')
 );
 
 CREATE TABLE Business_Trip_Requests(
