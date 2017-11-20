@@ -466,12 +466,32 @@ DECLARE @status1 BIT
 EXEC ViewJobInformationSP 'Fayrouz.Hussain', 'Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
 PRINT @status1
 --3:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful edit//job is not in the department
+DECLARE @status0 BIT
+EXEC EditJobInfoSP 'Fayrouz.Hussain', 'Manager- Managing JS Department','JS-8938','facebook.com','1-1-2018',NULL,NULL,NULL,NULL,NULL,NULL,@status0 OUTPUT
+PRINT @status0
+--successful edit
+DECLARE @status1 BIT
+EXEC EditJobInfoSP 'Fayrouz.Hussain', 'Manager- Managing PHP Department','PHP-5019','facebook.com','2018-1-1','this job is not easy, expect your eyes to shut down after looking at a computer screen for days non-stop',NULL,NULL,NULL,NULL,NULL,@status1 OUTPUT
+PRINT @status1
 --4:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
-
+-- unsuccessful view//the application does not belong to the HR employee's department
+DECLARE @status0 BIT
+EXEC ViewNewApplicationsSP 'Fayrouz.Hussain','Manager- Managing JS Department','JS-8938','facebook.com',@status0 OUTPUT
+PRINT @status0 
+-- successful view
+DECLARE @status1 BIT
+EXEC ViewNewApplicationsSP 'Fayrouz.Hussain','Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
+PRINT @status1
 --5:Reda------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+--unsuccessful response addition// this job application does not belong to the HR's department 
+DECLARE @status0 BIT
+EXEC AddHrResponseSP 'shadi.aly', 'Fayrouz.Hussain', 'Employee- BootStrap Developer', 'BS-3291', 'facebook.com','Rejected',@status0 OUTPUT
+PRINT @status0
+--successful response addition
+DECLARE @status1 BIT
+EXEC AddHrResponseSP 'shadi.aly','Fayrouz.Hussain','Manager- Managing PHP Department','PHP-5019','facebook.com','Rejected',@status1 OUTPUT
+PRINT @status1
 
 --6:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -1111,75 +1111,130 @@ CREATE PROC EditJobInfoSP
 @job_title VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
-@applicationDeadline DATETIME=NULL,
-@detailedDescription TEXT=NULL,
-@minYearsExperience INT=NULL,
-@salary INT=NULL,
-@shortDescription TEXT=NULL,
-@vacancies INT=NULL , 
-@workingHours INT=NULL 
-AS 
---If the department is the HR Employee's Department, He/She can edit the info
-IF EXISTS ( --We don't need this join we already have the HR username
-SELECT*
-FROM Staff_Members SM INNER JOIN HR_Employees HE ON SM.user_name=HE.user_name INNER JOIN Jobs J ON J.department_code=SM.department_code
-WHERE SM.company_domain=J.company_domain AND HE.user_name=@hrUsername
-)
-BEGIN --BEGIN IF EXISTS
+@applicationDeadline DATETIME = NULL,
+@detailedDescription TEXT = NULL,
+@minYearsExperience INT = NULL,
+@salary INT = NULL,
+@shortDescription TEXT = NULL,
+@vacancies INT = NULL , 
+@workingHours INT = NULL ,
+@operationStatus BIT OUTPUT
+AS
+IF( NOT EXISTS
+(
+SELECT *
+FROM Staff_Members
+WHERE Staff_Members.user_name = @hrUsername AND
+Staff_Members.department_code = @departmentCode
+AND Staff_Members.company_domain =@companyDomain
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
 IF(@applicationDeadline IS NOT NULL)
-BEGIN UPDATE Jobs SET application_deadline= @applicationDeadline WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs
+SET application_deadline= @applicationDeadline
+WHERE job_title=@job_title AND
+department_code=@departmentCode AND 
+company_domain=@companyDomain
 IF(@detailedDescription IS NOT  NULL)
-BEGIN UPDATE Jobs SET detailed_description= @detailedDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs
+SET detailed_description= @detailedDescription
+WHERE job_title=@job_title AND
+department_code=@departmentCode AND
+company_domain=@companyDomain 
 IF(@minYearsExperience IS NOT NULL)
-BEGIN UPDATE Jobs SET min_years_experience= @minYearsExperience WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs 
+SET min_years_experience= @minYearsExperience 
+WHERE job_title=@job_title AND 
+department_code=@departmentCode AND 
+company_domain=@companyDomain 
 IF(@salary IS NOT NULL)
-BEGIN UPDATE Jobs SET salary = @salary WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs
+SET salary = @salary
+WHERE job_title=@job_title AND 
+department_code=@departmentCode AND
+company_domain=@companyDomain
 IF(@shortDescription IS NOT NULL)
-BEGIN UPDATE Jobs SET short_description = @shortDescription WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs 
+SET short_description = @shortDescription 
+WHERE job_title=@job_title AND 
+department_code=@departmentCode AND 
+company_domain=@companyDomain 
 IF(@vacancies IS NOT NULL)
-BEGIN UPDATE Jobs SET vacancies= @vacancies WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
+UPDATE Jobs 
+SET vacancies= @vacancies 
+WHERE job_title=@job_title AND 
+department_code=@departmentCode AND 
+company_domain=@companyDomain 
 IF(@workingHours IS NOT NULL)
-BEGIN UPDATE Jobs SET working_hours = @workingHours WHERE job_title=@job_title AND department_code=@departmentCode AND company_domain=@companyDomain END 
-END --END IF EXISTS
+UPDATE Jobs 
+SET working_hours = @workingHours 
+WHERE job_title=@job_title AND 
+department_code=@departmentCode AND 
+company_domain=@companyDomain 
+SET @operationStatus = 1
+END 
 
 --4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
+--viewing seeker and job info are corvered already in the manager user stories. 
 GO
 CREATE PROC ViewNewApplicationsSP
 @hrUserName VARCHAR(30),
-@seekerUserName VARCHAR(30),
-@companyDomain VARCHAR(150),
+@jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@jobTitle VARCHAR(150)
+@companyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
-IF EXISTS
+IF NOT EXISTS
 (
 SELECT *
-FROM Staff_Members sm INNER JOIN Departments d
-ON sm.department_code = d.department_code
-WHERE d.department_code = @departmentCode AND sm.user_name = @hrUserName
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode AND sm.user_name = @hrUserName
 )
+SET @operationStatus = 0
+ELSE
+BEGIN
 SELECT *
 FROM Applications a
-WHERE a.seeker_username = @seekerUserName AND
-a.job_title = @jobTitle AND
+WHERE a.job_title = @jobTitle AND
 a.department_code = @departmentCode AND
-a.company_domain = @companyDomain
-
+a.company_domain = @companyDomain AND
+a.app_status = 'Pending' AND
+a.hr_response_app IS NULL AND
+a.manager_response_app IS NULL
+SET @operationStatus = 1
+END
 
 --5: Reda------------------------------------------------------------------------------------------------------------------------------------------------
 GO
-
-CREATE PROC AddHrResponseSP --fixed
+CREATE PROC AddHrResponseSP
 @seekerUserName VARCHAR(30),
 @hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
-@hrResponse VARCHAR(20)
+@hrResponse VARCHAR(20),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS
+(
+SELECT *
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode AND
+sm.user_name = @hrUserName
+)
+SET @operationStatus = 0
+ELSE
+BEGIN
 UPDATE Applications
 SET hr_response_app = @hrResponse , hr_username = @hrUserName
-WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.department_code = @departmentCode AND Applications.company_domain = @companyDomain)
+WHERE (Applications.seeker_username = @seekerUserName AND 
+Applications.job_title = @jobTitle AND 
+Applications.department_code = @departmentCode AND 
+Applications.company_domain = @companyDomain)
+SET @operationStatus = 1
+END
 --6: Gharam----------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC HRPostsAnnouncementSP --allows hr to post announcements handles hr 6
