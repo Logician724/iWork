@@ -540,19 +540,23 @@ EXEC ViewProjectsOfEmployeeSP 'godfrey.love'
 
 
 --2: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-DECLARE @status1 BIT
-EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'godfrey.love', @status1 OUTPUT 
-PRINT @status1
-
+--unsuccessful task view//the regular employee doesn't have tasks in this project
 DECLARE @status0 BIT
 EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'cam.percival', @status0 OUTPUT 
 PRINT @status0
-
+--successful task view
+DECLARE @status1 BIT
+EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'godfrey.love', @status1 OUTPUT 
+PRINT @status1
 --3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+--unsuccessful task edit//task doesn't exist, or is not assigned to this staff member
+DECLARE @status0 BIT
+EXEC FinalizeTaskSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-5651AMU chat page developing BootStrap',@status0 OUTPUT
+PRINT @status0
+--successful task edit
+DECLARE @status1 BIT
+EXEC FinalizeTaskSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-3284NMD upgrade of exterior of home page BootStrap',@status1 OUTPUT
+PRINT @status1
 
 --4: Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -1535,28 +1535,31 @@ SET @operationStatus = 0
 --3: Gharam------------------------------------------------------------------------------------
 
 GO
-CREATE PROC RegularFinalizesTaskSP
-@username VARCHAR(30) 
-,@taskName VARCHAR(30),
+CREATE PROC FinalizeTaskSP
+@username VARCHAR(30),
+@taskName VARCHAR(30),
 @deadline DATETIME, 
-@project VARCHAR(100)
+@projectName VARCHAR(100),
+@operationStatus BIT OUTPUT
 AS 
-IF EXISTS  (SELECT M.task_name 
-FROM Managers_Assign_Tasks_To_Regulars M 
-WHERE @username=M.regular_user_name 
-AND @taskName=M.task_name 
-AND @deadline=M.task_deadline 
-AND @project=M.project_name) 
-AND CONVERT (date, SYSDATETIMEOFFSET())<CONVERT (date, @deadline)
+IF NOT EXISTS  (
+SELECT *
+FROM Managers_Assign_Tasks_To_Regulars m
+WHERE @username=m.regular_user_name 
+AND @taskName = m.task_name 
+AND @deadline = m.task_deadline 
+AND @projectName = m.project_name) 
+AND DATEDIFF(DAY,@deadline,CURRENT_TIMESTAMP)>=0
+SET @operationStatus = 0
+ELSE
 BEGIN
 UPDATE Tasks
 SET status='Fixed'
 WHERE  @taskName=name
 AND @deadline=deadline 
-AND project_name=@project
+AND project_name=@projectName
+SET @operationStatus = 1
 END
-
-
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
 
 GO 
