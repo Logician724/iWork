@@ -1,4 +1,4 @@
-DROP PROC AddManagerResponseToRequestSP;
+﻿P PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
@@ -1283,7 +1283,20 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 
---7: Yasmine---------------------------------------------------------------------------------------------------------------------
+--7: Yasmine---------------------------------------------------------------------------------------------------------------------------
+
+--HR User Stories no.7: 
+--The HR can View requests (business or leave) approved by manager only of staff members in the same department as the HR 
+--The procedure takes as inputs the HR's username and his/her department info (department Code and company domain)
+--First, we check if the HR member belongs to this department.If not, the procedure just return false (0).
+--Otherwise,
+--We select info that we want to display from the Requests table. 
+--The procedure shows info from three tables: HR_Employees_Replace_HR_Employees, Regular_Employees_Replace_Regular_Employees,and Managers_Replace_Managers 
+--Each represents the requests info for HR, Regular, and Manager, respectively.
+--The procedure also filters out requests are for staff members not in the HR's department.
+--After knowing the request ID's, the HR can then view the Request info based on whether it is a Business trip request or a leave request.
+--If it's a leave request, the HR views its type
+--If it's a trip purpose request, The HR views its trip purpose and destination
 
 GO 
 CREATE PROC ViewRequestsSP
@@ -1346,6 +1359,7 @@ WHERE request_id = @requestID
 ELSE 
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
+
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
 
