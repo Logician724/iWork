@@ -1600,7 +1600,7 @@ END
 --otherwise, the task status is updated, returning true (1).
 
 GO 
-CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
+CREATE PROC ChangeTaskStatusSP
 @username VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
