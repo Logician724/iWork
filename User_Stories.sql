@@ -1924,7 +1924,9 @@ Values(@projectName,@managerUserName,@startDate,@endDate)
 --Otherwise, we then check if the manager who defined the project , and the manager who is assigning the regular employee to the project and also the 
 --regular employee are all in the same department or no.
 --If they are not in the same department, the procedure output integer 1, and the regular employee cannot be assigned.
---Otherwise, 
+--Otherwise, we check if the regular employee is already assigned to this project,, if so , the procedure outputs integer 2 and no updates happen.
+--Otherwise, we can now assign the Regular Employee to the project, updating table Managers_Assign_Projects_To_Regulars with the new values and 
+--returning integer 3 as an indication of successful assignment 
 GO
 CREATE PROC AssignRegularToProjectSP
 @regularUserName VARCHAR(30),
