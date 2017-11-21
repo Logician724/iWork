@@ -594,7 +594,14 @@ EXEC DefineTaskSP 'Mohamed_Mahmoud','Project Eris','2017-12-30','Alpha stage',@s
 PRINT @status1
 
 --9:Reda -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful task assignment// the regular employee is not assigned to the project
+DECLARE @status0 BIT
+EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','andra.kyla','Task 1','12/30/2017 12:00:00 AM',@status0 OUTPUT
+PRINT @status0
+--successful task assignment
+DECLARE @status1 BIT
+EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','rosannah.humphrey','Task 1','12/30/2017 12:00:00 AM',@status1 OUTPUT
+PRINT @status1
 
 --10:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
