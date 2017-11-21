@@ -2054,6 +2054,15 @@ AND @deadline=task_deadline
 AND @projectName=project_name 
 
 --11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.11:-
+--Manager can view a list of tasks in a certain project that have a certain status. 
+--The procedure takes as inputs the Manager's username, and project Name he/she wants to view tasks for and the task status
+--This Manager must be in the same department as the Manager's department who created the Project
+--So, first we check if this holds. 
+--If they are in different departments the procedure outputs 0 (false)
+--Otherwise, Manager views the list of tasks and the procedure outputs 1 (true)
+
 GO
 CREATE PROC ViewTasksSP 
 @managerUsername VARCHAR(100),
