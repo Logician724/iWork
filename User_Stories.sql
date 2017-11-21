@@ -1787,6 +1787,7 @@ END
 --Managers can view applications for a specific job in my department that were approved by an HR employee. For
 --each application, I should be able to check information about the job seeker, job, and the score
 --he/she got while applying.
+--This user stories is divided into 3 procedures
 
 
 GO
@@ -1810,6 +1811,12 @@ j.job_title = @jobTitle
 AND j.department_code = @departmentCode 
 AND j.company_domain = @companyDomain)
 
+
+
+--This procedure takes as inputs the HR username, and the job title, departmentCode and Company Domain (Primary Keys for Departments Table)
+--We first check if the HR is in this department.. 
+--If no, the manager can't view the requests..
+--Otherwise, the manager can view the Applications
 GO
 CREATE PROC ViewApprovedJobAppSP
 @hrUserName VARCHAR(30),
@@ -1825,7 +1832,7 @@ WHERE Staff_Members.user_name = @hrUserName
 AND Staff_Members.department_code = @departmentCode
 AND Staff_Members.company_domain = @CompanyDomain
 )
-SET @operationStatus = 0
+SET @operationStatus = 0;
 ELSE
 BEGIN
 SELECT a.*
@@ -1835,6 +1842,7 @@ a.job_title = @jobTitle
 AND a.department_code = @departmentCode 
 AND a.company_domain = @CompanyDomain 
 AND a.hr_response_app='Accepted')
+SET @operationStatus = 1;
 END
 --4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
 GO
