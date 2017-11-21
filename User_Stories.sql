@@ -1790,6 +1790,7 @@ END
 --This user stories is divided into 3 procedures
 
 
+--This procedure the Manager can view information about the jobs seeker. So, it takes as an input the username of the job seeker
 GO
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
@@ -1816,10 +1817,10 @@ AND j.company_domain = @companyDomain)
 --This procedure takes as inputs the HR username, and the job title, departmentCode and Company Domain (Primary Keys for Departments Table)
 --We first check if the HR is in this department.. 
 --If no, the manager can't view the requests..
---Otherwise, the manager can view the Applications
+--Otherwise, the manager can view the Applications approved by the HR
 GO
 CREATE PROC ViewApprovedJobAppSP
-@hrUserName VARCHAR(30),
+@managerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150),
@@ -1828,7 +1829,7 @@ AS
 IF NOT EXISTS(
 SELECT *
 FROM Staff_Members
-WHERE Staff_Members.user_name = @hrUserName
+WHERE Staff_Members.user_name = @managerUserName
 AND Staff_Members.department_code = @departmentCode
 AND Staff_Members.company_domain = @CompanyDomain
 )
