@@ -1305,7 +1305,7 @@ WHERE mrm.user_name_request_owner IN (
 SELECT sm.user_name
 FROM Staff_Members sm
 WHERE sm.department_code = @departmentCode
-)
+) AND r.manager_response_req = 'Accepted'
 UNION
 SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,hrh.user_name_request_owner,hrh.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
 FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hrh
@@ -1314,7 +1314,7 @@ WHERE hrh.user_name_request_owner IN(
 SELECT sm.user_name
 FROM Staff_Members sm
 WHERE sm.department_code = @departmentCode
-)
+) AND r.manager_response_req = 'Accepted' 
 UNION
 SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,rrr.user_name_request_owner,rrr.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
 FROM Requests r INNER JOIN Regular_Employees_Replace_Regular_Employees rrr
@@ -1323,7 +1323,7 @@ WHERE rrr.user_name_request_owner IN (
 SELECT sm.user_name
 FROM Staff_Members sm
 WHERE sm.department_code = @departmentCode
-)
+) AND r.manager_response_req = 'Accepted'
 SET @operationStatus = 1
 END
 ELSE 
@@ -1347,7 +1347,6 @@ ELSE
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
-
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
 GO
 
