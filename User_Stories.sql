@@ -1799,6 +1799,8 @@ SELECT u.user_name,u.personal_email,u.birth_date,u.exp_year,u.first_name,u.last_
 FROM Users u
 WHERE (u.user_name = @seekerUserName)
 
+--In this procedure, the manager can view the information about the Job.
+--The procedure takes as inputs the job title and department code and company domain (Jobs table primary keys )
 GO
 CREATE PROC ViewJobInfoSP
 @jobTitle VARCHAR(150),
@@ -1815,7 +1817,7 @@ AND j.company_domain = @companyDomain)
 
 
 --This procedure takes as inputs the HR username, and the job title, departmentCode and Company Domain (Primary Keys for Departments Table)
---We first check if the HR is in this department.. 
+--We first check if the Manager is in this department.. 
 --If no, the manager can't view the requests..
 --Otherwise, the manager can view the Applications approved by the HR
 GO
