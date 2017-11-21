@@ -1481,6 +1481,7 @@ END
 
 GO
 CREATE PROC ViewTop3RegularSP
+
 AS
 SELECT TOP 3 first_name+' '+ last_name AS full_name, SUM(a.duration) AS working_hours
 FROM Attendances a INNER JOIN
@@ -1988,6 +1989,8 @@ CREATE PROC DefineTaskSP
 @projectName VARCHAR(100), 
 @deadline DATETIME, 
 @taskName VARCHAR(30),
+@comments TEXT,
+@description TEXT,
 @operationStatus BIT OUTPUT
 AS
 IF NOT EXISTS ( 
@@ -2001,8 +2004,10 @@ WHERE @managerUsername = p.manager_user_name
 SET @operationStatus = 0
 ELSE
 BEGIN 
-INSERT INTO Tasks (project_name,deadline,name,status)
-VALUES (@projectName, @deadline, @taskName , 'Open')
+INSERT INTO Tasks (project_name,deadline,name,status,comments,description)
+VALUES (@projectName, @deadline, @taskName , 'Open',@comments,@description)
+INSERT INTO Managers_Assign_Tasks_To_Regulars(manager_user_name,task_name,task_deadline,project_name)
+VALUES  (@managerUsername,@taskName,@deadline,@projectName)
 SET @operationStatus = 1
 END
 --9: Reda ------------------------------------------------------------------------------------------------------------------------------------------
@@ -2025,9 +2030,12 @@ AND mapr.regular_user_name = @regularUserName
 SET @operationStatus = 0
 ELSE
 BEGIN
-INSERT INTO Managers_Assign_Tasks_To_Regulars
-(manager_user_name,regular_user_name,task_name,task_deadline,project_name)
-VALUES (@managerUserName,@regularUserName,@taskName,@taskDeadline,@projectName)
+UPDATE Managers_Assign_Tasks_To_Regulars
+SET regular_user_name = @regularUserName
+WHERE manager_user_name = @managerUserName
+AND task_name = @taskName
+AND task_deadline = @taskDeadline
+AND project_name = @projectName
 SET @operationStatus = 1
 END
 
@@ -2110,24 +2118,30 @@ END
 
 --12: Abdullah-------------------------------------------------------------------------------------------------------------------------------------
 
-GO
-CREATE PROC ReviewTaskSP
-@managerUserName VARCHAR(50),
-@projectName VARCHAR(100),
-@tasksName VARCHAR(30),
-@response VARCHAR(10), 
-@newDeadline DATETIME
-AS
-BEGIN
-IF(@response='Accepted')
-	UPDATE Tasks
-		SET Tasks.status = 'Closed'
-		WHERE Tasks.name= @tasksName AND Tasks.project_name = @projectName 
-ELSE
-IF(@response = 'Rejected')
-	UPDATE Tasks
-		SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline;
-END
+--GO
+--CREATE PROC ReviewTaskSP
+--@managerUserName VARCHAR(50),
+--@projectName VARCHAR(100),
+--@tasksName VARCHAR(30),
+--@response VARCHAR(10), 
+--@newDeadline DATETIME
+--AS
+--BEGIN
+--IF NOT EXISTS(
+--SELECT *
+--FROM Tasks
+--WHERE 
+--)
+
+--IF(@response='Accepted')
+--	UPDATE Tasks
+--		SET Tasks.status = 'Closed'
+--		WHERE Tasks.name= @tasksName AND Tasks.project_name = @projectName 
+--ELSE
+--IF(@response = 'Rejected')
+--	UPDATE Tasks
+--		SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline;
+--END
 ------------------------FUNCTIONS----------------------------------------------------
 GO
 CREATE FUNCTION MakeCompanyEmail
