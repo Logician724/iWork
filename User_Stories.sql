@@ -61,7 +61,7 @@ DROP PROC ApplyHRForRequestSP;
 DROP PROC ViewRequestsStatusSP;
 DROP PROC ReplyToEmailsSP;
 DROP PROC ShowRequestInfoSP;
-
+DROP PROC RespondHRToRequestSP;
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --“As an registered/unregistered user, I should be able to ...”
@@ -1329,7 +1329,6 @@ END
 ELSE 
 SET @operationStatus = 0
 
-
 GO
 CREATE PROC ShowRequestInfoSP
 @hrUserName VARCHAR(30),
@@ -1347,6 +1346,41 @@ ELSE
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
+GO
+CREATE PROC RespondHRToRequestSP
+@hrUserName VARCHAR(30),
+@requestID INT,
+@hrResponse VARCHAR(10)
+AS
+DECLARE @noOfLeaveDays INT
+DECLARE @staffUserName VARCHAR(30)
+UPDATE Requests
+SET hr_user_name = @hrUserName,
+hr_response_req = @hrResponse
+WHERE manager_response_req = 'Accepted' AND
+request_id = @requestID
+IF(@hrResponse = 'Accepted')
+BEGIN
+SELECT @noOfLeaveDays = no_of_leave_days 
+FROM Requests
+WHERE request_id = @requestID
+UPDATE Staff_Members
+SET no_annual_leaves = no_annual_leaves - @noOfLeaveDays
+WHERE Staff_Members.user_name IN(
+SELECT Managers_Replace_Managers.user_name_request_owner
+FROM Managers_Replace_Managers
+WHERE request_id = @requestID
+UNION
+SELECT user_name_request_owner
+FROM Regular_Employees_Replace_Regular_Employees
+WHERE request_id = @requestID
+UNION
+SELECT user_name_request_owner
+FROM HR_Employees_Replace_HR_Employees
+WHERE request_id = @requestID
+)
+END
+
 --9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
 GO
 
