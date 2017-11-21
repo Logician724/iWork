@@ -859,14 +859,14 @@ PRINT @status3
 
  -- Managers_Assign_Tasks_To Regulars INSERTIONS
 
- INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- VALUES ('Mahmoud_Mohamed','cam.percival','Project-5651AMU chat page developing BootStrap','Task 1','2017-12-30');
- INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- VALUES ('Mahmoud_Mohamed','cam.percival','Project-732EVT search engine maintenance','Task 4','2017-3-9');
- INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- VALUES ('Jack_Mark','godfrey.love','Project-8493QKL maintenance of game center BootStrap','Task 3','2017-12-30');
- INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- VALUES ('Jack_Mark','godfrey.love','Project-3284NMD upgrade of exterior of home page BootStrap','Task 1','2017-12-30');
+ --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ --VALUES ('Mahmoud_Mohamed','cam.percival','Project-5651AMU chat page developing BootStrap','Task 1','2017-12-30');
+ --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ --VALUES ('Mahmoud_Mohamed','cam.percival','Project-732EVT search engine maintenance','Task 4','2017-3-9');
+ --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ --VALUES ('Jack_Mark','godfrey.love','Project-8493QKL maintenance of game center BootStrap','Task 3','2017-12-30');
+ --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
+ --VALUES ('Jack_Mark','godfrey.love','Project-3284NMD upgrade of exterior of home page BootStrap','Task 1','2017-12-30');
 
 
  -- Emails INSERTIONS

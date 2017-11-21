@@ -508,7 +508,7 @@ EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page Boot
 PRINT @status0
 --successful task view
 DECLARE @status1 BIT
-EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'godfrey.love', @status1 OUTPUT 
+EXEC ViewTasksInProjectSP 'Project Mavis', 'godfrey.love', @status1 OUTPUT 
 PRINT @status1
 --3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task edit//task doesn't exist, or is not assigned to this staff member, or deadline passed
@@ -587,7 +587,7 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Neo','Mahmoud_Mohamed
 PRINT @status0
 --unsuccessful assignment// the regular doens't belong to the manager's department
 DECLARE @status1 INT
-EXEC AssignRegularToProjectSP 'Mohamed_Mahmoud','Project-3284NMD upgrade of exterior of home page BootStrap','claire.carles',@status1 OUTPUT
+EXEC AssignRegularToProjectSP 'Mohamed_Mahmoud','Project Mavis','claire.carles',@status1 OUTPUT
 PRINT @status1
 --unsuccessful assignment// the regular is already assigned to the project
 DECLARE @status2 INT
@@ -601,7 +601,14 @@ PRINT @status3
 
 
 --8:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful task definition// the regular employee doesn't belong to the project's department
+DECLARE @status0 BIT
+EXEC DefineTaskSP 'Ahmed_Mohamed','Project Mavis','2017-12-30','Alpha stage',@status0 OUTPUT
+PRINT @status0
+--successful task definition
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mohamed_Mahmoud','Project Eris','2017-12-30','Alpha stage',@status1 OUTPUT
+PRINT @status1
 
 --9:Reda -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
