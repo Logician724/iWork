@@ -519,12 +519,21 @@ PRINT @status1
 
 
 
---1: Abdullah-
+--1: Abdullah---------------------------------------------------------------------------------------------------
+
+EXEC ViewProjectsOfEmployeeSP 'godfrey.love'
 
 
 --2: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+DECLARE @status1 BIT
+EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'godfrey.love', @status1 OUTPUT 
+PRINT @status1
+
+DECLARE @status0 BIT
+EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'cam.percival', @status0 OUTPUT 
+PRINT @status0
 
 --3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
 

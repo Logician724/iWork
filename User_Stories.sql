@@ -1,4 +1,4 @@
-DROP PROC AddManagerResponseToRequestSP;
+﻿P PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
@@ -1283,7 +1283,20 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 
---7: Yasmine---------------------------------------------------------------------------------------------------------------------
+--7: Yasmine---------------------------------------------------------------------------------------------------------------------------
+
+--HR User Stories no.7: 
+--The HR can View requests (business or leave) approved by manager only of staff members in the same department as the HR 
+--The procedure takes as inputs the HR's username and his/her department info (department Code and company domain)
+--First, we check if the HR member belongs to this department.If not, the procedure just return false (0).
+--Otherwise,
+--We select info that we want to display from the Requests table. 
+--The procedure shows info from three tables: HR_Employees_Replace_HR_Employees, Regular_Employees_Replace_Regular_Employees,and Managers_Replace_Managers 
+--Each represents the requests info for HR, Regular, and Manager, respectively.
+--The procedure also filters out requests are for staff members not in the HR's department.
+--After knowing the request ID's, the HR can then view the Request info based on whether it is a Business trip request or a leave request.
+--If it's a leave request, the HR views its type
+--If it's a trip purpose request, The HR views its trip purpose and destination
 
 GO 
 CREATE PROC ViewRequestsSP
@@ -1345,6 +1358,7 @@ WHERE request_id = @requestID
 ELSE 
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
+
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 GO
 CREATE PROC RespondHRToRequestSP
@@ -1381,9 +1395,17 @@ WHERE request_id = @requestID
 )
 END
 
---9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
-GO
 
+
+--9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
+
+--HR user stories no.9:-
+--The HR can view the attendance records of any staff member in my department (check-in time, check-out time,
+--duration, missing hours) within a certain period of time.
+--The procedure takes as inputs the HR's username, and the username of the Regular employee whose attendance will be viewed, and the start and end period of the attendance
+--records. 
+
+GO
 CREATE PROC ViewAttendanceOfStaffSP
 @hrUserName VARCHAR(30),
 @regularUserName VARCHAR(30),
@@ -1399,6 +1421,7 @@ WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
 SELECT a.*
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
+
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
@@ -1467,28 +1490,51 @@ ORDER BY SUM(A.duration) desc
 
 
 --1: Abdullah-
-GO
 
+--Regular Emplyees User Stories no.1: 
+--The regular employe can view all projects assigned to him/her with their info.
+--The procedure simply takes the regular username as input.
+--it then selects from the Project table and the Assigning table for Regular Employees
+--and displays the records for the regular employee
+
+GO
 CREATE PROC ViewProjectsOfEmployeeSP
 @userName VARCHAR(30)
 AS 
 SELECT p.*
-FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr
+FROM Projects p INNER JOIN Managers_Assign_Projects_To_Regulars mapr 
 ON p.project_name = mapr.project_name
 WHERE mapr.regular_user_name = @userName
 
 
 --2: Reda----------------------------------------------------------------------------
 
+--Regular Employees User Stories No.2:- 
+--The regular employee can view tasks in a certain project assigned to him/her
+--The procedure takes as inputs the username of the regular employee and the name of the project he/she wants to view tasks for
+--If the regular employee does not have tasks in this project ,, the procedure outputs false (0)
+--Otherwise, the regular employee can view the info
+
 GO
-CREATE PROC ViewTasksInProjectSP --Also How to stop a regular employee from viewing tasks in other projects ?? the description says 'My' So maybe we should take the user as input ..otherwise it's correct
+CREATE PROC ViewTasksInProjectSP 
 @projectName VARCHAR(100),
-@userName VARCHAR(30)
+@userName VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
+IF EXISTS ( --If this regular employee has tasks in this project 
+SELECT *
+FROM Managers_Assign_Tasks_To_Regulars mar
+WHERE mar.regular_user_name=@userName AND mar.project_name=@projectName
+           )
+BEGIN
 SELECT t.*
 FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mar
 ON t.deadline = mar.task_deadline AND t.name = mar.task_name AND t.project_name = mar.project_name
 WHERE ( t.project_name = @projectName AND mar.regular_user_name = @userName)
+SET @operationStatus = 1
+END
+ELSE 
+SET @operationStatus = 0
 
 
 --3: Gharam------------------------------------------------------------------------------------
