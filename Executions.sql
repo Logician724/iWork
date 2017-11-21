@@ -504,20 +504,20 @@ EXEC ViewProjectsOfEmployeeSP 'godfrey.love'
 --2: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task view//the regular employee doesn't have tasks in this project
 DECLARE @status0 BIT
-EXEC ViewTasksInProjectSP 'Project-3284NMD upgrade of exterior of home page BootStrap', 'cam.percival', @status0 OUTPUT 
+EXEC ViewTasksInProjectSP 'Project Eris', 'marisa.lavender', @status0 OUTPUT 
 PRINT @status0
 --successful task view
 DECLARE @status1 BIT
-EXEC ViewTasksInProjectSP 'Project Mavis', 'godfrey.love', @status1 OUTPUT 
+EXEC ViewTasksInProjectSP 'Project Neo', 'marisa.lavender', @status1 OUTPUT 
 PRINT @status1
 --3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task edit//task doesn't exist, or is not assigned to this staff member, or deadline passed
 DECLARE @status0 BIT
-EXEC FinalizeTaskSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-5651AMU chat page developing BootStrap',@status0 OUTPUT
+EXEC FinalizeTaskSP 'rosannah.humphrey','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status0 OUTPUT
 PRINT @status0
 --successful task edit
 DECLARE @status1 BIT
-EXEC FinalizeTaskSP 'godfrey.love','Task 1','12/30/2017 12:00:00 AM','Project-3284NMD upgrade of exterior of home page BootStrap',@status1 OUTPUT
+EXEC FinalizeTaskSP 'marisa.lavender','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status1 OUTPUT
 PRINT @status1
 
 --4: Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -652,3 +652,9 @@ PRINT @status1
 
 
 --12:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DECLARE @status0 BIT
+EXEC ReviewTaskSP 'Mohamed_Mahmoud','Project Neo','Task 1','12/30/2017 12:00:00 AM','Accepted','2018-5-5',@status0 OUTPUT
+PRINT @status0
+DECLARE @status1 BIT
+EXEC ReviewTaskSP 'Mahmoud_Mohamed','Project Neo','Task 1','12/30/2017 12:00:00 AM','Accepted','2018-5-5',@status1 OUTPUT
+PRINT @status1
