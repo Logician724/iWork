@@ -1784,7 +1784,7 @@ END
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.3:-
---Managers can view applications for a specific job in my department that were approved by an HR employee. For
+--Managers can view applications for a specific job in their departments that were approved by an HR employee. For
 --each application, I should be able to check information about the job seeker, job, and the score
 --he/she got while applying.
 --This user stories is divided into 3 procedures
@@ -1848,6 +1848,15 @@ AND a.hr_response_app='Accepted')
 SET @operationStatus = 1;
 END
 --4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.4:-
+--Managers can accept or reject job applications to jobs related to their departments after being approved by an HR employee.
+--The procedure takes as inputs the Manager Username , the Manager response , and the primary keys for the Application he wants to respond to 
+--(job seeker username, jobtitle, department code, company domain)
+--If the manager's response is 'Accepted', the Application's record is updated accordingly, setting the final application status to accepted and manager's reponse to accepted
+--If the manager's response is 'Rejected', the Application's record is updated accordingly, setting the final applicaiton status to accepted and manager's response to accepted
+--We check before updating that the HR's response is 'Accepted'
+
 GO
 CREATE PROC RespondToJobApplicationsSP 
 @managerUserName VARCHAR(30),
@@ -1876,6 +1885,11 @@ AND Applications.company_domain = @companyDomain
 
 
 --5: Abdullah-------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.4:- 
+--Managers create a new project in their departments with all of its information.
+--So, the procedure just takes as inputs the mananger's username, and start date, end date, project name (columns of table Projects)
+--Then we insert in table Projects the values given by the Manager
 
 GO
 CREATE PROC DefineNewProject
