@@ -844,7 +844,7 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Eris','Mahmoud_Mohame
 PRINT @status3
 GO
 DECLARE @status3 INT
-EXEC AssignRegularToProjectSP 'godfrey.love','Project Mavis','Jack_Mark',@status3 OUTPUT
+EXEC AssignRegularToProjectSP 'marisa.lavender','Project Mavis','Mahmoud_Mohamed',@status3 OUTPUT
 PRINT @status3
 GO
 DECLARE @status3 INT
@@ -852,30 +852,37 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Morpheus','Mahmoud_Mo
 PRINT @status3
 GO
 DECLARE @status3 INT
-EXEC AssignRegularToProjectSP 'clark.maurine','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
+EXEC AssignRegularToProjectSP 'marisa.lavender','Project Neo','Mahmoud_Mohamed',@status3 OUTPUT
 PRINT @status3
 
 
 
  -- Managers_Assign_Tasks_To Regulars INSERTIONS
+ GO 
+ DECLARE @status1 BIT
+ EXEC AssignRegularToTaskSP 'Project Neo','Mahmoud_Mohamed','marisa.lavender','Task 1','12/30/2017 12:00:00 AM',@status1 OUTPUT
+ PRINT @status1 
+ GO
+ DECLARE @status1 BIT
+ EXEC AssignRegularToTaskSP 'Project Eris','Mahmoud_Mohamed','rosannah.humphrey','Task 3','12/30/2017 12:00:00 AM',@status1 OUTPUT
+ PRINT @status1
 
- --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- --VALUES ('Mahmoud_Mohamed','cam.percival','Project-5651AMU chat page developing BootStrap','Task 1','2017-12-30');
- --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- --VALUES ('Mahmoud_Mohamed','cam.percival','Project-732EVT search engine maintenance','Task 4','2017-3-9');
- --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- --VALUES ('Jack_Mark','godfrey.love','Project-8493QKL maintenance of game center BootStrap','Task 3','2017-12-30');
- --INSERT INTO Managers_Assign_Tasks_To_Regulars (manager_user_name,regular_user_name,project_name,task_name,task_deadline)
- --VALUES ('Jack_Mark','godfrey.love','Project-3284NMD upgrade of exterior of home page BootStrap','Task 1','2017-12-30');
+GO 
+DECLARE @status1 BIT
+EXEC AssignRegularToTaskSP 'Project Morpheus','Mahmoud_Mohamed','rosannah.humphrey','Task 4','3/9/2017 12:00:00 AM',@status1 OUTPUT
+PRINT @status1
 
+GO
+DECLARE @status1 BIT
+EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 2','7/31/2017 12:00:00 AM',@status1 OUTPUT
+PRINT @status1
 
  -- Emails INSERTIONS
+GO
 DECLARE @status1 BIT
 EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 EXEC SendEmailSP 'sally.ramadan','sally.ramadan@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
-
-
 
 -- Announcements INSERTIONS
 

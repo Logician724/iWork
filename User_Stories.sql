@@ -19,7 +19,7 @@ DROP PROC ViewJobInfoSP;
 DROP PROC AssignRegularToProjectSP;
 DROP PROC AssignRegularToTaskSP;
 DROP PROC ViewEmployeesRequestsSP;
-DROP PROC ViewTop3RegularSp;
+DROP PROC ViewTop3RegularSP;
 DROP PROC ReplaceRegularSP;
 DROP PROC RemoveRegularFromProjectSp
 DROP PROC HRPostsAnnouncementSP 
@@ -1921,10 +1921,22 @@ IF NOT EXISTS
 SELECT *
 FROM Staff_Members s1, Staff_Members s2
 WHERE (s1.department_code = s2.department_code
+AND s1.company_domain = s2.company_domain
 AND s1.user_name = @managerUserName
 AND s2.user_name = @regularUserName
+AND s1.department_code = ANY(
+SELECT sm.department_code 
+FROM Projects p INNER JOIN Staff_Members sm
+ON sm.user_name = p.manager_user_name
+WHERE sm.user_name = @managerUserName
 )
+AND s1.company_domain = ANY (
+SELECT sm.company_domain 
+FROM Projects p INNER JOIN Staff_Members sm
+ON sm.user_name = p.manager_user_name
+WHERE sm.user_name = @managerUserName
 )
+))
 SET @operationStatus = 1 --the regular is not in the same department as the manager
 ELSE
 IF  (
@@ -1986,27 +1998,34 @@ VALUES (@projectName, @deadline, @taskName , 'Open')
 SET @operationStatus = 1
 END
 --9: Reda ------------------------------------------------------------------------------------------------------------------------------------------
+
 GO
 CREATE PROC AssignRegularToTaskSP
 @projectName VARCHAR(100),
-@userName VARCHAR(30),
+@managerUserName VARCHAR(30),
 @regularUserName VARCHAR(30),
 @taskName VARCHAR(30),
-@taskDeadline DATETIME
+@taskDeadline DATETIME,
+@operationStatus BIT OUTPUT
 AS
-IF EXISTS(
+IF NOT EXISTS (
 SELECT *
 FROM Managers_Assign_Projects_To_Regulars mapr
-WHERE (mapr.project_name = @projectName AND mapr.regular_user_name = @regularUserName)
-)
+WHERE (mapr.project_name = @projectName 
+AND mapr.regular_user_name = @regularUserName
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
 INSERT INTO Managers_Assign_Tasks_To_Regulars
 (manager_user_name,task_name,task_deadline,project_name)
-VALUES (@userName,@taskName,@taskDeadline,@projectName)
-
+VALUES (@managerUserName,@taskName,@taskDeadline,@projectName)
+SET @operationStatus = 1
+END
 
 --10: Gharam----------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC ReplaceRegularSp 
+CREATE PROC ReplaceRegularSP 
 @username VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
