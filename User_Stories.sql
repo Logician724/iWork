@@ -2034,13 +2034,14 @@ END
 --10: Gharam----------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC ReplaceRegularSP 
-@username VARCHAR(30),
+@regularUsername VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
-@projectName VARCHAR(100)
+@projectName VARCHAR(100),
+@operationStatus BIT OUTPUT
 AS
 IF  EXISTS
-( SELECT matr.regular_user_name 
+( SELECT *
 FROM Managers_Assign_Tasks_To_Regulars matr INNER JOIN Tasks t
 ON
 t.name = matr.task_name 
@@ -2051,12 +2052,25 @@ WHERE
 AND @projectName=t.project_name
 AND @deadline=t.deadline 
 AND t.status='Assigned'
+) AND EXISTS(
+SELECT *
+FROM Managers_Assign_Tasks_To_Regulars matr INNER JOIN Staff_Members s1
+ON matr.manager_user_name = s1.user_name
+INNER JOIN  Staff_Members s2
+ON s1.department_code = s2.department_code
+AND s1.company_domain = s2.company_domain
+WHERE s2.user_name = @regularUsername
 )
+BEGIN
 UPDATE Managers_Assign_Tasks_To_Regulars 
-SET Regular_user_name=@username
+SET Regular_user_name=@regularUsername
 WHERE @taskName=task_name 
 AND @deadline=task_deadline
 AND @projectName=project_name 
+SET @operationStatus = 1
+END
+ELSE
+SET @operationStatus = 0
 
 --11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
 GO

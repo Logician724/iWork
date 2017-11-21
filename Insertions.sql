@@ -834,7 +834,8 @@ VALUES ('2017-12-30','Task 3','Project Eris',
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
 VALUES ('2017-12-30','Task 1','Project Neo',
 		'Task should be done as quickly as possible','Brain Storming about ideas to come up with a plan of upgrading','Assigned');
-
+INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
+VALUES ('2017-12-30','Task Beta','Project Deimos','bonus offered for finishing a week early','This is the first step in project deimos','Assigned')
 
 
 
@@ -859,6 +860,10 @@ GO
 DECLARE @status3 INT
 EXEC AssignRegularToProjectSP 'godfrey.love','Project Deimos','Mark_Jack',@status3 OUTPUT
 PRINT @status3
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'tracee.charlton','Project Deimos','Mark_Jack',@status3 OUTPUT
+PRINT @status3
 
  -- Managers_Assign_Tasks_To Regulars INSERTIONS
  GO 
@@ -880,6 +885,10 @@ DECLARE @status1 BIT
 EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 2','7/31/2017 12:00:00 AM',@status1 OUTPUT
 PRINT @status1
 
+GO
+DECLARE @status1 BIT
+EXEC AssignRegularToTaskSP 'Project Deimos','Mark_Jack','tracee.charlton','Task Beta','2017-12-30',@status1 OUTPUT
+PRINT @status1
  -- Emails INSERTIONS
 GO
 DECLARE @status1 BIT
@@ -888,7 +897,7 @@ EXEC SendEmailSP 'claire.carles','claire.carles@facebook.com','Yousef.Mustafa','
 EXEC SendEmailSP 'sally.ramadan','sally.ramadan@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
 
 -- Announcements INSERTIONS
-
+GO
 INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
 VALUES('2017-11-13','facebook.com','The new feature upgrade','Yousef.Mustafa','','event');
 INSERT INTO Announcements (date,company_domain,title,hr_user_name,description,type)
