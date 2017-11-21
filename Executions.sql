@@ -640,14 +640,15 @@ EXEC ReplaceRegularSP 'marisa.lavender','Task Beta','2017-12-30','Project Deimos
 PRINT @status1
 
 --11:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
---Tasks viewed succesfully 
-DECLARE @status1 BIT 
-EXEC ViewTasksSP 'Jack_Mark', 'Project Morpheus','Assigned', @Status1  OUTPUT
-PRINT @status1 
---Tasks viewed successfully because the Department of the Manager is different from the department of the Manager who created the project
+--Tasks viewed unsuccessfully because the Department of the Manager is different from the department of the Manager who created the project
 DECLARE @status0 BIT 
 EXEC ViewTasksSP 'Joe_John', 'Project Morpheus','Assigned', @status0  OUTPUT
 PRINT @status0
+
+--Tasks viewed succesfully 
+DECLARE @status1 BIT 
+EXEC ViewTasksSP 'Mohamed_Mahmoud', 'Project Mavis','Assigned', @status1  OUTPUT
+PRINT @status1 
+
 
 --12:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
