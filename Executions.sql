@@ -625,5 +625,13 @@ PRINT @status1
 
 --11:Yasmine-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+--Tasks viewed succesfully 
+DECLARE @status1 BIT 
+EXEC ViewTasksSP 'Jack_Mark', 'Project Morpheus','Assigned', @Status1  OUTPUT
+PRINT @status1 
+--Tasks viewed successfully because the Department of the Manager is different from the department of the Manager who created the project
+DECLARE @status0 BIT 
+EXEC ViewTasksSP 'Joe_John', 'Project Morpheus','Assigned', @status0  OUTPUT
+PRINT @status0
 
 --12:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------
