@@ -1780,9 +1780,13 @@ UPDATE Requests
 SET @operationStatus = 1;
 END
 END
+
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
 
-
+--Managers User Stories no.3:-
+--Managers can view applications for a specific job in my department that were approved by an HR employee. For
+--each application, I should be able to check information about the job seeker, job, and the score
+--he/she got while applying.
 
 
 GO
@@ -1819,6 +1823,7 @@ SELECT *
 FROM Staff_Members
 WHERE Staff_Members.user_name = @hrUserName
 AND Staff_Members.department_code = @departmentCode
+AND Staff_Members.company_domain = @CompanyDomain
 )
 SET @operationStatus = 0
 ELSE
