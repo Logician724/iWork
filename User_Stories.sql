@@ -1481,15 +1481,25 @@ END
 
 GO
 CREATE PROC ViewTop3RegularSP
-
+@hrUserName VARCHAR(30),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
 AS
 SELECT TOP 3 first_name+' '+ last_name AS full_name, SUM(a.duration) AS working_hours
 FROM Attendances a INNER JOIN
 (SELECT mtr.regular_user_name AS user_name
 FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mtr
-ON t.deadline = mtr.task_deadline AND
-t.project_name = mtr.project_name AND
-t.name = mtr.task_name
+ON t.deadline = mtr.task_deadline 
+AND t.project_name = mtr.project_name 
+AND t.name = mtr.task_name
+AND EXISTS
+(SELECT *
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code
+AND sm1.company_domain = sm2.company_domain
+WHERE sm1.department_code = @departmentCode
+AND sm1.company_domain = @companyDomain
+)
 WHERE t.status = 'Fixed' AND
 MONTH(t.deadline) = MONTH(GETDATE())) Regulars_Have_Fixed_Tasks 
 ON a.user_name = Regulars_Have_Fixed_Tasks.user_name 

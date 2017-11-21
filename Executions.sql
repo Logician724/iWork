@@ -489,7 +489,11 @@ DECLARE @status1 BIT
 EXEC ViewYearlyAttendanceOfStaffSP 'salma.tarek','salma.tarek',2017,@status1 OUTPUT
 PRINT @status1
 --11:Gharam-------------------------------------------------------------------------------------------------------------------------------------------
-
+--for testing purposes you can use this query to change the task status for everyone after running the insertions file, however you are asked 
+--to run the DB.sql and Insertions.sql again before running any other execution
+UPDATE Tasks
+SET status = 'Fixed'
+EXEC ViewTop3RegularSP 'mirna.alteer','BS-3291','facebook.com'
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a regular employee, I should be able to ...”
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
