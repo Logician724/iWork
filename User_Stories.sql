@@ -2073,13 +2073,40 @@ ELSE
 SET @operationStatus = 0
 
 --11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.11:-
+--Manager can view a list of tasks in a certain project that have a certain status. 
+--The procedure takes as inputs the Manager's username, and project Name he/she wants to view tasks for and the task status
+--This Manager must be in the same department as the Manager's department who created the Project
+--So, first we check if this holds. 
+--If they are in different departments the procedure outputs 0 (false)
+--Otherwise, Manager views the list of tasks and the procedure outputs 1 (true)
+
 GO
-CREATE PROC ViewTasksSP --project name is already in the table task u don't have to join !
-@project VARCHAR(100), @status VARCHAR(10)
+CREATE PROC ViewTasksSP 
+@managerUsername VARCHAR(100),
+@projectName VARCHAR(100), 
+@TaskStatus VARCHAR(10),
+@operationStatus BIT OUTPUT
 AS 
+If NOT EXISTS (
+SELECT *
+FROM Staff_Members sm1
+WHERE sm1.user_name=@managerUsername 
+AND EXISTS (
+ SELECT *
+ FROM Projects p INNER JOIN Staff_Members sm on p.manager_user_name=sm.user_name
+ WHERE p.project_name=@projectName AND sm.department_code=sm1.department_code AND sm.company_domain=sm1.company_domain  
+           )
+		   )
+SET @operationStatus=0;
+ELSE 
+BEGIN
 SELECT T.*
-FROM Task T inner join Project P on T.project_name = P.project_name
-WHERE T.project_name = @project AND T.status=@status
+FROM Tasks T 
+WHERE T.project_name = @projectName AND T.status=@TaskStatus 
+SET @operationStatus=1;
+END
 
 --12: Abdullah-------------------------------------------------------------------------------------------------------------------------------------
 
