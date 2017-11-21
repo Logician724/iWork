@@ -844,7 +844,7 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Eris','Mahmoud_Mohame
 PRINT @status3
 GO
 DECLARE @status3 INT
-EXEC AssignRegularToProjectSP 'godfrey.love','Project Mavis','Jack_Mark',@status3 OUTPUT
+EXEC AssignRegularToProjectSP 'marisa.lavender','Project Mavis','Mahmoud_Mohamed',@status3 OUTPUT
 PRINT @status3
 GO
 DECLARE @status3 INT
@@ -852,7 +852,7 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Morpheus','Mahmoud_Mo
 PRINT @status3
 GO
 DECLARE @status3 INT
-EXEC AssignRegularToProjectSP 'clark.maurine','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
+EXEC AssignRegularToProjectSP 'marisa.lavender','Project Neo','Mahmoud_Mohamed',@status3 OUTPUT
 PRINT @status3
 
 
