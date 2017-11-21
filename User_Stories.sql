@@ -1987,8 +1987,10 @@ END
 --Manager User Stories no.8:-
 --Managers can define a task in a project in their departments which will have status ‘Open’.
 --The procedure takes as inputs the manager Username, the project name, deadline of the task, task name, comments for the task, and description for the task
--- First, we check if the Manager is in the same department as the project's.
---
+--First, we check if the Manager is in the same department as the project's.
+--If not, the procedure output a 0 (false)
+--Otherwise, the procedure inserts a new record in tables Tasks and in the relational table Managers_Assign_Tasks_To_Regulars with the values of the inputs, and 
+--with a status 'open' 
 
 
 GO 
