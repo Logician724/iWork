@@ -742,7 +742,7 @@ VALUES (0,'Pending','shadi.aly','Manager- Managing PHP Department','PHP-5019','f
 INSERT INTO Applications (score,app_status,seeker_username,job_title,department_code,company_domain)
 VALUES (0,'Pending','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com');
 INSERT INTO Applications (score,seeker_username,job_title,department_code,company_domain,app_status) 
-VALUES (87,'shadi.aly','Employee- BootStrap Developer','BS-3291','facebook.com','Accepted');
+VALUES (87,'shadi.aly','Employee- BootStrap Developer','BS-3291','facebook.com','Pending');
 
 
 
