@@ -2037,7 +2037,6 @@ FROM Managers_Assign_Tasks_To_Regulars
 WHERE Managers_Assign_Tasks_To_Regulars.task_name = @taskName
 AND Managers_Assign_Tasks_To_Regulars.task_deadline = @taskDeadline
 AND Managers_Assign_Tasks_To_Regulars.project_name = @projectName
-
 )
 AND EXISTS
 (
@@ -2069,6 +2068,7 @@ END
 --10: Gharam----------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC ReplaceRegularSP 
+@managerUsername VARCHAR(30),
 @regularUsername VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
@@ -2087,6 +2087,7 @@ WHERE
 AND @projectName=t.project_name
 AND @deadline=t.deadline 
 AND t.status='Assigned'
+AND matr.manager_user_name = @managerUsername
 ) AND EXISTS(
 SELECT *
 FROM Managers_Assign_Tasks_To_Regulars matr INNER JOIN Staff_Members s1
@@ -2145,30 +2146,49 @@ END
 
 --12: Abdullah-------------------------------------------------------------------------------------------------------------------------------------
 
---GO
---CREATE PROC ReviewTaskSP
---@managerUserName VARCHAR(50),
---@projectName VARCHAR(100),
---@tasksName VARCHAR(30),
---@response VARCHAR(10), 
---@newDeadline DATETIME
---AS
---BEGIN
---IF NOT EXISTS(
---SELECT *
---FROM Tasks
---WHERE 
---)
-
---IF(@response='Accepted')
---	UPDATE Tasks
---		SET Tasks.status = 'Closed'
---		WHERE Tasks.name= @tasksName AND Tasks.project_name = @projectName 
---ELSE
---IF(@response = 'Rejected')
---	UPDATE Tasks
---		SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline;
---END
+GO
+CREATE PROC ReviewTaskSP
+@managerUserName VARCHAR(50),
+@projectName VARCHAR(100),
+@taskName VARCHAR(30),
+@taskDeadline DATETIME,
+@response VARCHAR(10), 
+@newDeadline DATETIME = NULL,
+@operationStatus BIT OUTPUT
+AS
+IF NOT( @managerUserName = ANY(
+SELECT Managers_Assign_Tasks_To_Regulars.manager_user_name
+FROM Managers_Assign_Tasks_To_Regulars
+WHERE Managers_Assign_Tasks_To_Regulars.task_name = @taskName
+AND Managers_Assign_Tasks_To_Regulars.task_deadline = @taskDeadline
+AND Managers_Assign_Tasks_To_Regulars.project_name = @projectName)
+AND EXISTS
+(
+SELECT *
+FROM Tasks
+WHERE Tasks.status = 'Fixed'
+AND Tasks.name = @taskName
+AND Tasks.deadline = @taskDeadline
+AND Tasks.project_name = @projectName
+))
+SET @operationStatus = 0
+ELSE
+BEGIN
+IF(@response='Accepted')
+UPDATE Tasks
+SET Tasks.status = 'Closed'
+WHERE Tasks.name = @taskName 
+AND Tasks.deadline = @taskDeadline
+AND Tasks.project_name = @projectName 
+ELSE
+IF(@response = 'Rejected')
+UPDATE Tasks
+SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline
+WHERE Tasks.name = @taskName
+AND Tasks.deadline = @taskDeadline
+AND Tasks.project_name = @projectName
+SET @operationStatus = 1
+END
 ------------------------FUNCTIONS----------------------------------------------------
 GO
 CREATE FUNCTION MakeCompanyEmail
