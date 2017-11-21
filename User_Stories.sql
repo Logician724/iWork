@@ -1719,6 +1719,16 @@ WHERE sm.department_code = @departmentCode
 END
 END
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.2:
+--The manager can respond to requests of Staff members in the same department as the Manager.
+--The procedure takes as inputs the Manager username, and the staff member username, the manager's response, and reason of disapproval..
+--If the request is rejected and Reason of diaspproval is not, the procedure won't update the Requests table.. It will output 0 (false)
+--If the status is status is accepted, reason of disapproval is set to NULL.
+--Then, we update the Request record that corresponds to the request id,,, 
+--We have 3 relational tables for HR, Regular, and Manager requests,, so we select from one of them,
+--Finally the procedure returns 1 (true)
+
 GO
 CREATE PROC AddManagerResponseToRequestSP
 @managerUserName VARCHAR(50),
