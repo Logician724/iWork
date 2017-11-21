@@ -1293,7 +1293,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 --We select info that we want to display from the Requests table. 
 --The procedure shows info from three tables: HR_Employees_Replace_HR_Employees, Regular_Employees_Replace_Regular_Employees,and Managers_Replace_Managers 
 --Each represents the requests info for HR, Regular, and Manager, respectively.
---The procedure also filters out requests are for staff members not in the HR's department.
+--The procedure also filters out requests that are for staff members not in the HR's department, and selects requests that are accepted bt the manager only.
 --After knowing the request ID's, the HR can then view the Request info based on whether it is a Business trip request or a leave request.
 --If it's a leave request, the HR views its type
 --If it's a trip purpose request, The HR views its trip purpose and destination
@@ -1360,7 +1360,14 @@ SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
 
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
-GO
+
+--HR user stories No.8: The HR give the final respond for the requests, and takes into
+--consideration that if the duration of the request includes the staff member’s weekly day-off and/or
+--Friday, they should not be counted as annual leaves.
+--So the procedure takes as inputs the HR username, the requestID , and the HR response. 
+--The procedure 1st check if the requests  are accepted by the manager only. 
+--Then, we check if the HR response accepted the Request. If yes we'll update the requests table and the annual leaves. 
+
 CREATE PROC RespondHRToRequestSP
 @hrUserName VARCHAR(30),
 @requestID INT,
@@ -1377,7 +1384,7 @@ IF(@hrResponse = 'Accepted')
 BEGIN
 SELECT @noOfLeaveDays = no_of_leave_days 
 FROM Requests
-WHERE request_id = @requestID
+WHERE request_id = @requestIDgi
 UPDATE Staff_Members
 SET no_annual_leaves = no_annual_leaves - @noOfLeaveDays
 WHERE Staff_Members.user_name IN(
@@ -1432,7 +1439,13 @@ END
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
---Just to make things clear for the user in the output table .. we should put the month along with it's corresonding sum
+--HR user stories no.10:- 
+--The HR can view the total number of hours for any staff member in my department in each month of a certain year.
+--The procedure takes as inputs the HR's username, Staff Member's username, and the year he/she wants to view records for.
+--The procedure first checks that the HR username and Staff Member username are in the same department.
+--If not the procedure outputs false. (0)
+--Otherwise, we group by the month, and sum the working hours for the staff member in each month, returning true (1).
+
 GO
 
 CREATE PROC ViewYearlyAttendanceOfStaffSP
@@ -1460,6 +1473,12 @@ SET @operationStatus = 1
 END
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
+
+--HR user stories no.11:- 
+--View names of the top 3 high achievers in my department. A high achiever is a regular employee
+--who stayed the longest hours in the company for a certain month and all tasks assigned to him/her with deadline within this month are fixed.
+--The procedure order the records descendignly by the duration, selecting the staff member that has a Tasks status 'Fixed'  
+
 GO
 CREATE PROC ViewTop3RegularSP
 AS
@@ -1477,6 +1496,7 @@ INNER JOIN Users u
 ON Regulars_Have_Fixed_Tasks.user_name = u.user_name 
 WHERE MONTH(a.start_time) = MONTH(GETDATE())
 GROUP BY first_name + ' '+ last_name
+ORDER By SUM(a.duration) desc
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --“As a regular employee, I should be able to ...”
@@ -1502,7 +1522,7 @@ ON p.project_name = mapr.project_name
 WHERE mapr.regular_user_name = @userName
 
 
---2: Reda----------------------------------------------------------------------------
+--2:Reda----------------------------------------------------------------------------
 
 --Regular Employees User Stories No.2:- 
 --The regular employee can view tasks in a certain project assigned to him/her
@@ -1530,7 +1550,18 @@ SET @operationStatus = 1
 END
 ELSE 
 SET @operationStatus = 0
---3: Gharam------------------------------------------------------------------------------------
+
+
+--3:Gharam------------------------------------------------------------------------------------
+
+--Regular Emloyees User Stories no.3:-
+--After finalizing a task, I can change the status of this task to ‘Fixed’ as long as it did not pass the deadline.
+--The procedure takes as inputs username of the regular employee and the task name and deadline and project name (Primary Keys of the Tasks Table).
+--The Procedure 1st checks if the deadline of the task did not pass, 
+--If it did pass , the procedure outputs false (0)
+--Otherwise, it changes the status of the procedure to 'Fixed', returning true (1).
+
+
 GO
 CREATE PROC FinalizeTaskSP
 @username VARCHAR(30),
@@ -1546,7 +1577,7 @@ WHERE @username=m.regular_user_name
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
 AND @projectName = m.project_name 
-AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0)
+AND DATEDIFF(DAY,CURRENT_TIMESTAMP,@deadline) >= 0)
 SET @operationStatus = 0
 ELSE
 BEGIN
@@ -1557,9 +1588,21 @@ AND @deadline=deadline
 AND project_name=@projectName
 SET @operationStatus = 1
 END
+
 --4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--Regular Employees User Stories no.4:- 
+--Work on the task again (a task that was assigned to me before). I can change the status of this
+--task from ‘Fixed’ to ‘Assigned’ as long as the deadline did not pass and it was not reviewed by the manager yet.
+--The procedure takes the username of the regular employee, the status of the task he/she wants to edit, and the task name, deadline , 
+--and project name (primary keys for table Tasks)... 
+--The Procedure 1st checks if the deadline of the task did not pass, and if the status of the task is fixed.
+--If the deadline passed or the status is fixed, the procedure outputs false.
+--otherwise, the task status is updated, returning true (1).
+
 GO 
-CREATE PROC ChangeTaskStatusSP --change task status to assigned this query is for changing a fixed task to assigned task .. also rename
+CREATE PROC ChangeTaskStatusSP
 @username VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
@@ -1591,14 +1634,31 @@ AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
 SET @operationStatus = 1
 END
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---“As a manager, I should be able to ...”
+
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
+--“As a manager, I should be able to ...
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories No.1:-
+--Managers can view new requests from staff members working in my department. 
+--The procedure takes as inputs the manager's username and the department code and the company domain (primary keys for Departments table)
+--If the manager is of type HR, he/she can view requests of all three (Managers, Regular Employees, and HR Employees) in the same department.
+--So, we first check if the manager is of type HR, then we select columns we want to show from three Inner Joins:- 
+--1. Table Requests and the Relational table for Managers
+--2. Table Requests and the Relational table for Regular Employees
+--3.Table Requests and the Relational table for HR Employees
+--If the manager is not of type HR, he/she can view requesrs of onlt (Managers and Regular Employees)
+--So, we then let that manager view the selected columns from only two inner joins:-
+--1. Table Requests and the Relational table for Managers
+--2. Table Requests and the Relational table for Regular Employees
+--For each select we check if the manager's department and the request owner's department are the same.
+
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @managerUserName VARCHAR(30),
@@ -1667,49 +1727,70 @@ WHERE sm.department_code = @departmentCode
 END
 END
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.2:
+--The manager can respond to requests of Staff members in the same department as the Manager.
+--The procedure takes as inputs the Manager username, and the staff member username, the manager's response, and reason of disapproval..
+--If the request is rejected and Reason of diaspproval is not, the procedure won't update the Requests table.. It will output 0 (false)
+--If the status is status is accepted, reason of disapproval is set to NULL.
+--Then, we update the Request record that corresponds to the request id,,, 
+--We have 3 relational tables for HR, Regular, and Manager requests,, so we select from one of them,
+--Finally the procedure returns 1 (true)
+
 GO
 CREATE PROC AddManagerResponseToRequestSP
 @managerUserName VARCHAR(50),
 @staffUserName VARCHAR(50),
 @managerResponse VARCHAR(10),
-@reasonOfDisapproval TEXT
+@reasonOfDisapproval TEXT = NULL,
+@operationStatus BIT OUTPUT
 AS
 IF EXISTS
 (
-SELECT *
+SELECT*
 FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
 ON sm1.department_code = sm2.department_code
 WHERE sm1.user_name = @managerUserName 
 AND sm2.user_name = @staffUserName
 )
 BEGIN
+IF(@managerResponse='Rejected' AND  @reasonOfDisapproval is NULL)
+SET @operationStatus = 0;
+ELSE 
+BEGIN 
 IF(@managerResponse = 'Accepted')
-	SET @reasonOfDisapproval = NULL
-ELSE
+SET @reasonOfDisapproval = NULL
 
 UPDATE Requests 
 	SET Requests.manager_response_req = @managerResponse, Requests.reason_of_disapproval = @reasonOfDisapproval, Requests.manager_user_name = @managerUserName
-	WHERE (request_id =
+	WHERE request_id 
+	IN (
 	(SELECT request_id
 	FROM Regular_Employees_Replace_Regular_Employees r
-	WHERE r.user_name_request_owner = @staffUserName)
-	OR request_id = 
-	(SELECT request_id 
+	WHERE r.user_name_request_owner = @staffUserName),
+   
+    (SELECT request_id 
 	FROM HR_Employees_Replace_HR_Employees h 
-	WHERE h.user_name_request_owner = @staffUserName)
-	OR request_id = (SELECT request_id 
+	WHERE h.user_name_request_owner = @staffUserName),
+	
+	(SELECT request_id 
 	FROM Managers_Replace_Managers m 
 	WHERE m.user_name_request_owner = @staffUserName)
-	) AND ((SELECT s.department_code 
-	FROM Staff_Members s INNER JOIN Managers m 
-	ON s.user_name = m.user_name 
-	WHERE  s.user_name = @managerUserName) 
-	= (
-	SELECT s.department_code 
-	FROM Staff_Members s 
-	WHERE s.user_name = @staffUserName))
+	 )
+SET @operationStatus = 1;
 END
+END
+
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.3:-
+--Managers can view applications for a specific job in my department that were approved by an HR employee. For
+--each application, I should be able to check information about the job seeker, job, and the score
+--he/she got while applying.
+--This user stories is divided into 3 procedures
+
+
+--This procedure the Manager can view information about the jobs seeker. So, it takes as an input the username of the job seeker
 GO
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
@@ -1718,6 +1799,8 @@ SELECT u.user_name,u.personal_email,u.birth_date,u.exp_year,u.first_name,u.last_
 FROM Users u
 WHERE (u.user_name = @seekerUserName)
 
+--In this procedure, the manager can view the information about the Job.
+--The procedure takes as inputs the job title and department code and company domain (Jobs table primary keys )
 GO
 CREATE PROC ViewJobInfoSP
 @jobTitle VARCHAR(150),
@@ -1731,9 +1814,15 @@ j.job_title = @jobTitle
 AND j.department_code = @departmentCode 
 AND j.company_domain = @companyDomain)
 
+
+
+--This procedure takes as inputs the HR username, and the job title, departmentCode and Company Domain (Primary Keys for Departments Table)
+--We first check if the Manager is in this department.. 
+--If no, the manager can't view the requests..
+--Otherwise, the manager can view the Applications approved by the HR
 GO
 CREATE PROC ViewApprovedJobAppSP
-@hrUserName VARCHAR(30),
+@managerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
 @CompanyDomain VARCHAR(150),
@@ -1742,10 +1831,11 @@ AS
 IF NOT EXISTS(
 SELECT *
 FROM Staff_Members
-WHERE Staff_Members.user_name = @hrUserName
+WHERE Staff_Members.user_name = @managerUserName
 AND Staff_Members.department_code = @departmentCode
+AND Staff_Members.company_domain = @CompanyDomain
 )
-SET @operationStatus = 0
+SET @operationStatus = 0;
 ELSE
 BEGIN
 SELECT a.*
@@ -1755,6 +1845,7 @@ a.job_title = @jobTitle
 AND a.department_code = @departmentCode 
 AND a.company_domain = @CompanyDomain 
 AND a.hr_response_app='Accepted')
+SET @operationStatus = 1;
 END
 --4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
 GO

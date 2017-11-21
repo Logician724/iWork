@@ -541,6 +541,23 @@ EXEC ViewEmployeesRequestsSP 'Ahmed_Mahmoud','JS-8938','facebook.com'
 EXEC ViewEmployeesRequestsSP 'Mahmoud_Ahmed','JS-8938','facebook.com'
 --2:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+--Request is accepted by a manager in the same department
+DECLARE @status1 BIT
+EXEC AddManagerResponseToRequestSP 'Mahmoud_Ahmed','Ahmed_Mahmoud', 'Accepted', NULL, @status1 OUTPUT
+PRINT @status1  
+--Request is rejected by a manager in the same department
+DECLARE @status1 BIT
+EXEC AddManagerResponseToRequestSP 'Mahmoud_Ahmed','Ahmed_Mahmoud','Rejected','Does not meat qualifications at the moment',@status1 OUTPUT 
+PRINT @status1 
+--Request is reject by a manager not in the same department, so no rows are affected
+DECLARE @status1 BIT
+EXEC AddManagerResponseToRequestSP 'Jack_Bob','Ahmed_Mahmoud','Accepted',NULL,@status1 OUTPUT 
+PRINT @status1 
+--Request is rejected by a manager in the same department;however, reason of disapproval is null, so no rows are affected 
+DECLARE @status0 BIT
+EXEC AddManagerResponseToRequestSP 'Mahmoud_Ahmed', 'Ahmed_Mahmoud','Rejected',NULL,@status0 OUTPUT 
+PRINT @status0 
+
 
 --3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful application view//job doesn't belong to the manager's department, or no accpeted applications yet by HR
