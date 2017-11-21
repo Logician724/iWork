@@ -1550,7 +1550,6 @@ SET @operationStatus = 1
 END
 ELSE 
 SET @operationStatus = 0
-<<<<<<< HEAD
 
 
 --3:Gharam------------------------------------------------------------------------------------
@@ -1561,14 +1560,8 @@ SET @operationStatus = 0
 --The Procedure 1st checks if the deadline of the task did not pass, 
 --If it did pass , the procedure outputs false (0)
 --Otherwise, it changes the status of the procedure to 'Fixed', returning true (1).
-||||||| merged common ancestors
 
 
---3: Gharam------------------------------------------------------------------------------------
-
-=======
---3: Gharam------------------------------------------------------------------------------------
->>>>>>> 496b7b920cb95d29fb72373216761addbee9c6a2
 GO
 CREATE PROC FinalizeTaskSP
 @username VARCHAR(30),
@@ -1651,6 +1644,21 @@ END
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1: Gharam--------------------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories No.1:-
+--Managers can view new requests from staff members working in my department. 
+--The procedure takes as inputs the manager's username and the department code and the company domain (primary keys for Departments table)
+--If the manager is of type HR, he/she can view requests of all three (Managers, Regular Employees, and HR Employees) in the same department.
+--So, we first check if the manager is of type HR, then we select columns we want to show from three Inner Joins:- 
+--1. Table Requests and the Relational table for Managers
+--2. Table Requests and the Relational table for Regular Employees
+--3.Table Requests and the Relational table for HR Employees
+--If the manager is not of type HR, he/she can view requesrs of onlt (Managers and Regular Employees)
+--So, we then let that manager view the selected columns from only two inner joins:-
+--1. Table Requests and the Relational table for Managers
+--2. Table Requests and the Relational table for Regular Employees
+--For each select we check if the manager's department and the request owner's department are the same.
+
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @managerUserName VARCHAR(30),
@@ -1773,6 +1781,10 @@ SET @operationStatus = 1;
 END
 END
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 GO
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
