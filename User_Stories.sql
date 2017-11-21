@@ -1983,6 +1983,16 @@ AND @projectName = project_name
 SET @operationStatus = 1
 END
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------
+
+--Manager User Stories no.8:-
+--Managers can define a task in a project in their departments which will have status ‘Open’.
+--The procedure takes as inputs the manager Username, the project name, deadline of the task, task name, comments for the task, and description for the task
+--First, we check if the Manager is in the same department as the project's.
+--If not, the procedure output a 0 (false)
+--Otherwise, the procedure inserts a new record in tables Tasks and in the relational table Managers_Assign_Tasks_To_Regulars with the values of the inputs, and 
+--with a status 'open' 
+
+
 GO 
 CREATE PROC DefineTaskSP
 @managerUsername VARCHAR(30),
@@ -1998,8 +2008,8 @@ SELECT *
 FROM Staff_Members s1 INNER JOIN Projects p 
 ON s1.user_name = p.manager_user_name
 INNER JOIN Staff_Members s2
-ON s2.department_code = s1.department_code
-WHERE @managerUsername = p.manager_user_name
+ON s2.department_code = s1.department_code AND S2.company_domain=S1.company_domain
+WHERE @managerUsername = s2.manager_user_name AND p.project_name=@projectName
 )
 SET @operationStatus = 0
 ELSE
