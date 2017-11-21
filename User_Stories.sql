@@ -21,7 +21,7 @@ DROP PROC AssignRegularToTaskSP;
 DROP PROC ViewEmployeesRequestsSP;
 DROP PROC ViewTop3RegularSP;
 DROP PROC ReplaceRegularSP;
-DROP PROC RemoveRegularFromProjectSp
+DROP PROC RemoveRegularFromProjectSP;
 DROP PROC HRPostsAnnouncementSP 
 DROP PROC ViewReceivedEmailsSP;
 DROP PROC CheckInSP;
@@ -1367,7 +1367,7 @@ FROM Business_Trip_Requests
 --So the procedure takes as inputs the HR username, the requestID , and the HR response. 
 --The procedure 1st check if the requests  are accepted by the manager only. 
 --Then, we check if the HR response accepted the Request. If yes we'll update the requests table and the annual leaves. 
-
+GO
 CREATE PROC RespondHRToRequestSP
 @hrUserName VARCHAR(30),
 @requestID INT,
@@ -1384,7 +1384,7 @@ IF(@hrResponse = 'Accepted')
 BEGIN
 SELECT @noOfLeaveDays = no_of_leave_days 
 FROM Requests
-WHERE request_id = @requestIDgi
+WHERE request_id = @requestID
 UPDATE Staff_Members
 SET no_annual_leaves = no_annual_leaves - @noOfLeaveDays
 WHERE Staff_Members.user_name IN(
@@ -1942,23 +1942,26 @@ END
 --7: Gharam----------------------------------------------------------------------------------------------------------- 
 
 GO
-CREATE PROC RemoveRegularFromProjectSp
+CREATE PROC RemoveRegularFromProjectSP
 @username VARCHAR(30),
-@project VARCHAR(100)
+@project VARCHAR(100),
+@operationStatus BIT OUTPUT
 AS
-IF NOT EXISTS 
-( SELECT M.regular_user_name FROM Managers_Assign_Tasks_To_Regulars M , TASKS t
-WHERE @username=M.regular_user_name 
-AND t.name=M.task_name 
-AND t.project_name=M.project_name 
-AND t.deadline=M.task_deadline 
+IF EXISTS 
+( SELECT matr.regular_user_name 
+FROM Managers_Assign_Tasks_To_Regulars matr , Tasks t
+WHERE @username=matr.regular_user_name 
+AND t.name=matr.task_name 
+AND t.project_name=matr.project_name 
+AND t.deadline=matr.task_deadline 
 AND t.status='Assigned')
-
-
+SET @operationStatus = 0
+ELSE
+BEGIN
 DELETE Managers_Assign_Projects_To_Regulars
 WHERE @username=regular_user_name
-
-
+SET @operationStatus = 1
+END
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------
 GO 
 CREATE PROC DefineTaskSP
@@ -2015,23 +2018,26 @@ CREATE PROC ReplaceRegularSP
 @username VARCHAR(30),
 @taskName VARCHAR(30),
 @deadline DATETIME,
-@project VARCHAR(100) --THIS ONLY TAKES THE ONE WHO IS GOING TO REPLACE NOT THE THE one being replaces 
+@projectName VARCHAR(100)
 AS
 IF  EXISTS
-( SELECT M.regular_user_name 
-FROM Managers_Assign_Tasks_To_Regulars M , TASKS t
-WHERE   t.name=M.task_name 
-AND t.project_name=M.project_name
-AND t.deadline=M.task_deadline 
-AND @taskName=t.name AND @project=t.project_name
+( SELECT matr.regular_user_name 
+FROM Managers_Assign_Tasks_To_Regulars matr INNER JOIN Tasks t
+ON
+t.name = matr.task_name 
+AND t.project_name = matr.project_name
+AND t.deadline = matr.task_deadline 
+WHERE 
+@taskName=t.name
+AND @projectName=t.project_name
 AND @deadline=t.deadline 
-AND t.status='Assigned')
-
+AND t.status='Assigned'
+)
 UPDATE Managers_Assign_Tasks_To_Regulars 
 SET Regular_user_name=@username
 WHERE @taskName=task_name 
 AND @deadline=task_deadline
-AND @project=project_name 
+AND @projectName=project_name 
 
 --11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
 GO
