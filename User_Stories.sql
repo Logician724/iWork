@@ -1460,49 +1460,23 @@ SET @operationStatus = 1
 END
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
-
 GO
-CREATE FUNCTION  RegularsWithFixed()
-RETURNS  @Fixed TABLE 
-(
-    user_name  VARCHAR(30) NOT NULL   
-)
+CREATE PROC ViewTop3RegularSP
 AS
-BEGIN
-DECLARE @myTable table (user_name  VARCHAR(30) NOT NULL)
-
-insert into @myTable 
-SELECT  R.user_name 
-FROM Tasks t ,Regular_Employees R ,  Managers_Assign_Tasks_To_Regulars  M 
-WHERE  R.user_name=M.regular_user_name  
-AND t.project_name=m.project_name 
-And T.deadline=M.task_deadline 
-AND T.name=M.task_name AND t.status='Fixed' 
-And MONTH(t.deadline)=MONTH(getdate())
-
-insert into @Fixed
-SELECT USER_NAME 
-FROM @mytable 
-return
-END
-
-
-GO
-
-
-
-CREATE PROC ViewTop3RegularSp
-AS
-
-SELECT TOP 3 first_name +' '+ last_name ,SUM(A.duration) 
-FROM Attendances A ,DBO.RegularsWithFixed() R , Users U 
-WHERE  R.user_name=A.user_name AND Month(a.leave_time)=MONTH(getdate())
-AND R.user_name=U.user_name
-GROUP BY first_name +' '+ last_name 
-ORDER BY SUM(A.duration) desc
-
-
-
+SELECT TOP 3 first_name+' '+ last_name AS full_name, SUM(a.duration) AS working_hours
+FROM Attendances a INNER JOIN
+(SELECT mtr.regular_user_name AS user_name
+FROM Tasks t INNER JOIN Managers_Assign_Tasks_To_Regulars mtr
+ON t.deadline = mtr.task_deadline AND
+t.project_name = mtr.project_name AND
+t.name = mtr.task_name
+WHERE t.status = 'Fixed' AND
+MONTH(t.deadline) = MONTH(GETDATE())) Regulars_Have_Fixed_Tasks 
+ON a.user_name = Regulars_Have_Fixed_Tasks.user_name 
+INNER JOIN Users u
+ON Regulars_Have_Fixed_Tasks.user_name = u.user_name 
+WHERE MONTH(a.start_time) = MONTH(GETDATE())
+GROUP BY first_name + ' '+ last_name
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --“As a regular employee, I should be able to ...”
