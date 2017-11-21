@@ -464,7 +464,7 @@ EXEC ViewRequestsSP 'Fayrouz.Hussain','PHP-5019','facebook.com',@status1
 PRINT @status1
 
 --8:Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
-
+EXEC RespondHRToRequestSP 'firdous.ahmed',11,'Accepted'
 --9:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful attendance view//the staff member doesn't belong to the HR's department or the user doesn't exists
 DECLARE @status0 BIT
