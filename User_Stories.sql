@@ -1,4 +1,4 @@
-﻿P PROC AddManagerResponseToRequestSP;
+﻿DROP PROC AddManagerResponseToRequestSP;
 DROP PROC ViewProjectsOfEmployeeSP;
 DROP PROC ViewDepartmentSP;
 DROP PROC ViewCompaniesSP;
@@ -1410,18 +1410,25 @@ CREATE PROC ViewAttendanceOfStaffSP
 @hrUserName VARCHAR(30),
 @regularUserName VARCHAR(30),
 @periodStart DATETIME,
-@periodEnd DATETIME
+@periodEnd DATETIME,
+@operationStatus BIT OUTPUT
 AS
-IF EXISTS(
+IF NOT EXISTS(
 SELECT *
 FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
-ON sm1.department_code = sm2.department_code
-WHERE sm1.user_name = @hrUserName AND sm2.user_name = @regularUserName
+ON sm1.department_code = sm2.department_code AND
+sm1.company_domain = sm2.company_domain
+WHERE sm1.user_name = @hrUserName AND 
+sm2.user_name = @regularUserName
 )
+SET @operationStatus = 0
+ELSE
+BEGIN
 SELECT a.*
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
-
+SET @operationStatus = 1
+END
 
 --10: Reda----------------------------------------------------------------------------------------------------------------------------------
 
@@ -1429,14 +1436,28 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 GO
 
 CREATE PROC ViewYearlyAttendanceOfStaffSP
+@hrUserName VARCHAR(30),
 @staffUserName VARCHAR(30),
-@year INT
+@year INT,
+@operationStatus BIT OUTPUT
 AS
-SELECT SUM(a.duration)
+IF NOT EXISTS(
+SELECT *
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code AND
+sm1.company_domain = sm2.company_domain
+WHERE sm1.user_name = @hrUserName AND 
+sm2.user_name = @staffUserName
+)
+SET @operationStatus = 0
+ELSE
+BEGIN
+SELECT MONTH(a.start_time) AS month ,SUM(a.duration) AS working_hours
 FROM Attendances a
 WHERE YEAR(a.start_time) = @year AND a.user_name = @staffUserName
 GROUP BY MONTH(a.start_time)
-
+SET @operationStatus = 1
+END
 
 --11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
 

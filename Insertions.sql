@@ -765,7 +765,7 @@ VALUES ('salma.tarek','2017-10-19 7:39:00','2017-10-19 16:12:24');
 INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('salma.tarek','2017-11-20 7:45:53','2017-11-20 16:46:7');
 INSERT INTO Attendances (user_name,start_time,leave_time)
-VALUES ('salma.tarek','2017-12-21 7:49:26','2017-12-21 16:2:8');
+VALUES ('salma.tarek','2017-9-21 7:49:26','2017-9-21 16:2:8');
 INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('salma.tarek','2017-5-23 7:43:36','2017-5-23 16:6:36');
 INSERT INTO Attendances (user_name,start_time,leave_time)
@@ -779,7 +779,7 @@ VALUES ('claire.carles','2017-10-19 7:39:00','2017-10-19 16:12:24');
 INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('claire.carles','2017-11-20 7:45:53','2017-11-20 16:46:7');
 INSERT INTO Attendances (user_name,start_time,leave_time)
-VALUES ('claire.carles','2017-12-21 7:49:26','2017-12-21 16:2:8');
+VALUES ('claire.carles','2017-9-21 7:49:26','2017-9-21 16:2:8');
 INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('coral.gaye','2017-5-22 7:43:36','2017-5-22 16:6:36');
 INSERT INTO Attendances (user_name,start_time,leave_time)
@@ -788,6 +788,14 @@ INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('godfrey.love','2017-5-22 7:43:36','2017-5-22 16:6:36');
 INSERT INTO Attendances (user_name,start_time,leave_time)
 VALUES ('godfrey.love','2017-6-23 7:52:16','2017-6-23 16:4:23');
+INSERT INTO Attendances (user_name,start_time,leave_time)
+VALUES ('mirna.alteer','2017-10-11 8:01:15','2017-10-11 22:05:55');
+INSERT INTO Attendances (user_name,start_time,leave_time)
+VALUES ('mirna.alteer','2017-10-12 8:01:15','2017-10-12 22:05:55');
+INSERT INTO Attendances (user_name,start_time,leave_time)
+VALUES ('mirna.alteer','2017-10-15 8:01:15','2017-10-15 22:05:55');
+
+
 
 
 -- Projects INSERTIONS

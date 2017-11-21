@@ -504,14 +504,29 @@ PRINT @status1
 --8:Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
 
 --9:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful attendance view//the staff member doesn't belong to the HR's department or the user doesn't exists
+DECLARE @status0 BIT
+EXEC ViewAttendanceOfStaffSP 'Fayrouz.Hussain','mirna.alteer','2017-10-1','2017-10-30',@status0 OUTPUT
+PRINT @status0
+--successful attendance view
+DECLARE @status1 BIT
+EXEC ViewAttendanceOfStaffSP 'Fayrouz.Hussain','claire.carles','2017-10-1','2017-12-30',@status1 OUTPUT
+PRINT @status1
 
 --10:Reda----------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful working hours view//the staff member doesn't belong to the HR's department or the user doesn't exist
+DECLARE @status0 BIT
+EXEC ViewYearlyAttendanceOfStaffSP 'Fayrouz.Hussain','mirna.alteer',2017,@status0 OUTPUT
+PRINT @status0
+--successful working hours view
+DECLARE @status1 BIT
+EXEC ViewYearlyAttendanceOfStaffSP 'Fayrouz.Hussain','claire.carles',2017,@status1 OUTPUT
+PRINT @status1
+--another successful working hours view
+DECLARE @status1 BIT
+EXEC ViewYearlyAttendanceOfStaffSP 'salma.tarek','salma.tarek',2017,@status1 OUTPUT
+PRINT @status1
 --11:Gharam-------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
 
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a regular employee, I should be able to ...”
