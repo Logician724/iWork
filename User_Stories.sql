@@ -1724,42 +1724,43 @@ CREATE PROC AddManagerResponseToRequestSP
 @managerUserName VARCHAR(50),
 @staffUserName VARCHAR(50),
 @managerResponse VARCHAR(10),
-@reasonOfDisapproval TEXT
+@reasonOfDisapproval TEXT = NULL,
+@operationStatus BIT OUTPUT
 AS
 IF EXISTS
 (
-SELECT *
+SELECT*
 FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
 ON sm1.department_code = sm2.department_code
 WHERE sm1.user_name = @managerUserName 
 AND sm2.user_name = @staffUserName
 )
 BEGIN
+IF(@managerResponse='Rejected' AND  @reasonOfDisapproval is NULL)
+SET @operationStatus = 0;
+ELSE 
+BEGIN 
 IF(@managerResponse = 'Accepted')
-	SET @reasonOfDisapproval = NULL
-ELSE
+SET @reasonOfDisapproval = NULL
 
 UPDATE Requests 
 	SET Requests.manager_response_req = @managerResponse, Requests.reason_of_disapproval = @reasonOfDisapproval, Requests.manager_user_name = @managerUserName
-	WHERE (request_id =
+	WHERE request_id 
+	IN (
 	(SELECT request_id
 	FROM Regular_Employees_Replace_Regular_Employees r
-	WHERE r.user_name_request_owner = @staffUserName)
-	OR request_id = 
-	(SELECT request_id 
+	WHERE r.user_name_request_owner = @staffUserName),
+   
+    (SELECT request_id 
 	FROM HR_Employees_Replace_HR_Employees h 
-	WHERE h.user_name_request_owner = @staffUserName)
-	OR request_id = (SELECT request_id 
+	WHERE h.user_name_request_owner = @staffUserName),
+	
+	(SELECT request_id 
 	FROM Managers_Replace_Managers m 
 	WHERE m.user_name_request_owner = @staffUserName)
-	) AND ((SELECT s.department_code 
-	FROM Staff_Members s INNER JOIN Managers m 
-	ON s.user_name = m.user_name 
-	WHERE  s.user_name = @managerUserName) 
-	= (
-	SELECT s.department_code 
-	FROM Staff_Members s 
-	WHERE s.user_name = @staffUserName))
+	 )
+SET @operationStatus = 1;
+END
 END
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
 GO
