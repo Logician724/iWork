@@ -609,11 +609,11 @@ PRINT @status1
 --8:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task definition// the regular employee doesn't belong to the project's department
 DECLARE @status0 BIT
-EXEC DefineTaskSP 'Ahmed_Mohamed','Project Mavis','2017-12-30','Alpha stage',@status0 OUTPUT
+EXEC DefineTaskSP 'Ahmed_Mohamed','Project Mavis','2017-12-30','Alpha stage','beginning the work','this is a project orientation task',@status0 OUTPUT
 PRINT @status0
 --successful task definition
 DECLARE @status1 BIT
-EXEC DefineTaskSP 'Mohamed_Mahmoud','Project Eris','2017-12-30','Alpha stage',@status1 OUTPUT
+EXEC DefineTaskSP 'Mohamed_Mahmoud','Project Eris','2017-12-30','Alpha stage','beginning the work','this is a project orientation task',@status1 OUTPUT
 PRINT @status1
 
 --9:Reda -------------------------------------------------------------------------------------------------------------------------------------------------------------------

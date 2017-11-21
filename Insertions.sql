@@ -814,30 +814,27 @@ VALUES('Project Deimos','Mark_Jack','2017-10-8','2018-02-05');
 
 
 -- Tasks INSERTIONS
+GO
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Mavis','2017-12-30','Task 2','Task should be done as quickly as possible','Brain storming of new ideas to enhance the page',@status1 OUTPUT
+PRINT @status1
 
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 1','Project Mavis',
-		'Task should be done as quickly as possible','Inspection of requests from cleints','Assigned');
-
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-7-31','Task 2','Project Mavis',
-		'Task should be done as quickly as possible','Brain storming of new ideas to enhance the page','Assigned');
-
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-3-9','Task 4','Project Morpheus',
-		'Task should be done as quickly as possible','Final procedures of maintenance','Assigned');
-
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 3','Project Eris',
-		'Task should be done as quickly as possible','Applying the agreed on protocol on maintenance','Assigned');
-
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 1','Project Neo',
-		'Task should be done as quickly as possible','Brain Storming about ideas to come up with a plan of upgrading','Assigned');
-INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task Beta','Project Deimos','bonus offered for finishing a week early','This is the first step in project deimos','Assigned')
-
-
+GO
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Morpheus','2018-3-9','Task 4','Task should be done as quickly as possible','Final procedures of maintenance',@status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Eris','2017-12-30','Task 3','Task should be done as quickly as possible','Applying the agreed on protocol on maintenance',@status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Neo','2017-12-30','Task 1','Task should be done as quickly as possible','Brain Storming about ideas to come up with a plan of upgrading',@status1 OUTPUT
+PRINT @status1
+GO
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mark_Jack','Project Deimos','2017-12-30','Task Beta','bonus offered for finishing a week early','This is the first step in project deimos',@status1 OUTPUT
+PRINT @status1
 
 -- Managers_Assign_Projects_to Regulars INSERTIONS
 GO
