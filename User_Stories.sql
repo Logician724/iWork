@@ -1710,14 +1710,13 @@ UPDATE Requests
 	WHERE s.user_name = @staffUserName))
 END
 --3: Reda--------------------------------------------------------------------------------------------------------------------------------------
-
 GO
 CREATE PROC ViewSeekerInfoSP
 @seekerUserName VARCHAR(30)
 AS
-SELECT s.*	
-FROM Job_Seekers s
-WHERE (s.user_name = @seekerUserName)
+SELECT u.user_name,u.personal_email,u.birth_date,u.exp_year,u.first_name,u.last_name,u.age
+FROM Users u
+WHERE (u.user_name = @seekerUserName)
 
 GO
 CREATE PROC ViewJobInfoSP
@@ -1727,33 +1726,63 @@ CREATE PROC ViewJobInfoSP
 AS
 SELECT j.*
 FROM Jobs j
-WHERE (j.job_title = @jobTitle AND j.department_code = @departmentCode AND j.company_domain = @companyDomain)
-
+WHERE (
+j.job_title = @jobTitle 
+AND j.department_code = @departmentCode 
+AND j.company_domain = @companyDomain)
 
 GO
 CREATE PROC ViewApprovedJobAppSP
+@hrUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@CompanyDomain VARCHAR(150)
+@CompanyDomain VARCHAR(150),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS(
+SELECT *
+FROM Staff_Members
+WHERE Staff_Members.user_name = @hrUserName
+AND Staff_Members.department_code = @departmentCode
+)
+SET @operationStatus = 0
+ELSE
+BEGIN
 SELECT a.*
 FROM Applications a
-WHERE (a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @CompanyDomain AND a.hr_response_app='Accepted')
-
+WHERE (
+a.job_title = @jobTitle
+AND a.department_code = @departmentCode 
+AND a.company_domain = @CompanyDomain 
+AND a.hr_response_app='Accepted')
+END
 --4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
 GO
-CREATE PROC RespondToJobApplicationsSP --This needs to be redone .. needs to take input information about the manager if u need to check the manager department .. and need to take info about the application you want to update
-@managerResponse VARCHAR(20)
+CREATE PROC RespondToJobApplicationsSP 
+@managerUserName VARCHAR(30),
+@managerResponse VARCHAR(20),
+@seekerUserName VARCHAR(30),
+@jobTitle VARCHAR(150),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
 AS
+IF(@managerResponse = 'Accepted')
 UPDATE Applications
-SET manager_response_app=@managerResponse
-WHERE Applications.hr_response_app = 'Accepted' AND EXISTS  
-     (
-	   SELECT *
-	   FROM Staff_Members SM INNER JOIN Managers M ON SM.user_name = M.user_name 
-	   INNER JOIN Applications A on A.manager_username=M.user_name 
-	   INNER JOIN Jobs J on J.department_code=A.department_code
-     )
+SET manager_response_app=@managerResponse, manager_username = @managerUserName, app_status = 'Accepted'
+WHERE Applications.hr_response_app = 'Accepted'
+AND Applications.seeker_username = @seekerUserName
+AND Applications.job_title = @jobTitle
+AND Applications.department_code = @departmentCode
+AND Applications.company_domain = @companyDomain
+ELSE
+UPDATE Applications
+SET manager_response_app=@managerResponse, manager_username = @managerUserName, app_status = 'Rejected'
+WHERE Applications.hr_response_app = 'Accepted'
+AND Applications.seeker_username = @seekerUserName
+AND Applications.job_title = @jobTitle
+AND Applications.department_code = @departmentCode
+AND Applications.company_domain = @companyDomain
+
 
 --5: Abdullah-------------------------------------------------------------------------------------------------------
 

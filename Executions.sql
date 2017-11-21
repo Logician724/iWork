@@ -445,11 +445,16 @@ PRINT @status1
 DECLARE @status0 BIT
 EXEC AddHrResponseSP 'shadi.aly', 'Fayrouz.Hussain', 'Employee- BootStrap Developer', 'BS-3291', 'facebook.com','Rejected',@status0 OUTPUT
 PRINT @status0
---successful response addition
+--successful response additions
 DECLARE @status1 BIT
-EXEC AddHrResponseSP 'shadi.aly','Fayrouz.Hussain','Manager- Managing PHP Department','PHP-5019','facebook.com','Rejected',@status1 OUTPUT
+EXEC AddHrResponseSP 'shadi.aly','Fayrouz.Hussain','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted',@status1 OUTPUT
 PRINT @status1
-
+DECLARE @status1 BIT
+EXEC AddHrResponseSP 'gawwad.gooda','Dina.AlMasry','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted',@status1 OUTPUT
+PRINT @status1
+DECLARE @status1 BIT
+EXEC AddHrResponseSP 'omar.mofti','Dina.AlMasry','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted',@status1 OUTPUT
+PRINT @status1
 --6:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC PostAnnouncementSP 'Fayrouz.Hussain','this is my first announcement','just chilling','fun'
 
@@ -530,19 +535,30 @@ PRINT @status1
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 --1:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------
---HR Manger View
+--HR Manager View
 EXEC ViewEmployeesRequestsSP 'Ahmed_Mahmoud','JS-8938','facebook.com'
-
+--NON-HR Manager View
+EXEC ViewEmployeesRequestsSP 'Mahmoud_Ahmed','JS-8938','facebook.com'
 --2:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 --3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+--unsuccessful application view//job doesn't belong to the manager's department, or no accpeted applications yet by HR
+DECLARE @status0 BIT
+EXEC ViewApprovedJobAppSP 'Mahmoud_Ahmed','Manager- Managing PHP Department','PHP-5019','facebook.com',@status0 OUTPUT
+PRINT @status0
+--successful application view
+DECLARE @status1 BIT
+EXEC ViewApprovedJobAppSP 'Mohamed_Ahmed','Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
+PRINT @status1
+--procedures for viewing more app info
+EXEC ViewJobInfoSP 'Manager- Managing PHP Department','PHP-5019','facebook.com'
+--procedures for viewing more job seeker info
+EXEC ViewSeekerInfoSP 'gawwad.gooda'
 
 --4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Accepted','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com'
+EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Rejected','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com'
 
 --5:Abdullah-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
