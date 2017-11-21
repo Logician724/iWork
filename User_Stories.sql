@@ -1954,26 +1954,31 @@ VALUES (@managerUserName,@regularUserName,@projectName)
 SET @operationStatus = 3 --successful assignment
 END
 --7: Gharam----------------------------------------------------------------------------------------------------------- 
-
 GO
 CREATE PROC RemoveRegularFromProjectSP
 @username VARCHAR(30),
-@project VARCHAR(100),
+@projectName VARCHAR(100),
 @operationStatus BIT OUTPUT
 AS
 IF EXISTS 
-( SELECT matr.regular_user_name 
-FROM Managers_Assign_Tasks_To_Regulars matr , Tasks t
-WHERE @username=matr.regular_user_name 
-AND t.name=matr.task_name 
+(
+SELECT matr.regular_user_name 
+FROM Managers_Assign_Tasks_To_Regulars matr INNER JOIN Tasks t
+ON
+t.name=matr.task_name 
 AND t.project_name=matr.project_name 
 AND t.deadline=matr.task_deadline 
-AND t.status='Assigned')
+WHERE 
+matr.regular_user_name = @username
+AND matr.project_name = @projectName
+AND t.status = 'Assigned'
+)
 SET @operationStatus = 0
 ELSE
 BEGIN
 DELETE Managers_Assign_Projects_To_Regulars
 WHERE @username=regular_user_name
+AND @projectName = project_name
 SET @operationStatus = 1
 END
 --8: Yasmine------------------------------------------------------------------------------------------------------------------------------------
@@ -2021,8 +2026,8 @@ SET @operationStatus = 0
 ELSE
 BEGIN
 INSERT INTO Managers_Assign_Tasks_To_Regulars
-(manager_user_name,task_name,task_deadline,project_name)
-VALUES (@managerUserName,@taskName,@taskDeadline,@projectName)
+(manager_user_name,regular_user_name,task_name,task_deadline,project_name)
+VALUES (@managerUserName,@regularUserName,@taskName,@taskDeadline,@projectName)
 SET @operationStatus = 1
 END
 

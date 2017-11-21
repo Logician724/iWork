@@ -598,8 +598,14 @@ DECLARE @status3 INT
 EXEC AssignRegularToProjectSP 'claire.carles','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
 PRINT @status3
 --7:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
-
+--unsuccessful removal// the employee is still assigned to tasks
+DECLARE @status0 BIT
+EXEC RemoveRegularFromProjectSP 'marisa.lavender','Project Neo',@status0 OUTPUT
+PRINT @status0
+--successful removal 
+DECLARE @status1 BIT
+EXEC RemoveRegularFromProjectSP 'godfrey.love','Project Deimos',@status1 OUTPUT
+PRINT @status1
 --8:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task definition// the regular employee doesn't belong to the project's department
 DECLARE @status0 BIT
@@ -617,7 +623,7 @@ EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','andra.kyla','Task 
 PRINT @status0
 --successful task assignment
 DECLARE @status1 BIT
-EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','rosannah.humphrey','Task 1','12/30/2017 12:00:00 AM',@status1 OUTPUT
+EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 1','12/30/2017 12:00:00 AM',@status1 OUTPUT
 PRINT @status1
 
 --10:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------------

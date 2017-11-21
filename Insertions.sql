@@ -803,12 +803,13 @@ VALUES ('mirna.alteer','2017-10-15 8:01:15','2017-10-15 22:05:55');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
 VALUES ('Project Mavis','Mahmoud_Mohamed','2017-6-23','2017-9-23');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
-VALUES ('Project Morpheus','Mark_Jack','2017-1-1','2017-3-9');
+VALUES ('Project Morpheus','Mahmoud_Mohamed','2017-1-1','2017-3-9');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
 VALUES ('Project Neo','Mahmoud_Mohamed','2017-3-31','2017-6-2');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
 VALUES ('Project Eris','Mohamed_Mahmoud','2017-5-1','2017-8-3');
-
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES('Project Deimos','Mark_Jack','2017-10-8','2018-02-05');
 
 
 
@@ -854,8 +855,10 @@ GO
 DECLARE @status3 INT
 EXEC AssignRegularToProjectSP 'marisa.lavender','Project Neo','Mahmoud_Mohamed',@status3 OUTPUT
 PRINT @status3
-
-
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'godfrey.love','Project Deimos','Mark_Jack',@status3 OUTPUT
+PRINT @status3
 
  -- Managers_Assign_Tasks_To Regulars INSERTIONS
  GO 
