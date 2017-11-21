@@ -1550,6 +1550,7 @@ SET @operationStatus = 1
 END
 ELSE 
 SET @operationStatus = 0
+<<<<<<< HEAD
 
 
 --3:Gharam------------------------------------------------------------------------------------
@@ -1560,6 +1561,14 @@ SET @operationStatus = 0
 --The Procedure 1st checks if the deadline of the task did not pass, 
 --If it did pass , the procedure outputs false (0)
 --Otherwise, it changes the status of the procedure to 'Fixed', returning true (1).
+||||||| merged common ancestors
+
+
+--3: Gharam------------------------------------------------------------------------------------
+
+=======
+--3: Gharam------------------------------------------------------------------------------------
+>>>>>>> 496b7b920cb95d29fb72373216761addbee9c6a2
 GO
 CREATE PROC FinalizeTaskSP
 @username VARCHAR(30),
@@ -1632,27 +1641,102 @@ AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
 SET @operationStatus = 1
 END
 
+<<<<<<< HEAD
 
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
---“As a manager, I should be able to ...”
----------------------------------------------------------------------------------------------------------------------------------------------------------------
+||||||| merged common ancestors
 
---1: Gharam--------------------------------------------------------------------------------------------------------------------------------------
---EXEC ViewEmployeesRequestsSP 'cam.percival','Bob_Mark','Accepted',4
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=======
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+>>>>>>> 496b7b920cb95d29fb72373216761addbee9c6a2
+--“As a manager, I should be able to ...”
+<<<<<<< HEAD
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+||||||| merged common ancestors
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+=======
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+>>>>>>> 496b7b920cb95d29fb72373216761addbee9c6a2
+
+--1: Gharam--------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC ViewEmployeesRequestsSP 
 @managerUserName VARCHAR(30),
-@response VARCHAR(20),
-@id INT,
-@operationStatus INT OUTPUT
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150)
 AS
-
+IF EXISTS(
+SELECT *
+FROM Managers m
+WHERE m.user_name = @managerUserName
+AND m.type = 'HR'
+)
+BEGIN
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,mrm.user_name_request_owner,mrm.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Managers_Replace_Managers mrm 
+ON r.request_id = mrm.request_id
+WHERE mrm.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+) AND r.manager_response_req = NULL
+UNION
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,hrh.user_name_request_owner,hrh.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hrh
+ON r.request_id = hrh.request_id
+WHERE hrh.user_name_request_owner IN(
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+) AND r.manager_response_req = NULL 
+UNION
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,rrr.user_name_request_owner,rrr.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Regular_Employees_Replace_Regular_Employees rrr
+ON r.request_id = rrr.request_id
+WHERE rrr.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+) AND r.manager_response_req = NULL
+END
+ELSE
+IF EXISTS(
+SELECT *
+FROM Managers m
+WHERE m.user_name = @managerUserName
+)
+BEGIN
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,mrm.user_name_request_owner,mrm.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Managers_Replace_Managers mrm 
+ON r.request_id = mrm.request_id
+WHERE mrm.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+) AND r.manager_response_req = NULL
+UNION
+SELECT r.request_id, r.request_date, r.start_date, r.end_date,r.no_of_leave_days,rrr.user_name_request_owner,rrr.user_name_replacer,r.hr_user_name,r.hr_response_req,r.manager_user_name,r.manager_response_req,r.reason_of_disapproval
+FROM Requests r INNER JOIN Regular_Employees_Replace_Regular_Employees rrr
+ON r.request_id = rrr.request_id
+WHERE rrr.user_name_request_owner IN (
+SELECT sm.user_name
+FROM Staff_Members sm
+WHERE sm.department_code = @departmentCode
+) AND r.manager_response_req = NULL
+END
 --2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
-
 GO
-
 CREATE PROC AddManagerResponseToRequestSP
 @managerUserName VARCHAR(50),
 @staffUserName VARCHAR(50),
@@ -1664,8 +1748,8 @@ IF EXISTS
 SELECT *
 FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
 ON sm1.department_code = sm2.department_code
-WHERE sm1.user_name = @managerUserName AND sm2.user_name = @staffUserName
-
+WHERE sm1.user_name = @managerUserName 
+AND sm2.user_name = @staffUserName
 )
 BEGIN
 IF(@managerResponse = 'Accepted')
@@ -1804,15 +1888,14 @@ CREATE PROC DefineTaskSP --tasks can be defined by any manager don't need the ex
 @managerUsername VARCHAR(30) , @projectName VARCHAR(100) , @deadline DATETIME , @taskName VARCHAR(30) , @status VARCHAR(10) = 'Open'
 AS
 IF EXISTS ( 
-  SELECT *
-  FROM Manager M INNER JOIN Projects P on M.user_name = P.manager_user_name
-  WHERE @managerUsername = P.manager_user_name
-          )
+SELECT *
+FROM Manager M INNER JOIN Projects P on M.user_name = P.manager_user_name
+WHERE @managerUsername = P.manager_user_name
+)
 BEGIN 
 INSERT INTO Tasks (project_name,deadline,name,status)
 VALUES (@projectName, @deadline, @taskName , @status)
 END
-
 --9: Reda ------------------------------------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC AssignRegularToTaskSP
@@ -1857,7 +1940,6 @@ AND @deadline=task_deadline
 AND @project=project_name 
 
 --11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
-
 GO
 CREATE PROC ViewTasksSP --project name is already in the table task u don't have to join !
 @project VARCHAR(100), @status VARCHAR(10)
@@ -1869,7 +1951,6 @@ WHERE T.project_name = @project AND T.status=@status
 --12: Abdullah-------------------------------------------------------------------------------------------------------------------------------------
 
 GO
-
 CREATE PROC ReviewTaskSP
 @managerUserName VARCHAR(50),
 @projectName VARCHAR(100),
@@ -1887,11 +1968,7 @@ IF(@response = 'Rejected')
 	UPDATE Tasks
 		SET Tasks.status= 'Assigned', Tasks.deadline = @newDeadline;
 END
-
-
 ------------------------FUNCTIONS----------------------------------------------------
-
-
 GO
 CREATE FUNCTION MakeCompanyEmail
 ( @userName VARCHAR(30),
