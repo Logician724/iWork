@@ -835,7 +835,9 @@ GO
 DECLARE @status1 BIT
 EXEC DefineTaskSP 'Mark_Jack','Project Deimos','2017-12-30','Task Beta','bonus offered for finishing a week early','This is the first step in project deimos',@status1 OUTPUT
 PRINT @status1
-
+DECLARE @status1 BIT
+EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Mavis','12/30/2017 12:00:00 AM','Task 1','this one is difficult, take your time','Make a database for platform called iWork',@status1 OUTPUT
+PRINT @status1
 -- Managers_Assign_Projects_to Regulars INSERTIONS
 GO
 DECLARE @status3 INT
@@ -874,12 +876,12 @@ PRINT @status3
 
 GO 
 DECLARE @status1 BIT
-EXEC AssignRegularToTaskSP 'Project Morpheus','Mahmoud_Mohamed','rosannah.humphrey','Task 4','3/9/2017 12:00:00 AM',@status1 OUTPUT
+EXEC AssignRegularToTaskSP 'Project Morpheus','Mahmoud_Mohamed','rosannah.humphrey','Task 4','3/9/2018 12:00:00 AM',@status1 OUTPUT
 PRINT @status1
 
 GO
 DECLARE @status1 BIT
-EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 2','7/31/2017 12:00:00 AM',@status1 OUTPUT
+EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 2','12/30/2017 12:00:00 AM',@status1 OUTPUT
 PRINT @status1
 
 GO

@@ -2009,7 +2009,7 @@ FROM Staff_Members s1 INNER JOIN Projects p
 ON s1.user_name = p.manager_user_name
 INNER JOIN Staff_Members s2
 ON s2.department_code = s1.department_code AND S2.company_domain=S1.company_domain
-WHERE @managerUsername = s2.manager_user_name AND p.project_name=@projectName
+WHERE @managerUsername = s2.user_name AND p.project_name=@projectName
 )
 SET @operationStatus = 0
 ELSE
@@ -2031,12 +2031,24 @@ CREATE PROC AssignRegularToTaskSP
 @taskDeadline DATETIME,
 @operationStatus BIT OUTPUT
 AS
-IF NOT EXISTS (
+IF NOT (@managerUserName = ANY(
+SELECT Managers_Assign_Tasks_To_Regulars.manager_user_name
+FROM Managers_Assign_Tasks_To_Regulars
+WHERE Managers_Assign_Tasks_To_Regulars.task_name = @taskName
+AND Managers_Assign_Tasks_To_Regulars.task_deadline = @taskDeadline
+AND Managers_Assign_Tasks_To_Regulars.project_name = @projectName
+
+)
+AND EXISTS
+(
 SELECT *
-FROM Managers_Assign_Projects_To_Regulars mapr
-WHERE (mapr.project_name = @projectName 
-AND mapr.regular_user_name = @regularUserName
-))
+FROM Staff_Members sm1 INNER JOIN Staff_Members sm2
+ON sm1.department_code = sm2.department_code
+AND sm1.company_domain = sm2.company_domain
+WHERE sm1.user_name = @managerUserName
+AND sm2.user_name = @regularUserName
+)
+)
 SET @operationStatus = 0
 ELSE
 BEGIN
@@ -2045,6 +2057,11 @@ SET regular_user_name = @regularUserName
 WHERE manager_user_name = @managerUserName
 AND task_name = @taskName
 AND task_deadline = @taskDeadline
+AND project_name = @projectName
+UPDATE Tasks
+SET status = 'Assigned'
+WHERE name = @taskName
+AND deadline = @taskDeadline
 AND project_name = @projectName
 SET @operationStatus = 1
 END
