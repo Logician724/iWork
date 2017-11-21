@@ -801,13 +801,13 @@ VALUES ('mirna.alteer','2017-10-15 8:01:15','2017-10-15 22:05:55');
 -- Projects INSERTIONS
 
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
-VALUES ('Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed','2017-6-23','2017-9-23');
+VALUES ('Project Mavis','Mahmoud_Mohamed','2017-6-23','2017-9-23');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
-VALUES ('Project-732EVT search engine maintenance','Mark_Jack','2017-1-1','2017-3-9');
+VALUES ('Project Morpheus','Mark_Jack','2017-1-1','2017-3-9');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
-VALUES ('Project-8493QKL maintenance of game center BootStrap','Mahmoud_Mohamed','2017-3-31','2017-6-2');
+VALUES ('Project Neo','Mahmoud_Mohamed','2017-3-31','2017-6-2');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
-VALUES ('Project-3284NMD upgrade of exterior of home page BootStrap','Mohamed_Mahmoud','2017-5-1','2017-8-3');
+VALUES ('Project Eris','Mohamed_Mahmoud','2017-5-1','2017-8-3');
 
 
 
@@ -815,38 +815,45 @@ VALUES ('Project-3284NMD upgrade of exterior of home page BootStrap','Mohamed_Ma
 -- Tasks INSERTIONS
 
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 1','Project-5651AMU chat page developing BootStrap',
+VALUES ('2017-12-30','Task 1','Project Mavis',
 		'Task should be done as quickly as possible','Inspection of requests from cleints','Assigned');
 
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-7-31','Task 2','Project-5651AMU chat page developing BootStrap',
+VALUES ('2017-7-31','Task 2','Project Mavis',
 		'Task should be done as quickly as possible','Brain storming of new ideas to enhance the page','Assigned');
 
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-3-9','Task 4','Project-732EVT search engine maintenance',
+VALUES ('2017-3-9','Task 4','Project Morpheus',
 		'Task should be done as quickly as possible','Final procedures of maintenance','Assigned');
 
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 3','Project-8493QKL maintenance of game center BootStrap',
+VALUES ('2017-12-30','Task 3','Project Eris',
 		'Task should be done as quickly as possible','Applying the agreed on protocol on maintenance','Assigned');
 
 INSERT INTO Tasks (deadline,name,project_name,comments,description,status)
-VALUES ('2017-12-30','Task 1','Project-3284NMD upgrade of exterior of home page BootStrap',
+VALUES ('2017-12-30','Task 1','Project Neo',
 		'Task should be done as quickly as possible','Brain Storming about ideas to come up with a plan of upgrading','Assigned');
 
 
 
 
 -- Managers_Assign_Projects_to Regulars INSERTIONS
-
-INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
-VALUES ('cam.percival','Project-5651AMU chat page developing BootStrap','Mahmoud_Mohamed');
-INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
-VALUES ('godfrey.love','Project-732EVT search engine maintenance','Jack_Mark');
-INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
-VALUES ('cam.percival','Project-8493QKL maintenance of game center BootStrap','Mahmoud_Mohamed');
-INSERT INTO Managers_Assign_Projects_To_Regulars (regular_user_name,project_name,manager_user_name)
-VALUES ('cam.percival','Project-3284NMD upgrade of exterior of home page BootStrap','Mahmoud_Mohamed');
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Eris','Mahmoud_Mohamed',@status3 OUTPUT
+PRINT @status3
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'godfrey.love','Project Mavis','Jack_Mark',@status3 OUTPUT
+PRINT @status3
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Morpheus','Mahmoud_Mohamed',@status3 OUTPUT
+PRINT @status3
+GO
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'clark.maurine','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
+PRINT @status3
 
 
 

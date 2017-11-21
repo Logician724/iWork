@@ -1797,31 +1797,45 @@ INSERT Projects (project_name,manager_user_name,start_date,end_date)
 Values(@projectName,@managerUserName,@startDate,@endDate)
 
 --6: Reda--------------------------------------------------------------------------------------------------------------
-
 GO
 CREATE PROC AssignRegularToProjectSP
+@regularUserName VARCHAR(30),
 @projectName VARCHAR(100),
 @managerUserName VARCHAR(30),
-@regularUserName VARCHAR(30)
+@operationStatus INT OUTPUT
 AS
 IF (
 SELECT COUNT(*)
 FROM Managers_Assign_Projects_To_Regulars mapr
 WHERE mapr.regular_user_name = @regularUserName
-) < 2
-AND EXISTS
+) = 2
+SET @operationStatus = 0 --the employee is working on 2 project, you can't assign him to more projects
+ELSE
+IF NOT EXISTS
 (
 SELECT *
 FROM Staff_Members s1, Staff_Members s2
-WHERE (s1.user_name = s2.user_name AND
-s1.department_code = s2.department_code AND
-s1.user_name = @managerUserName AND
-s2.user_name = @regularUserName
+WHERE (s1.department_code = s2.department_code
+AND s1.user_name = @managerUserName
+AND s2.user_name = @regularUserName
 )
 )
+SET @operationStatus = 1 --the regular is not in the same department as the manager
+ELSE
+IF  (
+SELECT COUNT(*)
+FROM Managers_Assign_Projects_To_Regulars
+WHERE regular_user_name = @regularUserName
+AND project_name = @projectName
+) = 1
+SET @operationStatus = 2 --the regular is already assigned to the project.
+ELSE
+BEGIN
 INSERT INTO Managers_Assign_Projects_To_Regulars
 (manager_user_name,regular_user_name,project_name)
 VALUES (@managerUserName,@regularUserName,@projectName)
+SET @operationStatus = 3 --successful assignment
+END
 --7: Gharam----------------------------------------------------------------------------------------------------------- 
 
 GO

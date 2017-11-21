@@ -561,10 +561,25 @@ EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Accepted','gawwad.gooda','Manag
 EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Rejected','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com'
 
 --5:Abdullah-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+EXEC DefineNewProject 'Mohamed_Ahmed','2017-11-21','2017-12-30','Project Hela'
 
 --6:Reda-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+--unsuccessful assignment// the regular works on 2 project, and can't be assigned to more
+DECLARE @status0 INT
+EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Neo','Mahmoud_Mohamed',@status0 OUTPUT
+PRINT @status0
+--unsuccessful assignment// the regular doens't belong to the manager's department
+DECLARE @status1 INT
+EXEC AssignRegularToProjectSP 'Mohamed_Mahmoud','Project-3284NMD upgrade of exterior of home page BootStrap','claire.carles',@status1 OUTPUT
+PRINT @status1
+--unsuccessful assignment// the regular is already assigned to the project
+DECLARE @status2 INT
+EXEC AssignRegularToProjectSP 'godfrey.love','Project Mavis','Jack_Mark',@status2 OUTPUT
+PRINT @status2
+--successful assignment
+DECLARE @status3 INT
+EXEC AssignRegularToProjectSP 'claire.carles','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
+PRINT @status3
 --7:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
 
