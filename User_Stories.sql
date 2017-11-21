@@ -2022,6 +2022,14 @@ SET @operationStatus = 1
 END
 --9: Reda ------------------------------------------------------------------------------------------------------------------------------------------
 
+--Managers User Stories 9:- 
+--A managers can assign one regular employee (from those already assigned to the project) to work on an already defined task by him/her in this project.
+--The procedure takes as inputs the manager user name, regular employee user name to be assigned, project name, task name and task deadline.
+--First I check if the Manager is the one assigned the task and of the regular employee and the manager are in the same department.
+--If both does not hold, the procedure outputs 0 (false)
+--If both hold, then corresponding record in the table  Managers_Assign_Tasks_To_Regulars is update with values of the inputs
+
+
 GO
 CREATE PROC AssignRegularToTaskSP
 @projectName VARCHAR(100),
@@ -2066,6 +2074,16 @@ SET @operationStatus = 1
 END
 
 --10: Gharam----------------------------------------------------------------------------------------------------------------------------------------
+
+--Manager User Stories 10:-
+--A Manager can change the regular employee working on a task on the condition that its state is ‘Assigned’, i.e. by assigning it to another regular employee.
+--The procedure takes as input the manager username, the Regular username to be assigned, and the taks name, deadline, and the project name.
+--We first check if the manager is the one who defined the task and if this task has a status "Assigned" and if the regular employee is in the same department as the 
+--Manager's department who defined the task...
+--if the checks does not hold, the procedure outputs false (0).
+--if the checks do hold, the manager can update the table Managers_Assign_Tasks_To_Regulars  with the new values in the input (the new regular employee),
+--and the procedure outputs 1 (true); 
+
 GO
 CREATE PROC ReplaceRegularSP 
 @managerUsername VARCHAR(30),
