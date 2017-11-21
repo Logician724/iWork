@@ -1848,6 +1848,15 @@ AND a.hr_response_app='Accepted')
 SET @operationStatus = 1;
 END
 --4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories no.4:-
+--Managers can accept or reject job applications to jobs related to my department after being approved by an HR employee.
+--The procedure takes as inputs the Manager Username , the Manager response , and the primary keys for the Application he wants to respond to 
+--(job seeker username, jobtitle, department code, company domain)
+--If the manager's response is 'Accepted', the Application's record is updated accordingly, setting the final application status to accepted and manager's reponse to accepted
+--If the manager's response is 'Rejected', the Application's record is updated accordingly, setting the final applicaiton status to accepted and manager's response to accepted
+--We check before updating that the HR's response is 'Accepted'
+
 GO
 CREATE PROC RespondToJobApplicationsSP 
 @managerUserName VARCHAR(30),
