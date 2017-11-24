@@ -1,16 +1,18 @@
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 4% 2%;
-    margin: 8px 0;
+label{
     display: block;
-    border: 1px solid #ccc;
-    
+    font-size: 90%;
 }
-label,input{
+.txtbox{
     display:block;
+    width: 100%;
+    font-size:100%;
 }
-
-button {
+.main-container{
+    width: 25%;
+    height: 25%;
+    margin: auto auto;
+}
+.submit-button{
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
