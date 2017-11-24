@@ -1,59 +1,46 @@
-label{
-    display: block;
-    font-size: 90%;
-}
-.txtbox{
-    display:block;
+body {
+    position:fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
     width: 100%;
-    font-size:100%;
+}
+.center-container{
+    float: none;
+    margin: 0 auto;
+    width: 60%;
+
+}
+.label {
+    position: relative;
+    float:none;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    padding: 0;
+    color: #1c1a1a;
+    font-size: 1.1em;
+
+}
+.txtbox {
+    width: 100%;
+    float: none;
+    margin: 0 auto;
+    margin-top:5%;
+    margin-bottom:5%;
+}
+.button{ 
+ 
+    width:100%;
+    font-size:1.4em;
+    margin: 0 auto;
+}
+.logo{
+    border-radius: 75%;
 }
 .main-container{
-    width: 25%;
-    height: 25%;
-    margin: auto auto;
-}
-.submit-button{
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
-
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-}
-
-img.logo {
-    width: 40%;
-    border-radius: 50%;
-}
-
-.container {
-    padding: 16px;
-}
-
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-       display: block;
-       float: none;
-    }
-    .cancelbtn {
-       width: 100%;
-    }
+    margin-top: 25vh;
 }
