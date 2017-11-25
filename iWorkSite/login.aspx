@@ -16,10 +16,10 @@
             </div>
             <div class="center-container">
                 <label class ="label">Username</label>
-                <asp:TextBox class="txtbox input-lg" ID="txt_username" runat="server" placeholder="Enter your username" ></asp:TextBox>
+                <asp:TextBox CssClass="txtbox input-lg" ID="txt_username" runat="server" placeholder="Enter your username" ></asp:TextBox>
                 <label class="label">Password</label>
-                <asp:TextBox class="txtbox input-lg" ID="txt_password" runat="server" TextMode="Password" placeholder="Enter your password" ></asp:TextBox>
-                <asp:Button class="button btn btn-success" ID="btn_login" runat="server" Text="Login" onclick="login"/>
+                <asp:TextBox CssClass="txtbox input-lg" ID="txt_password" runat="server" TextMode="Password" placeholder="Enter your password" ></asp:TextBox>
+                <asp:Button CssClass="button btn btn-success" ID="btn_login" runat="server" Text="Login" onclick="login"/>
             </div>
         </form>
     </div>
