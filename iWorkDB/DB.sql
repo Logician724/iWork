@@ -1,3 +1,5 @@
+
+
 CREATE TABLE Companies(
 domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
 name VARCHAR(50) NOT NULL,
