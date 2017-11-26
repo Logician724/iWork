@@ -9,6 +9,6 @@
     <title>Home</title>
 </head>
 <body>
-    <div id="div_main" class="container" runat="server"></div>
+    <form id="div_main" class="container" runat="server"></form>
 </body>
 </html>
