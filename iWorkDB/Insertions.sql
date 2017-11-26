@@ -1,24 +1,32 @@
-﻿-- COMPANIES INSERTIONS
+﻿
+-- COMPANIES INSERTIONS
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email) 
-VALUES('facebook.com','facebook',' Palo Alto','computer marketing',
-		'social media','connection of all humanity','info@facebook.com');
+VALUES('facebook.com','Facebook','Palo Alto','Computer Marketing',
+		'International','People use Facebook to stay connected with friends and family, to discover what''s going on in the world, and to share and express what matters to them.','info@facebook.com');
 
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
-VALUES('google.com','google','600 Amphitheatre Parkway in Mountain View, Santa Clara County, California, United States',
-		'computer marketing','internet managing','have all humanity search through it','google@google.com');
+VALUES('google.com','Google','600 Amphitheatre Parkway in Mountain View, Santa Clara County, California, United States',
+		'Computer Marketing','International','to provide access to the world''s information in one click','google@google.com');
 
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
-VALUES('amazon.com','amazon','Beacon Hill neighborhood','computer marketing',
-		'digital marketing','sell to all humanity','amazon@amazon.com');
+VALUES('amazon.com','Amazon','Beacon Hill neighborhood','Computer Marketing',
+		'International','to be Earth''s most customer-centric company, where customers can find and discover anything they might want to buy online','amazon@amazon.com');
+
+INSERT INTO Companies (domain_name,name,address,field,type,vision,email)
+VALUES('360codes.net','360Code','Nasr City, Cairo','Graphic Design and Web Development','National','Our vision is to help businesses in Egypt grow by providing them with appropriate software & programs.','Sales@360codes.net');
+
 
 --COMPANIES PHONES INSERTIONS
 INSERT INTO Companies_Phones(company_domain,phone)
-VALUES ('facebook.com','1599965467')
+VALUES ('facebook.com','1599965467');
 INSERT INTO Companies_Phones(company_domain,phone)
-VALUES ('google.com','155485309')
+VALUES ('google.com','155485309');
 INSERT INTO Companies_Phones(company_domain,phone)
-VALUES('amazon.com','61549612354')
-
+VALUES('amazon.com','61549612354');
+INSERT INTO Companies_Phones(company_domain,phone)
+VALUES('360codes.net','+01115555945');
+INSERT INTO Companies_Phones(company_domain,phone)
+VALUES('360codes.net','+01115977749');
 
 --DEPARTMENTS INSERTIONS
 INSERT INTO Departments (company_domain,department_code,name)
