@@ -950,6 +950,7 @@ SELECT a.*
 	AND DATEDIFF(DAY, a.date, CURRENT_TIMESTAMP) < 21
 
 --helper staff member procedures--
+GO
 CREATE PROC ViewStaffDepartment
 @userName VARCHAR(30),
 @departmentCode VARCHAR(30) OUTPUT,

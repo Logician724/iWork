@@ -107,7 +107,7 @@ public partial class Companies : System.Web.UI.Page
             DepartmentButton.Text = "View Departments";
             DepartmentButton.CssClass = "btn btn-primary";
            
-            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName,CardBlockPanel));
+             DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName,CardBlockPanel));
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -136,6 +136,7 @@ public partial class Companies : System.Web.UI.Page
         }
         
     }
+
     protected void ViewDepartments(Object sender, EventArgs e, string DomainName, Panel TargetPanel)
     {
        
@@ -182,6 +183,15 @@ public partial class Companies : System.Web.UI.Page
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
             CardPanel.CssClass = "card";
+
+            //add actions form
+            Button DepartmentButton = new Button();
+            JobsButton.Text = "View Available Jobs";
+            JobsButton.CssClass = "btn btn-primary";
+
+            JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName,DepartmentCode, CardBlockPanel));
+           
+
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(DepartmentNamePanel);
             CardBlockPanel.Controls.Add(DepartmentCodePanel);
@@ -192,4 +202,158 @@ public partial class Companies : System.Web.UI.Page
 
 
     }
+
+    protected void ViewJobs(Object sender, EventArgs e, string DomainName,string DepartmentCode, Panel TargetPanel)
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewJobsWithVacancySP", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+        cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        Panel CardPanel = new Panel();
+
+        while (rdr.Read())
+        {
+
+            string JobTitle = rdr.GetString(rdr.GetOrdinal("job_title"));
+            string DepartmentCode = rdr.GetString(rdr.GetOrdinal("department_code"));
+            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
+            string ApplicationDeadline = rdr.GetString(rdr.GetOrdinal("application_deadline"));
+            string DetailedDescription = rdr.GetString(rdr.GetOrdinal("detailed_description"));
+            string MinYearsExperience = rdr.GetString(rdr.GetOrdinal("min_years_experience"));
+            string Salary = rdr.GetString(rdr.GetOrdinal("salary"));
+            string ShortDescription = rdr.GetString(rdr.GetOrdinal("short_description"));
+            string Vacancies = rdr.GetString(rdr.GetOrdinal("vacancies"));
+            string WorkingHours = rdr.GetString(rdr.GetOrdinal("working_hours"));
+            //holder labels
+            Label JobTitleHolder = new Label();
+            Label DepartmentCodeHolder = new Label();
+            Label CompanyDomainHolder = new Label();
+            Label ApplicationDeadlineHolder = new Label();
+            Label DetailedDescriptionHolder = new Label();
+            Label MinYearsExperienceHolder = new Label();
+            Label SalaryHolder = new Label();
+            Label ShortDescriptionHolder = new Label();
+            Label VacanciesHolder = new Label();
+            Label WorkingHoursHolder = new Label();
+            //holder label attr
+            JobTitleHolder.Text = "Job Title: ";
+            JobTitleHolder.CssClass = "card-text font-weight-bold";
+
+            DepartmentCodeHolder.Text = "Department Code: ";
+            DepartmentCodeHolder.CssClass = "card-text font-weight-bold";
+
+            CompanyDomainHolder.Text = "Company Domain: ";
+            CompanyDomainHolder.CssClass = "card-text font-weight-bold";
+
+            ApplicationDeadlineHolder.Text = "Applicaiton Deadline: ";
+            ApplicationDeadlineHolder.CssClass = "card-text font-weight-bold";
+
+            DetailedDescriptionHolder.Text = "Detailed Description: ";
+            DetailedDescriptionHolder.CssClass = "card-text font-weight-bold";
+
+            MinYearsExperienceHolder.Text = "Minimum Years of Experience: ";
+            MinYearsExperienceHolder.CssClass = "card-text font-weight-bold";
+
+            SalaryHolder.Text = "Salary: ";
+            SalaryHolder.CssClass = "card-text font-weight-bold";
+
+            ShortDescriptionHolder.Text = "Short Description: ";
+            ShortDescriptionHolder.CssClass = "card-text font-weight-bold";
+
+            VacanciesHolder.Text = "Vacancies: ";
+            VacanciesHolder.CssClass = "card-text font-weight-bold";
+
+            WorkingHoursHolder.Text = "Working Hours: ";
+            WorkingHoursHolder.CssClass = "card-text font-weight-bold";
+
+            //department info panels
+            Panel JobTitlePanel = new Panel();
+            Panel DepartmentCodePanel = new Panel();
+            Panel CompanyDomainPanel = new Panel();
+            Panel ApplicationDeadlinePanel = new Panel();
+            Panel DetailedDescriptionPanel = new Panel();
+            Panel MinYearsExperiencePanel = new Panel();
+            Panel SalaryPanel = new Panel();
+            Panel ShortDescriptionPanel = new Panel();
+            Panel VacanciesPanel = new Panel();
+            Panel WorkingHoursPanel = new Panel();
+
+            //add labels to correct panels
+            JobTitlePanel.Controls.Add(JobTitleHolder);
+            JobTitlePanel.Controls.Add(JobTitleLabel);
+
+            DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
+            DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
+
+
+            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
+            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
+
+            ApplicationDeadlinePanel.Controls.Add(ApplicationDeadlineHolder);
+            ApplicationDeadlinePanel.Controls.Add(ApplicationDeadlineLabel);
+
+            DetailedDescriptionPanel.Controls.Add(DetailedDescriptionHolder);
+            DetailedDescriptionPanel.Controls.Add(DetailedDescriptionLabel);
+
+            MinYearsExperiencePanel.Controls.Add(MinYearsExperienceHolder);
+            MinYearsExperiencePanel.Controls.Add(MinYearsExperienceLabel);
+
+            SalaryPanel.Controls.Add(SalaryHolder);
+            SalaryPanel.Controls.Add(SalaryLabel);
+
+            ShortDescriptionPanel.Controls.Add(ShortDescriptionHolder);
+            ShortDescriptionPanel.Controls.Add(ShortDescriptionLabel);
+
+            VacanciesPanel.Controls.Add(VacanciesHolder);
+            VacanciesPanel.Controls.Add(VacanciesLabel);
+
+            WorkingHoursPanel.Controls.Add(WorkingHoursHolder);
+            WorkingHoursPanel.Controls.Add(WorkingHoursLabel);
+            
+            //add main panels
+            Panel CardBlockPanel = new Panel();
+            
+            //add main panels attr
+            CardBlockPanel.CssClass = "card-block";
+            CardPanel.CssClass = "card";
+
+
+
+            //add sub-panels to main panel
+            CardBlockPanel.Controls.Add(JobTitlePanel);
+            CardBlockPanel.Controls.Add(DepartmentCodePanel);
+            CardBlockPanel.Controls.Add(CompanyDomainPanel);
+            CardBlockPanel.Controls.Add(ApplicationDeadlinePanel);
+            CardBlockPanel.Controls.Add(DetailedDescriptionPanel);
+            CardBlockPanel.Controls.Add(MinYearsExperiencePanel);
+            CardBlockPanel.Controls.Add(SalaryPanel);
+            CardBlockPanel.Controls.Add(ShortDescriptionPanel);
+            CardBlockPanel.Controls.Add(VacanciesPanel);
+            CardBlockPanel.Controls.Add(WorkingHoursPanel);
+            CardPanel.Controls.Add(CardBlockPanel);
+
+        }//end of while loop
+
+        TargetPanel.Controls.Add(CardPanel);
+
+
+
+
+
+
+    } //end of method 
+
+
+
+
+
+
+
+
+
+
 }
