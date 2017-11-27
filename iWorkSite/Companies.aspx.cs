@@ -149,6 +149,7 @@ public partial class Companies : System.Web.UI.Page
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         Panel CardPanel = new Panel();
+        CardPanel.CssClass = "card";
         while (rdr.Read())
         {
             string DepartmentName = rdr.GetString(rdr.GetOrdinal("name"));
@@ -158,20 +159,25 @@ public partial class Companies : System.Web.UI.Page
             Label DepartmentCodeHolder = new Label();
             //holder label attr
             DepartmentNameHolder.Text = "Deaprtment Name: ";
-            DepartmentNameHolder.CssClass = "card-text font-weight-bold";
+            DepartmentNameHolder.CssClass = "font-weight-bold";
             DepartmentCodeHolder.Text = "Department Code: ";
-            DepartmentCodeHolder.CssClass = "card-text font-weight-bold";
+            DepartmentCodeHolder.CssClass = "font-weight-bold";
             //department info labels
             Label DepartmentNameLabel = new Label();
             Label DepartmentCodeLabel = new Label();
             //department info label attributes
             DepartmentNameLabel.Text = DepartmentName;
-            DepartmentNameLabel.CssClass = "card-text";
             DepartmentCodeLabel.Text = DepartmentCode;
-            DepartmentCodeLabel.CssClass = "card-text";
             //department info panels
             Panel DepartmentNamePanel = new Panel();
             Panel DepartmentCodePanel = new Panel();
+            //add action panel
+            Panel ActionPanel = new Panel();
+            //add panel styles
+            DepartmentNamePanel.CssClass = "card-text";
+            DepartmentCodePanel.CssClass = "card-text";
+            //add action panel styles
+            ActionPanel.CssClass = "card-block flex-row flex-wrap";
             //add labels to correct panels
             DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
             DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
@@ -179,13 +185,12 @@ public partial class Companies : System.Web.UI.Page
             DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
             //add main panels
             Panel CardBlockPanel = new Panel();
-            
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
-            CardPanel.CssClass = "card";
+           
 
             //add actions form
-            Button DepartmentButton = new Button();
+            Button JobsButton = new Button();
             JobsButton.Text = "View Available Jobs";
             JobsButton.CssClass = "btn btn-primary";
 
@@ -195,6 +200,8 @@ public partial class Companies : System.Web.UI.Page
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(DepartmentNamePanel);
             CardBlockPanel.Controls.Add(DepartmentCodePanel);
+            ActionPanel.Controls.Add(JobsButton);
+            CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
         }
         TargetPanel.Controls.Add(CardPanel);
@@ -214,13 +221,11 @@ public partial class Companies : System.Web.UI.Page
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         Panel CardPanel = new Panel();
-
+        CardPanel.CssClass = "card";
         while (rdr.Read())
         {
 
             string JobTitle = rdr.GetString(rdr.GetOrdinal("job_title"));
-            string DepartmentCode = rdr.GetString(rdr.GetOrdinal("department_code"));
-            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
             string ApplicationDeadline = rdr.GetString(rdr.GetOrdinal("application_deadline"));
             string DetailedDescription = rdr.GetString(rdr.GetOrdinal("detailed_description"));
             string MinYearsExperience = rdr.GetString(rdr.GetOrdinal("min_years_experience"));
@@ -230,8 +235,6 @@ public partial class Companies : System.Web.UI.Page
             string WorkingHours = rdr.GetString(rdr.GetOrdinal("working_hours"));
             //holder labels
             Label JobTitleHolder = new Label();
-            Label DepartmentCodeHolder = new Label();
-            Label CompanyDomainHolder = new Label();
             Label ApplicationDeadlineHolder = new Label();
             Label DetailedDescriptionHolder = new Label();
             Label MinYearsExperienceHolder = new Label();
@@ -241,39 +244,42 @@ public partial class Companies : System.Web.UI.Page
             Label WorkingHoursHolder = new Label();
             //holder label attr
             JobTitleHolder.Text = "Job Title: ";
-            JobTitleHolder.CssClass = "card-text font-weight-bold";
-
-            DepartmentCodeHolder.Text = "Department Code: ";
-            DepartmentCodeHolder.CssClass = "card-text font-weight-bold";
-
-            CompanyDomainHolder.Text = "Company Domain: ";
-            CompanyDomainHolder.CssClass = "card-text font-weight-bold";
+            JobTitleHolder.CssClass = "font-weight-bold";
 
             ApplicationDeadlineHolder.Text = "Applicaiton Deadline: ";
-            ApplicationDeadlineHolder.CssClass = "card-text font-weight-bold";
+            ApplicationDeadlineHolder.CssClass = "font-weight-bold";
 
             DetailedDescriptionHolder.Text = "Detailed Description: ";
-            DetailedDescriptionHolder.CssClass = "card-text font-weight-bold";
+            DetailedDescriptionHolder.CssClass = "font-weight-bold";
 
             MinYearsExperienceHolder.Text = "Minimum Years of Experience: ";
-            MinYearsExperienceHolder.CssClass = "card-text font-weight-bold";
+            MinYearsExperienceHolder.CssClass = "font-weight-bold";
 
             SalaryHolder.Text = "Salary: ";
             SalaryHolder.CssClass = "card-text font-weight-bold";
 
             ShortDescriptionHolder.Text = "Short Description: ";
-            ShortDescriptionHolder.CssClass = "card-text font-weight-bold";
+            ShortDescriptionHolder.CssClass = "font-weight-bold";
 
             VacanciesHolder.Text = "Vacancies: ";
-            VacanciesHolder.CssClass = "card-text font-weight-bold";
+            VacanciesHolder.CssClass = "font-weight-bold";
 
             WorkingHoursHolder.Text = "Working Hours: ";
-            WorkingHoursHolder.CssClass = "card-text font-weight-bold";
+            WorkingHoursHolder.CssClass = "font-weight-bold";
+            //add job info labels
+            Label JobTitleLabel = new Label();
+            Label DepartmentCodeLabel = new Label();
+            Label CompanyDomainLabel = new Label();
+            Label ApplicationDeadlineLabel = new Label();
+            Label DetailedDescriptionLabel = new Label();
+            Label MinYearsExperienceLabel = new Label();
+            Label SalaryLabel = new Label();
+            Label ShortDescriptionLabel = new Label();
+            Label VacanciesLabel = new Label();
+            Label WorkingHoursLabel = new Label();
 
-            //department info panels
+            //job info panels
             Panel JobTitlePanel = new Panel();
-            Panel DepartmentCodePanel = new Panel();
-            Panel CompanyDomainPanel = new Panel();
             Panel ApplicationDeadlinePanel = new Panel();
             Panel DetailedDescriptionPanel = new Panel();
             Panel MinYearsExperiencePanel = new Panel();
@@ -281,17 +287,21 @@ public partial class Companies : System.Web.UI.Page
             Panel ShortDescriptionPanel = new Panel();
             Panel VacanciesPanel = new Panel();
             Panel WorkingHoursPanel = new Panel();
+            //add panel styles
+            JobTitlePanel.CssClass = "card-text";
+            ApplicationDeadlinePanel.CssClass = "card-text";
+            DetailedDescriptionPanel.CssClass = "card-text";
+            MinYearsExperiencePanel.CssClass = "card-text";
+            SalaryPanel.CssClass = "card-text";
+            ShortDescriptionPanel.CssClass = "card-text";
+            VacanciesPanel.CssClass = "card-text";
+            WorkingHoursPanel.CssClass = "card-text";
+            
 
             //add labels to correct panels
             JobTitlePanel.Controls.Add(JobTitleHolder);
             JobTitlePanel.Controls.Add(JobTitleLabel);
 
-            DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
-            DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
-
-
-            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
-            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
 
             ApplicationDeadlinePanel.Controls.Add(ApplicationDeadlineHolder);
             ApplicationDeadlinePanel.Controls.Add(ApplicationDeadlineLabel);
@@ -313,20 +323,17 @@ public partial class Companies : System.Web.UI.Page
 
             WorkingHoursPanel.Controls.Add(WorkingHoursHolder);
             WorkingHoursPanel.Controls.Add(WorkingHoursLabel);
-            
+
+           
+
             //add main panels
             Panel CardBlockPanel = new Panel();
             
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
-            CardPanel.CssClass = "card";
-
-
 
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(JobTitlePanel);
-            CardBlockPanel.Controls.Add(DepartmentCodePanel);
-            CardBlockPanel.Controls.Add(CompanyDomainPanel);
             CardBlockPanel.Controls.Add(ApplicationDeadlinePanel);
             CardBlockPanel.Controls.Add(DetailedDescriptionPanel);
             CardBlockPanel.Controls.Add(MinYearsExperiencePanel);
