@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -28,7 +29,16 @@ public partial class Companies : System.Web.UI.Page
             string Type = rdr.GetString(rdr.GetOrdinal("type"));
             string Vision = rdr.GetString(rdr.GetOrdinal("vision"));
             string Email = rdr.GetString(rdr.GetOrdinal("email"));
-            string Phone = rdr.GetString(rdr.GetOrdinal("phone"));
+            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP",conn);
+            CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            ArrayList Phones = new ArrayList();
+            while (PhonesReader.Read())
+            {
+                string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
+                Phones.Add(CompanyPhone);
+            }
             //string CardDiv = "<div class=\"card\">"
             //+ "<div class=\"card-block\">"
             //+ "<asp:Label class=\"card-title text-muted\">" + CompanyName + "</div>"
@@ -74,7 +84,6 @@ public partial class Companies : System.Web.UI.Page
             Label FieldLabel = new Label();
             Label VisionLabel = new Label();
             Label AddressLabel = new Label();
-            Label PhoneLabel = new Label();
             //company info labels attr
             CompanyDomainLabel.Text = DomainName;
             CompanyNameLabel.Text = CompanyName;
@@ -84,7 +93,6 @@ public partial class Companies : System.Web.UI.Page
             FieldLabel.Text = Field;
             VisionLabel.Text = Vision;
             AddressLabel.Text = Address;
-            PhoneLabel.Text = Phone;
             //company info panels
             Panel CompanyNamePanel = new Panel();
             Panel CompanyDomainPanel = new Panel();
@@ -132,7 +140,12 @@ public partial class Companies : System.Web.UI.Page
             AddressPanel.Controls.Add(AddressHolder);
             AddressPanel.Controls.Add(AddressLabel);
             PhonePanel.Controls.Add(PhoneHolder);
-            PhonePanel.Controls.Add(PhoneLabel);
+            for(int i =0; i < Phones.Count; i++)
+            {
+                Label PhoneLabel = new Label();
+                PhoneLabel.Text =(string)( Phones[i]);
+                PhonePanel.Controls.Add(PhoneLabel);
+            }
             ActionPanel.Controls.Add(DepartmentButton);
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
@@ -384,9 +397,29 @@ public partial class Companies : System.Web.UI.Page
             string Type = rdr.GetString(rdr.GetOrdinal("type"));
             string Vision = rdr.GetString(rdr.GetOrdinal("vision"));
             string Email = rdr.GetString(rdr.GetOrdinal("email"));
-            string Phone = rdr.GetString(rdr.GetOrdinal("phone"));
-
-
+            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP", conn);
+            CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            ArrayList Phones = new ArrayList();
+            while (PhonesReader.Read())
+            {
+                string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
+                Phones.Add(CompanyPhone);
+            }
+            //string CardDiv = "<div class=\"card\">"
+            //+ "<div class=\"card-block\">"
+            //+ "<asp:Label class=\"card-title text-muted\">" + CompanyName + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Field: </span>" + Field + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Type: </span>" + Type + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Vision: </span>" + Vision + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Domain Name: </span>" + DomainName + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Email: </span>" + Email + "</div>"
+            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Address: </span>" + Address + "</div>"
+            //+ "<a href = \"#\" class=\"btn btn-primary\">Kill me please</a>"
+            //+ "</div>"
+            //+ "</div>";
+            //div_main.Controls.Add(new LiteralControl(CardDiv));
 
             //holder labels
             Label FieldHolder = new Label();
@@ -419,7 +452,6 @@ public partial class Companies : System.Web.UI.Page
             Label FieldLabel = new Label();
             Label VisionLabel = new Label();
             Label AddressLabel = new Label();
-            Label PhoneLabel = new Label();
             //company info labels attr
             CompanyDomainLabel.Text = DomainName;
             CompanyNameLabel.Text = CompanyName;
@@ -429,7 +461,6 @@ public partial class Companies : System.Web.UI.Page
             FieldLabel.Text = Field;
             VisionLabel.Text = Vision;
             AddressLabel.Text = Address;
-            PhoneLabel.Text = Phone;
             //company info panels
             Panel CompanyNamePanel = new Panel();
             Panel CompanyDomainPanel = new Panel();
@@ -456,7 +487,12 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
+            //add actions form
+            Button DepartmentButton = new Button();
+            DepartmentButton.Text = "View Departments";
+            DepartmentButton.CssClass = "btn btn-primary";
 
+            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -472,7 +508,13 @@ public partial class Companies : System.Web.UI.Page
             AddressPanel.Controls.Add(AddressHolder);
             AddressPanel.Controls.Add(AddressLabel);
             PhonePanel.Controls.Add(PhoneHolder);
-            PhonePanel.Controls.Add(PhoneLabel);
+            for (int i = 0; i < Phones.Count; i++)
+            {
+                Label PhoneLabel = new Label();
+                PhoneLabel.Text = (string)(Phones[i]);
+                PhonePanel.Controls.Add(PhoneLabel);
+            }
+            ActionPanel.Controls.Add(DepartmentButton);
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
