@@ -9,6 +9,16 @@
     <title>Home</title>
 </head>
 <body>
-    <form id="div_main" class="container" runat="server"></form>
+
+<div  class="main-container center-container" > 
+
+
+   <form id="div_main" class="container" runat="server">
+   <asp:TextBox CssClass="txtbox input-lg"  ID="txt_search" runat="server" placeholder="Search" ></asp:TextBox>
+   <asp:Button CssClass="button btn btn-success" ID="btn_search_byname" runat="server" Text=  "Search"  onclick="searchCompaniesByName"  />
+   </form>
+
+</div>
+   
 </body>
 </html>
