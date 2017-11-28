@@ -39,20 +39,6 @@ public partial class Companies : System.Web.UI.Page
                 string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
                 Phones.Add(CompanyPhone);
             }
-            //string CardDiv = "<div class=\"card\">"
-            //+ "<div class=\"card-block\">"
-            //+ "<asp:Label class=\"card-title text-muted\">" + CompanyName + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Field: </span>" + Field + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Type: </span>" + Type + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Vision: </span>" + Vision + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Domain Name: </span>" + DomainName + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Email: </span>" + Email + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Address: </span>" + Address + "</div>"
-            //+ "<a href = \"#\" class=\"btn btn-primary\">Kill me please</a>"
-            //+ "</div>"
-            //+ "</div>";
-            //div_main.Controls.Add(new LiteralControl(CardDiv));
-
             //holder labels
             Label FieldHolder = new Label();
             Label TypeHolder = new Label();
@@ -62,6 +48,8 @@ public partial class Companies : System.Web.UI.Page
             Label CompanyDomainHolder = new Label();
             Label PhoneHolder = new Label();
             //holder labels attr
+            PhoneHolder.CssClass = "font-weight-bold";
+            PhoneHolder.Text = "Phone(s) :";
             FieldHolder.CssClass = "font-weight-bold";
             FieldHolder.Text = "Field: ";
             TypeHolder.CssClass = "font-weight-bold";
@@ -74,8 +62,6 @@ public partial class Companies : System.Web.UI.Page
             VisionHolder.Text = "Vision: ";
             CompanyDomainHolder.CssClass = "font-weight-bold";
             CompanyDomainHolder.Text = "Domain Name: ";
-            PhoneHolder.CssClass = "font-weight-bold";
-            PhoneHolder.Text = "Phone(s):";
             //company info labels
             Label CompanyDomainLabel = new Label();
             Label CompanyNameLabel = new Label();
@@ -101,9 +87,9 @@ public partial class Companies : System.Web.UI.Page
             Panel EmailPanel = new Panel();
             Panel FieldPanel = new Panel();
             Panel AddressPanel = new Panel();
-            Panel PhonePanel = new Panel();
             Panel CardBlockPanel = new Panel();
             Panel CardPanel = new Panel();
+            Panel PhonePanel = new Panel();
             //add action panel
             Panel ActionPanel = new Panel();
             //company info panels attr
@@ -114,7 +100,6 @@ public partial class Companies : System.Web.UI.Page
             EmailPanel.CssClass = "card-text";
             FieldPanel.CssClass = "card-text";
             AddressPanel.CssClass = "card-text";
-            PhonePanel.CssClass = "card-text";
             CardPanel.CssClass = "card";
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
@@ -143,7 +128,7 @@ public partial class Companies : System.Web.UI.Page
             for(int i =0; i < Phones.Count; i++)
             {
                 Label PhoneLabel = new Label();
-                PhoneLabel.Text =(string)( Phones[i]);
+                PhoneLabel.Text =(string)( Phones[i])+"    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
             ActionPanel.Controls.Add(DepartmentButton);
@@ -407,20 +392,6 @@ public partial class Companies : System.Web.UI.Page
                 string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
                 Phones.Add(CompanyPhone);
             }
-            //string CardDiv = "<div class=\"card\">"
-            //+ "<div class=\"card-block\">"
-            //+ "<asp:Label class=\"card-title text-muted\">" + CompanyName + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Field: </span>" + Field + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Type: </span>" + Type + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Vision: </span>" + Vision + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Domain Name: </span>" + DomainName + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Email: </span>" + Email + "</div>"
-            //+ "<div class=\"card-text \"><span class =\"font-weight-bold\" >Address: </span>" + Address + "</div>"
-            //+ "<a href = \"#\" class=\"btn btn-primary\">Kill me please</a>"
-            //+ "</div>"
-            //+ "</div>";
-            //div_main.Controls.Add(new LiteralControl(CardDiv));
-
             //holder labels
             Label FieldHolder = new Label();
             Label TypeHolder = new Label();
@@ -430,6 +401,8 @@ public partial class Companies : System.Web.UI.Page
             Label CompanyDomainHolder = new Label();
             Label PhoneHolder = new Label();
             //holder labels attr
+            PhoneHolder.CssClass = "font-weight-bold";
+            PhoneHolder.Text = "Phone(s) :";
             FieldHolder.CssClass = "font-weight-bold";
             FieldHolder.Text = "Field: ";
             TypeHolder.CssClass = "font-weight-bold";
@@ -442,8 +415,6 @@ public partial class Companies : System.Web.UI.Page
             VisionHolder.Text = "Vision: ";
             CompanyDomainHolder.CssClass = "font-weight-bold";
             CompanyDomainHolder.Text = "Domain Name: ";
-            PhoneHolder.CssClass = "font-weight-bold";
-            PhoneHolder.Text = "Phone(s):";
             //company info labels
             Label CompanyDomainLabel = new Label();
             Label CompanyNameLabel = new Label();
@@ -469,9 +440,9 @@ public partial class Companies : System.Web.UI.Page
             Panel EmailPanel = new Panel();
             Panel FieldPanel = new Panel();
             Panel AddressPanel = new Panel();
-            Panel PhonePanel = new Panel();
             Panel CardBlockPanel = new Panel();
             Panel CardPanel = new Panel();
+            Panel PhonePanel = new Panel();
             //add action panel
             Panel ActionPanel = new Panel();
             //company info panels attr
@@ -482,7 +453,6 @@ public partial class Companies : System.Web.UI.Page
             EmailPanel.CssClass = "card-text";
             FieldPanel.CssClass = "card-text";
             AddressPanel.CssClass = "card-text";
-            PhonePanel.CssClass = "card-text";
             CardPanel.CssClass = "card";
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
@@ -511,7 +481,7 @@ public partial class Companies : System.Web.UI.Page
             for (int i = 0; i < Phones.Count; i++)
             {
                 Label PhoneLabel = new Label();
-                PhoneLabel.Text = (string)(Phones[i]);
+                PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
             ActionPanel.Controls.Add(DepartmentButton);
@@ -531,13 +501,298 @@ public partial class Companies : System.Web.UI.Page
 
 
 
-        }//End of While Loop
+    }//End of While Loop
                                    
 
     }//End of Method
 
 
+    protected void searchCompaniesByAddress(Object sender, EventArgs e)
+    {
+        div_main.Controls.Clear();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmdname = new SqlCommand("SearchCompanyByAddressSP", conn);
+        cmdname.CommandType = System.Data.CommandType.StoredProcedure;
+        string keyword = txt_search.Text;
+        cmdname.Parameters.Add(new SqlParameter("@keyWord", keyword));
+        conn.Open();
+        SqlDataReader rdr = cmdname.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
+        while (rdr.Read())
+        {
+            string CompanyName = rdr.GetString(rdr.GetOrdinal("name"));
+            string DomainName = rdr.GetString(rdr.GetOrdinal("domain_name"));
+            string Address = rdr.GetString(rdr.GetOrdinal("address"));
+            string Field = rdr.GetString(rdr.GetOrdinal("field"));
+            string Type = rdr.GetString(rdr.GetOrdinal("type"));
+            string Vision = rdr.GetString(rdr.GetOrdinal("vision"));
+            string Email = rdr.GetString(rdr.GetOrdinal("email"));
+            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP", conn);
+            CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            ArrayList Phones = new ArrayList();
+            while (PhonesReader.Read())
+            {
+                string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
+                Phones.Add(CompanyPhone);
+            }
+            //holder labels
+            Label FieldHolder = new Label();
+            Label TypeHolder = new Label();
+            Label AddressHolder = new Label();
+            Label EmailHolder = new Label();
+            Label VisionHolder = new Label();
+            Label CompanyDomainHolder = new Label();
+            Label PhoneHolder = new Label();
+            //holder labels attr
+            PhoneHolder.CssClass = "font-weight-bold";
+            PhoneHolder.Text = "Phone(s) :";
+            FieldHolder.CssClass = "font-weight-bold";
+            FieldHolder.Text = "Field: ";
+            TypeHolder.CssClass = "font-weight-bold";
+            TypeHolder.Text = "Type: ";
+            AddressHolder.CssClass = "font-weight-bold";
+            AddressHolder.Text = "Address: ";
+            EmailHolder.CssClass = "font-weight-bold";
+            EmailHolder.Text = "Email: ";
+            VisionHolder.CssClass = "font-weight-bold";
+            VisionHolder.Text = "Vision: ";
+            CompanyDomainHolder.CssClass = "font-weight-bold";
+            CompanyDomainHolder.Text = "Domain Name: ";
+            //company info labels
+            Label CompanyDomainLabel = new Label();
+            Label CompanyNameLabel = new Label();
+            Label EmailLabel = new Label();
+            Label TypeLabel = new Label();
+            Label FieldLabel = new Label();
+            Label VisionLabel = new Label();
+            Label AddressLabel = new Label();
+            //company info labels attr
+            CompanyDomainLabel.Text = DomainName;
+            CompanyNameLabel.Text = CompanyName;
+            CompanyNameLabel.CssClass = " text-muted font-weight-bold";
+            EmailLabel.Text = Email;
+            TypeLabel.Text = Type;
+            FieldLabel.Text = Field;
+            VisionLabel.Text = Vision;
+            AddressLabel.Text = Address;
+            //company info panels
+            Panel CompanyNamePanel = new Panel();
+            Panel CompanyDomainPanel = new Panel();
+            Panel TypePanel = new Panel();
+            Panel VisionPanel = new Panel();
+            Panel EmailPanel = new Panel();
+            Panel FieldPanel = new Panel();
+            Panel AddressPanel = new Panel();
+            Panel CardBlockPanel = new Panel();
+            Panel CardPanel = new Panel();
+            Panel PhonePanel = new Panel();
+            //add action panel
+            Panel ActionPanel = new Panel();
+            //company info panels attr
+            CompanyNamePanel.CssClass = "card-title";
+            CompanyDomainPanel.CssClass = "card-text";
+            TypePanel.CssClass = "card-text";
+            VisionPanel.CssClass = "card-text";
+            EmailPanel.CssClass = "card-text";
+            FieldPanel.CssClass = "card-text";
+            AddressPanel.CssClass = "card-text";
+            CardPanel.CssClass = "card";
+            CardBlockPanel.CssClass = "card-block";
+            //add action panel attr
+            ActionPanel.CssClass = "card-block flex-row flex-wrap";
+            //add actions form
+            Button DepartmentButton = new Button();
+            DepartmentButton.Text = "View Departments";
+            DepartmentButton.CssClass = "btn btn-primary";
+
+            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
+            //add sub panels to the main panel
+            CompanyNamePanel.Controls.Add(CompanyNameLabel);
+            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
+            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
+            EmailPanel.Controls.Add(EmailHolder);
+            EmailPanel.Controls.Add(EmailLabel);
+            VisionPanel.Controls.Add(VisionHolder);
+            VisionPanel.Controls.Add(VisionLabel);
+            TypePanel.Controls.Add(TypeHolder);
+            TypePanel.Controls.Add(TypeLabel);
+            FieldPanel.Controls.Add(FieldHolder);
+            FieldPanel.Controls.Add(FieldLabel);
+            AddressPanel.Controls.Add(AddressHolder);
+            AddressPanel.Controls.Add(AddressLabel);
+            PhonePanel.Controls.Add(PhoneHolder);
+            for (int i = 0; i < Phones.Count; i++)
+            {
+                Label PhoneLabel = new Label();
+                PhoneLabel.Text = (string)(Phones[i]) + "    ";
+                PhonePanel.Controls.Add(PhoneLabel);
+            }
+            ActionPanel.Controls.Add(DepartmentButton);
+            CardBlockPanel.Controls.Add(CompanyNamePanel);
+            CardBlockPanel.Controls.Add(FieldPanel);
+            CardBlockPanel.Controls.Add(TypePanel);
+            CardBlockPanel.Controls.Add(VisionPanel);
+            CardBlockPanel.Controls.Add(CompanyDomainPanel);
+            CardBlockPanel.Controls.Add(EmailPanel);
+            CardBlockPanel.Controls.Add(AddressPanel);
+            CardBlockPanel.Controls.Add(PhonePanel);
+            CardBlockPanel.Controls.Add(ActionPanel);
+            CardPanel.Controls.Add(CardBlockPanel);
+            div_main.Controls.Add(CardPanel);
+
+    }//End of While Loop
+
+
+    }//End of Method
+
+
+
+
+
+
+    protected void searchCompaniesByType(Object sender, EventArgs e)
+    {
+        div_main.Controls.Clear();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmdname = new SqlCommand("SearchCompanyByTypeSP", conn);
+        cmdname.CommandType = System.Data.CommandType.StoredProcedure;
+        string keyword = txt_search.Text;
+        cmdname.Parameters.Add(new SqlParameter("@keyWord", keyword));
+        conn.Open();
+        SqlDataReader rdr = cmdname.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+        while (rdr.Read())
+        {
+            string CompanyName = rdr.GetString(rdr.GetOrdinal("name"));
+            string DomainName = rdr.GetString(rdr.GetOrdinal("domain_name"));
+            string Address = rdr.GetString(rdr.GetOrdinal("address"));
+            string Field = rdr.GetString(rdr.GetOrdinal("field"));
+            string Type = rdr.GetString(rdr.GetOrdinal("type"));
+            string Vision = rdr.GetString(rdr.GetOrdinal("vision"));
+            string Email = rdr.GetString(rdr.GetOrdinal("email"));
+            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP", conn);
+            CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            ArrayList Phones = new ArrayList();
+            while (PhonesReader.Read())
+            {
+                string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
+                Phones.Add(CompanyPhone);
+            }
+            //holder labels
+            Label FieldHolder = new Label();
+            Label TypeHolder = new Label();
+            Label AddressHolder = new Label();
+            Label EmailHolder = new Label();
+            Label VisionHolder = new Label();
+            Label CompanyDomainHolder = new Label();
+            Label PhoneHolder = new Label();
+            //holder labels attr
+            PhoneHolder.CssClass = "font-weight-bold";
+            PhoneHolder.Text = "Phone(s) :";
+            FieldHolder.CssClass = "font-weight-bold";
+            FieldHolder.Text = "Field: ";
+            TypeHolder.CssClass = "font-weight-bold";
+            TypeHolder.Text = "Type: ";
+            AddressHolder.CssClass = "font-weight-bold";
+            AddressHolder.Text = "Address: ";
+            EmailHolder.CssClass = "font-weight-bold";
+            EmailHolder.Text = "Email: ";
+            VisionHolder.CssClass = "font-weight-bold";
+            VisionHolder.Text = "Vision: ";
+            CompanyDomainHolder.CssClass = "font-weight-bold";
+            CompanyDomainHolder.Text = "Domain Name: ";
+            //company info labels
+            Label CompanyDomainLabel = new Label();
+            Label CompanyNameLabel = new Label();
+            Label EmailLabel = new Label();
+            Label TypeLabel = new Label();
+            Label FieldLabel = new Label();
+            Label VisionLabel = new Label();
+            Label AddressLabel = new Label();
+            //company info labels attr
+            CompanyDomainLabel.Text = DomainName;
+            CompanyNameLabel.Text = CompanyName;
+            CompanyNameLabel.CssClass = " text-muted font-weight-bold";
+            EmailLabel.Text = Email;
+            TypeLabel.Text = Type;
+            FieldLabel.Text = Field;
+            VisionLabel.Text = Vision;
+            AddressLabel.Text = Address;
+            //company info panels
+            Panel CompanyNamePanel = new Panel();
+            Panel CompanyDomainPanel = new Panel();
+            Panel TypePanel = new Panel();
+            Panel VisionPanel = new Panel();
+            Panel EmailPanel = new Panel();
+            Panel FieldPanel = new Panel();
+            Panel AddressPanel = new Panel();
+            Panel CardBlockPanel = new Panel();
+            Panel CardPanel = new Panel();
+            Panel PhonePanel = new Panel();
+            //add action panel
+            Panel ActionPanel = new Panel();
+            //company info panels attr
+            CompanyNamePanel.CssClass = "card-title";
+            CompanyDomainPanel.CssClass = "card-text";
+            TypePanel.CssClass = "card-text";
+            VisionPanel.CssClass = "card-text";
+            EmailPanel.CssClass = "card-text";
+            FieldPanel.CssClass = "card-text";
+            AddressPanel.CssClass = "card-text";
+            CardPanel.CssClass = "card";
+            CardBlockPanel.CssClass = "card-block";
+            //add action panel attr
+            ActionPanel.CssClass = "card-block flex-row flex-wrap";
+            //add actions form
+            Button DepartmentButton = new Button();
+            DepartmentButton.Text = "View Departments";
+            DepartmentButton.CssClass = "btn btn-primary";
+
+            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
+            //add sub panels to the main panel
+            CompanyNamePanel.Controls.Add(CompanyNameLabel);
+            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
+            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
+            EmailPanel.Controls.Add(EmailHolder);
+            EmailPanel.Controls.Add(EmailLabel);
+            VisionPanel.Controls.Add(VisionHolder);
+            VisionPanel.Controls.Add(VisionLabel);
+            TypePanel.Controls.Add(TypeHolder);
+            TypePanel.Controls.Add(TypeLabel);
+            FieldPanel.Controls.Add(FieldHolder);
+            FieldPanel.Controls.Add(FieldLabel);
+            AddressPanel.Controls.Add(AddressHolder);
+            AddressPanel.Controls.Add(AddressLabel);
+            PhonePanel.Controls.Add(PhoneHolder);
+            for (int i = 0; i < Phones.Count; i++)
+            {
+                Label PhoneLabel = new Label();
+                PhoneLabel.Text = (string)(Phones[i]) + "    ";
+                PhonePanel.Controls.Add(PhoneLabel);
+            }
+            ActionPanel.Controls.Add(DepartmentButton);
+            CardBlockPanel.Controls.Add(CompanyNamePanel);
+            CardBlockPanel.Controls.Add(FieldPanel);
+            CardBlockPanel.Controls.Add(TypePanel);
+            CardBlockPanel.Controls.Add(VisionPanel);
+            CardBlockPanel.Controls.Add(CompanyDomainPanel);
+            CardBlockPanel.Controls.Add(EmailPanel);
+            CardBlockPanel.Controls.Add(AddressPanel);
+            CardBlockPanel.Controls.Add(PhonePanel);
+            CardBlockPanel.Controls.Add(ActionPanel);
+            CardPanel.Controls.Add(CardBlockPanel);
+            div_main.Controls.Add(CardPanel);
+
+    }//End of While Loop
+
+
+    }//End of Method
 
 
 
