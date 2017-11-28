@@ -15,7 +15,9 @@
 
    <form id="div_main" class="container" runat="server">
    <asp:TextBox CssClass="txtbox input-lg"  ID="txt_search" runat="server" placeholder="Search" ></asp:TextBox>
-   <asp:Button CssClass="button btn btn-success" ID="btn_search_byname" runat="server" Text=  "Search"  onclick="searchCompaniesByName"  />
+   <asp:Button CssClass="button btn btn-success" ID="btn_search_byname" runat="server" Text=  "By Company Name"  onclick="searchCompaniesByName"  />
+   <asp:Button CssClass="button btn btn-success" ID="btn_search_byaddress" runat="server" Text=  "By Company Address"  onclick="searchCompaniesByAddress"  />
+   <asp:Button CssClass="button btn btn-success" ID="btn_search_bytype" runat="server" Text=  "By Company Type"  onclick="searchCompaniesByType"  />
    </form>
 
 </div>
