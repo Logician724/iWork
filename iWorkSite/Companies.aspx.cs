@@ -11,7 +11,6 @@ using System.Web.UI.WebControls;
 
 public partial class Companies : System.Web.UI.Page
 {
-    public static bool flag;
     protected void Page_Load(object sender, EventArgs e)
     {
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();

@@ -13,9 +13,8 @@ GO
 CREATE PROC SearchCompanyByNameSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*,cp.phone
-FROM Companies c LEFT JOIN Companies_Phones cp
-ON c.domain_name = cp.company_domain
+SELECT c.*
+FROM Companies c
 WHERE c.name LIKE CONCAT('%',@keyWord,'%');
 
 -- The procedure views the information of companies with its adress containing a key word
@@ -25,9 +24,8 @@ GO
 CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
-SELECT c.*,cp.phone
-FROM Companies c LEFT JOIN Companies_Phones cp
-ON c.domain_name = cp.company_domain
+SELECT c.*
+FROM Companies c 
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 -- The procedure views the information of companies with its type containing a key word
@@ -37,9 +35,8 @@ GO
 CREATE PROC SearchCompanyByTypeSP
 @keyWord VARCHAR(50)
 AS
-SELECT c.*,cp.phone
-FROM Companies c LEFT JOIN Companies_Phones cp
-ON c.domain_name = cp.company_domain
+SELECT c.*
+FROM Companies c 
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 --2:--------------------------------------------------------------------------------------------------------------------------------------------
 --Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the
@@ -48,9 +45,8 @@ WHERE c.type LIKE CONCAT('%',@keyWord,'%')
 GO
 CREATE PROC ViewCompaniesSP
 AS
-SELECT C.*,  CP.phone
-FROM Companies C LEFT JOIN Companies_Phones CP
-ON C.domain_name = CP.company_domain
+SELECT C.*
+FROM Companies C 
 
 
 --3:-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,14 +56,20 @@ GO
 CREATE PROC ViewCompanySP
 @companyDomain VARCHAR(150)
 AS
-SELECT c.*,cp.phone
-FROM Companies c LEFT JOIN Companies_Phones cp
-ON c.domain_name = cp.company_domain
+SELECT c.*
+FROM Companies c
 WHERE (c.domain_name = @companyDomain)
 
+--this procedure returns the phone numbers of a certain company
+GO
+CREATE PROC ViewCompanyPhonesSP
+@companyDomain VARCHAR(150)
+AS
+SELECT cp.phone
+FROM Companies_Phones cp
+WHERE cp.company_domain = @companyDomain
 
 GO
-
 -- The procedure takes the companyDomain as input and outputs the information of all the departments in that company
 CREATE PROC ViewDepartmentsOfCompanySP
 @companyDomain VARCHAR(150)
@@ -75,7 +77,6 @@ AS
 SELECT d.*
 FROM Departments d
 WHERE (d.company_domain= @companyDomain)
-
 
 --4:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.4 view the info of jobs in a departments in a certain company that have vacancies in it
