@@ -45,10 +45,10 @@ public partial class Register : System.Web.UI.Page
         Response.Write(OperationStatus.Value.ToString());
         switch (OperationStatus.Value.ToString())
         {
-            case "0":
+            case "False":
                 Response.Write("This username is already in use");
                 break;
-            case "1":
+            case "True":
                 Session["Username"] = username;
                 Response.Write("Successfully Registered!");
                 Response.Redirect("Companies", true);
