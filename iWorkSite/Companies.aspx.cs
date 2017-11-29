@@ -125,7 +125,8 @@ public partial class Companies : System.Web.UI.Page
             AddressPanel.Controls.Add(AddressHolder);
             AddressPanel.Controls.Add(AddressLabel);
             PhonePanel.Controls.Add(PhoneHolder);
-            for(int i =0; i < Phones.Count; i++)
+
+            for (int i =0; i < Phones.Count; i++)
             {
                 Label PhoneLabel = new Label();
                 PhoneLabel.Text =(string)( Phones[i])+"    ";
@@ -146,6 +147,164 @@ public partial class Companies : System.Web.UI.Page
         }
         
     }
+
+   protected void viewCompaniesByAvgSalary(object sender, EventArgs e)
+    {
+        div_main.Controls.Clear();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewCompaniesSalariesSP", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        Panel CardPanel = new Panel();
+        CardPanel.CssClass = "card";
+        while (rdr.Read())
+        {
+            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
+            string AvgSalary = rdr.GetValue(rdr.GetOrdinal("average_salary")).ToString();
+
+
+
+            SqlCommand CompanyInfoCmd = new SqlCommand("ViewCompanySP", conn);
+            CompanyInfoCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyInfoCmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+            SqlDataReader CompanyInfoReader = CompanyInfoCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+            string CompanyName = null;
+            string Address = null;
+            string Field = null;
+            string Type = null;
+            string Vision = null;
+            string Email = null;
+
+            if (CompanyInfoReader.Read())
+            {
+                CompanyName = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("name"));
+                 Address = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("address"));
+                Field = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("field"));
+                Type = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("type"));
+               Vision = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("vision"));
+                 Email = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("email"));
+            }
+            //holder labels
+            Label CompanyNameHolder = new Label();
+            Label CompanyDomainHolder = new Label();
+            Label AddressHolder = new Label();
+            Label FieldHolder = new Label();
+            Label TypeHolder = new Label();
+            Label VisionHolder = new Label();
+            Label EmailHolder = new Label();
+            Label AvgSalaryHolder = new Label();
+            //holder labels attr
+            CompanyNameHolder.CssClass = "font-weight-bold";
+            CompanyNameHolder.Text = "Company Name: ";
+
+            CompanyDomainHolder.CssClass = "font-weight-bold";
+            CompanyDomainHolder.Text = "Company Domain:";
+
+            AddressHolder.CssClass = "font-weight-bold";
+            AddressHolder.Text = "Address: ";
+
+            FieldHolder.CssClass = "font-weight-bold";
+            FieldHolder.Text = "Field: ";
+
+            TypeHolder.CssClass = "font-weight-bold";
+            TypeHolder.Text = "Type: ";
+
+            VisionHolder.CssClass = "font-weight-bold";
+            VisionHolder.Text = "Vision: ";
+
+            EmailHolder.CssClass = "font-weight-bold";
+            EmailHolder.Text = "Email: ";
+
+
+            AvgSalaryHolder.CssClass = "font-weight-bold";
+            AvgSalaryHolder.Text = "Average Salary: ";
+            //company info labels
+            Label CompanyNameLabel = new Label();
+            Label CompanyDomainLabel = new Label();
+            Label AddressLabel = new Label();
+            Label FieldLabel = new Label();
+            Label TypeLabel = new Label();
+            Label VisionLabel = new Label();
+            Label EmailLabel = new Label();
+            Label AvgSalaryLabel = new Label();
+            //company info labels attr
+            CompanyNameLabel.Text = CompanyName;
+            CompanyDomainLabel.Text = CompanyDomain;
+            AddressLabel.Text = Address;
+            FieldLabel.Text = Field;
+            TypeLabel.Text = Type;
+            VisionLabel.Text = Vision;
+            EmailLabel.Text = Email;
+            AvgSalaryLabel.Text = AvgSalary;
+            //Company info panel
+            Panel CompanyNamePanel = new Panel();
+            Panel CompanyDomainPanel = new Panel();
+            Panel AddressPanel = new Panel();
+            Panel FieldPanel = new Panel();
+            Panel TypePanel = new Panel();
+            Panel VisionPanel = new Panel();
+            Panel EmailPanel = new Panel();
+            Panel AvgSalaryPanel = new Panel();
+            //add action panel
+            Panel ActionPanel = new Panel();
+            //add panel styles
+            CompanyNamePanel.CssClass = "card-text";
+            CompanyDomainPanel.CssClass = "card-text";
+            AddressPanel.CssClass = "card-text";
+            FieldPanel.CssClass = "card-text";
+            TypePanel.CssClass = "card-text";
+            VisionPanel.CssClass = "card-text";
+            EmailPanel.CssClass = "card-text";
+            AvgSalaryPanel.CssClass = "card-text";
+            //add action panel styles
+            ActionPanel.CssClass = "card-block flex-row flex-wrap";
+            //add labels to correct panels
+            CompanyNamePanel.Controls.Add(CompanyNameHolder);
+            CompanyNamePanel.Controls.Add(CompanyNameLabel);
+
+            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
+            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
+
+            AddressPanel.Controls.Add(AddressHolder);
+            AddressPanel.Controls.Add(AddressLabel);
+
+            FieldPanel.Controls.Add(FieldHolder);
+            FieldPanel.Controls.Add(FieldLabel);
+
+            TypePanel.Controls.Add(TypeHolder);
+            TypePanel.Controls.Add(TypeLabel);
+
+            VisionPanel.Controls.Add(VisionHolder);
+            VisionPanel.Controls.Add(VisionLabel);
+
+            EmailPanel.Controls.Add(EmailHolder);
+            EmailPanel.Controls.Add(EmailLabel);
+
+            AvgSalaryPanel.Controls.Add(AvgSalaryHolder);
+            AvgSalaryPanel.Controls.Add(AvgSalaryLabel);
+            //add main panels
+            Panel CardBlockPanel = new Panel();
+            //add main panels attr
+            CardBlockPanel.CssClass = "card-block";
+            //add sub-panels to main panel
+            CardBlockPanel.Controls.Add(CompanyNamePanel);
+            CardBlockPanel.Controls.Add(CompanyDomainPanel);
+            CardBlockPanel.Controls.Add(AddressPanel);
+            CardBlockPanel.Controls.Add(FieldPanel);
+            CardBlockPanel.Controls.Add(TypePanel);
+            CardBlockPanel.Controls.Add(VisionPanel);
+            CardBlockPanel.Controls.Add(EmailPanel);
+            CardBlockPanel.Controls.Add(AvgSalaryPanel);
+            CardBlockPanel.Controls.Add(ActionPanel);
+            CardPanel.Controls.Add(CardBlockPanel);
+            div_main.Controls.Add(CardPanel);
+
+        } //end of while loop
+
+    } //end of method
 
     protected void ViewDepartments(Object sender, EventArgs e, string DomainName, Panel TargetPanel)
     {
@@ -213,6 +372,8 @@ public partial class Companies : System.Web.UI.Page
             ActionPanel.Controls.Add(JobsButton);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
+
+           
         }
         TargetPanel.Controls.Add(CardPanel);
 
@@ -220,8 +381,10 @@ public partial class Companies : System.Web.UI.Page
 
     }
 
+    
     protected void ViewJobs(Object sender, EventArgs e, string DomainName,string DepartmentCode, Panel TargetPanel)
     {
+        
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewJobsWithVacancySP", conn);
@@ -457,12 +620,8 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
-            //add actions form
-            Button DepartmentButton = new Button();
-            DepartmentButton.Text = "View Departments";
-            DepartmentButton.CssClass = "btn btn-primary";
-
-            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
+       
+   
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -484,7 +643,7 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-            ActionPanel.Controls.Add(DepartmentButton);
+    
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -496,13 +655,11 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
             div_main.Controls.Add(CardPanel);
+          
+      
 
+         }//End of While Loop
 
-
-
-
-    }//End of While Loop
-                                   
 
     }//End of Method
 
