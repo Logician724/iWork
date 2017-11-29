@@ -20,6 +20,7 @@
                 <label class="label">Password</label>
                 <asp:TextBox CssClass="txtbox input-lg" ID="txt_password" runat="server" TextMode="Password" placeholder="Enter your password" ></asp:TextBox>
                 <asp:Button CssClass="button btn btn-success" ID="btn_login" runat="server" Text="Login" onclick="login"/>
+                <asp:Button CssClass="button btn btn-success" ID="btn_register" runat="server" Text="Register" onclick="register"/>
             </div>
         </form>
     </div>

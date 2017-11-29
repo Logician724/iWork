@@ -14,6 +14,12 @@ public partial class Login : System.Web.UI.Page
     {
 
     }
+
+    protected void register(object sender, EventArgs e)
+    {
+        Response.Redirect("Register", true);
+    }
+
     protected void login (object sender,EventArgs e)
     {
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
