@@ -195,11 +195,11 @@ public partial class Companies : System.Web.UI.Page
             if (CompanyInfoReader.Read())
             {
                 CompanyName = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("name"));
-                 Address = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("address"));
+                Address = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("address"));
                 Field = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("field"));
                 Type = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("type"));
-               Vision = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("vision"));
-                 Email = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("email"));
+                Vision = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("vision"));
+                Email = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("email"));
             }
             //holder labels
             Label CompanyNameHolder = new Label();
@@ -314,7 +314,70 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(AvgSalaryPanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
+            
+            //----------Calling Department-------------
+
+            SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
+            CompanyDepCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyDepCmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+            SqlDataReader CompanyDepReader = CompanyDepCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+            Panel CardPanel2 = new Panel();
+            CardPanel2.CssClass = "card";
+            while (CompanyDepReader.Read())
+            {
+              
+
+                string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
+                string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
+
+                //holder labels
+                Label DepartmentNameHolder = new Label();
+                Label DepartmentCodeHolder = new Label();
+                //holder label attr
+                DepartmentNameHolder.Text = "Deaprtment Name: ";
+                DepartmentNameHolder.CssClass = "font-weight-bold";
+                DepartmentCodeHolder.Text = "Department Code: ";
+                DepartmentCodeHolder.CssClass = "font-weight-bold";
+                //department info labels
+                Label DepartmentNameLabel = new Label();
+                Label DepartmentCodeLabel = new Label();
+                //department info label attributes
+                DepartmentNameLabel.Text = DepartmentName;
+                DepartmentCodeLabel.Text = DepartmentCode;
+                //department info panels
+                Panel DepartmentNamePanel = new Panel();
+                Panel DepartmentCodePanel = new Panel();
+                //add action panel
+                Panel ActionPanel2 = new Panel();
+                //add panel styles
+                DepartmentNamePanel.CssClass = "card-text";
+                DepartmentCodePanel.CssClass = "card-text";
+                //add action panel styles
+                ActionPanel2.CssClass = "card-block flex-row flex-wrap";
+                //add labels to correct panels
+                DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
+                DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
+                //add main panels
+                Panel CardBlockPanel2 = new Panel();
+                //add main panels attr
+                CardBlockPanel2.CssClass = "card-block";
+
+
+                //add sub-panels to main panel
+                CardBlockPanel2.Controls.Add(DepartmentNamePanel);
+                CardBlockPanel2.Controls.Add(DepartmentCodePanel);
+                CardBlockPanel2.Controls.Add(ActionPanel2);
+                CardPanel2.Controls.Add(CardBlockPanel2);
+
+                CardPanel.Controls.Add(CardPanel2);
+                
+
+            }
             div_main.Controls.Add(CardPanel);
+
 
         } //end of while loop
 
@@ -516,6 +579,8 @@ public partial class Companies : System.Web.UI.Page
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
 
+         
+
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(JobTitlePanel);
             CardBlockPanel.Controls.Add(ApplicationDeadlinePanel);
@@ -631,8 +696,9 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
-       
-   
+
+  
+
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -654,7 +720,8 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-    
+
+  
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -665,11 +732,72 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(PhonePanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
-            div_main.Controls.Add(CardPanel);
-          
-      
+            //----------Calling Department-------------
 
-         }//End of While Loop
+            SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
+            CompanyDepCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyDepCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader CompanyDepReader = CompanyDepCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+            Panel CardPanel2 = new Panel();
+            CardPanel2.CssClass = "card";
+            while (CompanyDepReader.Read())
+            {
+
+
+                string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
+                string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
+
+                //holder labels
+                Label DepartmentNameHolder = new Label();
+                Label DepartmentCodeHolder = new Label();
+                //holder label attr
+                DepartmentNameHolder.Text = "Deaprtment Name: ";
+                DepartmentNameHolder.CssClass = "font-weight-bold";
+                DepartmentCodeHolder.Text = "Department Code: ";
+                DepartmentCodeHolder.CssClass = "font-weight-bold";
+                //department info labels
+                Label DepartmentNameLabel = new Label();
+                Label DepartmentCodeLabel = new Label();
+                //department info label attributes
+                DepartmentNameLabel.Text = DepartmentName;
+                DepartmentCodeLabel.Text = DepartmentCode;
+                //department info panels
+                Panel DepartmentNamePanel = new Panel();
+                Panel DepartmentCodePanel = new Panel();
+                //add action panel
+                Panel ActionPanel2 = new Panel();
+                //add panel styles
+                DepartmentNamePanel.CssClass = "card-text";
+                DepartmentCodePanel.CssClass = "card-text";
+                //add action panel styles
+                ActionPanel2.CssClass = "card-block flex-row flex-wrap";
+                //add labels to correct panels
+                DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
+                DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
+                //add main panels
+                Panel CardBlockPanel2 = new Panel();
+                //add main panels attr
+                CardBlockPanel2.CssClass = "card-block";
+
+
+                //add sub-panels to main panel
+                CardBlockPanel2.Controls.Add(DepartmentNamePanel);
+                CardBlockPanel2.Controls.Add(DepartmentCodePanel);
+                CardBlockPanel2.Controls.Add(ActionPanel2);
+                CardPanel2.Controls.Add(CardBlockPanel2);
+
+                CardPanel.Controls.Add(CardPanel2);
+
+
+            }
+            div_main.Controls.Add(CardPanel);
+
+
+
+        }//End of While Loop
 
 
     }//End of Method
@@ -771,12 +899,7 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
-            //add actions form
-            Button DepartmentButton = new Button();
-            DepartmentButton.Text = "View Departments";
-            DepartmentButton.CssClass = "btn btn-primary";
 
-            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -798,7 +921,7 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-            ActionPanel.Controls.Add(DepartmentButton);
+        
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -809,9 +932,72 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(PhonePanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
+            //----------Calling Department-------------
+
+            SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
+            CompanyDepCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyDepCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader CompanyDepReader = CompanyDepCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+            Panel CardPanel2 = new Panel();
+            CardPanel2.CssClass = "card";
+            while (CompanyDepReader.Read())
+            {
+
+
+                string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
+                string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
+
+                //holder labels
+                Label DepartmentNameHolder = new Label();
+                Label DepartmentCodeHolder = new Label();
+                //holder label attr
+                DepartmentNameHolder.Text = "Deaprtment Name: ";
+                DepartmentNameHolder.CssClass = "font-weight-bold";
+                DepartmentCodeHolder.Text = "Department Code: ";
+                DepartmentCodeHolder.CssClass = "font-weight-bold";
+                //department info labels
+                Label DepartmentNameLabel = new Label();
+                Label DepartmentCodeLabel = new Label();
+                //department info label attributes
+                DepartmentNameLabel.Text = DepartmentName;
+                DepartmentCodeLabel.Text = DepartmentCode;
+                //department info panels
+                Panel DepartmentNamePanel = new Panel();
+                Panel DepartmentCodePanel = new Panel();
+                //add action panel
+                Panel ActionPanel2 = new Panel();
+                //add panel styles
+                DepartmentNamePanel.CssClass = "card-text";
+                DepartmentCodePanel.CssClass = "card-text";
+                //add action panel styles
+                ActionPanel2.CssClass = "card-block flex-row flex-wrap";
+                //add labels to correct panels
+                DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
+                DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
+                //add main panels
+                Panel CardBlockPanel2 = new Panel();
+                //add main panels attr
+                CardBlockPanel2.CssClass = "card-block";
+
+
+                //add sub-panels to main panel
+                CardBlockPanel2.Controls.Add(DepartmentNamePanel);
+                CardBlockPanel2.Controls.Add(DepartmentCodePanel);
+                CardBlockPanel2.Controls.Add(ActionPanel2);
+                CardPanel2.Controls.Add(CardBlockPanel2);
+
+                CardPanel.Controls.Add(CardPanel2);
+
+
+            }
             div_main.Controls.Add(CardPanel);
 
-    }//End of While Loop
+
+
+        }//End of While Loop
 
 
     }//End of Method
@@ -917,12 +1103,7 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.CssClass = "card-block";
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
-            //add actions form
-            Button DepartmentButton = new Button();
-            DepartmentButton.Text = "View Departments";
-            DepartmentButton.CssClass = "btn btn-primary";
 
-            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -944,7 +1125,7 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-            ActionPanel.Controls.Add(DepartmentButton);
+         
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -955,9 +1136,71 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(PhonePanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
+            //----------Calling Department-------------
+
+            SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
+            CompanyDepCmd.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyDepCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+            SqlDataReader CompanyDepReader = CompanyDepCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+            Panel CardPanel2 = new Panel();
+            CardPanel2.CssClass = "card";
+            while (CompanyDepReader.Read())
+            {
+
+
+                string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
+                string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
+
+                //holder labels
+                Label DepartmentNameHolder = new Label();
+                Label DepartmentCodeHolder = new Label();
+                //holder label attr
+                DepartmentNameHolder.Text = "Deaprtment Name: ";
+                DepartmentNameHolder.CssClass = "font-weight-bold";
+                DepartmentCodeHolder.Text = "Department Code: ";
+                DepartmentCodeHolder.CssClass = "font-weight-bold";
+                //department info labels
+                Label DepartmentNameLabel = new Label();
+                Label DepartmentCodeLabel = new Label();
+                //department info label attributes
+                DepartmentNameLabel.Text = DepartmentName;
+                DepartmentCodeLabel.Text = DepartmentCode;
+                //department info panels
+                Panel DepartmentNamePanel = new Panel();
+                Panel DepartmentCodePanel = new Panel();
+                //add action panel
+                Panel ActionPanel2 = new Panel();
+                //add panel styles
+                DepartmentNamePanel.CssClass = "card-text";
+                DepartmentCodePanel.CssClass = "card-text";
+                //add action panel styles
+                ActionPanel2.CssClass = "card-block flex-row flex-wrap";
+                //add labels to correct panels
+                DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
+                DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
+                DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
+                //add main panels
+                Panel CardBlockPanel2 = new Panel();
+                //add main panels attr
+                CardBlockPanel2.CssClass = "card-block";
+
+
+                //add sub-panels to main panel
+                CardBlockPanel2.Controls.Add(DepartmentNamePanel);
+                CardBlockPanel2.Controls.Add(DepartmentCodePanel);
+                CardBlockPanel2.Controls.Add(ActionPanel2);
+                CardPanel2.Controls.Add(CardBlockPanel2);
+
+                CardPanel.Controls.Add(CardPanel2);
+
+
+            }
             div_main.Controls.Add(CardPanel);
 
-    }//End of While Loop
+
+        }//End of While Loop
 
 
     }//End of Method
