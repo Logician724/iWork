@@ -154,7 +154,7 @@ GO
 
 CREATE PROC ViewCompaniesSalariesSP
 AS
-SELECT sm.company_domain, AVG(sm.salary) AS average_salary
+SELECT sm.company_domain AS company_domain , AVG(sm.salary) AS average_salary
 FROM Staff_Members sm
 GROUP BY (sm.company_domain)
 ORDER BY AVG(sm.salary) DESC
