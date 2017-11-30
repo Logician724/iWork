@@ -49,6 +49,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     {
         Response.Redirect("EditPersonalInfo", true);
     }
+
     //-------------------------------------------------------------------------------------------------------------------
     protected void viewPersonalInfo(object sender, EventArgs e)
     {
@@ -119,10 +120,10 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         cmd.Parameters.Add(new SqlParameter("@lastname", lastname));
 
 
-
-
     }
 
 
 
-}
+
+    }
+
