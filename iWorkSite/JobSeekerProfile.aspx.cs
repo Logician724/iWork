@@ -99,18 +99,33 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("EditPersonalInfoSP", conn);
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
-        conn.Open();
-        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-
+       
 
 
 
         string password = txt_password.Text;
         string personalemail = txt_personalemail.Text;
         string birthdate = txt_birthdate.Text;
-        int expyear = Convert.ToInt32(txt_expyrs.Text);
+        string expyearTemp = txt_expyrs.Text;
+        int expyear = 0;
+        if (expyearTemp == "")
+            expyear = Convert.ToInt32(txt_expyrs.Attributes["placeholder"]);
+        else
+            expyear = Convert.ToInt32(txt_expyrs.Text);
         string firstname = txt_fn.Text;
         string lastname = txt_ln.Text;
+
+        if (password == "")
+            password = null;
+        if (personalemail == "")
+            personalemail = null;
+        if (birthdate == "")
+            birthdate = null;
+        if (firstname == "")
+            firstname = null;
+        if (lastname == "")
+            lastname = null;
+
 
         cmd.Parameters.Add(new SqlParameter("@password", password));
         cmd.Parameters.Add(new SqlParameter("@personalEmail", personalemail));
@@ -118,6 +133,8 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         cmd.Parameters.Add(new SqlParameter("@expYear", expyear));
         cmd.Parameters.Add(new SqlParameter("@firstname", firstname));
         cmd.Parameters.Add(new SqlParameter("@lastname", lastname));
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
 
     }
@@ -125,5 +142,5 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
 
 
-    }
+}
 
