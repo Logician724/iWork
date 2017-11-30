@@ -45,25 +45,25 @@ public partial class Login : System.Web.UI.Page
                 Session["Type"] = "Job Seeker"; 
                 Session["Username"] = username;
                 Response.Write("Passed");
-                Response.Redirect("Companies", true);
+                Response.Redirect("JobSeekerProfile", true);
                break;
             case "2":
                 Session["Type"] = "Manager";
                 Session["Username"] = username;
                 Response.Write("Passed");
-                Response.Redirect("Staff", true);
+                Response.Redirect("ManagerProfile", true);
                 break;
             case "3":
                 Session["Type"] = "HR";
                 Session["Username"] = username;
                 Response.Write("Passed");
-                Response.Redirect("Staff", true);
+                Response.Redirect("HREmployeeProfile", true);
                 break;
             case "4":
                 Session["Type"] = "Regular";
                 Session["Username"] = username;
                 Response.Write("Passed");
-                Response.Redirect("Staff", true);
+                Response.Redirect("RegularEmployeeProfile", true);
                 break;
         }
     }

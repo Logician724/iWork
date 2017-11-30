@@ -42,7 +42,7 @@ public partial class Register : System.Web.UI.Page
         conn.Open();
         cmd.ExecuteNonQuery();
         conn.Close();
-        Response.Write(OperationStatus.Value.ToString());
+
         switch (OperationStatus.Value.ToString())
         {
             case "False":
