@@ -9,7 +9,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 
-
 public partial class Companies : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -20,6 +19,19 @@ public partial class Companies : System.Web.UI.Page
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        Label NationalLabel = new Label();
+        NationalLabel.Text = "National Companies: ";
+        HtmlGenericControl NationalDiv = new HtmlGenericControl("div");
+        NationalDiv.Attributes["class"] = "card";
+        NationalDiv.Controls.Add(NationalLabel);
+        Label InternationalLabel = new Label();
+        InternationalLabel.Text = "International Companies: ";
+        HtmlGenericControl InternationalDiv = new HtmlGenericControl("div");
+        InternationalDiv.Attributes["class"] = "card";
+        InternationalDiv.Controls.Add(InternationalLabel);
+        div_main.Controls.Add(InternationalDiv);
+        div_main.Controls.Add(NationalDiv);
+        
         while (rdr.Read())
         {
             string CompanyName = rdr.GetString(rdr.GetOrdinal("name"));
@@ -143,9 +155,11 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(PhonePanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
-            div_main.Controls.Add(CardPanel);            
+            if (Type == "National")
+                NationalDiv.Controls.Add(CardPanel);
+            else
+                InternationalDiv.Controls.Add(CardPanel);
         }
-        
     }
 
    protected void viewCompaniesByAvgSalary(object sender, EventArgs e)
@@ -425,10 +439,7 @@ public partial class Companies : System.Web.UI.Page
             Button JobsButton = new Button();
             JobsButton.Text = "View Available Jobs";
             JobsButton.CssClass = "btn btn-primary";
-
             JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName,DepartmentCode, CardBlockPanel));
-           
-
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(DepartmentNamePanel);
             CardBlockPanel.Controls.Add(DepartmentCodePanel);
@@ -1194,7 +1205,50 @@ public partial class Companies : System.Web.UI.Page
 
     }//End of Method
 
+    protected void searchJob(Object sender, EventArgs e)
+    {
+        div_main.Controls.Clear();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand SearchJobCmd = new SqlCommand("SearchJobsSP", conn);
+        SearchJobCmd.CommandType = System.Data.CommandType.StoredProcedure;
+        string keywords = txt_search.Text;
+        SearchJobCmd.Parameters.Add(new SqlParameter("@keywords", keywords));
+        conn.Open();
+        SqlDataReader JobsReader= SearchJobCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        while (JobsReader.Read())
+        {
+            string JobTitle= JobsReader.GetString(JobsReader.GetOrdinal("job_title"));
+            string DepartmentCode = JobsReader.GetString(JobsReader.GetOrdinal("department_code"));
+            string CompanyDomain= JobsReader.GetString(JobsReader.GetOrdinal("company_domain"));
+            string ApplicationDeadline = JobsReader.GetOrdinal("application_deadline").ToString();
+            string DetailedDescription = JobsReader.GetString(JobsReader.GetOrdinal("detailed_description"));
+            string MinYearsExp = JobsReader.GetValue(JobsReader.GetOrdinal("min_years_experience")).ToString();
+            string Salary = JobsReader.GetValue(JobsReader.GetOrdinal("salary")).ToString();
+            string ShortDescription = JobsReader.GetString(JobsReader.GetOrdinal("short_description"));
+            string Vacancies = JobsReader.GetValue(JobsReader.GetOrdinal("vacancies")).ToString();
+            string WorkingHours = JobsReader.GetValue(JobsReader.GetOrdinal("working_hours")).ToString();
+            string JobBuild = "<div class = \"card-block\">"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>"+JobTitle+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Department code: </span>"+DepartmentCode+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>"+CompanyDomain+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Deadline: </span>"+ApplicationDeadline+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Detailed Description: </span>"+DetailedDescription+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Minimum Years Of Experience: </span>"+MinYearsExp+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Salary: </span>"+Salary+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Short Description: </span>"+ShortDescription+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Vacancies: </span>"+Vacancies+"</div>"
+        + "<div class = \"card-text\"><span class=\"font-weight-bold\">Working Hours: </span>"+WorkingHours+"</div>"
+        + "</div>";
 
+            Panel Job = new Panel();
+            Job.CssClass = "card";
+            Job.Controls.Add(new LiteralControl(JobBuild));
+            div_main.Controls.Add(Job);
+        }
+        
+        
+    }
 
 
 }
