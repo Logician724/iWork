@@ -1,28 +1,44 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Login" %>
+﻿<%@ page language="C#" autoeventwireup="true" codefile="Login.aspx.cs" inherits="Login" %>
 
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>iWork Login</title>
-    <link rel="stylesheet" type="text/css" href="content/bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="content/login.css"/>
+    <link rel="stylesheet" type="text/css" href="content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="content/login.css" />
 </head>
-<body>
-    <div class="main-container center-container">   
-        <form class="center-container" runat="server">
-            <div class ="center-container" >
-                <img class=" img-responsive logo "  src="http://via.placeholder.com/350x150" alt="logo" />
-            </div>
-            <div class="center-container">
-                <label class ="label">Username</label>
-                <asp:TextBox CssClass="txtbox input-lg" ID="txt_username" runat="server" placeholder="Enter your username" ></asp:TextBox>
-                <label class="label">Password</label>
-                <asp:TextBox CssClass="txtbox input-lg" ID="txt_password" runat="server" TextMode="Password" placeholder="Enter your password" ></asp:TextBox>
-                <asp:Button CssClass="button btn btn-success" ID="btn_login" runat="server" Text="Login" onclick="login"/>
-                <asp:Button CssClass="button btn btn-success" ID="btn_register" runat="server" Text="Register" onclick="register"/>
-            </div>
-        </form>
+<body class="jumbotron">
+    <div class="container">
+        <div class="container">
+            <h1 class="display-2 text-center">Login Here</h1>
+            <p class="lead text-center">You profile awaits!</p>
+        </div>
+        <div class="container">
+            <form runat="server">
+                <div class="form-group row ">
+                    <label class="font-weight-bold col-2 col-form-label offset-3">Username</label>
+                    <div class="col-3">
+                        <asp:TextBox CssClass="form-control" ID="txt_username" runat="server" placeholder="Enter your username"></asp:TextBox>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="font-weight-bold col-2 col-form-label offset-3">Password</label>
+                    <div class="col-3">
+                        <asp:TextBox CssClass="form-control" ID="txt_password" runat="server" TextMode="Password" placeholder="Enter your password"></asp:TextBox>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <asp:Button CssClass="btn btn-primary" ID="btn_login" runat="server" Text="Login" OnClick="login" />
+
+                    </div>
+                    <div class="text-center mt-1">
+                        <asp:Button CssClass="btn btn-primary" ID="btn_register" runat="server" Text="Register" OnClick="register" />
+                    </div>
+                </div>
+                <div class="text-center mt-2 font-weight-bold text-danger" id="register_response" runat="server"></div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
