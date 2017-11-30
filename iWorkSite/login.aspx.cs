@@ -20,13 +20,14 @@ public partial class Login : System.Web.UI.Page
         Response.Redirect("Register", true);
     }
 
-    protected void login (object sender,EventArgs e)
+    protected void login(object sender, EventArgs e)
     {
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("UserLoginSP", conn);
         cmd.CommandType = CommandType.StoredProcedure;
         string username = txt_username.Text;
+
         string password = txt_password.Text;
         cmd.Parameters.Add(new SqlParameter("@userName", username));
         cmd.Parameters.Add(new SqlParameter("@password", password));
@@ -36,17 +37,17 @@ public partial class Login : System.Web.UI.Page
         conn.Open();
         cmd.ExecuteNonQuery();
         conn.Close();
-        switch(type.Value.ToString())
+        switch (type.Value.ToString())
         {
             case "0":
                 Response.Write("Failed");
                 break;
             case "1":
-                Session["Type"] = "Job Seeker"; 
+                Session["Type"] = "Job Seeker";
                 Session["Username"] = username;
                 Response.Write("Passed");
                 Response.Redirect("JobSeekerProfile", true);
-               break;
+                break;
             case "2":
                 Session["Type"] = "Manager";
                 Session["Username"] = username;

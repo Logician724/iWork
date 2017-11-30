@@ -31,7 +31,7 @@ public partial class Companies : System.Web.UI.Page
         InternationalDiv.Controls.Add(InternationalLabel);
         div_main.Controls.Add(InternationalDiv);
         div_main.Controls.Add(NationalDiv);
-        
+
         while (rdr.Read())
         {
             string CompanyName = rdr.GetString(rdr.GetOrdinal("name"));
@@ -41,7 +41,7 @@ public partial class Companies : System.Web.UI.Page
             string Type = rdr.GetString(rdr.GetOrdinal("type"));
             string Vision = rdr.GetString(rdr.GetOrdinal("vision"));
             string Email = rdr.GetString(rdr.GetOrdinal("email"));
-            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP",conn);
+            SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP", conn);
             CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
             CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
             SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
@@ -105,7 +105,7 @@ public partial class Companies : System.Web.UI.Page
             //add action panel
             Panel ActionPanel = new Panel();
             //company info panels attr
-            CompanyNamePanel.CssClass = "card-title";           
+            CompanyNamePanel.CssClass = "card-title";
             CompanyDomainPanel.CssClass = "card-text";
             TypePanel.CssClass = "card-text";
             VisionPanel.CssClass = "card-text";
@@ -120,8 +120,8 @@ public partial class Companies : System.Web.UI.Page
             Button DepartmentButton = new Button();
             DepartmentButton.Text = "View Departments";
             DepartmentButton.CssClass = "btn btn-primary";
-           
-             DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName,CardBlockPanel));
+
+            DepartmentButton.Click += new EventHandler((sender_dep_btn, e_dep_btn) => ViewDepartments(sender_dep_btn, e_dep_btn, DomainName, CardBlockPanel));
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
             CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
@@ -138,10 +138,10 @@ public partial class Companies : System.Web.UI.Page
             AddressPanel.Controls.Add(AddressLabel);
             PhonePanel.Controls.Add(PhoneHolder);
 
-            for (int i =0; i < Phones.Count; i++)
+            for (int i = 0; i < Phones.Count; i++)
             {
                 Label PhoneLabel = new Label();
-                PhoneLabel.Text =(string)( Phones[i])+"    ";
+                PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
             ActionPanel.Controls.Add(DepartmentButton);
@@ -162,7 +162,7 @@ public partial class Companies : System.Web.UI.Page
         }
     }
 
-   protected void viewCompaniesByAvgSalary(object sender, EventArgs e)
+    protected void viewCompaniesByAvgSalary(object sender, EventArgs e)
     {
         div_main.Controls.Clear();
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
@@ -314,7 +314,7 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(AvgSalaryPanel);
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
-            
+
             //----------Calling Department-------------
 
             SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
@@ -326,7 +326,7 @@ public partial class Companies : System.Web.UI.Page
             CardPanel2.CssClass = "card";
             while (CompanyDepReader.Read())
             {
-              
+
 
                 string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
                 string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
@@ -373,7 +373,7 @@ public partial class Companies : System.Web.UI.Page
                 CardPanel2.Controls.Add(CardBlockPanel2);
 
                 CardPanel.Controls.Add(CardPanel2);
-                
+
 
             }
             div_main.Controls.Add(CardPanel);
@@ -385,8 +385,8 @@ public partial class Companies : System.Web.UI.Page
 
     protected void ViewDepartments(Object sender, EventArgs e, string DomainName, Panel TargetPanel)
     {
-       
-            
+
+
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
@@ -433,13 +433,13 @@ public partial class Companies : System.Web.UI.Page
             Panel CardBlockPanel = new Panel();
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
-           
+
 
             //add actions form
             Button JobsButton = new Button();
             JobsButton.Text = "View Available Jobs";
             JobsButton.CssClass = "btn btn-primary";
-            JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName,DepartmentCode, CardBlockPanel));
+            JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName, DepartmentCode, CardBlockPanel));
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(DepartmentNamePanel);
             CardBlockPanel.Controls.Add(DepartmentCodePanel);
@@ -447,7 +447,7 @@ public partial class Companies : System.Web.UI.Page
             CardBlockPanel.Controls.Add(ActionPanel);
             CardPanel.Controls.Add(CardBlockPanel);
 
-           
+
         }
         TargetPanel.Controls.Add(CardPanel);
 
@@ -455,10 +455,10 @@ public partial class Companies : System.Web.UI.Page
 
     }
 
-    
-    protected void ViewJobs(Object sender, EventArgs e, string DomainName,string DepartmentCode, Panel TargetPanel)
+
+    protected void ViewJobs(Object sender, EventArgs e, string DomainName, string DepartmentCode, Panel TargetPanel)
     {
-        
+
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewJobsWithVacancySP", conn);
@@ -543,7 +543,7 @@ public partial class Companies : System.Web.UI.Page
             ShortDescriptionPanel.CssClass = "card-text";
             VacanciesPanel.CssClass = "card-text";
             WorkingHoursPanel.CssClass = "card-text";
-            
+
 
             //add labels to correct panels
             JobTitlePanel.Controls.Add(JobTitleHolder);
@@ -571,15 +571,15 @@ public partial class Companies : System.Web.UI.Page
             WorkingHoursPanel.Controls.Add(WorkingHoursHolder);
             WorkingHoursPanel.Controls.Add(WorkingHoursLabel);
 
-           
+
 
             //add main panels
             Panel CardBlockPanel = new Panel();
-            
+
             //add main panels attr
             CardBlockPanel.CssClass = "card-block";
 
-         
+
 
             //add sub-panels to main panel
             CardBlockPanel.Controls.Add(JobTitlePanel);
@@ -596,7 +596,7 @@ public partial class Companies : System.Web.UI.Page
 
         TargetPanel.Controls.Add(CardPanel);
 
-       
+
     } //end of method 
 
 
@@ -608,7 +608,7 @@ public partial class Companies : System.Web.UI.Page
         SqlCommand cmdname = new SqlCommand("SearchCompanyByNameSP", conn);
         cmdname.CommandType = System.Data.CommandType.StoredProcedure;
         string keyword = txt_search.Text;
-        cmdname.Parameters.Add(new SqlParameter("@keyWord",keyword));
+        cmdname.Parameters.Add(new SqlParameter("@keyWord", keyword));
         conn.Open();
         SqlDataReader rdr = cmdname.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
@@ -697,7 +697,7 @@ public partial class Companies : System.Web.UI.Page
             //add action panel attr
             ActionPanel.CssClass = "card-block flex-row flex-wrap";
 
-  
+
 
             //add sub panels to the main panel
             CompanyNamePanel.Controls.Add(CompanyNameLabel);
@@ -721,7 +721,7 @@ public partial class Companies : System.Web.UI.Page
                 PhonePanel.Controls.Add(PhoneLabel);
             }
 
-  
+
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -921,7 +921,7 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-        
+
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -1125,7 +1125,7 @@ public partial class Companies : System.Web.UI.Page
                 PhoneLabel.Text = (string)(Phones[i]) + "    ";
                 PhonePanel.Controls.Add(PhoneLabel);
             }
-         
+
             CardBlockPanel.Controls.Add(CompanyNamePanel);
             CardBlockPanel.Controls.Add(FieldPanel);
             CardBlockPanel.Controls.Add(TypePanel);
@@ -1215,12 +1215,12 @@ public partial class Companies : System.Web.UI.Page
         string keywords = txt_search.Text;
         SearchJobCmd.Parameters.Add(new SqlParameter("@keywords", keywords));
         conn.Open();
-        SqlDataReader JobsReader= SearchJobCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        SqlDataReader JobsReader = SearchJobCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         while (JobsReader.Read())
         {
-            string JobTitle= JobsReader.GetString(JobsReader.GetOrdinal("job_title"));
+            string JobTitle = JobsReader.GetString(JobsReader.GetOrdinal("job_title"));
             string DepartmentCode = JobsReader.GetString(JobsReader.GetOrdinal("department_code"));
-            string CompanyDomain= JobsReader.GetString(JobsReader.GetOrdinal("company_domain"));
+            string CompanyDomain = JobsReader.GetString(JobsReader.GetOrdinal("company_domain"));
             string ApplicationDeadline = JobsReader.GetOrdinal("application_deadline").ToString();
             string DetailedDescription = JobsReader.GetString(JobsReader.GetOrdinal("detailed_description"));
             string MinYearsExp = JobsReader.GetValue(JobsReader.GetOrdinal("min_years_experience")).ToString();
@@ -1229,16 +1229,16 @@ public partial class Companies : System.Web.UI.Page
             string Vacancies = JobsReader.GetValue(JobsReader.GetOrdinal("vacancies")).ToString();
             string WorkingHours = JobsReader.GetValue(JobsReader.GetOrdinal("working_hours")).ToString();
             string JobBuild = "<div class = \"card-block\">"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>"+JobTitle+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Department code: </span>"+DepartmentCode+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>"+CompanyDomain+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Deadline: </span>"+ApplicationDeadline+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Detailed Description: </span>"+DetailedDescription+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Minimum Years Of Experience: </span>"+MinYearsExp+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Salary: </span>"+Salary+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Short Description: </span>"+ShortDescription+"</div>"
-        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Vacancies: </span>"+Vacancies+"</div>"
-        + "<div class = \"card-text\"><span class=\"font-weight-bold\">Working Hours: </span>"+WorkingHours+"</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + JobTitle + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Department code: </span>" + DepartmentCode + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Deadline: </span>" + ApplicationDeadline + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Detailed Description: </span>" + DetailedDescription + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Minimum Years Of Experience: </span>" + MinYearsExp + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Salary: </span>" + Salary + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Short Description: </span>" + ShortDescription + "</div>"
+        + "<div class = \"card-text\"><span class = \"font-weight-bold\">Vacancies: </span>" + Vacancies + "</div>"
+        + "<div class = \"card-text\"><span class=\"font-weight-bold\">Working Hours: </span>" + WorkingHours + "</div>"
         + "</div>";
 
             Panel Job = new Panel();
@@ -1246,8 +1246,8 @@ public partial class Companies : System.Web.UI.Page
             Job.Controls.Add(new LiteralControl(JobBuild));
             div_main.Controls.Add(Job);
         }
-        
-        
+
+
     }
 
 
