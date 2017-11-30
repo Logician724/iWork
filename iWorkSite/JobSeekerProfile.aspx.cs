@@ -44,11 +44,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     }
 
     }
-    //-------------------------------------------------------------------------------------------------------------------
-    protected void edit(object sender, EventArgs e)
-    {
-        Response.Redirect("EditPersonalInfo", true);
-    }
 
     //-------------------------------------------------------------------------------------------------------------------
     protected void viewPersonalInfo(object sender, EventArgs e)
