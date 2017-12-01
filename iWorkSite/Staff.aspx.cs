@@ -53,7 +53,7 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
-    //---------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------
 
 
     protected void CheckOut(object sender, EventArgs e)
@@ -88,6 +88,83 @@ public partial class Staff : System.Web.UI.Page
                 break;
 
         }
+
+
+    }
+
+//-----------------------------------------------------------------------------------------------
+
+    protected void viewAttendance(object sender, EventArgs e)
+    {
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewAttendanceSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+
+        string startdate = txt_from.Text;
+        string enddate = txt_to.Text;
+
+        cmd.Parameters.Add(new SqlParameter("@periodStart", startdate));
+        cmd.Parameters.Add(new SqlParameter("@periodEnd", enddate));
+
+        //output parameterssub
+        SqlParameter OperationStatus = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
+        OperationStatus.Direction = ParameterDirection.Output;
+        conn.Open();
+        cmd.ExecuteNonQuery();
+        string op = OperationStatus.Value.ToString();
+        conn.Close();
+
+
+        conn.Open();
+        Label failed = new Label();
+        failed.Text = "End date should be after start date.";
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+        switch (op)
+        {
+            case "False":
+                attendance_response.Controls.Add(failed);
+                break;
+            case "True":
+
+
+                while (rdr.Read())
+                {
+
+
+                    string StartTime = rdr.GetValue(rdr.GetOrdinal("start_time")).ToString();
+                    string LeaveTime = rdr.GetValue(rdr.GetOrdinal("leave_time")).ToString();
+                    string Duration = rdr.GetValue(rdr.GetOrdinal("duration")).ToString();
+                    string MissingHours = rdr.GetValue(rdr.GetOrdinal("missing_hours")).ToString();
+
+
+
+                    string TasksInfo = "<div class = \"card-block\">"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Arrival Time: </span>" + StartTime + "</div>"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Leave Time: </span>" + LeaveTime + "</div>"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Duration: </span>" + Duration + "</div>"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Missing Hours: </span>" + MissingHours + "</div>"
+            + "</div>";
+
+
+
+                    viewattendance_panel.Controls.Add(new LiteralControl(TasksInfo));
+
+
+
+
+
+                }//end of while loop
+
+
+                break;
+
+        }
+
 
 
     }

@@ -16,6 +16,31 @@
         <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="Check Out" OnClick="CheckOut" />
         <div class="text-center mt-2 font-weight-bold text-danger" id="checkout_response" runat="server"></div>
 
+
+
+
+ <asp:Panel ID="viewattendance_panel" runat="server" >
+       <div class="form-group row ">
+            <label class="font-weight-bold col-2 col-form-label offset-3">From</label>
+            <div class="col-3">
+                <asp:TextBox CssClass="form-control" ID="txt_from" runat="server" placeholder="YY/MM/DD"></asp:TextBox>
+            </div>
+      </div>
+                
+      <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">To</label>
+            <div class="col-3">
+                 <asp:TextBox CssClass="form-control" ID="txt_to" runat="server" placeholder="YY/MM/DD"></asp:TextBox>
+             </div>
+      </div>
+               
+      <div class="text-center">
+            <asp:Button CssClass="btn btn-primary" ID="btn" runat="server" Text="View Attendance" OnClick=" viewAttendance" />
+      </div>
+
+      <div class="text-center mt-2 font-weight-bold text-danger" id="attendance_response" runat="server"></div>
+</asp:Panel>
+
     </form>
 </body>
 </html>
