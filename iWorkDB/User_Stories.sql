@@ -30,14 +30,7 @@ WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 -- The procedure views the information of companies with its type containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
-GO
 
-CREATE PROC SearchCompanyByTypeSP
-@keyWord VARCHAR(50)
-AS
-SELECT c.*
-FROM Companies c 
-WHERE c.type LIKE @keyWord
 --2:--------------------------------------------------------------------------------------------------------------------------------------------
 --Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the
 --table Companies_Phones to show also the phones available for each company.
@@ -536,7 +529,7 @@ IF( EXISTS
 SELECT *
 FROM Attendances a INNER JOIN Staff_Members sm
 ON a.user_name = sm.user_name
-WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp)
+WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp) OR (DATENAME(dw,GETDATE())='Friday')
 ))
 SET @operationStatus=0
 ELSE
