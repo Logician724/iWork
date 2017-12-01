@@ -547,14 +547,22 @@ END
 -- and the dates over which he wants to check his attendance, and generates all the attendance records
 -- in between those 2 dates.
 GO
-CREATE PROC ViewAttendanceSP
+ALTER PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
-@periodEnd DATETIME
+@periodEnd DATETIME,
+@operationStatus BIT OUTPUT
 AS
+IF(@periodStart>@periodEnd)
+SET @operationStatus=0;
+ELSE
+BEGIN
 SELECT a.start_time, a.leave_time, a.duration, a.missing_hours
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
+SET @operationStatus=1;
+END
+
 
 
 
