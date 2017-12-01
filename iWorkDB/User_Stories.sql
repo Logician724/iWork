@@ -722,10 +722,28 @@ END
 --As we have three tables for Staff member-applies-for-Request-relations, one for each of the Managers, HR_Employees, and Regular Employees,
 --the procedure makes a union of those 3 tables and matches the Staff member's Username
 -- to  whatever comes from the Union.
+
 GO
-CREATE PROC ViewRequestsStatusSP
-@userName VARCHAR(30)
+ALTER PROC ViewRequestsStatusSP
+@userName VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS(
+SELECT hrr.request_id
+FROM HR_Employees_Replace_HR_Employees hrr
+WHERE hrr.user_name_request_owner = @userName
+UNION
+SELECT mmr.request_id
+FROM Managers_Replace_Managers mmr
+WHERE mmr.user_name_request_owner = @userName
+UNION
+SELECT rrr.request_id
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.user_name_request_owner = @userName
+             )
+SET @operationStatus=0; --no requests found
+ELSE 
+BEGIN
 SELECT r.request_id, r.hr_response_req, r.manager_response_req
 FROM Requests r
 WHERE r.request_id = ANY(
@@ -741,8 +759,8 @@ SELECT rrr.request_id
 FROM Regular_Employees_Replace_Regular_Employees rrr
 WHERE rrr.user_name_request_owner = @userName
 )
-
-
+SET @operationStatus=1;
+END
 
 
 --6:  --------------------------------------------------------------------------------------------------------------------------------------------------------------

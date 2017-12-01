@@ -223,7 +223,16 @@ EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','sic
 PRINT @status0
 GO
 --5:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EXEC ViewRequestsStatusSP 'claire.carles'
+
+GO
+DECLARE @status1 BIT
+EXEC ViewRequestsStatusSP 'godfrey.love', @status1
+PRINT @status1
+
+GO
+DECLARE @status0 BIT
+EXEC ViewRequestsStatusSP 'tracee.charlton', @status0 OUTPUT
+PRINT @status0
 --6:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC DeletePendingRequestsSP 'claire.carles'
 
