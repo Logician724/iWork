@@ -49,12 +49,61 @@
             <div class="text-center mt-2 font-weight-bold text-danger" id="requests_response" runat="server"></div>
         </asp:Panel>
 
-
+<!---------------------------------------------------------------------------------->
         <asp:Panel ID="announcement_panel" runat="server">
             <div class="text-center">
             <asp:Button CssClass="btn btn-primary" ID="Button4" runat="server" Text="View Announcements" OnClick="viewAnnouncements" />
             </div>
         </asp:Panel>
+
+<!---------------------------------------------------------------------------------->
+         <asp:Panel ID="sendemail_panel" runat="server" >
+       <div class="form-group row ">
+            <label class="font-weight-bold col-2 col-form-label offset-3">From</label>
+            <div class="col-3">
+                <asp:TextBox CssClass="form-control" ID="sendemail_txt" runat="server" placeholder="Enter Your Email"></asp:TextBox>
+            </div>
+      </div>
+                
+      <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">To</label>
+            <div class="col-3">
+                 <asp:TextBox CssClass="form-control" ID="recipusername_txt" runat="server" placeholder="Enter recipient's username"></asp:TextBox>
+             </div>
+      </div>
+
+      <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">To</label>
+            <div class="col-3">
+                 <asp:TextBox CssClass="form-control" ID="recipemail_txt" runat="server" placeholder="Enter recipient's email"></asp:TextBox>
+             </div>
+      </div>
+               
+  <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">Subject</label>
+            <div class="col-3">
+                 <asp:TextBox CssClass="form-control" ID="subject_txt" runat="server" placeholder="Enter Subject"></asp:TextBox>
+             </div>
+      </div>
+
+
+  <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">Body</label>
+            <div class="col-3">
+                 <asp:TextBox CssClass="form-control" ID="body_txt" runat="server" placeholder="Enter Body"></asp:TextBox>
+             </div>
+      </div>
+
+      <div class="text-center">
+            <asp:Button CssClass="btn btn-primary" ID="Button5" runat="server" Text="Send Email" OnClick="sendEmail" />
+      </div>
+
+      <div class="text-center mt-2 font-weight-bold text-danger" id="send_response" runat="server"></div>
+</asp:Panel>
+
+
+      
+
 
     </form>
 </body>

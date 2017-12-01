@@ -306,5 +306,66 @@ public partial class Staff : System.Web.UI.Page
 
 
     }
+    //----------------------------------------------------------------------------------------------------------
+
+
+    protected void sendEmail(object sender, EventArgs e)
+    {
+
+
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("SendEmailSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@senderUserName", Username));
+
+        string SenderEmail = sendemail_txt.Text;
+        string RecipUsername = recipusername_txt.Text;
+
+        string RecipEmail = recipemail_txt.Text;
+        string Subject = subject_txt.Text;
+
+        string Body = body_txt.Text;
+
+
+        cmd.Parameters.Add(new SqlParameter("@senderEmail", SenderEmail));
+        cmd.Parameters.Add(new SqlParameter("@recipientUserName", RecipUsername));
+        cmd.Parameters.Add(new SqlParameter("@recipientEmail", RecipEmail));
+        cmd.Parameters.Add(new SqlParameter("@emailSubject", Subject));
+        cmd.Parameters.Add(new SqlParameter("@emailBody", Body));
+
+
+        //output parameterssub
+        SqlParameter OperationStatus = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
+        OperationStatus.Direction = ParameterDirection.Output;
+        conn.Open();
+        cmd.ExecuteNonQuery();
+        string op = OperationStatus.Value.ToString();
+        conn.Close();
+
+
+
+
+        Label failed = new Label();
+        failed.Text = "Sending Failed. Recipient is not in your company.";
+        Label passed = new Label();
+        passed.Text = "Email Sent";
+
+
+
+        switch (op)
+        {
+            case "False":
+                requests_response.Controls.Add(failed);
+                break;
+            case "True":
+                requests_response.Controls.Add(passed);
+                break;
+
+        }
+
+    }
 
 }
