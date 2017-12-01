@@ -368,4 +368,55 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
+    //-----------------------------------------------------------------------------------------------------
+
+    protected void viewEmails(object sender, EventArgs e)
+    {
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewReceivedEmailsSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@username", Username));
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
+        string Subject = null;
+        string Body = null;
+        while (rdr.Read())
+        {
+
+            string TimeStamp = rdr.GetValue(rdr.GetOrdinal("time_stamp")).ToString();
+            string SenderUsername = rdr.GetString(rdr.GetOrdinal("sender_user_name"));
+            string SenderEmail = rdr.GetString(rdr.GetOrdinal("sender_email"));
+            string RecipientEmail = rdr.GetString(rdr.GetOrdinal("recipient_email"));
+            if (rdr.GetValue(rdr.GetOrdinal("email_subject")) == DBNull.Value)
+                Subject = "";
+            else
+                Subject = rdr.GetString(rdr.GetOrdinal("email_subject"));
+            if (rdr.GetValue(rdr.GetOrdinal("email_body")) == DBNull.Value)
+                Body = "";
+            else
+                Body = rdr.GetString(rdr.GetOrdinal("email_body"));
+
+
+            string Info = "<div class = \"card-block\">"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Date: </span>" + TimeStamp + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Sender Username: </span>" + SenderUsername + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Sender Email: </span>" + SenderEmail + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Recipient Email: </span>" + RecipientEmail + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Subject: </span>" + Subject + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Body: </span>" + Body + "</div>"
++ "</div>";
+            inbox_panel.Controls.Add(new LiteralControl(Info));
+
+        }
+
+
+
+
+
+    }
 }

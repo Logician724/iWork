@@ -101,6 +101,13 @@
       <div class="text-center mt-2 font-weight-bold text-danger" id="send_response" runat="server"></div>
 </asp:Panel>
 
+<!------------------------------------------------------------------------------------------------------->
+
+        <asp:Panel ID="inbox_panel" runat="server">
+            <div class="text-center">
+            <asp:Button CssClass="btn btn-primary" ID="Button6" runat="server" Text="Check Inbox" OnClick="viewEmails" />
+            </div>
+        </asp:Panel>
 
       
 
