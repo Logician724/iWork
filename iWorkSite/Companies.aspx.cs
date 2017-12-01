@@ -162,7 +162,7 @@ public partial class Companies : System.Web.UI.Page
         }
     }
 
-    protected void viewCompaniesByAvgSalary(object sender, EventArgs e)
+    protected void SearchByAvgSalary(object sender, EventArgs e)
     {
         div_main.Controls.Clear();
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
@@ -1249,6 +1249,31 @@ public partial class Companies : System.Web.UI.Page
 
 
     }
-
+    protected void SearchCompany(object sender, EventArgs e)
+    {
+        if (Request.Form["radio_search_company"] != null)
+        {
+            string SearchType = Request.Form["radio_search_company"];
+            if (SearchType =="radio_search_name")
+            {
+                searchCompaniesByName(sender, e);
+            }
+            else
+                if (SearchType == "radio_search_address")
+            {
+                searchCompaniesByAddress(sender, e);
+            }
+            else
+                if (SearchType == "radio_search_type")
+            {
+                searchCompaniesByType(sender, e);
+            }
+            else
+                if (SearchType == "radio_search_avg_salary")
+            {
+                SearchByAvgSalary(sender, e);
+            }
+        }
+    }
 
 }

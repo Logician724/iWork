@@ -11,7 +11,7 @@
     <div class="container">
         <div class="container">
             <h1 class="display-2 text-center">Login Here</h1>
-            <p class="lead text-center">You profile awaits!</p>
+            <p class="lead text-center">Your profile awaits!</p>
         </div>
         <div class="container">
             <form runat="server">
