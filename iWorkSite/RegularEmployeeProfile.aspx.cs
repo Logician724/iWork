@@ -135,7 +135,7 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
 
     }
 
-    //-----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------
     // View a list of projects assigned to him/her along with all of their information.
 
     protected void viewProjects(object sender, EventArgs e)
@@ -232,6 +232,9 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
                     viewtasks_panel.Controls.Add(new LiteralControl(TasksInfo));
 
 
+
+
+
                 }//end of while loop
 
 
@@ -239,6 +242,9 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
         }
 
     }//end of method
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
     }

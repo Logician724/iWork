@@ -39,6 +39,6 @@
                 <div class="text-center mt-2 font-weight-bold text-danger" id="register_response" runat="server"></div>
             </form>
         </div>
-    </div>
+    </div>  
 </body>
 </html>

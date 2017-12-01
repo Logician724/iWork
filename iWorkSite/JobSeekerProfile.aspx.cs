@@ -69,7 +69,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
             string Info = "<div class = \"card-block\">"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Username: </span>" + Username + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Personal: Email:- </span>" + PersonalEmail + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Personal Email: </span>" + PersonalEmail + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Birthdate: </span>" + Birthdate + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Experience Years: </span>" + ExpYear + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">First Name: </span>" + FirstName + "</div>"
@@ -132,7 +132,47 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
 
-    }
+    } // End of Method
+
+
+//--------------------------------------------------------------------------------------------------------------------------------
+
+    protected void viewJobsStatus(object sender, EventArgs e)
+    {
+        string Username = Session["Username"].ToString();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewJobsStatusSP", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
+        while (rdr.Read())
+        {
+            string JobTitle = rdr.GetString(rdr.GetOrdinal("job_title"));
+            string DepartmentCode = rdr.GetString(rdr.GetOrdinal("department_code"));
+            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
+            string Score = rdr.GetValue(rdr.GetOrdinal("score")).ToString();
+            string AppStatus = rdr.GetString(rdr.GetOrdinal("app_status"));
+
+
+            string viewStatus =  "<div class = \"card-block\">"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + Username + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Department Code: </span>" + DepartmentCode + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Score: </span>" + Score + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Status: </span>" + AppStatus + "</div>"
++ "</div>";
+
+            task_status.Controls.Add(new LiteralControl(viewStatus));
+
+        }
+
+    }//End of Method
+
+//--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
