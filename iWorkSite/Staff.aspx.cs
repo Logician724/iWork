@@ -33,7 +33,7 @@ public partial class Staff : System.Web.UI.Page
         cmd.ExecuteNonQuery();
         string op = OperationStatus.Value.ToString();
         conn.Close();
-   
+
         Label failed = new Label();
         failed.Text = "It's your day-off !";
         Label passed = new Label();
@@ -47,13 +47,13 @@ public partial class Staff : System.Web.UI.Page
             case "True":
                 checkin_response.Controls.Add(passed);
                 break;
- 
+
         }
 
 
     }
 
-  //---------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------
 
 
     protected void CheckOut(object sender, EventArgs e)
@@ -92,7 +92,7 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
-//-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
 
     protected void viewAttendance(object sender, EventArgs e)
     {
@@ -253,5 +253,58 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
+
+    //----------------------------------------------------------------------------------------------------------------------------
+
+    //View announcements related to his/her company within the past 20 days.
+
+
+
+    protected void viewAnnouncements(object sender, EventArgs e)
+    {
+
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewLatestAnnouncementsSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+        conn.Open();
+        Label failed = new Label();
+        failed.Text = "No requests found";
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
+        string HRUsername = null;
+        while (rdr.Read())
+        {
+
+            string Date = rdr.GetValue(rdr.GetOrdinal("date")).ToString();
+            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
+            string Title = rdr.GetString(rdr.GetOrdinal("title"));
+            string Description = rdr.GetString(rdr.GetOrdinal("description"));
+            string Type = rdr.GetString(rdr.GetOrdinal("type"));
+            if (rdr.GetValue(rdr.GetOrdinal("hr_user_name")) == DBNull.Value)
+                HRUsername = "-";
+            else
+                HRUsername = rdr.GetString(rdr.GetOrdinal("hr_user_name"));
+
+
+
+            string Info = "<div class = \"card-block\">"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Date: </span>" + Date + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Title: </span>" + Title + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Description: </span>" + Description + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Type: </span>" + Type + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">HR Username: </span>" + HRUsername + "</div>"
++ "</div>";
+            announcement_panel.Controls.Add(new LiteralControl(Info));
+
+        }
+
+
+    }
 
 }

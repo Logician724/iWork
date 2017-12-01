@@ -50,6 +50,12 @@
         </asp:Panel>
 
 
+        <asp:Panel ID="announcement_panel" runat="server">
+            <div class="text-center">
+            <asp:Button CssClass="btn btn-primary" ID="Button4" runat="server" Text="View Announcements" OnClick="viewAnnouncements" />
+            </div>
+        </asp:Panel>
+
     </form>
 </body>
 </html>
