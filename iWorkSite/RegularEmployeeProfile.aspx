@@ -55,6 +55,17 @@
                     <asp:Button CssClass="btn btn-primary" ID="btn_login" runat="server" Text="Apply Changes" OnClick="editPersonalInfo" />
                 </div>
                   </asp:Panel>
+
+                <asp:Panel ID="viewproject_panel" runat="server" >
+                    <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="My Projects" OnClick="viewProjects" />
+                 </asp:Panel>
+
+                 <asp:Panel ID="viewtasks_panel" runat="server" >
+                     <asp:TextBox CssClass="form-control" ID="proj_name" runat="server" placeholder="Enter Project Name"></asp:TextBox>
+                     <asp:Button CssClass="btn btn-primary" ID="Button2" runat="server" Text="My Tasks" OnClick="viewTasks" />
+                     <div class="text-center mt-2 font-weight-bold text-danger" id="tasks_response" runat="server"></div>
+                 </asp:Panel>
+
             </form>
         </div>
     </div>
