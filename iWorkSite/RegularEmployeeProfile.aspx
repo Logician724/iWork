@@ -66,6 +66,8 @@
                      <div class="text-center mt-2 font-weight-bold text-danger" id="tasks_response" runat="server"></div>
                  </asp:Panel>
 
+                 <asp:Button CssClass="btn btn-primary" ID="Button3" runat="server" Text="Staff Member" OnClick="staff" />
+
             </form>
         </div>
     </div>

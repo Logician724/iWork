@@ -45,7 +45,15 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
         }
     }
 
+//-------------------------------------------------------------------------------------------------------------------
 
+        protected void staff(object sender, EventArgs e)
+    {
+        Session["Username"] = Session["Username"].ToString();
+        Response.Redirect("Staff", true);
+    }
+
+ //------------------------------------------------------------------------------------------------------------------
 
 
 
