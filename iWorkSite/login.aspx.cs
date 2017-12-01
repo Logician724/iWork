@@ -52,12 +52,12 @@ public partial class Login : System.Web.UI.Page
             case "2":
                 Session["Type"] = "Manager";
                 Session["Username"] = username;
-                Response.Redirect("ManagerProfile", true);
+                Response.Redirect("ManagerControl", true);
                 break;
             case "3":
                 Session["Type"] = "HR";
                 Session["Username"] = username;
-                Response.Redirect("HREmployeeProfile", true);
+                Response.Redirect("HRControl", true);
                 break;
             case "4":
                 Session["Type"] = "Regular";
