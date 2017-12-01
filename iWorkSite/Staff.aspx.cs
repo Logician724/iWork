@@ -169,5 +169,89 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
+    //------------------------------------------------------------------------------------------------------
+
+    //View the status of all requests he/she applied for before (HR employee and Manager responses).
+
+    protected void viewRequests(object sender, EventArgs e)
+    {
+
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewRequestsStatusSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+
+
+
+        //output parameterssub
+        SqlParameter OperationStatus = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
+        OperationStatus.Direction = ParameterDirection.Output;
+        conn.Open();
+        cmd.ExecuteNonQuery();
+        string op = OperationStatus.Value.ToString();
+        conn.Close();
+
+
+        conn.Open();
+        Label failed = new Label();
+        failed.Text = "No requests found";
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
+
+
+        switch (op)
+        {
+            case "False":
+                requests_response.Controls.Add(failed);
+                break;
+            case "True":
+
+                string HRResponse = null;
+                string ManagerResponse = null;
+                while (rdr.Read())
+                {
+                    string RequestID = rdr.GetValue(rdr.GetOrdinal("request_id")).ToString();
+
+                    if (rdr.GetValue(rdr.GetOrdinal("hr_response_req")) == DBNull.Value)
+                        HRResponse = "-";
+                    else
+                        HRResponse = rdr.GetString(rdr.GetOrdinal("hr_response_req"));
+
+                    if (rdr.GetValue(rdr.GetOrdinal("manager_response_req")) == DBNull.Value)
+                        ManagerResponse = "-";
+                    else
+                        ManagerResponse = rdr.GetString(rdr.GetOrdinal("manager_response_req"));
+
+
+                    string requests = "<div class = \"card-block\">"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Request ID: </span>" + RequestID + "</div>"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">HR Response: </span>" + HRResponse + "</div>"
+            + "<div class = \"card-text\"><span class = \"font-weight-bold\">Manager Response: </span>" + ManagerResponse + "</div>"
+            + "</div>";
+
+
+
+                    viewattendance_panel.Controls.Add(new LiteralControl(requests));
+
+
+
+
+
+                }//end of while loop
+
+
+                break;
+
+        }
+
+
+
+
+    }
+
 
 }

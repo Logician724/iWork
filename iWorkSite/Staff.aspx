@@ -35,11 +35,20 @@
       </div>
                
       <div class="text-center">
-            <asp:Button CssClass="btn btn-primary" ID="btn" runat="server" Text="View Attendance" OnClick=" viewAttendance" />
+            <asp:Button CssClass="btn btn-primary" ID="btn" runat="server" Text="View Attendance" OnClick="viewAttendance" />
       </div>
 
       <div class="text-center mt-2 font-weight-bold text-danger" id="attendance_response" runat="server"></div>
 </asp:Panel>
+
+
+        <asp:Panel ID="viewrequests_panel" runat="server">
+            <div class="text-center">
+            <asp:Button CssClass="btn btn-primary" ID="Button3" runat="server" Text="View Requests" OnClick="viewRequests" />
+            </div>
+            <div class="text-center mt-2 font-weight-bold text-danger" id="requests_response" runat="server"></div>
+        </asp:Panel>
+
 
     </form>
 </body>
