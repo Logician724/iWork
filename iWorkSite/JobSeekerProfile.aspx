@@ -55,6 +55,9 @@
                     <asp:Button CssClass="btn btn-primary" ID="btn_login" runat="server" Text="Apply Changes" OnClick="editPersonalInfo" />
                 </div>
                   </asp:Panel>
+                <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="Jobs Status" OnClick="viewJobsStatus" />
+                <asp:Panel ID="task_status" runat="server" ></asp:Panel>
+
             </form>
         </div>
     </div>

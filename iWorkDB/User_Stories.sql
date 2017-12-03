@@ -30,14 +30,7 @@ WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 -- The procedure views the information of companies with its type containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its type
-GO
 
-CREATE PROC SearchCompanyByTypeSP
-@keyWord VARCHAR(50)
-AS
-SELECT c.*
-FROM Companies c 
-WHERE c.type LIKE @keyWord
 --2:--------------------------------------------------------------------------------------------------------------------------------------------
 --Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the
 --table Companies_Phones to show also the phones available for each company.
@@ -536,7 +529,7 @@ IF( EXISTS
 SELECT *
 FROM Attendances a INNER JOIN Staff_Members sm
 ON a.user_name = sm.user_name
-WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp)
+WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp) OR (DATENAME(dw,GETDATE())='Friday')
 ))
 SET @operationStatus=0
 ELSE
@@ -554,14 +547,22 @@ END
 -- and the dates over which he wants to check his attendance, and generates all the attendance records
 -- in between those 2 dates.
 GO
-CREATE PROC ViewAttendanceSP
+ALTER PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
-@periodEnd DATETIME
+@periodEnd DATETIME,
+@operationStatus BIT OUTPUT
 AS
+IF(@periodStart>@periodEnd)
+SET @operationStatus=0;
+ELSE
+BEGIN
 SELECT a.start_time, a.leave_time, a.duration, a.missing_hours
 FROM Attendances a
 WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.start_time) <=0)
+SET @operationStatus=1;
+END
+
 
 
 
@@ -721,10 +722,28 @@ END
 --As we have three tables for Staff member-applies-for-Request-relations, one for each of the Managers, HR_Employees, and Regular Employees,
 --the procedure makes a union of those 3 tables and matches the Staff member's Username
 -- to  whatever comes from the Union.
+
 GO
-CREATE PROC ViewRequestsStatusSP
-@userName VARCHAR(30)
+ALTER PROC ViewRequestsStatusSP
+@userName VARCHAR(30),
+@operationStatus BIT OUTPUT
 AS
+IF NOT EXISTS(
+SELECT hrr.request_id
+FROM HR_Employees_Replace_HR_Employees hrr
+WHERE hrr.user_name_request_owner = @userName
+UNION
+SELECT mmr.request_id
+FROM Managers_Replace_Managers mmr
+WHERE mmr.user_name_request_owner = @userName
+UNION
+SELECT rrr.request_id
+FROM Regular_Employees_Replace_Regular_Employees rrr
+WHERE rrr.user_name_request_owner = @userName
+             )
+SET @operationStatus=0; --no requests found
+ELSE 
+BEGIN
 SELECT r.request_id, r.hr_response_req, r.manager_response_req
 FROM Requests r
 WHERE r.request_id = ANY(
@@ -740,8 +759,8 @@ SELECT rrr.request_id
 FROM Regular_Employees_Replace_Regular_Employees rrr
 WHERE rrr.user_name_request_owner = @userName
 )
-
-
+SET @operationStatus=1;
+END
 
 
 --6:  --------------------------------------------------------------------------------------------------------------------------------------------------------------
