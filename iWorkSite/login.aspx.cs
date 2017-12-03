@@ -38,7 +38,7 @@ public partial class Login : System.Web.UI.Page
         switch (type.Value.ToString())
         {
             case "0":
-                register_response.Controls.Add(failed);
+                login_response.Controls.Add(failed);
                 break;
             case "1":
                 Session["Type"] = "Job Seeker";

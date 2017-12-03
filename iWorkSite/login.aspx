@@ -36,7 +36,7 @@
                         <asp:Button CssClass="btn btn-primary" ID="btn_register" runat="server" Text="Register" OnClick="register" />
                     </div>
                 </div>
-                <div class="text-center mt-2 font-weight-bold text-danger" id="register_response" runat="server"></div>
+                <div class="text-center mt-2 font-weight-bold text-danger" id="login_response" runat="server"></div>
             </form>
         </div>
     </div>

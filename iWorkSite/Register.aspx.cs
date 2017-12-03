@@ -42,11 +42,12 @@ public partial class Register : System.Web.UI.Page
         conn.Open();
         cmd.ExecuteNonQuery();
         conn.Close();
-
+        Label failed = new Label();
+        failed.Text = "This username is already in use";
         switch (OperationStatus.Value.ToString())
         {
             case "False":
-                Response.Write("This username is already in use");
+                register_response.Controls.Add(failed);
                 break;
             case "True":
                 Session["Username"] = username;
