@@ -7,14 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" type="text/css" href="Content/companies.css" />
     <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
-    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa:300" rel="stylesheet" />
     <title>Home</title>
 </head>
 <body class="jumbotron">
     <div class="container">
         <form runat="server">
-            <div class="form-group sticky-top" runat="server">
+            <div class="form-group" runat="server">
                 <div class="container text-center">
                     <div class="display-1">iWork</div>
                     <p class="lead">We lighten your path</p>

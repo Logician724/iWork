@@ -21,8 +21,6 @@ public partial class Companies : System.Web.UI.Page
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         HtmlGenericControl NationalDiv = new HtmlGenericControl("div");
         HtmlGenericControl InternationalDiv = new HtmlGenericControl("div");
-        main_content.Controls.Add(InternationalDiv);
-        main_content.Controls.Add(NationalDiv);
         //initialize ID counters
         int CompanyCount = 0;
         int DepartmentCount = 0;
@@ -60,7 +58,6 @@ public partial class Companies : System.Web.UI.Page
             SqlCommand DeparmentViewQuery = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
             DeparmentViewQuery.CommandType = System.Data.CommandType.StoredProcedure;
             DeparmentViewQuery.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
-            conn.Open();
             SqlDataReader DepartmentReader = DeparmentViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
             while (DepartmentReader.Read())
             {
@@ -73,37 +70,42 @@ public partial class Companies : System.Web.UI.Page
                 //add a department
                 AddDepartment(DepartmentCode, DomainName, DepartmentName, CompanyCount, DepartmentCount, DepartmentDiv);
                 //initialize job sql
-                SqlCommand JobViewQuery = new SqlCommand("ViewJobsWithVacancySP", conn);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
-                cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
-                conn.Open();
-                SqlDataReader JobReader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                SqlCommand JobsViewQuery = new SqlCommand("ViewJobsWithVacancySP", conn);
+                JobsViewQuery.CommandType = System.Data.CommandType.StoredProcedure;
+                JobsViewQuery.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
+                JobsViewQuery.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+                SqlDataReader JobReader = JobsViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
                 while (JobReader.Read())
                 {
-                    string JobTitle = rdr.GetString(rdr.GetOrdinal("job_title"));
-                    string ApplicationDeadline = rdr.GetString(rdr.GetOrdinal("application_deadline"));
-                    string DetailedDescription = rdr.GetString(rdr.GetOrdinal("detailed_description"));
-                    string MinYearsExperience = rdr.GetString(rdr.GetOrdinal("min_years_experience"));
-                    string Salary = rdr.GetString(rdr.GetOrdinal("salary"));
-                    string ShortDescription = rdr.GetString(rdr.GetOrdinal("short_description"));
-                    string Vacancies = rdr.GetString(rdr.GetOrdinal("vacancies"));
-                    string WorkingHours = rdr.GetString(rdr.GetOrdinal("working_hours"));
+                    string JobTitle = JobReader.GetString(JobReader.GetOrdinal("job_title"));
+                    string ApplicationDeadline = JobReader.GetValue(JobReader.GetOrdinal("application_deadline")).ToString() ;
+                    string DetailedDescription = JobReader.GetString(JobReader.GetOrdinal("detailed_description"));
+                    string MinYearsExperience = JobReader.GetValue(JobReader.GetOrdinal("min_years_experience")).ToString() ;
+                    string Salary = JobReader.GetValue(JobReader.GetOrdinal("salary")).ToString();
+                    string ShortDescription = JobReader.GetString(JobReader.GetOrdinal("short_description"));
+                    string Vacancies = JobReader.GetValue(JobReader.GetOrdinal("vacancies")).ToString();
+                    string WorkingHours = JobReader.GetValue(JobReader.GetOrdinal("working_hours")).ToString();
                     HtmlGenericControl JobDiv = new HtmlGenericControl("div");
                     JobDiv.Attributes["id"] = "department" + DepartmentCount;
-                        
+                    AddJob(DepartmentCode, DomainName, JobTitle, ApplicationDeadline, Vacancies, DetailedDescription, ShortDescription, MinYearsExperience, Salary, WorkingHours, DepartmentCount, JobDiv);
+                    DepartmentDiv.Controls.Add(JobDiv);
                 }
-                DepartmentDiv.Controls.Add(CompanyDiv);
+                CompanyDiv.Controls.Add(DepartmentDiv);
                 DepartmentCount++;
             }
             if (Type == "international")
             {
                 InternationalDiv.Controls.Add(CompanyDiv);
             }
+            else
+            {
+                NationalDiv.Controls.Add(CompanyDiv);
+            }
+
             CompanyCount += 1;
         }
-
-
+        main_content.Controls.Add(InternationalDiv);
+        main_content.Controls.Add(NationalDiv);
     }
 
     protected void SearchByAvgSalary(object sender, EventArgs e)
