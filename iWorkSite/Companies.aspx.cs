@@ -1,4 +1,4 @@
-﻿                                    using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,7 +24,6 @@ public partial class Companies : System.Web.UI.Page
         //initialize ID counters
         int CompanyCount = 0;
         int DepartmentCount = 0;
-        int JobCount = 0;
         while (rdr.Read())
         {
 
@@ -43,7 +42,6 @@ public partial class Companies : System.Web.UI.Page
             //initialize data reader
             SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
             ArrayList Phones = new ArrayList();
-
             while (PhonesReader.Read())
             {
                 string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
@@ -51,7 +49,6 @@ public partial class Companies : System.Web.UI.Page
             }
             //initialize a company div
             HtmlGenericControl CompanyDiv = new HtmlGenericControl("div");
-            CompanyDiv.Attributes["id"] = "company" + CompanyCount;
             //Add company info to the div
             AddCompany(DomainName, CompanyName, Field, Vision, Type, Address, Email, Phones, CompanyCount, CompanyDiv);
             //Initialize Department sql
@@ -59,6 +56,9 @@ public partial class Companies : System.Web.UI.Page
             DeparmentViewQuery.CommandType = System.Data.CommandType.StoredProcedure;
             DeparmentViewQuery.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
             SqlDataReader DepartmentReader = DeparmentViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            HtmlGenericControl DepartmentContainer = new HtmlGenericControl("div");
+            DepartmentContainer.Attributes["id"] = "company" + CompanyCount;
+            DepartmentContainer.Attributes["class"] = "collapse";
             while (DepartmentReader.Read())
             {
                 // get department attributes
@@ -66,7 +66,6 @@ public partial class Companies : System.Web.UI.Page
                 string DepartmentCode = DepartmentReader.GetString(DepartmentReader.GetOrdinal("department_code"));
                 //initialize department div
                 HtmlGenericControl DepartmentDiv = new HtmlGenericControl("div");
-                DepartmentDiv.Attributes["id"] = "department" + DepartmentCount;
                 //add a department
                 AddDepartment(DepartmentCode, DomainName, DepartmentName, CompanyCount, DepartmentCount, DepartmentDiv);
                 //initialize job sql
@@ -75,12 +74,15 @@ public partial class Companies : System.Web.UI.Page
                 JobsViewQuery.Parameters.Add(new SqlParameter("@companyDomain", DomainName));
                 JobsViewQuery.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
                 SqlDataReader JobReader = JobsViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                HtmlGenericControl JobContainer = new HtmlGenericControl("div");
+                JobContainer.Attributes["id"] = "department" + DepartmentCount;
+                JobContainer.Attributes["class"] = "collapse";
                 while (JobReader.Read())
                 {
                     string JobTitle = JobReader.GetString(JobReader.GetOrdinal("job_title"));
-                    string ApplicationDeadline = JobReader.GetValue(JobReader.GetOrdinal("application_deadline")).ToString() ;
+                    string ApplicationDeadline = JobReader.GetValue(JobReader.GetOrdinal("application_deadline")).ToString();
                     string DetailedDescription = JobReader.GetString(JobReader.GetOrdinal("detailed_description"));
-                    string MinYearsExperience = JobReader.GetValue(JobReader.GetOrdinal("min_years_experience")).ToString() ;
+                    string MinYearsExperience = JobReader.GetValue(JobReader.GetOrdinal("min_years_experience")).ToString();
                     string Salary = JobReader.GetValue(JobReader.GetOrdinal("salary")).ToString();
                     string ShortDescription = JobReader.GetString(JobReader.GetOrdinal("short_description"));
                     string Vacancies = JobReader.GetValue(JobReader.GetOrdinal("vacancies")).ToString();
@@ -88,21 +90,26 @@ public partial class Companies : System.Web.UI.Page
                     HtmlGenericControl JobDiv = new HtmlGenericControl("div");
                     JobDiv.Attributes["id"] = "department" + DepartmentCount;
                     AddJob(DepartmentCode, DomainName, JobTitle, ApplicationDeadline, Vacancies, DetailedDescription, ShortDescription, MinYearsExperience, Salary, WorkingHours, DepartmentCount, JobDiv);
-                    DepartmentDiv.Controls.Add(JobDiv);
+                    JobContainer.Controls.Add(JobDiv);
+
                 }
-                CompanyDiv.Controls.Add(DepartmentDiv);
+                DepartmentDiv.Controls.Add(JobContainer);
+                DepartmentContainer.Controls.Add(DepartmentDiv);
                 DepartmentCount++;
+
             }
-            if (Type == "international")
+            CompanyDiv.Controls.Add(DepartmentContainer);
+            CompanyDiv.Controls.Add(new LiteralControl("<hr/>"));
+            if (Type == "International")
             {
                 InternationalDiv.Controls.Add(CompanyDiv);
             }
-            else
+            if (Type == "National")
             {
                 NationalDiv.Controls.Add(CompanyDiv);
             }
 
-            CompanyCount += 1;
+            CompanyCount++;
         }
         main_content.Controls.Add(InternationalDiv);
         main_content.Controls.Add(NationalDiv);
@@ -117,216 +124,92 @@ public partial class Companies : System.Web.UI.Page
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-        Panel CardPanel = new Panel();
-        CardPanel.CssClass = "card";
+        int CompanyCount = 0;
+        int DepartmentCount = 0;
         while (rdr.Read())
         {
             string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
             string AvgSalary = rdr.GetValue(rdr.GetOrdinal("average_salary")).ToString();
-
-
-
             SqlCommand CompanyInfoCmd = new SqlCommand("ViewCompanySP", conn);
             CompanyInfoCmd.CommandType = System.Data.CommandType.StoredProcedure;
             CompanyInfoCmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
             SqlDataReader CompanyInfoReader = CompanyInfoCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-            string CompanyName = null;
-            string Address = null;
-            string Field = null;
-            string Type = null;
-            string Vision = null;
-            string Email = null;
-
-            if (CompanyInfoReader.Read())
+            while (CompanyInfoReader.Read())
             {
-                CompanyName = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("name"));
-                Address = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("address"));
-                Field = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("field"));
-                Type = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("type"));
-                Vision = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("vision"));
-                Email = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("email"));
+                string CompanyName = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("name"));
+                string Address = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("address"));
+                string Field = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("field"));
+                string Type = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("type"));
+                string Vision = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("vision"));
+                string Email = CompanyInfoReader.GetString(CompanyInfoReader.GetOrdinal("email"));
+                //initialize sql command for finding the company phones
+                SqlCommand CompanyPhoneCmd = new SqlCommand("ViewCompanyPhonesSP", conn);
+                CompanyPhoneCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                CompanyPhoneCmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+                //initialize data reader
+                SqlDataReader PhonesReader = CompanyPhoneCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                ArrayList Phones = new ArrayList();
+                while (PhonesReader.Read())
+                {
+                    string CompanyPhone = PhonesReader.GetString(PhonesReader.GetOrdinal("phone"));
+                    Phones.Add(CompanyPhone);
+                }
+                HtmlGenericControl CompanyDiv = new HtmlGenericControl();
+                AddCompany(CompanyDomain, CompanyName, Field, Vision, Type, Address, Email, Phones, CompanyCount, CompanyDiv);
+                //initialize Department Sql
+                SqlCommand DeparmentViewQuery = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
+                DeparmentViewQuery.CommandType = System.Data.CommandType.StoredProcedure;
+                DeparmentViewQuery.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+                SqlDataReader DepartmentReader = DeparmentViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                HtmlGenericControl DepartmentContainer = new HtmlGenericControl("div");
+                DepartmentContainer.Attributes["id"] = "company" + CompanyCount;
+                DepartmentContainer.Attributes["class"] = "collapse";
+                while (DepartmentReader.Read())
+                {
+                    // get department attributes
+                    string DepartmentName = DepartmentReader.GetString(DepartmentReader.GetOrdinal("name"));
+                    string DepartmentCode = DepartmentReader.GetString(DepartmentReader.GetOrdinal("department_code"));
+                    //initialize department div
+                    HtmlGenericControl DepartmentDiv = new HtmlGenericControl("div");
+                    //add a department
+                    AddDepartment(DepartmentCode, CompanyDomain, DepartmentName, CompanyCount, DepartmentCount, DepartmentDiv);
+                    //initialize job sql
+                    SqlCommand JobsViewQuery = new SqlCommand("ViewJobsWithVacancySP", conn);
+                    JobsViewQuery.CommandType = System.Data.CommandType.StoredProcedure;
+                    JobsViewQuery.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+                    JobsViewQuery.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+                    SqlDataReader JobReader = JobsViewQuery.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                    HtmlGenericControl JobContainer = new HtmlGenericControl("div");
+                    JobContainer.Attributes["id"] = "department" + DepartmentCount;
+                    JobContainer.Attributes["class"] = "collapse";
+                    while (JobReader.Read())
+                    {
+                        string JobTitle = JobReader.GetString(JobReader.GetOrdinal("job_title"));
+                        string ApplicationDeadline = JobReader.GetValue(JobReader.GetOrdinal("application_deadline")).ToString();
+                        string DetailedDescription = JobReader.GetString(JobReader.GetOrdinal("detailed_description"));
+                        string MinYearsExperience = JobReader.GetValue(JobReader.GetOrdinal("min_years_experience")).ToString();
+                        string Salary = JobReader.GetValue(JobReader.GetOrdinal("salary")).ToString();
+                        string ShortDescription = JobReader.GetString(JobReader.GetOrdinal("short_description"));
+                        string Vacancies = JobReader.GetValue(JobReader.GetOrdinal("vacancies")).ToString();
+                        string WorkingHours = JobReader.GetValue(JobReader.GetOrdinal("working_hours")).ToString();
+                        HtmlGenericControl JobDiv = new HtmlGenericControl("div");
+                        JobDiv.Attributes["id"] = "department" + DepartmentCount;
+                        AddJob(DepartmentCode, CompanyDomain, JobTitle, ApplicationDeadline, Vacancies, DetailedDescription, ShortDescription, MinYearsExperience, Salary, WorkingHours, DepartmentCount, JobDiv);
+                        JobContainer.Controls.Add(JobDiv);
+
+                    }
+                    DepartmentDiv.Controls.Add(JobContainer);
+                    DepartmentContainer.Controls.Add(DepartmentDiv);
+                    DepartmentCount++;
+
+                }
+                CompanyDiv.Controls.Add(DepartmentContainer);
+                main_content.Controls.Add(CompanyDiv);
             }
-            //holder labels
-            Label CompanyNameHolder = new Label();
-            Label CompanyDomainHolder = new Label();
-            Label AddressHolder = new Label();
-            Label FieldHolder = new Label();
-            Label TypeHolder = new Label();
-            Label VisionHolder = new Label();
-            Label EmailHolder = new Label();
-            Label AvgSalaryHolder = new Label();
-            //holder labels attr
-            CompanyNameHolder.CssClass = "font-weight-bold";
-            CompanyNameHolder.Text = "Company Name: ";
-            CompanyDomainHolder.CssClass = "font-weight-bold";
-            CompanyDomainHolder.Text = "Company Domain:";
-
-            AddressHolder.CssClass = "font-weight-bold";
-            AddressHolder.Text = "Address: ";
-
-            FieldHolder.CssClass = "font-weight-bold";
-            FieldHolder.Text = "Field: ";
-
-            TypeHolder.CssClass = "font-weight-bold";
-            TypeHolder.Text = "Type: ";
-
-            VisionHolder.CssClass = "font-weight-bold";
-            VisionHolder.Text = "Vision: ";
-
-            EmailHolder.CssClass = "font-weight-bold";
-            EmailHolder.Text = "Email: ";
-
-
-            AvgSalaryHolder.CssClass = "font-weight-bold";
-            AvgSalaryHolder.Text = "Average Salary: ";
-            //company info labels
-            Label CompanyNameLabel = new Label();
-            Label CompanyDomainLabel = new Label();
-            Label AddressLabel = new Label();
-            Label FieldLabel = new Label();
-            Label TypeLabel = new Label();
-            Label VisionLabel = new Label();
-            Label EmailLabel = new Label();
-            Label AvgSalaryLabel = new Label();
-            //company info labels attr
-            CompanyNameLabel.Text = CompanyName;
-            CompanyDomainLabel.Text = CompanyDomain;
-            AddressLabel.Text = Address;
-            FieldLabel.Text = Field;
-            TypeLabel.Text = Type;
-            VisionLabel.Text = Vision;
-            EmailLabel.Text = Email;
-            AvgSalaryLabel.Text = AvgSalary;
-            //Company info panel
-            Panel CompanyNamePanel = new Panel();
-            Panel CompanyDomainPanel = new Panel();
-            Panel AddressPanel = new Panel();
-            Panel FieldPanel = new Panel();
-            Panel TypePanel = new Panel();
-            Panel VisionPanel = new Panel();
-            Panel EmailPanel = new Panel();
-            Panel AvgSalaryPanel = new Panel();
-            //add action panel
-            Panel ActionPanel = new Panel();
-            //add panel styles
-            CompanyNamePanel.CssClass = "card-text";
-            CompanyDomainPanel.CssClass = "card-text";
-            AddressPanel.CssClass = "card-text";
-            FieldPanel.CssClass = "card-text";
-            TypePanel.CssClass = "card-text";
-            VisionPanel.CssClass = "card-text";
-            EmailPanel.CssClass = "card-text";
-            AvgSalaryPanel.CssClass = "card-text";
-            //add action panel styles
-            ActionPanel.CssClass = "card-block flex-row flex-wrap";
-            //add labels to correct panels
-            CompanyNamePanel.Controls.Add(CompanyNameHolder);
-            CompanyNamePanel.Controls.Add(CompanyNameLabel);
-
-            CompanyDomainPanel.Controls.Add(CompanyDomainHolder);
-            CompanyDomainPanel.Controls.Add(CompanyDomainLabel);
-
-            AddressPanel.Controls.Add(AddressHolder);
-            AddressPanel.Controls.Add(AddressLabel);
-
-            FieldPanel.Controls.Add(FieldHolder);
-            FieldPanel.Controls.Add(FieldLabel);
-
-            TypePanel.Controls.Add(TypeHolder);
-            TypePanel.Controls.Add(TypeLabel);
-
-            VisionPanel.Controls.Add(VisionHolder);
-            VisionPanel.Controls.Add(VisionLabel);
-
-            EmailPanel.Controls.Add(EmailHolder);
-            EmailPanel.Controls.Add(EmailLabel);
-
-            AvgSalaryPanel.Controls.Add(AvgSalaryHolder);
-            AvgSalaryPanel.Controls.Add(AvgSalaryLabel);
-            //add main panels
-            Panel CardBlockPanel = new Panel();
-            //add main panels attr
-            CardBlockPanel.CssClass = "card-block";
-            //add sub-panels to main panel
-            CardBlockPanel.Controls.Add(CompanyNamePanel);
-            CardBlockPanel.Controls.Add(CompanyDomainPanel);
-            CardBlockPanel.Controls.Add(AddressPanel);
-            CardBlockPanel.Controls.Add(FieldPanel);
-            CardBlockPanel.Controls.Add(TypePanel);
-            CardBlockPanel.Controls.Add(VisionPanel);
-            CardBlockPanel.Controls.Add(EmailPanel);
-            CardBlockPanel.Controls.Add(AvgSalaryPanel);
-            CardBlockPanel.Controls.Add(ActionPanel);
-            CardPanel.Controls.Add(CardBlockPanel);
-
-            //----------Calling Department-------------
-
-            SqlCommand CompanyDepCmd = new SqlCommand("ViewDepartmentsOfCompanySP", conn);
-            CompanyDepCmd.CommandType = System.Data.CommandType.StoredProcedure;
-            CompanyDepCmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
-            SqlDataReader CompanyDepReader = CompanyDepCmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-
-            Panel CardPanel2 = new Panel();
-            CardPanel2.CssClass = "card";
-            while (CompanyDepReader.Read())
-            {
-
-
-                string DepartmentName = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("name"));
-                string DepartmentCode = CompanyDepReader.GetString(CompanyDepReader.GetOrdinal("department_code"));
-
-                //holder labels
-                Label DepartmentNameHolder = new Label();
-                Label DepartmentCodeHolder = new Label();
-                //holder label attr
-                DepartmentNameHolder.Text = "Deaprtment Name: ";
-                DepartmentNameHolder.CssClass = "font-weight-bold";
-                DepartmentCodeHolder.Text = "Department Code: ";
-                DepartmentCodeHolder.CssClass = "font-weight-bold";
-                //department info labels
-                Label DepartmentNameLabel = new Label();
-                Label DepartmentCodeLabel = new Label();
-                //department info label attributes
-                DepartmentNameLabel.Text = DepartmentName;
-                DepartmentCodeLabel.Text = DepartmentCode;
-                //department info panels
-                Panel DepartmentNamePanel = new Panel();
-                Panel DepartmentCodePanel = new Panel();
-                //add action panel
-                Panel ActionPanel2 = new Panel();
-                //add panel styles
-                DepartmentNamePanel.CssClass = "card-text";
-                DepartmentCodePanel.CssClass = "card-text";
-                //add action panel styles
-                ActionPanel2.CssClass = "card-block flex-row flex-wrap";
-                //add labels to correct panels
-                DepartmentNamePanel.Controls.Add(DepartmentNameHolder);
-                DepartmentNamePanel.Controls.Add(DepartmentNameLabel);
-                DepartmentCodePanel.Controls.Add(DepartmentCodeHolder);
-                DepartmentCodePanel.Controls.Add(DepartmentCodeLabel);
-                //add main panels
-                Panel CardBlockPanel2 = new Panel();
-                //add main panels attr
-                CardBlockPanel2.CssClass = "card-block";
-
-
-                //add sub-panels to main panel
-                CardBlockPanel2.Controls.Add(DepartmentNamePanel);
-                CardBlockPanel2.Controls.Add(DepartmentCodePanel);
-                CardBlockPanel2.Controls.Add(ActionPanel2);
-                CardPanel2.Controls.Add(CardBlockPanel2);
-
-                CardPanel.Controls.Add(CardPanel2);
-
-
-            }
-            main_content.Controls.Add(CardPanel);
-
-
-        } //end of while loop
-
-    } //end of method
+            CompanyCount++;
+        }
+    }
 
     protected void ViewDepartments(Object sender, EventArgs e, string DomainName, Panel TargetPanel)
     {
@@ -1227,9 +1110,9 @@ public partial class Companies : System.Web.UI.Page
         {
             PhonesBuild += Phones[i] + " ";
         }
-        string CompanyBuild = "<div class=\"display-2 capitalize\">" + CompanyName + "</div>\r\n " +
+        string CompanyBuild = "<div class=\"mt-4 display-2 text-capitalize\">" + CompanyName + "</div>\r\n " +
             "           <div>\r\n" +
-            "                <p class=\"lead\">" + Vision + "</p>\r\n" +
+            "                <p class=\"mt-2 lead\">" + Vision + "</p>\r\n" +
             "            </div>\r\n" +
             "            <div class=\"row mb-4\">\r\n" +
             "                <div class=\"col-4 font-weight-bold font-italic\">Type</div>\r\n" +
@@ -1249,11 +1132,11 @@ public partial class Companies : System.Web.UI.Page
             "            <div class=\"row\">\r\n" +
             "                <div class=\"col-4\">" + Email + "</div>\r\n" +
             "                <div class=\"col-4 text-justify\">" + Address + "</div>\r\n" +
-            "                <div class=\"col-4 text-center\">" + PhonesBuild + "</div>\r\n" +
+            "                <div class=\"col-4\">" + PhonesBuild + "</div>\r\n" +
             "            </div>\r\n" +
-            "                <div class=\"row\">\r\n" +
+            "                <div class=\"mt-4 row\">\r\n" +
             "                    <div class=\"col-10 h4 text-muted font-comfortaa\">\r\n" +
-            "                        <a data-toggle=\"collapse\" href=\"" + "company" + CompanyID + "\" aria-expanded=\"false\">View Departments</a>\r\n" +
+            "                        <a data-toggle=\"collapse\" href=\"" + "#company" + CompanyID + "\" aria-expanded=\"false\">View Departments</a>\r\n" +
             "                    </div>\r\n" +
             "                </div>";
 
@@ -1262,49 +1145,77 @@ public partial class Companies : System.Web.UI.Page
     }
     protected void AddDepartment(string DepartmentCode, string CompanyDomain, string DepartmentName, int CompanyID, int DepartmentID, HtmlGenericControl DepartmentDiv)
     {
-        string DepartmentBuild = "<div id=\"company" + CompanyID + "\">\r\n" +
-            "                    <div>\r\n" +
-            "                        <div class=\"display-3 capitalize\">" + DepartmentName + "</div>\r\n" +
+        string DepartmentBuild =
+            "                    <div class=\"mt-3\">\r\n" +
+            "                        <div class=\"display-3 text-capitalize\">" + DepartmentName + "</div>\r\n" +
             "                        <div class=\"lead\">\r\n" +
             "                            <p>" + DepartmentCode + "</p>\r\n" +
             "                        </div>\r\n" +
             "                    </div>" +
             "                    <div class=\"row\">\r\n" +
             "                        <div class=\"col-10 h4 text-muted font-comfortaa\">\r\n" +
-            "                            <a data-toggle=\"collapse\" href=\"" + "department" + DepartmentID + "\" aria-expanded=\"false\">View Jobs</a>\r\n" +
+            "                            <a data-toggle=\"collapse\" href=\"" + "#department" + DepartmentID + "\" aria-expanded=\"false\">View Jobs</a>\r\n" +
             "                        </div>\r\n" +
-            "                    </div>";
+            "                     </div>\r\n";
         DepartmentDiv.Controls.Add(new LiteralControl(DepartmentBuild));
     }
     protected void AddJob(string DepartmentCode, string CompanyDomain, string JobTitle, string ApplicationDeadline, string Vacancies, string DetailedDescription, string ShortDescription, string MinYearsExp, string Salary, string WorkingHours, int DepartmentID, HtmlGenericControl JobDiv)
     {
-        string JobBuild = "<div class=\"row\">\r\n" +
-            "                            <div class=\"offset-1 col-10 display-4 Capitalize\">"+JobTitle+"</div>\r\n" +
+        string JobBuild = "<div class=\"mt-3 row\">\r\n" +
+            "                            <div class=\"offset-1 col-10 display-4 Capitalize\">" + JobTitle + "</div>\r\n" +
             "                        </div>\r\n" +
-            "                        <div class=\"lead offset-1\">\r\n" +
-            "                            <p>"+ShortDescription+"</p>\r\n" +
+            "                        <div class=\"mt-2 lead offset-1\">\r\n" +
+            "                            <p>" + ShortDescription + "</p>\r\n" +
             "                        </div>\r\n" +
             "                            <div class=\"offset-1 h4 mt-2 text-muted\">Description</div>\r\n" +
-            "                            <div class=\"offset-1 lead mt-1\">"+DetailedDescription+"</div>\r\n" +
+            "                            <div class=\"offset-1 lead mt-1\">" + DetailedDescription + "</div>\r\n" +
             "                            <div class=\"row mt-4 mb-3\">\r\n" +
             "                              <div class=\"offset-2 col-3 font-weight-bold font-italic\">Application Deadline</div>\r\n" +
             "                              <div class=\"col-3 font-weight-bold font-italic\">Years Of Experience</div>\r\n" +
             "                              <div class=\"col-3 font-weight-bold font-italic\">Salary</div>\r\n" +
             "                            </div>\r\n" +
-            "                            <div class=\"row\">\r\n" +
-            "                              <div class=\"offset-2 col-3\">"+ApplicationDeadline+"</div>\r\n" +
-            "                              <div class=\"col-3\">"+MinYearsExp+"</div>\r\n" +
-            "                              <div class=\"col-3\">"+Salary+"</div>\r\n" +
+            "                            <div class=\"mt-2 row\">\r\n" +
+            "                              <div class=\"offset-2 col-3\">" + ApplicationDeadline + "</div>\r\n" +
+            "                              <div class=\"col-3\">" + MinYearsExp + "</div>\r\n" +
+            "                              <div class=\"col-3\">" + Salary + "</div>\r\n" +
             "                            </div>\r\n" +
             "                            <div class=\"row mt-4\">\r\n" +
             "                              <div class=\"offset-2 col-3 font-weight-bold font-italic\">Vacancies</div>\r\n" +
             "                              <div class=\"offset-3 col-3 font-weight-bold font-italic\">Working Hours</div>\r\n" +
             "                            </div>\r\n" +
-            "                            <div class=\"row\">\r\n" +
-            "                              <div class=\"offset-2 col-3\">"+Vacancies+"</div>\r\n" +
-            "                              <div class=\"offset-3 col-3\">"+WorkingHours+"</div>\r\n" +
-            "                            </div>";
+            "                            <div class=\"mt-3 row\">\r\n" +
+            "                              <div class=\"offset-2 col-3\">" + Vacancies + "</div>\r\n";
         JobDiv.Controls.Add(new LiteralControl(JobBuild));
+        Button ApplyButton = new Button();
+        ApplyButton.CssClass = "btn btn-primary";
+        ApplyButton.Click += new EventHandler((sender_apply, e_apply) => ApplyForJob(sender_apply, e_apply, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString()));
+        ApplyButton.Text = "Apply Now!";
+        if (Session["Username"] == null)
+        {
+            ApplyButton.Enabled = false;
+
+            ApplyButton.ToolTip = "please login or register first";
+        }
+        else if (Session["Type"].ToString() != "Job Seeker")
+        {
+            ApplyButton.Visible = false;
+        }
+        else
+        {
+            ApplyButton.Enabled = true;
+        }
+        Panel ApplyPanel = new Panel();
+        ApplyPanel.CssClass = "col-3";
+        ApplyPanel.Controls.Add(ApplyButton);
+        JobDiv.Controls.Add(ApplyPanel);
+        //JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName, DepartmentCode, CardBlockPanel));
+        string JobBuild2 = "                              <div class=\"col-3\">" + WorkingHours + "</div>\r\n" +
+            "                            </div>";
+        JobDiv.Controls.Add(new LiteralControl(JobBuild2));
+
+    }
+    protected void ApplyForJob(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string SeekerUsername)
+    {
 
     }
 }

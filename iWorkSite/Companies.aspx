@@ -4,10 +4,11 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="stylesheet" type="text/css" href="Content/companies.css" />
     <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
     <link href="https://fonts.googleapis.com/css?family=Comfortaa:300" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="Content/companies.css" />
     <title>Home</title>
 </head>
 <body class="jumbotron">
