@@ -349,10 +349,9 @@ public partial class Companies : System.Web.UI.Page
             ApplyButton.Enabled = true;
         }
         Panel ApplyPanel = new Panel();
-        ApplyPanel.CssClass = "col-3";
+        ApplyPanel.CssClass = "col-3 pb-4";
         ApplyPanel.Controls.Add(ApplyButton);
         JobDiv.Controls.Add(ApplyPanel);
-        //JobsButton.Click += new EventHandler((sender_job_btn, e_job_btn) => ViewJobs(sender_job_btn, e_job_btn, DomainName, DepartmentCode, CardBlockPanel));
         string JobBuild2 = "                              <div class=\"col-3\">" + WorkingHours + "</div>\r\n" +
             "                            </div>";
         JobDiv.Controls.Add(new LiteralControl(JobBuild2));
