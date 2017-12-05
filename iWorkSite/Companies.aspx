@@ -56,6 +56,12 @@
                     </label>
                 </div>
             </div>
+            <div class="container">
+                <div class="display-1 text-center">OUR PARTNERS</div>
+                <div class="text-center">
+                    <hr />
+                </div>
+            </div>
             <div class="container" id="main_content" runat="server"></div>
         </form>
 
