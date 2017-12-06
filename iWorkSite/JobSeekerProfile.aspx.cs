@@ -43,7 +43,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             txt_fn.Attributes.Add("placeholder", FirstName);
             txt_ln.Attributes.Add("placeholder", LastName);
         }
-
+        viewJobsStatus(sender, e);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -68,15 +68,28 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
             string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
 
-            string Info = "<div class = \"card-block\">"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Username: </span>" + Username + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Personal Email: </span>" + PersonalEmail + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Birthdate: </span>" + Birthdate + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Experience Years: </span>" + ExpYear + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">First Name: </span>" + FirstName + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Last Name: </span>" + LastName + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Age: </span>" + Age + "</div>"
-+ "</div>";
+            string Info =
+        "<div class=\"mt-3 row\">\r\n" +
+            "                            <div class=\"offset-1 col-10 display-4 Capitalize\">" + Username + "</div>\r\n" +
+            "                        </div>\r\n" +
+            "                        <div class=\"mt-2 lead offset-1\">\r\n" +
+            "                            <p>" + PersonalEmail + "</p>\r\n" +
+            "                        </div>\r\n" +
+            "                            <div class=\"row mt-4 mb-3\">\r\n" +
+            "                              <div class=\"offset-2 col-5 font-weight-bold font-italic\">Name</div>\r\n" +
+            "                              <div class=\"col-5 font-weight-bold font-italic\">Years Of Experience</div>\r\n" +
+            "                            </div>\r\n" +
+            "                            <div class=\"mt-2 row\">\r\n" +
+            "                              <div class=\"offset-2 col-5\">" + FirstName + " " + LastName + "</div>\r\n" +
+            "                              <div class=\"col-5\">" + ExpYear + "</div>\r\n" +
+            "                            </div>\r\n" +
+            "                            <div class=\"row mt-4\">\r\n" +
+            "                              <div class=\"offset-2 col-5 font-weight-bold font-italic\">Birthdate</div>\r\n" +
+            "                              <div class=\"col-5 font-weight-bold font-italic\">Age</div>\r\n" +
+            "                            </div>\r\n" +
+            "                            <div class=\"mt-3 row\">\r\n" +
+            "                              <div class=\"offset-2 col-5\">" + Birthdate + "</div>\r\n" +
+            "                               <div class=\"col-5\">" + Age + "</div>\r\n </div>\r\n";
             personal_info.Controls.Add(new LiteralControl(Info));
 
         }
@@ -157,7 +170,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         }
         else
         {
-            cmd.Parameters.Add(new SqlParameter("@lastname", lastname)); 
+            cmd.Parameters.Add(new SqlParameter("@lastname", lastname));
         }
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
@@ -189,15 +202,29 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             string AppStatus = rdr.GetString(rdr.GetOrdinal("app_status"));
 
 
-            string viewStatus = "<div class = \"card-block\">"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + Username + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Department Code: </span>" + DepartmentCode + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Score: </span>" + Score + "</div>"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Status: </span>" + AppStatus + "</div>"
-+ "</div>";
+            string viewStatus =
+            "<div class=\"mt-3 row\">\r\n" +
+    "                            <div class=\"offset-1 col-10 display-4 Capitalize\">" + JobTitle + "</div>\r\n" +
+    "                        </div>\r\n" +
+    "                        <div class=\"mt-2 lead offset-1\">\r\n" +
+    "                            <p>" + CompanyDomain + "/" + DepartmentCode + "</p>\r\n" +
+    "                        </div>\r\n" +
+    "                            <div class=\"row mt-4\">\r\n" +
+    "                              <div class=\"offset-2 col-5 font-weight-bold font-italic\">Score</div>\r\n" +
+    "                              <div class=\"col-5 font-weight-bold font-italic\">Application Status</div>\r\n" +
+    "                            </div>\r\n" +
+    "                            <div class=\"mt-3 row\">\r\n" +
+    "                               <div class=\"offset-2 col-5\">" + Score + "</div>\r\n" +
+    "                               <div class=\"col-5\">" + AppStatus + "</div>\r\n" +
+    "                            <div class=\"row mt-4\"\r\n" +
+    "                               <div class=\"offset-2 col-3\"";
+            Button deleteApp = new Button();
+            deleteApp.Text = "Delete";
+            deleteApp.CssClass = "btn btn-danger";
+            string viewStatus2 = "</div>" +
+    "</div>\r\n"; "
 
-            task_status.Controls.Add(new LiteralControl(viewStatus));
+            applications.Controls.Add(new LiteralControl(viewStatus));
 
         }
 
