@@ -444,28 +444,18 @@ END
 --6: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
 -- and company domain, returns an output bit that specifies the following
--- 0 --> unsuccessful operation//this application is not in the review process or this application does not exist
--- 1 --> successful operation// the application specified has a status 'Pending' and was deleted as a result
+
 GO
-CREATE PROC DeletePendingApplicationSP
+Create PROC DeletePendingApplicationSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150),
-@operationStatus BIT OUTPUT
+@companyDomain VARCHAR(150)
 AS
-IF NOT EXISTS (
-SELECT *
-FROM Applications a
-WHERE a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @companyDomain AND a.seeker_username = @seekerUserName AND a.app_status = 'pending'
-)
-SET @operationStatus = 0
-ELSE
-BEGIN
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
-SET @operationStatus = 1
-END
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
