@@ -55,11 +55,24 @@
                     <asp:Button CssClass="btn btn-primary" ID="btn_login" runat="server" Text="Apply Changes" OnClick="editPersonalInfo" />
                 </div>
                   </asp:Panel>
-                <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="Jobs Status" OnClick="viewJobsStatus" />
-                <asp:Panel ID="task_status" runat="server" ></asp:Panel>
+
+
+                <asp:Panel ID="job_status" runat="server" >
+                    <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="Jobs Status" OnClick="viewJobsStatus" />
+                  </asp:Panel>
+            
+      
+                <asp:Button CssClass="btn btn-primary" ID="Button3" runat="server" Text="Staff Member" OnClick="staff" />
+                 
+                <asp:Button CssClass="btn btn-primary" ID="Button2" Visible="true" runat="server" Text="Vacancies" OnClick="Vacancies" />
 
             </form>
         </div>
     </div>
+    
+
+                
+
+                
 </body>
 </html>

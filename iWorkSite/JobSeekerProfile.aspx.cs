@@ -159,20 +159,70 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
 
             string viewStatus =  "<div class = \"card-block\">"
-+ "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + Username + "</div>"
++ "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + JobTitle + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Department Code: </span>" + DepartmentCode + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Score: </span>" + Score + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Application Status: </span>" + AppStatus + "</div>"
 + "</div>";
 
-            task_status.Controls.Add(new LiteralControl(viewStatus));
+
+       
+            Button DeleteButton = new Button();
+            DeleteButton.CssClass = "btn btn-primary";
+            DeleteButton.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(), job_status));
+            DeleteButton.Text = "Delete Application";
+
+            if (AppStatus=="Pending")
+            {
+               DeleteButton.Enabled = true;
+
+                
+            }
+            else if (Session["Type"].ToString() != "Job Seeker")
+            {
+               DeleteButton.Visible = false;
+
+                DeleteButton.ToolTip = "Application should be pending.";
+            
+            }
+
+             job_status.Controls.Add(DeleteButton);
+            job_status.Controls.Add(new LiteralControl(viewStatus));
 
         }
 
     }//End of Method
 
 //--------------------------------------------------------------------------------------------------------------------------------------
+
+    protected void Vacancies(object sender, EventArgs e)
+    {
+
+        Session["Username"] = Session["Username"].ToString(); ;
+        Response.Redirect("Companies", true);
+
+    }
+
+
+  //-------------------------------------------------------------------------------------------------------------------
+
+    protected void staff(object sender, EventArgs e)
+    {
+        Session["Username"] = Session["Username"].ToString();
+        Response.Redirect("Staff", true);
+    }
+
+  //------------------------------------------------------------------------------------------------------------------
+
+
+    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string Username, Panel job_status)
+    {
+
+                               
+
+
+    }
 
 
 
