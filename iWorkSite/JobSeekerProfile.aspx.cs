@@ -25,23 +25,24 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-        if (rdr.Read()) { 
+        if (rdr.Read())
+        {
 
 
-        string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
-        string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
-        string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
-        string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
-        string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
-        string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
+            string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
+            string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
+            string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
+            string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
+            string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
+            string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
 
-        txt_password.Attributes.Add("placeholder", "**********");
-        txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
-        txt_birthdate.Attributes.Add("placeholder", Birthdate);
-        txt_expyrs.Attributes.Add("placeholder", ExpYear);
-        txt_fn.Attributes.Add("placeholder", FirstName);
-        txt_ln.Attributes.Add("placeholder", LastName);
-    }
+            txt_password.Attributes.Add("placeholder", "**********");
+            txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
+            txt_birthdate.Attributes.Add("placeholder", Birthdate);
+            txt_expyrs.Attributes.Add("placeholder", ExpYear);
+            txt_fn.Attributes.Add("placeholder", FirstName);
+            txt_ln.Attributes.Add("placeholder", LastName);
+        }
 
     }
 
@@ -79,11 +80,11 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             personal_info.Controls.Add(new LiteralControl(Info));
 
         }
-    
+
 
     }//End of method 
-     
- //--------------------------------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------------------------------------
 
 
     protected void editPersonalInfo(object sender, EventArgs e)
@@ -94,7 +95,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("EditPersonalInfoSP", conn);
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
-       
+
 
 
 
@@ -110,24 +111,54 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         string firstname = txt_fn.Text;
         string lastname = txt_ln.Text;
 
-        if (password == "")
-            password = null;
-        if (personalemail == "")
-            personalemail = null;
-        if (birthdate == "")
-            birthdate = null;
-        if (firstname == "")
-            firstname = null;
-        if (lastname == "")
-            lastname = null;
-
-
-        cmd.Parameters.Add(new SqlParameter("@password", password));
-        cmd.Parameters.Add(new SqlParameter("@personalEmail", personalemail));
-        cmd.Parameters.Add(new SqlParameter("@birthDate", birthdate));
-        cmd.Parameters.Add(new SqlParameter("@expYear", expyear));
-        cmd.Parameters.Add(new SqlParameter("@firstname", firstname));
-        cmd.Parameters.Add(new SqlParameter("@lastname", lastname));
+        if (string.IsNullOrEmpty(password))
+        {
+            cmd.Parameters.Add(new SqlParameter("@password", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@password", password));
+        }
+        if (string.IsNullOrEmpty(personalemail))
+        {
+            cmd.Parameters.Add(new SqlParameter("@personalEmail", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@personalEmail", personalemail));
+        }
+        if (string.IsNullOrEmpty(birthdate))
+        {
+            cmd.Parameters.Add(new SqlParameter("@birthDate", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@birthDate", birthdate));
+        }
+        if (string.IsNullOrEmpty(txt_expyrs.Text))
+        {
+            cmd.Parameters.Add(new SqlParameter("@expYear", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@expYear", expyear));
+        }
+        if (string.IsNullOrEmpty(firstname))
+        {
+            cmd.Parameters.Add(new SqlParameter("@firstname", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@firstname", firstname));
+        }
+        if (string.IsNullOrEmpty(lastname))
+        {
+            cmd.Parameters.Add(new SqlParameter("@lastname", DBNull.Value));
+        }
+        else
+        {
+            cmd.Parameters.Add(new SqlParameter("@lastname", lastname)); 
+        }
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
@@ -135,7 +166,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     } // End of Method
 
 
-//--------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------
 
     protected void viewJobsStatus(object sender, EventArgs e)
     {
@@ -158,7 +189,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             string AppStatus = rdr.GetString(rdr.GetOrdinal("app_status"));
 
 
-            string viewStatus =  "<div class = \"card-block\">"
+            string viewStatus = "<div class = \"card-block\">"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Job Title: </span>" + Username + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Department Code: </span>" + DepartmentCode + "</div>"
 + "<div class = \"card-text\"><span class = \"font-weight-bold\">Company Domain: </span>" + CompanyDomain + "</div>"
@@ -172,7 +203,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
     }//End of Method
 
-//--------------------------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
 
 

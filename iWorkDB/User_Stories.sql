@@ -547,7 +547,7 @@ END
 -- and the dates over which he wants to check his attendance, and generates all the attendance records
 -- in between those 2 dates.
 GO
-ALTER PROC ViewAttendanceSP
+CREATE PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME,
@@ -724,7 +724,7 @@ END
 -- to  whatever comes from the Union.
 
 GO
-ALTER PROC ViewRequestsStatusSP
+CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30),
 @operationStatus BIT OUTPUT
 AS

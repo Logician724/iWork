@@ -128,7 +128,16 @@ public partial class Companies : System.Web.UI.Page
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-        CompanyBuild(rdr, conn);
+        while (rdr.Read())
+        {
+            string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
+            string AverageSalary = rdr.GetValue(rdr.GetOrdinal("average_salary")).ToString();
+            SqlCommand CompanyInfoCommand = new SqlCommand("ViewCompanySP", conn);
+            CompanyInfoCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            CompanyInfoCommand.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+            SqlDataReader CompanyInfoReader = CompanyInfoCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            CompanyBuild(CompanyInfoReader, conn);
+        }
     }
 
     protected void searchCompaniesByName(Object sender, EventArgs e)
