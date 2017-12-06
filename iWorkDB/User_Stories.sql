@@ -724,7 +724,7 @@ END
 -- to  whatever comes from the Union.
 
 GO
-ALTER PROC ViewRequestsStatusSP
+CREATE PROC ViewRequestsStatusSP
 @userName VARCHAR(30),
 @operationStatus BIT OUTPUT
 AS
