@@ -346,11 +346,11 @@ CREATE PROC ViewQuetionsInInterviewSP
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
 AS
-SELECT q.question_title
+SELECT q.question_title,q.question_id
 FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
-
+	
 
 --3: ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
