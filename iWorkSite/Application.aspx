@@ -13,11 +13,10 @@
         <asp:Panel ID="questions_panel" runat="server" > </asp:Panel>
         <asp:Panel ID="answers_panel" runat="server" > </asp:Panel>
 
-
-
-         <div class="text-center mt-1">
-              <asp:Button CssClass="btn btn-primary" ID="btn_Apply" runat="server" Text="Apply" OnClick="ApplyForJob" />
-         </div>
+          <asp:Panel ID="apply_panel" runat="server">
+                    <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="Apply" OnClick="ApplyForJob" />
+          <div class="text-center mt-2 font-weight-bold text-danger" id="apply_response" runat="server"></div>        
+          </asp:Panel>
 
     <div>
     

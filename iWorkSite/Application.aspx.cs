@@ -126,26 +126,26 @@ foreach (Control c in questions_panel.Controls)
         cmd.ExecuteNonQuery();
         conn.Close();
 
-       // Label failed1 = new Label();
-        //failed1.Text = "You already have a pending application for this job.";
+        Label failed1 = new Label();
+        failed1.Text = "You already have a pending application for this job.";
 
-        //Label failed2 = new Label();
-        //failed2.Text = "You don't have enough experience years for this job";
+        Label failed2 = new Label();
+        failed2.Text = "You don't have enough experience years for this job";
 
 
-//        Label passed = new Label();
-  //      passed.Text = "Successfully Applied!";
+        Label passed = new Label();
+        passed.Text = "Successfully Applied!";
 
         switch (operationstatus.Value.ToString())
         {
             case "1":
-                //search.Controls.Add(failed1);
+                apply_response.Controls.Add(failed1);
                 break;
             case "2":
-                //search.Controls.Add(failed2);
+                apply_response.Controls.Add(failed2);
                 break;
             case "3":
-                //search.Controls.Add(passed);
+                apply_response.Controls.Add(passed);
                 Response.Redirect("JobSeekerProfile",true);
                 break;
         
