@@ -341,9 +341,9 @@ public partial class Companies : System.Web.UI.Page
         JobDiv.Controls.Add(new LiteralControl(JobBuild));
         Button ApplyButton = new Button();
         ApplyButton.CssClass = "btn btn-primary";
-        ApplyButton.Click += new EventHandler((sender_apply, e_apply) => ApplyForJob(sender_apply, e_apply, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(),JobDiv));
+        ApplyButton.Click += new EventHandler((sender_apply, e_apply) => ApplyForJob(sender_apply, e_apply, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(), JobDiv));
         ApplyButton.Text = "Apply Now!";
-      
+
         if (Session["Username"] == null)
         {
             ApplyButton.Enabled = false;
@@ -458,46 +458,13 @@ public partial class Companies : System.Web.UI.Page
     }
     protected void ApplyForJob(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string SeekerUsername, HtmlGenericControl JobDiv)
     {
-        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
-        SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("ApplyForJobSP", conn);
-        cmd.CommandType = CommandType.StoredProcedure;
-
-        cmd.Parameters.Add(new SqlParameter("@seekerUserName", SeekerUsername));
-        cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
-        cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
-        cmd.Parameters.Add(new SqlParameter("@jobTitle", JobTitle));
-        //output parameters
-        SqlParameter operationstatus = cmd.Parameters.Add("@operationStatus", SqlDbType.Int);
-        operationstatus.Direction = ParameterDirection.Output;
-        conn.Open();
-        cmd.ExecuteNonQuery();
-        conn.Close();
-
-      //  Label failed1 = new Label();
-       // failed1.Text = "You already have a pending application for this job.";
-
-//        Label failed2 = new Label();
-  //      failed2.Text = "You don't have enough experience years for this job";
-
-    //    Label passed = new Label();
-      //  passed.Text = "Successfully Applied!";
-
-        switch (operationstatus.Value.ToString())
-        {
-            case "1":
-               // JobDiv.Controls.Add(failed1);
-                break;
-            case "2":
-                //JobDiv.Controls.Add(failed2);
-                break;
-            case "3":
-                //JobDiv.Controls.Add(passed);
-                Response.Redirect("JobSeekerProfile",true);
-                break;
+        Session["JobTitle"] = JobTitle;
+        Session["Username"] = SeekerUsername;
+        Session["DepartmentCode"] = DepartmentCode;
+        Session["CompanyDomain"] = CompanyDomain;
+        Session["Username"] = SeekerUsername;
+        Response.Redirect("Application", true);
 
 
-
-        }
     }
 }
