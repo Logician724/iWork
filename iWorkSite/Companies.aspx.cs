@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-
+using System.Data;
 
 public partial class Companies : System.Web.UI.Page
 {
@@ -238,19 +238,19 @@ public partial class Companies : System.Web.UI.Page
             }
             else
                 if (SearchType == "radio_search_address")
-            {
-                searchCompaniesByAddress(sender, e);
-            }
-            else
-                if (SearchType == "radio_search_type")
-            {
-                searchCompaniesByType(sender, e);
-            }
-            else
-                if (SearchType == "radio_search_avg_salary")
-            {
-                SearchByAvgSalary(sender, e);
-            }
+                {
+                    searchCompaniesByAddress(sender, e);
+                }
+                else
+                    if (SearchType == "radio_search_type")
+                    {
+                        searchCompaniesByType(sender, e);
+                    }
+                    else
+                        if (SearchType == "radio_search_avg_salary")
+                        {
+                            SearchByAvgSalary(sender, e);
+                        }
         }
     }
 
@@ -341,8 +341,9 @@ public partial class Companies : System.Web.UI.Page
         JobDiv.Controls.Add(new LiteralControl(JobBuild));
         Button ApplyButton = new Button();
         ApplyButton.CssClass = "btn btn-primary";
-        ApplyButton.Click += new EventHandler((sender_apply, e_apply) => ApplyForJob(sender_apply, e_apply, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString()));
+        ApplyButton.Click += new EventHandler((sender_apply, e_apply) => ApplyForJob(sender_apply, e_apply, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(), JobDiv));
         ApplyButton.Text = "Apply Now!";
+
         if (Session["Username"] == null)
         {
             ApplyButton.Enabled = false;
@@ -455,8 +456,15 @@ public partial class Companies : System.Web.UI.Page
         HeadingPanel.Controls.Add(HeadingLabel);
         TargetDiv.Controls.Add(HeadingPanel);
     }
-    protected void ApplyForJob(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string SeekerUsername)
+    protected void ApplyForJob(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string SeekerUsername, HtmlGenericControl JobDiv)
     {
+        Session["JobTitle"] = JobTitle;
+        Session["Username"] = SeekerUsername;
+        Session["DepartmentCode"] = DepartmentCode;
+        Session["CompanyDomain"] = CompanyDomain;
+        Session["Username"] = SeekerUsername;
+        Response.Redirect("Application", true);
+
 
     }
 }

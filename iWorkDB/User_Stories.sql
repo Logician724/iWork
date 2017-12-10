@@ -346,11 +346,11 @@ CREATE PROC ViewQuetionsInInterviewSP
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
 AS
-SELECT q.question_title
+SELECT q.question_title,q.question_id
 FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
-
+	
 
 --3: ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
@@ -444,28 +444,18 @@ END
 --6: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
 -- and company domain, returns an output bit that specifies the following
--- 0 --> unsuccessful operation//this application is not in the review process or this application does not exist
--- 1 --> successful operation// the application specified has a status 'Pending' and was deleted as a result
+
 GO
-CREATE PROC DeletePendingApplicationSP
+Create PROC DeletePendingApplicationSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150),
-@operationStatus BIT OUTPUT
+@companyDomain VARCHAR(150)
 AS
-IF NOT EXISTS (
-SELECT *
-FROM Applications a
-WHERE a.job_title = @jobTitle AND a.department_code = @departmentCode AND a.company_domain = @companyDomain AND a.seeker_username = @seekerUserName AND a.app_status = 'pending'
-)
-SET @operationStatus = 0
-ELSE
-BEGIN
 DELETE FROM Applications
 WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
-SET @operationStatus = 1
-END
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -547,7 +537,7 @@ END
 -- and the dates over which he wants to check his attendance, and generates all the attendance records
 -- in between those 2 dates.
 GO
-CREATE PROC ViewAttendanceSP
+ALTER PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME,

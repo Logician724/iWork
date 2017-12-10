@@ -65,6 +65,7 @@
                         <asp:Button CssClass="btn btn-primary" ID="apply_edit" runat="server" Text="Apply Changes" OnClick="editPersonalInfo" />
                     </div>
                 </div>
+<<<<<<< HEAD
                 
                 <div class="tab-pane" id="applications" runat="server"></div>
             </div>

@@ -223,6 +223,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             Button DeleteApp = new Button();
             DeleteApp.Text = "Delete";
             DeleteApp.CssClass = "btn btn-danger";
+            DeleteApp.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(), job_status));
 
             if (AppStatus == "Pending")
             {
@@ -233,7 +234,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 DeleteApp.Enabled = false;
                 DeleteApp.ToolTip = "You can't delete the application unless it is pending";
             }
-            
+
 
             DeletePanel.Controls.Add(DeleteApp);
             Panel ViewQPanel = new Panel();
@@ -264,12 +265,41 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             applications.Controls.Add(ChooseJobPanel);
             applications.Controls.Add(new LiteralControl("</div>\r\n</div>\r\n"));
             ApplicationCounter++;
-        }
-
-        string ViewStatus2 = "</div>\r\n";
-        applications.Controls.Add(new LiteralControl(ViewStatus2));
+            string ViewStatus2 = "</div>\r\n";
+            applications.Controls.Add(new LiteralControl(ViewStatus2));
+        }//End of while loop
     }//End of Method
 
     //--------------------------------------------------------------------------------------------------------------------------------------
+
+
+    protected void Vacancies(object sender, EventArgs e)
+    {
+
+        Session["Username"] = Session["Username"].ToString(); ;
+        Response.Redirect("Companies", true);
+
+    }
+
+
+    //-------------------------------------------------------------------------------------------------------------------
+
+    protected void staff(object sender, EventArgs e)
+    {
+        Session["Username"] = Session["Username"].ToString();
+        Response.Redirect("Staff", true);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+
+    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string Username, Panel job_status)
+    {
+
+
+
+
+    }
+
 }
 

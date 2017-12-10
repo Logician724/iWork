@@ -36,16 +36,16 @@ INSERT INTO Departments (company_domain,department_code,name)
 VALUES('facebook.com','JS-8938','Facebook JS handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('facebook.com','BS-3291','Facebook BootStrap handlers');
+VALUES('facebook.com','BS-3291','Facebook Bootstrap handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
 VALUES('amazon.com','MRC-8738','Amazon Merchandise handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('amazon.com','CSR-1263','Amazon CUSTOMER handlers');
+VALUES('amazon.com','CSR-1263','Amazon Customer handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
-VALUES('amazon.com','WBST-2429','Amazon WEBSITE handlers');
+VALUES('amazon.com','WBST-2429','Amazon Website handlers');
 
 INSERT INTO Departments (company_domain,department_code,name)
 VALUES('google.com','LOC-4729','Google location handlers');
