@@ -16,40 +16,49 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         viewPersonalInfo(sender, e);
 
         //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
-        string Username = Session["Username"].ToString();
-        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
-        SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
-        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-        cmd.Parameters.Add(new SqlParameter("@userName", Username));
-        conn.Open();
-        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            string Username = Session["Username"].ToString();
+            string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+            SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@userName", Username));
+            conn.Open();
+            SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-        if (rdr.Read())
-        {
+            if (rdr.Read())
+            {
 
 
-            string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
-            string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
-            string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
-            string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
-            string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
-            string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
+                string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
+                string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
+                string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
+                string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
+                string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
+                string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
 
-            txt_password.Attributes.Add("placeholder", "**********");
-            txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
-            txt_birthdate.Attributes.Add("placeholder", Birthdate);
-            txt_expyrs.Attributes.Add("placeholder", ExpYear);
-            txt_fn.Attributes.Add("placeholder", FirstName);
-            txt_ln.Attributes.Add("placeholder", LastName);
-        }
-        viewJobsStatus(sender, e);
+                txt_password.Attributes.Add("placeholder", "**********");
+                txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
+                txt_birthdate.Attributes.Add("placeholder", Birthdate);
+                txt_expyrs.Attributes.Add("placeholder", ExpYear);
+                txt_fn.Attributes.Add("placeholder", FirstName);
+                txt_ln.Attributes.Add("placeholder", LastName);
+            }
+            viewJobsStatus(sender, e);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
     protected void viewPersonalInfo(object sender, EventArgs e)
     {
-        string Username = Session["Username"].ToString();
+        string Username = null;
+        if (Session["Username"] != null)
+        {
+             Username = Session["Username"].ToString();
+        }
+        else
+        {
+            Response.Redirect("login");
+        }
+        
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
@@ -258,12 +267,13 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 ChooseJobButton.Enabled = false;
                 ChooseJobButton.ToolTip = "You can't choose this job unless your application is accepted";
             }
+
             ChooseJobPanel.Controls.Add(ChooseJobButton);
             applications.Controls.Add(new LiteralControl(ViewStatus));
             applications.Controls.Add(DeletePanel);
             applications.Controls.Add(ViewQPanel);
             applications.Controls.Add(ChooseJobPanel);
-            applications.Controls.Add(new LiteralControl("</div>\r\n</div>\r\n"));
+            applications.Controls.Add(new LiteralControl("</div>\r\n"));
             ApplicationCounter++;
             string ViewStatus2 = "</div>\r\n";
             applications.Controls.Add(new LiteralControl(ViewStatus2));
