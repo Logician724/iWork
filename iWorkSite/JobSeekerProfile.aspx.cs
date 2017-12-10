@@ -223,7 +223,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             Button DeleteApp = new Button();
             DeleteApp.Text = "Delete";
             DeleteApp.CssClass = "btn btn-danger";
-            DeleteApp.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString(), job_status));
+            DeleteApp.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString()));
 
             if (AppStatus == "Pending")
             {
@@ -293,7 +293,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     //------------------------------------------------------------------------------------------------------------------
 
 
-    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string Username, Panel job_status)
+    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string Username)
     {
 
 
