@@ -422,15 +422,34 @@ needed information for the request. A staff member can not apply for a leave if 
 the number of annual leaves allowed. If a manager applies for a request, the request does not need
 to be approved, but it only needs to be kept track of. A staff member can not apply for a request
 when its applied period overlaps with another request he/she applied for before.
-*/
+    GO
+CREATE PROC  ApplyManagerForRequestSP
+@ownerUserName VARCHAR(30),
+@replacementUserName VARCHaR(30),
+@startDate DATETIME,
+@endDate DATETIME,
+@leaveType VARCHAR(50) = NULL,
+@tripDestination VARCHAR(150) = NULL,
+@tripPurpose TEXT = NULL,
+@operationStatus INT OUTPUT
+AS
+  
+  
+  */
 
     protected void ApplyForRequests(object sender, EventArgs)
-    {
+    {             string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewReceivedEmailsSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@username", Username));
+        conn.Open();
                 string type = Session["Type"].ToString();
+                string Username = Session["Username"].ToString();
     
     if(type=="Regular")
     {
-
+          DropDownList_Replacers.Items.Add("Add New");
 
     }
     
@@ -440,9 +459,10 @@ when its applied period overlaps with another request he/she applied for before.
 
     }
 
-     else{
+     else
+    {
 
-}
+    }
 
     }
 
@@ -456,3 +476,4 @@ when its applied period overlaps with another request he/she applied for before.
 
 
 }
+
