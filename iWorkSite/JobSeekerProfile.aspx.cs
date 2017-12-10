@@ -7,13 +7,23 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Data;
+
 
 
 public partial class JobSeekerProfile : System.Web.UI.Page
 {
+
+   
+  
+
+            
     protected void Page_Load(object sender, EventArgs e)
     {
+      
+//----------------------------------------------------------------------------------------------------------------
         viewPersonalInfo(sender, e);
+
 
         //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
             string Username = Session["Username"].ToString();
@@ -27,8 +37,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
             if (rdr.Read())
             {
-
-
                 string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
                 string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
                 string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
@@ -209,8 +217,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             string CompanyDomain = rdr.GetString(rdr.GetOrdinal("company_domain"));
             string Score = rdr.GetValue(rdr.GetOrdinal("score")).ToString();
             string AppStatus = rdr.GetString(rdr.GetOrdinal("app_status"));
-
-
             string ViewStatus = "<div id=\"application" + ApplicationCounter + "\"" + ">\r\n" +
             "<div class=\"mt-3 row\">\r\n" +
     "                            <div class=\"offset-1 col-10 display-4 Capitalize\">" + JobTitle + "</div>\r\n" +
@@ -227,15 +233,17 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     "                               <div class=\"col-5\">" + AppStatus + "</div>\r\n" +
     "                            </div>" +
     "                            <div class=\"row mt-4\"\r\n>";
+
             Panel DeletePanel = new Panel();
             DeletePanel.CssClass = "offset-2 col-3";
             Button DeleteApp = new Button();
             DeleteApp.Text = "Delete";
             DeleteApp.CssClass = "btn btn-danger";
-            DeleteApp.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain, Session["Username"].ToString()));
+            DeleteApp.Click += new EventHandler((sender_delete, e_delete) => DeleteApplication(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain));
 
             if (AppStatus == "Pending")
             {
+             
                 DeleteApp.Enabled = true;
             }
             else
@@ -243,9 +251,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 DeleteApp.Enabled = false;
                 DeleteApp.ToolTip = "You can't delete the application unless it is pending";
             }
-
-
-            DeletePanel.Controls.Add(DeleteApp);
             Panel ViewQPanel = new Panel();
             ViewQPanel.CssClass = "col-3";
             Button ViewQButton = new Button();
@@ -297,19 +302,53 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     protected void staff(object sender, EventArgs e)
     {
         Session["Username"] = Session["Username"].ToString();
+        Session["Type"] = Session["Type"].ToString();
         Response.Redirect("Staff", true);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
 
-    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain, string Username)
+    //Delete any job application he/she applied for as long as it is still in the review process.
+    protected void DeleteApplication(object sender, EventArgs e,string JobTitle, string DepartmentCode, string CompanyDomain)
+
     {
 
 
+        string Username = Session["Username"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("DeletePendingApplicationSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.Add(new SqlParameter("@seekerUserName", Username));
+        cmd.Parameters.Add(new SqlParameter("@jobTitle", JobTitle));
+        cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+        cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                               
+
+}
 
 
-    }
+//-------------------------------------------------------------------------------------------------------------------------
+
+    protected void ChooseJob(Object sender, EventArgs e , string JobTitle, string DepartmentCode, string CompanyDomain)
+{
+
+   Session["JobTitle"] = JobTitle;
+   Session["DepartmentCode"] = DepartmentCode;
+   Session["CompanyDomain"] = CompanyDomain;
+   Response.Redirect("ChooseFromAcceptedJobs", true);
+
+
+
+}
+
+
 
 }
 
