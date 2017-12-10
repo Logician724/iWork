@@ -66,6 +66,10 @@
                  
                 <asp:Button CssClass="btn btn-primary" ID="Button2" Visible="true" runat="server" Text="Vacancies" OnClick="Vacancies" />
 
+
+              
+
+
             </form>
         </div>
     </div>
