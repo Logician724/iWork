@@ -192,7 +192,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-
+        int ApplicationCounter = 0;
         while (rdr.Read())
         {
             string JobTitle = rdr.GetString(rdr.GetOrdinal("job_title"));
@@ -202,7 +202,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             string AppStatus = rdr.GetString(rdr.GetOrdinal("app_status"));
 
 
-            string viewStatus =
+            string ViewStatus = "<div id=\"application" + ApplicationCounter + "\"" + ">\r\n" +
             "<div class=\"mt-3 row\">\r\n" +
     "                            <div class=\"offset-1 col-10 display-4 Capitalize\">" + JobTitle + "</div>\r\n" +
     "                        </div>\r\n" +
@@ -216,24 +216,60 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     "                            <div class=\"mt-3 row\">\r\n" +
     "                               <div class=\"offset-2 col-5\">" + Score + "</div>\r\n" +
     "                               <div class=\"col-5\">" + AppStatus + "</div>\r\n" +
-    "                            <div class=\"row mt-4\"\r\n" +
-    "                               <div class=\"offset-2 col-3\"";
-            Button deleteApp = new Button();
-            deleteApp.Text = "Delete";
-            deleteApp.CssClass = "btn btn-danger";
-            string viewStatus2 = "</div>" +
-    "</div>\r\n"; "
+    "                            </div>" +
+    "                            <div class=\"row mt-4\"\r\n>";
+            Panel DeletePanel = new Panel();
+            DeletePanel.CssClass = "offset-2 col-3";
+            Button DeleteApp = new Button();
+            DeleteApp.Text = "Delete";
+            DeleteApp.CssClass = "btn btn-danger";
 
-            applications.Controls.Add(new LiteralControl(viewStatus));
+            if (AppStatus == "Pending")
+            {
+                DeleteApp.Enabled = true;
+            }
+            else
+            {
+                DeleteApp.Enabled = false;
+                DeleteApp.ToolTip = "You can't delete the application unless it is pending";
+            }
+            
 
+            DeletePanel.Controls.Add(DeleteApp);
+            Panel ViewQPanel = new Panel();
+            ViewQPanel.CssClass = "col-3";
+            Button ViewQButton = new Button();
+            ViewQButton.Text = "View Questions";
+            ViewQButton.CssClass = "btn btn-primary";
+            ViewQPanel.Controls.Add(ViewQButton);
+            Panel ChooseJobPanel = new Panel();
+            ChooseJobPanel.CssClass = "col-3";
+            Button ChooseJobButton = new Button();
+            ChooseJobButton.Text = "Accept Application";
+            ChooseJobButton.CssClass = "btn btn-primary";
+
+            if (AppStatus == "Accepted")
+            {
+                ChooseJobButton.Enabled = true;
+            }
+            else
+            {
+                ChooseJobButton.Enabled = false;
+                ChooseJobButton.ToolTip = "You can't choose this job unless your application is accepted";
+            }
+            ChooseJobPanel.Controls.Add(ChooseJobButton);
+            applications.Controls.Add(new LiteralControl(ViewStatus));
+            applications.Controls.Add(DeletePanel);
+            applications.Controls.Add(ViewQPanel);
+            applications.Controls.Add(ChooseJobPanel);
+            applications.Controls.Add(new LiteralControl("</div>\r\n</div>\r\n"));
+            ApplicationCounter++;
         }
 
+        string ViewStatus2 = "</div>\r\n";
+        applications.Controls.Add(new LiteralControl(ViewStatus2));
     }//End of Method
 
     //--------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 }
 
