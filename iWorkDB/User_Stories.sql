@@ -346,7 +346,7 @@ CREATE PROC ViewQuetionsInInterviewSP
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150)
 AS
-SELECT q.question_title,q.question_id
+SELECT q.question_title,q.question_id,q.answer
 FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
@@ -457,10 +457,7 @@ WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 --“As a staff member, I should be able to ...”
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --1:
@@ -537,7 +534,7 @@ END
 -- and the dates over which he wants to check his attendance, and generates all the attendance records
 -- in between those 2 dates.
 GO
-ALTER PROC ViewAttendanceSP
+CREATE PROC ViewAttendanceSP
 @userName VARCHAR(30),
 @periodStart DATETIME,
 @periodEnd DATETIME,
@@ -576,23 +573,53 @@ CREATE PROC ApplyRegularForRequestSP
 @leaveType VARCHAR(50) = NULL,
 @tripDestination VARCHAR(150) = NULL,
 @tripPurpose TEXT = NULL,
-@operationStatus BIT OUTPUT
+@operationStatus INT OUTPUT
 AS
+
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
+DECLARE @noOfLeaveDays INT
+
+SET @noOfLeaveDays = dbo.NumberOfDaysHelper(@ownerUserName,@startDate,@endDate)
+
 SET @timestamp = CURRENT_TIMESTAMP
 IF NOT EXISTS(
 SELECT *
 FROM Regular_Employees re
-WHERE re.user_name = @ownerUserName
-)SET @operationStatus = 0; -- your replacer is not a regular employee
-ELSE
+WHERE re.user_name = @replacementUserName
+)
+SET @operationStatus = 0; -- your replacer is not a regular employee
+
+ELSE IF(@leaveType IS NOT NULL AND EXISTS(
+SELECT*
+FROM Staff_Members sm WHERE sm.user_name=@ownerUserName
+AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
+))
+SET @operationStatus=1; --exceeded number of annual leaves
+ELSE IF EXISTS(
+SELECT*
+ FROM Requests r
+ WHERE 
+ (r.start_date<=@startDate AND r.end_date>=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date<=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<=@endDate)
+ OR 
+ (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>=@startDate)
+ 
+        )
+SET @operationStatus=2; --overlap with another request
+
+ELSE----
+
 BEGIN
 IF(@leaveType IS NULL)
 SET @requestType = 0 --this is a business trip request
 ELSE
 SET @requestType = 1 -- this is a leave request
+
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
@@ -610,12 +637,11 @@ VALUES (@identity,@leaveType)
 INSERT INTO Regular_Employees_Replace_Regular_Employees
 (request_id,user_name_request_owner,user_name_replacer)
 VALUES(@identity,@ownerUserName,@replacementUserName);
-SET @operationStatus = 1; --successful request application
+SET @operationStatus = 3; --successful request application
 END
-
 --This procedure applies the above documented functionality for HR Employees only
 GO
-CREATE PROC ApplyHRForRequestSP
+CREATE PROC  ApplyHRForRequestSP
 @ownerUserName VARCHAR(30),
 @replacementUserName VARCHaR(30),
 @startDate DATETIME,
@@ -623,23 +649,56 @@ CREATE PROC ApplyHRForRequestSP
 @leaveType VARCHAR(50) = NULL,
 @tripDestination VARCHAR(150) = NULL,
 @tripPurpose TEXT = NULL,
-@operationStatus BIT OUTPUT
+@operationStatus INT OUTPUT
 AS
+
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
+DECLARE @noOfLeaveDays INT
+
+SET @noOfLeaveDays = dbo.NumberOfDaysHelper(@ownerUserName,@startDate,@endDate)
+
 SET @timestamp = CURRENT_TIMESTAMP
 IF NOT EXISTS(
 SELECT *
 FROM HR_Employees hr
-WHERE hr.user_name = @ownerUserName
-)SET @operationStatus = 0; -- your replacer is not an HR employee
-ELSE
+WHERE hr.user_name = @replacementUserName
+)
+SET @operationStatus = 0; -- your replacer is not a regular employee
+
+ELSE IF(@leaveType IS NOT NULL AND EXISTS(
+SELECT*
+FROM Staff_Members sm WHERE sm.user_name=@ownerUserName
+AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
+))
+SET @operationStatus=1; --exceeded number of annual leaves
+ELSE IF EXISTS(
+SELECT*
+ FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hr ON r.request_id=hr.request_id  
+ WHERE 
+ (hr.user_name_request_owner=@ownerUserName)
+ AND
+ (
+ (r.start_date<=@startDate AND r.end_date>=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date<=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<=@endDate)
+ OR 
+ (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>=@startDate)
+ )
+ )
+SET @operationStatus=2; --overlap with another request
+
+ELSE----
+
 BEGIN
 IF(@leaveType IS NULL)
 SET @requestType = 0 --this is a business trip request
 ELSE
 SET @requestType = 1 -- this is a leave request
+
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
@@ -657,11 +716,12 @@ VALUES (@identity,@leaveType)
 INSERT INTO HR_Employees_Replace_HR_Employees
 (request_id,user_name_request_owner,user_name_replacer)
 VALUES(@identity,@ownerUserName,@replacementUserName);
-SET @operationStatus = 1; --successful request application
+SET @operationStatus = 3; --successful request application
 END
+
 --This procedure applies the above documented functionality on managers only
 GO
-CREATE PROC ApplyManagerForRequestSP
+CREATE PROC  ApplyManagerForRequestSP
 @ownerUserName VARCHAR(30),
 @replacementUserName VARCHaR(30),
 @startDate DATETIME,
@@ -669,23 +729,56 @@ CREATE PROC ApplyManagerForRequestSP
 @leaveType VARCHAR(50) = NULL,
 @tripDestination VARCHAR(150) = NULL,
 @tripPurpose TEXT = NULL,
-@operationStatus BIT OUTPUT
+@operationStatus INT OUTPUT
 AS
+
 DECLARE @identity INT
 DECLARE @requestType BIT
 DECLARE @timestamp DATETIME
+DECLARE @noOfLeaveDays INT
+
+SET @noOfLeaveDays = dbo.NumberOfDaysHelper(@ownerUserName,@startDate,@endDate)
+
 SET @timestamp = CURRENT_TIMESTAMP
 IF NOT EXISTS(
 SELECT *
 FROM Managers m
-WHERE m.user_name = @ownerUserName
-)SET @operationStatus = 0; -- your replacer is not manager
-ELSE
+WHERE m.user_name = @replacementUserName
+)
+SET @operationStatus = 0; -- your replacer is not a regular employee
+
+ELSE IF(@leaveType IS NOT NULL AND EXISTS(
+SELECT*
+FROM Staff_Members sm WHERE sm.user_name=@ownerUserName
+AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
+))
+SET @operationStatus=1; --exceeded number of annual leaves
+ELSE IF EXISTS(
+SELECT*
+ FROM Requests r INNER JOIN Managers_Replace_Managers mr ON r.request_id=mr.request_id  
+ WHERE 
+ (mr.user_name_request_owner=@ownerUserName)
+ AND
+ (
+ (r.start_date<=@startDate AND r.end_date>=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date<=@endDate)
+ OR 
+ (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<@endDate)
+ OR 
+ (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>@startDate)
+ )
+ )
+SET @operationStatus=2; --overlap with another request
+
+ELSE----
+
 BEGIN
 IF(@leaveType IS NULL)
 SET @requestType = 0 --this is a business trip request
 ELSE
 SET @requestType = 1 -- this is a leave request
+
 INSERT INTO Requests
 (start_date,end_date,request_date)
 VALUES(@startDate,@endDate,@timestamp)
@@ -703,8 +796,9 @@ VALUES (@identity,@leaveType)
 INSERT INTO Managers_Replace_Managers
 (request_id,user_name_request_owner,user_name_replacer)
 VALUES(@identity,@ownerUserName,@replacementUserName);
-SET @operationStatus = 1; --successful request application
+SET @operationStatus = 3; --successful request application
 END
+
 --5: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Staff Members User Stories No.5: The staff member checks the status (respond of Manager and HR ) to the requests he/she applied for.
@@ -2342,3 +2436,64 @@ SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) +
 
 RETURN (@totaldays - @weekenddays)
 END
+
+---------------------------------------------------------
+
+--HELPER FOR REGULAR REPLACE REGULAR AND HR REPLACE HR
+--AND MANAGER REPLACE MANAGER
+
+GO
+CREATE FUNCTION NumberOfDaysHelper(@userName VARCHAR(30),@startDate DATETIME , @endDate DATETIME)
+RETURNS INT
+AS
+BEGIN
+DECLARE @totaldays INT
+DECLARE @weekenddays INT
+DECLARE @weekEndDay INT
+DECLARE @dayOff VARCHAR(10)
+
+SELECT @dayOff = sm.day_off
+FROM Staff_Members sm
+WHERE sm.user_name = @userName
+
+SET @weekEndDay = CASE @dayOff
+WHEN 'Saturday' THEN  0
+WHEN 'Sunday'   THEN  1
+WHEN 'Monday'   THEN  2
+WHEN 'Tuesday'  THEN  3
+WHEN 'Wednesday'THEN  4
+WHEN 'Thursday' THEN  5
+ELSE 6
+END
+
+SET @totaldays = DATEDIFF(DAY, @startDate, @endDate)
+SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) +
+                       CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END +
+					   CASE WHEN DATEPART(WEEKDAY, @startDate) = 6 THEN 1 ELSE 0 END +
+					   CASE WHEN DATEPART(WEEKDAY, @endDate)   = @weekEndDay THEN 1 ELSE 0 END +
+                       CASE WHEN DATEPART(WEEKDAY, @endDate)   = 6 THEN 1 ELSE 0 END)
+
+
+RETURN (@totaldays - @weekenddays)
+
+
+
+---------------------------ADDED PROCEDURES----------------------------------------------------------------------------------------------
+
+GO
+Create Procedure RegularUsernames
+AS
+Select user_name 
+from Regular_Employees
+
+GO
+Create Procedure HRUsernames
+AS
+Select user_name 
+from HR_Employees
+
+GO
+Create Procedure ManagerUsernames
+AS
+Select user_name 
+from Managers
