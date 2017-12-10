@@ -23,7 +23,7 @@ public partial class Staff : System.Web.UI.Page
 
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("CheckInSP", conn); http://localhost:12044/Staff.aspx.cs
+        SqlCommand cmd = new SqlCommand("CheckInSP", conn);
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
         //output parameters
