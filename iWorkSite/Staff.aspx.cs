@@ -23,7 +23,7 @@ public partial class Staff : System.Web.UI.Page
 
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("CheckInSP", conn);
+        SqlCommand cmd = new SqlCommand("CheckInSP", conn);http://localhost:12044/Staff.aspx.cs
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
         //output parameters
@@ -413,10 +413,46 @@ public partial class Staff : System.Web.UI.Page
             inbox_panel.Controls.Add(new LiteralControl(Info));
 
         }
+ }
+//-------------------------------------------------------------------------------------------------------------
 
+ /*
+Apply for requests of both types: leave requests or business trip requests, by supplying all the
+needed information for the request. A staff member can not apply for a leave if he/she exceeded
+the number of annual leaves allowed. If a manager applies for a request, the request does not need
+to be approved, but it only needs to be kept track of. A staff member can not apply for a request
+when its applied period overlaps with another request he/she applied for before.
+*/
 
-
+    protected void ApplyForRequests(object sender, EventArgs)
+    {
+                string type = Session["Type"].ToString();
+    
+    if(type=="Regular")
+    {
 
 
     }
+    
+    if(type=="HR")
+    {
+
+
+    }
+
+     else{
+
+}
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
