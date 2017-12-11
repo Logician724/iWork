@@ -13,7 +13,7 @@ public partial class Staff : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        populateDropDown(sender, e);
     }
 
 
@@ -23,7 +23,7 @@ public partial class Staff : System.Web.UI.Page
 
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("CheckInSP", conn);http://localhost:12044/Staff.aspx.cs
+        SqlCommand cmd = new SqlCommand("CheckInSP", conn);
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
         //output parameters
@@ -437,30 +437,70 @@ AS
   
   */
 
-    protected void ApplyForRequests(object sender, EventArgs)
-    {             string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+    protected void populateDropDown(object sender, EventArgs e)
+    {
+        string type = Session["Type"].ToString();
+        string Username = Session["Username"].ToString();         
+        
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("ViewReceivedEmailsSP", conn);
-        cmd.CommandType = CommandType.StoredProcedure;
-        cmd.Parameters.Add(new SqlParameter("@username", Username));
         conn.Open();
-                string type = Session["Type"].ToString();
-                string Username = Session["Username"].ToString();
+              
     
     if(type=="Regular")
     {
-          DropDownList_Replacers.Items.Add("Add New");
+        SqlCommand RegularUsernamescmd = new SqlCommand("RegularUsernames", conn);
+        RegularUsernamescmd.CommandType = CommandType.StoredProcedure;
+        SqlDataReader RegularUsernamesrdr = RegularUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        while (RegularUsernamesrdr.Read())
+        {
+            string username = RegularUsernamesrdr.GetString(RegularUsernamesrdr.GetOrdinal("user_name"));
+            ListItem userItem = new ListItem(username, username);
+            DropDownList_Replacers.Items.Add(userItem);
+                    
+        }
+
+        dropdownlist_leavetype.Items.Add("annual leave");
+        dropdownlist_leavetype.Items.Add("accidental leave");
+        dropdownlist_leavetype.Items.Add("sick leave");
+
+        
 
     }
     
     if(type=="HR")
     {
+        SqlCommand RegularUsernamescmd = new SqlCommand("HRUsernames", conn);
+        RegularUsernamescmd.CommandType = CommandType.StoredProcedure;
+        SqlDataReader RegularUsernamesrdr = RegularUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        while (RegularUsernamesrdr.Read())
+        {
+            string username = RegularUsernamesrdr.GetString(RegularUsernamesrdr.GetOrdinal("user_name"));
+            DropDownList_Replacers.Items.Add(username);
 
+
+        }
+
+        dropdownlist_leavetype.Items.Add("annual leave");
+        dropdownlist_leavetype.Items.Add("accidental leave");
+        dropdownlist_leavetype.Items.Add("sick leave");
 
     }
 
      else
     {
+        SqlCommand RegularUsernamescmd = new SqlCommand("ManagerUsernames", conn);
+        RegularUsernamescmd.CommandType = CommandType.StoredProcedure;
+        SqlDataReader RegularUsernamesrdr = RegularUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        while (RegularUsernamesrdr.Read())
+        {
+            string username = RegularUsernamesrdr.GetString(RegularUsernamesrdr.GetOrdinal("user_name"));
+            DropDownList_Replacers.Items.Add(username);
+        }
+
+        dropdownlist_leavetype.Items.Add("annual leave");
+        dropdownlist_leavetype.Items.Add("accidental leave");
+        dropdownlist_leavetype.Items.Add("sick leave");
 
     }
 
@@ -475,5 +515,9 @@ AS
 
 
 
+    protected void DropDownList_Replacers_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
 }
 

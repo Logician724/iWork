@@ -109,27 +109,42 @@
             </div>
         </asp:Panel>
 <!--------------------------------------------------------------------------------------------------------------------------------->
-          <asp:Panel ID="ApplyForRequest_Panel" runat="server" >
-          
-          
-
+              
+              <asp:Panel ID="ApplyForRequest_Panel" runat="server" >
+              <label class="font-weight-bold col-2 col-form-label offset-3">Choose Replacer Username</label>  
               <asp:DropDownList ID="DropDownList_Replacers" runat="server"></asp:DropDownList>
+
+              <label class="font-weight-bold col-2 col-form-label offset-3">Start Date</label>
+              <asp:Calendar ID="start_date" runat="server"></asp:Calendar>
+
+              <label class="font-weight-bold col-2 col-form-label offset-3">End Date</label>
+              <asp:Calendar ID="end_date" runat="server"></asp:Calendar>
           
-
-
-
-          
-
-
-            <div class="text-center">
-            <asp:Button CssClass="btn btn-primary" ID="Button7" runat="server" Text="Send Email" OnClick="sendEmail" />
+              <label class="font-weight-bold col-2 col-form-label offset-3">Leave Request</label>
+              <label class="font-weight-bold col-2 col-form-label offset-3">Leave Type</label>
+              <asp:DropDownList ID="dropdownlist_leavetype" runat="server"></asp:DropDownList>      
+                      
+           
+            <label class="font-weight-bold col-2 col-form-label offset-3">Business Trip Requesr</label>
+            <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">Trip Destination</label>
+            <div class="col-3">
+            <asp:TextBox CssClass="form-control" ID="trip_destination" runat="server" placeholder="Enter Trip Destination"></asp:TextBox>
             </div>
+            </div>
+                  
 
-            <div class="text-center mt-2 font-weight-bold text-danger" id="Div1" runat="server"></div>
-        
+                  
+       
+            <div class="form-group row">
+            <label class="font-weight-bold col-2 col-form-label offset-3">Trip Purpose</label>
+            <div class="col-3">
+            <asp:TextBox CssClass="form-control" ID="trip_purpose" runat="server" placeholder="Enter Trip Purpose"></asp:TextBox>
+            </div>
+            </div>                         
+
+
           </asp:Panel>
-      
-
 
     </form>
 </body>
