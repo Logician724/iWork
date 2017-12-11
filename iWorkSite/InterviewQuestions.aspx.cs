@@ -11,7 +11,7 @@ using System.Data;
 
 
 
-public partial class Application : System.Web.UI.Page
+public partial class InterviewQuestions : System.Web.UI.Page
 {   
 
     public static int score; 
