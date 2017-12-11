@@ -14,44 +14,44 @@ using System.Data;
 public partial class JobSeekerProfile : System.Web.UI.Page
 {
 
-   
-  
 
-            
+
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
-      
-//----------------------------------------------------------------------------------------------------------------
+
+        //----------------------------------------------------------------------------------------------------------------
         viewPersonalInfo(sender, e);
 
 
         //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
-            string Username = Session["Username"].ToString();
-            string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
-            SqlConnection conn = new SqlConnection(connStr);
-            SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@userName", Username));
-            conn.Open();
-            SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+        string Username = Session["Username"].ToString();
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+        conn.Open();
+        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-            if (rdr.Read())
-            {
-                string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
-                string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
-                string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
-                string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
-                string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
-                string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
+        if (rdr.Read())
+        {
+            string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
+            string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
+            string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
+            string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
+            string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
+            string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
 
-                txt_password.Attributes.Add("placeholder", "**********");
-                txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
-                txt_birthdate.Attributes.Add("placeholder", Birthdate);
-                txt_expyrs.Attributes.Add("placeholder", ExpYear);
-                txt_fn.Attributes.Add("placeholder", FirstName);
-                txt_ln.Attributes.Add("placeholder", LastName);
-            }
-            viewJobsStatus(sender, e);
+            txt_password.Attributes.Add("placeholder", "**********");
+            txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
+            txt_birthdate.Attributes.Add("placeholder", Birthdate);
+            txt_expyrs.Attributes.Add("placeholder", ExpYear);
+            txt_fn.Attributes.Add("placeholder", FirstName);
+            txt_ln.Attributes.Add("placeholder", LastName);
+        }
+        viewJobsStatus(sender, e);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -60,13 +60,13 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         string Username = null;
         if (Session["Username"] != null)
         {
-             Username = Session["Username"].ToString();
+            Username = Session["Username"].ToString();
         }
         else
         {
             Response.Redirect("login");
         }
-        
+
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
@@ -243,7 +243,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
             if (AppStatus == "Pending")
             {
-             
+
                 DeleteApp.Enabled = true;
             }
             else
@@ -251,37 +251,71 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 DeleteApp.Enabled = false;
                 DeleteApp.ToolTip = "You can't delete the application unless it is pending";
             }
+            DeletePanel.Controls.Add(DeleteApp);
             Panel ViewQPanel = new Panel();
             ViewQPanel.CssClass = "col-3";
             Button ViewQButton = new Button();
             ViewQButton.Text = "View Questions";
             ViewQButton.CssClass = "btn btn-primary";
+            ViewQButton.Click += new EventHandler((sender_view, e_view) => ViewQuestions(sender_view, e_view, Username, JobTitle, DepartmentCode, CompanyDomain));
             ViewQPanel.Controls.Add(ViewQButton);
             Panel ChooseJobPanel = new Panel();
             ChooseJobPanel.CssClass = "col-3";
-            Button ChooseJobButton = new Button();
-            ChooseJobButton.Text = "Accept Application";
-            ChooseJobButton.CssClass = "btn btn-primary";
+            LinkButton ChooseJobLink = new LinkButton();
+            ChooseJobLink.Text = "Choose Job";
+            ChooseJobLink.CssClass = "btn btn-primary";
+            ChooseJobLink.Attributes["data-toggle"] = "modal";
+            ChooseJobLink.Attributes["href"] = "#" + "choose" + ApplicationCounter;
 
-            if (AppStatus == "Accepted")
+            if (AppStatus != "Accepted")
             {
-                ChooseJobButton.Enabled = true;
-            }
-            else
-            {
-                ChooseJobButton.Enabled = false;
-                ChooseJobButton.ToolTip = "You can't choose this job unless your application is accepted";
-            }
 
-            ChooseJobPanel.Controls.Add(ChooseJobButton);
+                ChooseJobLink.CssClass = "btn btn-primary disabled";
+                ChooseJobLink.ToolTip = "You can't choose this job unless your application is accepted";
+            }
+            ChooseJobPanel.Controls.Add(ChooseJobLink);
             applications.Controls.Add(new LiteralControl(ViewStatus));
             applications.Controls.Add(DeletePanel);
             applications.Controls.Add(ViewQPanel);
             applications.Controls.Add(ChooseJobPanel);
             applications.Controls.Add(new LiteralControl("</div>\r\n"));
-            ApplicationCounter++;
             string ViewStatus2 = "</div>\r\n";
             applications.Controls.Add(new LiteralControl(ViewStatus2));
+            string ChooseModalheader = "<div class=\"modal fade\" id=\"" + "choose" + ApplicationCounter + "\"" + " tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\r\n" +
+                "  <div class=\"modal-dialog\" role=\"document\">\r\n" +
+                "    <div class=\"modal-content\">\r\n" +
+                "      <div class=\"modal-header\">\r\n" +
+                "        <h5 class=\"modal-title\" id=\"exampleModalLabel\">Choose Your Day Off</h5>\r\n" +
+                "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n" +
+                "          <span aria-hidden=\"true\">&times;</span>\r\n" +
+                "        </button>\r\n" +
+                "      </div>\r\n" +
+                "      <div class=\"modal-body\">\r\n";
+            applications.Controls.Add(new LiteralControl(ChooseModalheader));
+            RadioButtonList DayOffList = new RadioButtonList();
+            DayOffList.Items.Add(new ListItem("Saturday", "sat"));
+            DayOffList.Items.Add(new ListItem("Sunday", "sun"));
+            DayOffList.Items.Add(new ListItem("Monday", "mon"));
+            DayOffList.Items.Add(new ListItem("Tuesday", "tue"));
+            DayOffList.Items.Add(new ListItem("Wednesday", "wed"));
+            DayOffList.Items.Add(new ListItem("Thursday", "thu"));
+            DayOffList.AutoPostBack = false;
+            applications.Controls.Add(DayOffList);
+            string ChooseModalBody = "      </div>\r\n" +
+                "      <div class=\"modal-footer\">\r\n" +
+                "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\r\n";
+            applications.Controls.Add(new LiteralControl(ChooseModalBody));
+            Button ChooseJobButton = new Button();
+            ChooseJobButton.CssClass = "btn btn-primary";
+            ChooseJobButton.Text = "Confirm";
+            ChooseJobButton.Click += new EventHandler((sender_choose, e_choose) => ChooseJob(sender_choose, e_choose, Username, JobTitle, DepartmentCode, CompanyDomain, DayOffList));
+            applications.Controls.Add(ChooseJobButton);
+            string ChooseModalFooter = "      </div>\r\n" +
+                 "    </div>\r\n" +
+                 "  </div>\r\n" +
+                 "</div>";
+            applications.Controls.Add(new LiteralControl(ChooseModalFooter));
+            ApplicationCounter++;
         }//End of while loop
     }//End of Method
 
@@ -310,7 +344,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
 
 
     //Delete any job application he/she applied for as long as it is still in the review process.
-    protected void DeleteApplication(object sender, EventArgs e,string JobTitle, string DepartmentCode, string CompanyDomain)
+    protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain)
 
     {
 
@@ -327,28 +361,38 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
         cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
 
+
         conn.Open();
-        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-                               
-
-}
+        cmd.ExecuteNonQuery();
 
 
-//-------------------------------------------------------------------------------------------------------------------------
-
-    protected void ChooseJob(Object sender, EventArgs e , string JobTitle, string DepartmentCode, string CompanyDomain)
-{
-
-   Session["JobTitle"] = JobTitle;
-   Session["DepartmentCode"] = DepartmentCode;
-   Session["CompanyDomain"] = CompanyDomain;
-   Response.Redirect("ChooseFromAcceptedJobs", true);
+    }
 
 
+    //-------------------------------------------------------------------------------------------------------------------------
 
-}
+    protected void ChooseJob(Object sender, EventArgs e, string Username, string JobTitle, string DepartmentCode, string CompanyDomain, RadioButtonList DayOffList)
+    {
+        if (string.IsNullOrEmpty(DayOffList.SelectedValue))
+        {
+            Label ResponseLabel = new Label();
+            ResponseLabel.Text = "You need to specify a day off first!";
+            response.Controls.Add(ResponseLabel);
+        }
+        else
+        {
+            //format the values in the drop down list depending on the database format
+            string DayOff = DayOffList.SelectedValue.ToString();
+        }
 
 
 
+    }
+
+
+    protected void ViewQuestions(object sender, EventArgs e, string Username, string JobTitle, string DepartmentCode, string CompanyDomain)
+    {
+
+    }
 }
 
