@@ -446,7 +446,7 @@ END
 -- and company domain, returns an output bit that specifies the following
 
 GO
-Create PROC DeletePendingApplicationSP
+CREATE PROC DeletePendingApplicationSP
 @seekerUserName VARCHAR(30),
 @jobTitle VARCHAR(150),
 @departmentCode VARCHAR(30),
