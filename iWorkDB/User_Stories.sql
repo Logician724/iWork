@@ -389,8 +389,72 @@ WHERE A.seeker_username=@username
 -- 0 --> This is not an accepted application
 -- 1 --> This chosen day off is friday
 -- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
-
+	
 GO
+ALTER PROC ChooseJobFromAcceptedAppSP
+@seekerUserName VARCHAR(30),
+@departmentCode VARCHAR(30),
+@companyDomain VARCHAR(150),
+@jobTitle VARCHAR(150),
+@dayOff VARCHAR(10),
+@operationStatus INT OUTPUT,
+@type INT OUTPUT
+AS
+IF(NOT EXISTS
+(
+SELECT *
+FROM Applications a
+WHERE a.company_domain = @companyDomain AND
+a.department_code = @departmentCode AND
+a.job_title = @jobTitle AND
+a.seeker_username = @seekerUserName AND
+a.app_status = 'Accepted'
+))
+SET @operationStatus = 0 --The chosen application is not an accepted one
+ELSE IF(@dayOff = 'Friday')
+SET @operationStatus = 1 --The chosen day off is friday
+ELSE
+BEGIN
+DELETE FROM Job_Seekers
+WHERE Job_Seekers.user_name = @seekerUserName
+DECLARE @salary INT
+SELECT @salary = salary
+	FROM Jobs
+	WHERE department_code = @departmentCode AND
+	company_domain = @companyDomain AND
+	job_title = @jobTitle
+DELETE FROM Applications
+    WHERE
+	Applications.seeker_username=@seekerUserName
+	AND Applications.company_domain=@companyDomain
+	AND Applications.department_code=@departmentCode
+	AND Applications.job_title=@jobTitle
+INSERT INTO Staff_Members
+(user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
+VALUES
+(@seekerUserName,@dayOff,30,@salary,@jobTitle,@departmentCode,@companyDomain)
+IF(@jobTitle LIKE 'HR%')
+BEGIN
+INSERT INTO HR_Employees VALUES (@seekerUserName)
+SET @type=1; 
+END 
+ELSE IF (@jobTitle LIKE 'Employee%')
+BEGIN 
+INSERT INTO Regular_Employees VALUES (@seekerUserName)
+SET @type=2;
+END
+ELSE 
+BEGIN 
+INSERT INTO Managers VALUES (@seekerUserName,'')
+SET @type=3;
+END
+UPDATE Jobs
+SET vacancies = vacancies - 1
+WHERE Jobs.company_domain = @companyDomain AND
+		Jobs.department_code = @departmentCode AND
+		Jobs.job_title = @jobTitle
+SET @operationStatus = 2 --Successful job choice
+ENDGO
 CREATE PROC ChooseJobFromAcceptedAppSP
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
@@ -455,22 +519,6 @@ WHERE Jobs.company_domain = @companyDomain AND
 		Jobs.job_title = @jobTitle
 SET @operationStatus = 2 --Successful job choice
 END
-
---6: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
---job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
--- and company domain, returns an output bit that specifies the following
-
-GO
-CREATE PROC DeletePendingApplicationSP
-@seekerUserName VARCHAR(30),
-@jobTitle VARCHAR(150),
-@departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
-AS
-DELETE FROM Applications
-WHERE (Applications.seeker_username = @seekerUserName AND Applications.job_title = @jobTitle AND Applications.company_domain = @companyDomain AND Applications.app_status = 'Pending')
-
-
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --“As a staff member, I should be able to ...”
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
