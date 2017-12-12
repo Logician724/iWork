@@ -13,6 +13,51 @@ public partial class Companies : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["Username"] == null)
+        {
+            HyperLink LoginLink = new HyperLink();
+            LoginLink.Text = "Login";
+            LoginLink.Attributes["href"] = "login";
+            LoginLink.CssClass = "nav-link h6";
+            identity_control_1.Controls.Add(LoginLink);
+            HyperLink RegisterLink = new HyperLink();
+            RegisterLink.Text = "Register";
+            RegisterLink.Attributes["href"] = "register";
+            RegisterLink.CssClass = "nav-link h6";
+            identity_control_2.Controls.Add(RegisterLink);
+        }
+        else
+        {
+            LinkButton SignOutLink = new LinkButton();
+            SignOutLink.Text = "Sign Out";
+            SignOutLink.CssClass = "nav-link h6";
+            SignOutLink.Click += new EventHandler((sender_out, e_out) => SignOut(sender_out, e_out));
+            identity_control_1.Controls.Add(SignOutLink);
+            HyperLink ProfileLink = new HyperLink();
+            ProfileLink.Text = "Profile";
+            ProfileLink.CssClass = "nav-link h6";
+            switch (Session["Type"].ToString())
+            {
+                case "Job Seeker":
+                    ProfileLink.Attributes["href"] = "JobSeekerProfile";
+                    break;
+                case "Regular":
+                    ProfileLink.Attributes["href"] = "RegularEmployeeProfile";
+                    break;
+                case "HR":
+                    ProfileLink.Attributes["href"] = "HrControl";
+                    break;
+                case "Manager":
+                    ProfileLink.Attributes["href"] = "ManagerControl";
+                    break;
+                default:
+                    Label ResponseLabel = new Label();
+                    ResponseLabel.Text = "Unexpected error occured, please login again and contact the developer";
+                    response_div.Controls.Add(ResponseLabel);
+                    break;
+            }
+            profile_control.Controls.Add(ProfileLink);
+        }
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewCompaniesSP", conn);
@@ -238,19 +283,19 @@ public partial class Companies : System.Web.UI.Page
             }
             else
                 if (SearchType == "radio_search_address")
-                {
-                    searchCompaniesByAddress(sender, e);
-                }
-                else
+            {
+                searchCompaniesByAddress(sender, e);
+            }
+            else
                     if (SearchType == "radio_search_type")
-                    {
-                        searchCompaniesByType(sender, e);
-                    }
-                    else
+            {
+                searchCompaniesByType(sender, e);
+            }
+            else
                         if (SearchType == "radio_search_avg_salary")
-                        {
-                            SearchByAvgSalary(sender, e);
-                        }
+            {
+                SearchByAvgSalary(sender, e);
+            }
         }
     }
 
@@ -435,7 +480,6 @@ public partial class Companies : System.Web.UI.Page
                     JobDiv.Attributes["id"] = "department" + DepartmentCount;
                     AddJob(DepartmentCode, CompanyDomain, JobTitle, ApplicationDeadline, Vacancies, DetailedDescription, ShortDescription, MinYearsExperience, Salary, WorkingHours, DepartmentCount, JobDiv);
                     JobContainer.Controls.Add(JobDiv);
-
                 }
                 DepartmentDiv.Controls.Add(JobContainer);
                 DepartmentContainer.Controls.Add(DepartmentDiv);
@@ -463,8 +507,11 @@ public partial class Companies : System.Web.UI.Page
         Session["DepartmentCode"] = DepartmentCode;
         Session["CompanyDomain"] = CompanyDomain;
         Session["Username"] = SeekerUsername;
-        Response.Redirect("Application", true);
-
-
+        Response.Redirect("InterviewQuestions", true);
+    }
+    protected void SignOut(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Response.Redirect("companies");
     }
 }

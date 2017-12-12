@@ -1,17 +1,34 @@
 ﻿<%@ page language="C#" autoeventwireup="true" codefile="JobSeekerProfile.aspx.cs" inherits="JobSeekerProfile" %>
 
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Seeker Profile</title>
     <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" />
 </head>
 <body class="jumbotron">
-    <div class="container">
-
+    <nav class="navbar navbar-toggleable-md fixed-top navbar-inverse bg-primary">
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand vertical-ruler pr-3 display-1" href="companies">iWork</a>
+            <ul id="nav_list_primary" class="navbar-nav mr-auto mt-2 mt-lg-0" runat="server">
+                <li class="nav-item active">
+                    <a class="nav-link h6" href="companies">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h6" href="Staff">Staff</a>
+                </li>
+            </ul>
+            <ul id="nav_list_secondary" class="navbar-nav" runat="server">
+                <li class="nav-item">
+                    <a class="nav-link h6" onserverclick="SignOut" runat="server">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
         <form runat="server">
-            <div id="response" class= "text-danger font-weight-bold text-center" runat="server"></div>
+            <div id="response" class="text-danger font-weight-bold text-center" runat="server"></div>
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#personal_info">View Info</a>

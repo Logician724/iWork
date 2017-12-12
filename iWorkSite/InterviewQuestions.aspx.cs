@@ -12,15 +12,12 @@ using System.Data;
 
 
 public partial class InterviewQuestions : System.Web.UI.Page
-{   
+{
 
-    public static int score; 
+    public static int score;
     protected void Page_Load(object sender, EventArgs e)
     {
         viewQuestions(sender, e);
-
-
-
     }
 
 
@@ -42,11 +39,9 @@ public partial class InterviewQuestions : System.Web.UI.Page
 
     protected void viewQuestions(object sender, EventArgs e)
     {
-
         string CompanyDomain = Session["CompanyDomain"].ToString();
         string DepartmentCode = Session["DepartmentCode"].ToString();
         string JobTitle = Session["JobTitle"].ToString();
-
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewQuetionsInInterviewSP", conn);
@@ -78,42 +73,31 @@ public partial class InterviewQuestions : System.Web.UI.Page
             questions_panel.Controls.Add(answer);
             Console.Write("Hi");
             System.Diagnostics.Debug.WriteLine(answer.ID);
-        
-           
-        }
-
-
 
 
         }
+    }
 
     protected void ApplyForJob(object sender, EventArgs e)
     {
-                   
-
-
-foreach (Control c in questions_panel.Controls)
-{
-    if (c is TextBox)
-    {
-        TextBox textBox = (TextBox)c;
-        if ((textBox.Text == "Yes" && c.ID[0] == 'T') || (textBox.Text == "No" && c.ID[0] == 'F'))
-            score += 10;
-    }
-}
-
-
+        foreach (Control c in questions_panel.Controls)
+        {
+            if (c is TextBox)
+            {
+                TextBox textBox = (TextBox)c;
+                if ((textBox.Text == "Yes" && c.ID[0] == 'T') || (textBox.Text == "No" && c.ID[0] == 'F'))
+                    score += 10;
+            }
+        }
         string Score = score + "";
         string SeekerUsername = Session["Username"].ToString();
         string CompanyDomain = Session["CompanyDomain"].ToString();
         string DepartmentCode = Session["DepartmentCode"].ToString();
         string JobTitle = Session["JobTitle"].ToString();
-
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ApplyForJobSP", conn);
         cmd.CommandType = CommandType.StoredProcedure;
-
         cmd.Parameters.Add(new SqlParameter("@seekerUserName", SeekerUsername));
         cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
         cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
@@ -125,17 +109,12 @@ foreach (Control c in questions_panel.Controls)
         conn.Open();
         cmd.ExecuteNonQuery();
         conn.Close();
-
         Label failed1 = new Label();
         failed1.Text = "You already have a pending application for this job.";
-
         Label failed2 = new Label();
         failed2.Text = "You don't have enough experience years for this job";
-
-
         Label passed = new Label();
         passed.Text = "Successfully Applied!";
-
         switch (operationstatus.Value.ToString())
         {
             case "1":
@@ -146,14 +125,8 @@ foreach (Control c in questions_panel.Controls)
                 break;
             case "3":
                 apply_response.Controls.Add(passed);
-                Response.Redirect("JobSeekerProfile",true);
+                Response.Redirect("JobSeekerProfile", true);
                 break;
-        
-
-
-        } 
-    } 
-
-
-
         }
+    }
+}

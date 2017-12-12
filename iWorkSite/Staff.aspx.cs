@@ -13,9 +13,13 @@ public partial class Staff : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["Username"] == null)
+        if (Session["Username"] == null)
         {
             Response.Redirect("login");
+        }
+        else
+        {
+            ShowProfile(sender,e);
         }
     }
 
@@ -465,9 +469,41 @@ public partial class Staff : System.Web.UI.Page
         else
         {
 
-        }
 
+
+        }
     }
+
+    //identity controls
+    protected void ShowProfile(object sender, EventArgs e)
+    {
+        switch (Session["Type"].ToString())
+        {
+            case "Job Seeker":
+                profile_link.Attributes["href"] = "JobSeekerProfile";
+                break;
+            case "Regular":
+                profile_link.Attributes["href"] = "RegularEmployeeProfile";
+                break;
+            case "HR":
+                profile_link.Attributes["href"] = "HrControl";
+                break;
+            case "Manager":
+                profile_link.Attributes["href"] = "ManagerControl";
+                break;
+            default:
+                Label ResponseLabel = new Label();
+                ResponseLabel.Text = "Unexpected error occured, please login again and contact the developer";
+                response_div.Controls.Add(ResponseLabel);
+                break;
+        }
+    }
+    protected void SignOut(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Response.Redirect("companies");
+    }
+
 
 
 

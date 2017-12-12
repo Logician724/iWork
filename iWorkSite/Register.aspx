@@ -6,14 +6,30 @@
 <head runat="server">
     <title>Register</title>
     <link rel="stylesheet" type="text/css" href="Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" />
 </head>
 <body class="jumbotron">
     <div class="container">
         <h1 class="display-2 text-center">Welcome to iWork</h1>
         <p class="lead text-center">We lighten your path</p>
     </div>
-    <div class="container">
-        <form runat="server">
+    <form runat="server">
+        <nav class="navbar navbar-toggleable-md fixed-top navbar-inverse bg-primary">
+            <div class="collapse navbar-collapse">
+                <a class="navbar-brand vertical-ruler pr-3 display-1" href="companies">iWork</a>
+                <ul id="nav_list_primary" class="navbar-nav mr-auto mt-2 mt-lg-0" runat="server">
+                    <li class="nav-item active">
+                        <a class="nav-link h6" href="companies">Home</a>
+                    </li>
+                </ul>
+                <ul id="nav_list_secondary" class="navbar-nav mt-2 mt-lg-0">
+                    <li id="identity_control_1" class="nav-item active" runat="server">
+                        <a class="nav-link h6" href="register">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
             <div class="form-group row">
                 <label class="font-weight-bold col-2 col-form-label">Username</label>
                 <div class="col-10">
@@ -60,7 +76,7 @@
                 <asp:Button CssClass="btn btn-primary" ID="btn_login" runat="server" Text="Register" OnClick="register" />
             </div>
             <div class="text-center mt-2 font-weight-bold text-danger" id="register_response" runat="server"></div>
-        </form>
-    </div>
+        </div>
+    </form>
 </body>
 </html>

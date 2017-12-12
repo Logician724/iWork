@@ -74,7 +74,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
         conn.Open();
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-
         if (rdr.Read())
         {
 
@@ -235,7 +234,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     "                            <div class=\"row mt-4\"\r\n>";
 
             Panel DeletePanel = new Panel();
-            DeletePanel.CssClass = "offset-2 col-3";
+            DeletePanel.CssClass = "offset-2 col-5";
             Button DeleteApp = new Button();
             DeleteApp.Text = "Delete";
             DeleteApp.CssClass = "btn btn-danger";
@@ -252,15 +251,8 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 DeleteApp.ToolTip = "You can't delete the application unless it is pending";
             }
             DeletePanel.Controls.Add(DeleteApp);
-            Panel ViewQPanel = new Panel();
-            ViewQPanel.CssClass = "col-3";
-            Button ViewQButton = new Button();
-            ViewQButton.Text = "View Questions";
-            ViewQButton.CssClass = "btn btn-primary";
-            ViewQButton.Click += new EventHandler((sender_view, e_view) => ViewQuestions(sender_view, e_view, Username, JobTitle, DepartmentCode, CompanyDomain));
-            ViewQPanel.Controls.Add(ViewQButton);
             Panel ChooseJobPanel = new Panel();
-            ChooseJobPanel.CssClass = "col-3";
+            ChooseJobPanel.CssClass = "col-5";
             LinkButton ChooseJobLink = new LinkButton();
             ChooseJobLink.Text = "Choose Job";
             ChooseJobLink.CssClass = "btn btn-primary";
@@ -276,7 +268,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             ChooseJobPanel.Controls.Add(ChooseJobLink);
             applications.Controls.Add(new LiteralControl(ViewStatus));
             applications.Controls.Add(DeletePanel);
-            applications.Controls.Add(ViewQPanel);
             applications.Controls.Add(ChooseJobPanel);
             applications.Controls.Add(new LiteralControl("</div>\r\n"));
             string ViewStatus2 = "</div>\r\n";
@@ -347,29 +338,18 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     protected void DeleteApplication(object sender, EventArgs e, string JobTitle, string DepartmentCode, string CompanyDomain)
 
     {
-
-
         string Username = Session["Username"].ToString();
-
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("DeletePendingApplicationSP", conn);
         cmd.CommandType = CommandType.StoredProcedure;
-
         cmd.Parameters.Add(new SqlParameter("@seekerUserName", Username));
         cmd.Parameters.Add(new SqlParameter("@jobTitle", JobTitle));
         cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
         cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
-
-
         conn.Open();
         cmd.ExecuteNonQuery();
-
-
     }
-
-
-    //-------------------------------------------------------------------------------------------------------------------------
 
     protected void ChooseJob(Object sender, EventArgs e, string Username, string JobTitle, string DepartmentCode, string CompanyDomain, RadioButtonList DayOffList)
     {
@@ -384,15 +364,11 @@ public partial class JobSeekerProfile : System.Web.UI.Page
             //format the values in the drop down list depending on the database format
             string DayOff = DayOffList.SelectedValue.ToString();
         }
-
-
-
     }
-
-
-    protected void ViewQuestions(object sender, EventArgs e, string Username, string JobTitle, string DepartmentCode, string CompanyDomain)
+    protected void SignOut (object sender, EventArgs e)
     {
-
+        Session.Clear();
+        Response.Redirect("companies");
     }
-}
 
+}
