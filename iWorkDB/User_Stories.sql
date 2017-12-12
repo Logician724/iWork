@@ -391,13 +391,14 @@ WHERE A.seeker_username=@username
 -- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
 
 GO
-Create PROC ChooseJobFromAcceptedAppSP
+CREATE PROC ChooseJobFromAcceptedAppSP
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
 @companyDomain VARCHAR(150),
 @jobTitle VARCHAR(150),
 @dayOff VARCHAR(10),
-@operationStatus INT OUTPUT
+@operationStatus INT OUTPUT,
+@type INT OUTPUT
 AS
 IF(NOT EXISTS
 (
@@ -432,6 +433,21 @@ INSERT INTO Staff_Members
 (user_name,day_off,no_annual_leaves,salary,job_title,department_code,company_domain)
 VALUES
 (@seekerUserName,@dayOff,30,@salary,@jobTitle,@departmentCode,@companyDomain)
+IF(@jobTitle LIKE 'HR%')
+BEGIN
+INSERT INTO HR_Employees VALUES (@seekerUserName)
+SET @type=1; 
+END 
+ELSE IF (@jobTitle LIKE 'Employee%')
+BEGIN 
+INSERT INTO Regular_Employees VALUES (@seekerUserName)
+SET @type=2;
+END
+ELSE 
+BEGIN 
+INSERT INTO Managers VALUES (@seekerUserName,'')
+SET @type=3;
+END
 UPDATE Jobs
 SET vacancies = vacancies - 1
 WHERE Jobs.company_domain = @companyDomain AND
@@ -439,7 +455,6 @@ WHERE Jobs.company_domain = @companyDomain AND
 		Jobs.job_title = @jobTitle
 SET @operationStatus = 2 --Successful job choice
 END
-
 
 --6: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
@@ -851,73 +866,26 @@ END
 --staff member Story no.6 Delete any request that is still in the review process
 --DeletePendingRequestsSP takes the username of the employee as input and deletes all
 --his requests that have an hr_response_req attr value of NULL
+
+
 GO
 
 CREATE PROC DeletePendingRequestsSP
-@userName VARCHAR(30)
+@requestID int
 AS
 --first delete the replacement part of the request
 --in case the user is a manager
 DELETE FROM Managers_Replace_Managers
-WHERE (user_name_request_owner = @userName AND
-Managers_Replace_Managers.request_id = ANY(
-SELECT Requests.request_id
-FROM Requests
-WHERE hr_response_req IS NULL))
+WHERE request_id=@requestID
 --in case the user is a regular employee
 DELETE FROM Regular_Employees_Replace_Regular_Employees
-WHERE (user_name_request_owner = @userName AND
-Regular_Employees_Replace_Regular_Employees.request_id = ANY(
-SELECT Requests.request_id
-FROM Requests
-WHERE hr_response_req IS NULL))
+WHERE request_id=@requestID
 --in case the user is an HR employee
 DELETE FROM HR_Employees_Replace_HR_Employees
-WHERE (user_name_request_owner = @userName AND
-HR_Employees_Replace_HR_Employees.request_id = ANY(
-SELECT Requests.request_id
-FROM Requests
-WHERE hr_response_req = NULL))
---Then delete the request sub-type whenever its ID is not available anywhere in the replacement tables
---in case part of the target requests is leave requests
-DELETE FROM Leave_Requests
-WHERE NOT( request_id = ANY(
-	SELECT request_id
-	FROM Managers_Replace_Managers
-	)
-	OR request_id = ANY(
-	SELECT request_id
-	FROM Regular_Employees_Replace_Regular_Employees
-	)
-	OR request_id = ANY(
-	SELECT request_id
-	FROM HR_Employees_Replace_HR_Employees
-	))
---in case part of the target requests is business trip requests
-DELETE FROM Business_Trip_Requests
-WHERE NOT(request_id = ANY(
-	SELECT request_id
-	FROM Managers_Replace_Managers
-	)
-	OR request_id = ANY(
-	SELECT request_id
-	FROM Regular_Employees_Replace_Regular_Employees
-	)
-	OR request_id = ANY(
-	SELECT request_id
-	FROM HR_Employees_Replace_HR_Employees
-	))
+WHERE request_id=@requestID
 --then delete all the requests that don't have equivalent IDS is either the leave or business trip request tables
 DELETE FROM Requests
-	WHERE NOT (request_id = ANY(
-	SELECT request_id
-	FROM Leave_Requests
-	)
-	OR request_id = ANY(
-	SELECT request_id
-	FROM Business_Trip_Requests
-	))
-
+WHERE request_id=@requestID
 
 --7: --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- staff member story no.7 the procedure takes the email info as input and performs
