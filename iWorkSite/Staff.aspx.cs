@@ -13,13 +13,17 @@ public partial class Staff : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+
         if (Session["Username"] == null)
         {
             Response.Redirect("login");
         }
         else
         {
-            ShowProfile(sender,e);
+            ShowProfile(sender, e);
+            populateDropDown(sender, e);
+            viewRequests(sender, e);
+            viewEmails(sender, e);
         }
     }
 
@@ -240,10 +244,29 @@ public partial class Staff : System.Web.UI.Page
             + "<div class = \"card-text\"><span class = \"font-weight-bold\">Manager Response: </span>" + ManagerResponse + "</div>"
             + "</div>";
 
+                    Panel DeletePanel = new Panel();
+                    DeletePanel.CssClass = "offset-2 col-3";
+                    Button DeleteRequest = new Button();
+                    DeleteRequest.Text = "Delete";
+                    DeleteRequest.CssClass = "btn btn-danger";
+                    DeleteRequest.Click += new EventHandler((sender_delete, e_delete) => DeleteRequests(sender_delete, e_delete, RequestID));
+
+                    if (rdr.GetValue(rdr.GetOrdinal("hr_response_req")) == DBNull.Value && rdr.GetValue(rdr.GetOrdinal("manager_response_req")) == DBNull.Value)
+                    {
+
+                        DeleteRequest.Enabled = true;
+                    }
+                    else
+                    {
+                        DeleteRequest.Enabled = false;
+                        DeleteRequest.ToolTip = "You can't delete the Request unless it is pending";
+                    }
 
 
-                    viewattendance_panel.Controls.Add(new LiteralControl(requests));
+                    DeletePanel.Controls.Add(DeleteRequest);
 
+                    viewrequests_panel.Controls.Add(new LiteralControl(requests));
+                    viewrequests_panel.Controls.Add(DeletePanel);
 
 
 
@@ -420,60 +443,188 @@ public partial class Staff : System.Web.UI.Page
             inbox_panel.Controls.Add(new LiteralControl(Info));
 
         }
+
     }
     //-------------------------------------------------------------------------------------------------------------
 
-    /*
-   Apply for requests of both types: leave requests or business trip requests, by supplying all the
-   needed information for the request. A staff member can not apply for a leave if he/she exceeded
-   the number of annual leaves allowed. If a manager applies for a request, the request does not need
-   to be approved, but it only needs to be kept track of. A staff member can not apply for a request
-   when its applied period overlaps with another request he/she applied for before.
-       GO
-   CREATE PROC  ApplyManagerForRequestSP
-   @ownerUserName VARCHAR(30),
-   @replacementUserName VARCHaR(30),
-   @startDate DATETIME,
-   @endDate DATETIME,
-   @leaveType VARCHAR(50) = NULL,
-   @tripDestination VARCHAR(150) = NULL,
-   @tripPurpose TEXT = NULL,
-   @operationStatus INT OUTPUT
-   AS
-
-
-     */
-
-    protected void ApplyForRequests(object sender, EventArgs e)
+    protected void populateDropDown(object sender, EventArgs e)
     {
         string type = Session["Type"].ToString();
         string Username = Session["Username"].ToString();
+
+
+        dropdownlist_leavetype.Items.Add("annual leave");
+        dropdownlist_leavetype.Items.Add("accidental leave");
+        dropdownlist_leavetype.Items.Add("sick leave");
+
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("ViewReceivedEmailsSP", conn);
-        cmd.CommandType = CommandType.StoredProcedure;
-        cmd.Parameters.Add(new SqlParameter("@username", Username));
         conn.Open();
         if (type == "Regular")
         {
-            DropDownList_Replacers.Items.Add("Add New");
+            SqlCommand RegularUsernamescmd = new SqlCommand("RegularUsernames", conn);
+            RegularUsernamescmd.CommandType = CommandType.StoredProcedure;
+            SqlDataReader RegularUsernamesrdr = RegularUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            while (RegularUsernamesrdr.Read())
+            {
+                string username = RegularUsernamesrdr.GetString(RegularUsernamesrdr.GetOrdinal("user_name"));
+                ListItem userItem = new ListItem(username, username);
+                dropdownlist_replacers.Items.Add(userItem);
+
+            }
+
+        }
+        else
+            if (type == "HR")
+        {
+            SqlCommand HRUsernamescmd = new SqlCommand("HRUsernames", conn);
+            HRUsernamescmd.CommandType = CommandType.StoredProcedure;
+            SqlDataReader HRUsernamesrdr = HRUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            while (HRUsernamesrdr.Read())
+            {
+                string username = HRUsernamesrdr.GetString(HRUsernamesrdr.GetOrdinal("user_name"));
+                dropdownlist_replacers.Items.Add(username);
+
+            }
+        }
+        else
+        {
+            SqlCommand ManagerUsernamescmd = new SqlCommand("ManagerUsernames", conn);
+            ManagerUsernamescmd.CommandType = CommandType.StoredProcedure;
+            SqlDataReader ManagerUsernamesrdr = ManagerUsernamescmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            while (ManagerUsernamesrdr.Read())
+            {
+                string username = ManagerUsernamesrdr.GetString(ManagerUsernamesrdr.GetOrdinal("user_name"));
+                dropdownlist_replacers.Items.Add(username);
+            }
 
         }
 
-        if (type == "HR")
+    }
+
+
+    //-----------------------------------------------------------------------------------------------------------------------------
+
+
+    protected void ApplyForRequests(object sender, EventArgs e)
+    {
+        string Username = Session["Username"].ToString();
+        string type = Session["Type"].ToString();
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        conn.Open();
+
+        string TripPurpose = trip_purpose.Text;
+        string TripDestination = trip_destination.Text;
+        string StartDate = start_date.SelectedDate.ToShortDateString();
+        string EndDate = end_date.SelectedDate.ToShortDateString();
+        string LeaveType = dropdownlist_leavetype.SelectedValue;
+        string Replacer = dropdownlist_replacers.SelectedValue;
+        SqlCommand ApplyRequestscmd = null;
+
+        if (type == "Regular")
+        {
+            ApplyRequestscmd = new SqlCommand("ApplyRegularForRequestSP", conn);
+            ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
+        }
+
+        else if (type == "HR")
         {
 
+            ApplyRequestscmd = new SqlCommand("ApplyHRForRequestSP", conn);
+            ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
 
         }
-
         else
         {
 
+            ApplyRequestscmd = new SqlCommand("ApplyManagerForRequestSP", conn);
+            ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
 
+        }
+
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@ownerUserName", Username));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@startDate", StartDate));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@endDate", EndDate));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@replacementUserName", Replacer));
+
+        if (string.IsNullOrEmpty(LeaveType))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", LeaveType));
+        }
+        if (string.IsNullOrEmpty(TripPurpose))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", TripPurpose));
+        }
+        if (string.IsNullOrEmpty(TripDestination))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", TripDestination));
+        }
+        if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate) || string.IsNullOrEmpty(Replacer) || (string.IsNullOrEmpty(LeaveType) && (string.IsNullOrEmpty(TripDestination) || string.IsNullOrEmpty(TripPurpose))))
+        {
+            Label failed3 = new Label();
+            failed3.Text = "Please Enter All Info";
+        }
+        else
+        {
+            SqlParameter OperationStatus = ApplyRequestscmd.Parameters.Add("@operationStatus", SqlDbType.Int);
+            OperationStatus.Direction = ParameterDirection.Output;
+
+            ApplyRequestscmd.ExecuteNonQuery();
+            conn.Close();
+            Label failed = new Label();
+            failed.Text = "You Exceeded Your Number of Annual Leaves.";
+
+            Label failed1 = new Label();
+            failed1.Text = "Your Dates are overlapping with another Request's Dates";
+
+            Label Passed = new Label();
+            Passed.Text = "Requests Successfully Applied!";
+            switch (OperationStatus.Value.ToString())
+            {
+                case "1":
+                    apply_requests_response.Controls.Add(failed);
+                    break;
+
+                case "2":
+                    apply_requests_response.Controls.Add(failed1);
+                    break;
+                case "3":
+                    apply_requests_response.Controls.Add(Passed);
+                    break;
+            }
 
         }
     }
 
+    protected void DeleteRequests(object sender, EventArgs e, string RequestID)
+    {
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("DeletePendingRequestsSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.Add(new SqlParameter("@requestID", RequestID));
+        conn.Open();
+        cmd.ExecuteNonQuery();
+    }
+
+    protected void replyToEmail(object sender, EventArgs e, string RecipientUsername, string Timestamp, string SenderUsername)
+    {
+    }
     //identity controls
     protected void ShowProfile(object sender, EventArgs e)
     {
@@ -504,15 +655,4 @@ public partial class Staff : System.Web.UI.Page
         Response.Redirect("companies");
     }
 
-
-
-
-
-
-
-
-
-
-
 }
-

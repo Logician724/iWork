@@ -40,7 +40,7 @@
                     <a class="nav-link" data-toggle="tab" href="#viewproject_panel">View Projects</a>
                 </li>
             </ul>
-            <div class="tab-content">
+            <div class="tab-content mt-5">
                 <div id="personal_info" class="tab-pane active" runat="server"></div>
                 <div id="edit_info" class="tab-pane" runat="server">
                     <div class="form-group row">
@@ -84,12 +84,8 @@
                     </div>
                 </div>
                 <div id="viewproject_panel" class="tab-pane" runat="server">
-                    <asp:Button CssClass="btn btn-primary" ID="Button1" runat="server" Text="My Projects" OnClick="viewProjects" />
-                    <div id="viewtasks_panel" runat="server">
-                        <asp:TextBox CssClass="form-control" ID="proj_name" runat="server" placeholder="Enter Project Name"></asp:TextBox>
-                        <asp:Button CssClass="btn btn-primary" ID="Button2" runat="server" Text="My Tasks" OnClick="viewTasks" />
-                        <div class="text-center mt-2 font-weight-bold text-danger" id="tasks_response" runat="server"></div>
-                    </div>
+                    <div id="project_response" class="text-center text-danger font-weight-bold mt-2" runat="server"></div>
+                    <div class="text-center mt-2 font-weight-bold text-danger" id="viewtasks_response" runat="server"></div>
                 </div>
             </div>
         </div>

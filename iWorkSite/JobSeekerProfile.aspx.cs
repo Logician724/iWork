@@ -21,8 +21,8 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        //----------------------------------------------------------------------------------------------------------------
-        viewPersonalInfo(sender, e);
+        //-----------------------------------------------------------------------------------------
+        ViewPersonalInfo(sender, e);
 
 
         //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
@@ -55,7 +55,7 @@ public partial class JobSeekerProfile : System.Web.UI.Page
     }
 
     //-------------------------------------------------------------------------------------------------------------------
-    protected void viewPersonalInfo(object sender, EventArgs e)
+    protected void ViewPersonalInfo(object sender, EventArgs e)
     {
         string Username = null;
         if (Session["Username"] != null)
@@ -124,10 +124,6 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("EditPersonalInfoSP", conn);
         cmd.CommandType = System.Data.CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
-
-
-
-
         string password = txt_password.Text;
         string personalemail = txt_personalemail.Text;
         string birthdate = txt_birthdate.Text;
@@ -284,12 +280,12 @@ public partial class JobSeekerProfile : System.Web.UI.Page
                 "      <div class=\"modal-body\">\r\n";
             applications.Controls.Add(new LiteralControl(ChooseModalheader));
             RadioButtonList DayOffList = new RadioButtonList();
-            DayOffList.Items.Add(new ListItem("Saturday", "sat"));
-            DayOffList.Items.Add(new ListItem("Sunday", "sun"));
-            DayOffList.Items.Add(new ListItem("Monday", "mon"));
-            DayOffList.Items.Add(new ListItem("Tuesday", "tue"));
-            DayOffList.Items.Add(new ListItem("Wednesday", "wed"));
-            DayOffList.Items.Add(new ListItem("Thursday", "thu"));
+            DayOffList.Items.Add(new ListItem("Saturday", "Saturday"));
+            DayOffList.Items.Add(new ListItem("Sunday", "Sunday"));
+            DayOffList.Items.Add(new ListItem("Monday", "Monday"));
+            DayOffList.Items.Add(new ListItem("Tuesday", "Tuesday"));
+            DayOffList.Items.Add(new ListItem("Wednesday", "Wednesday"));
+            DayOffList.Items.Add(new ListItem("Thursday", "Thursday"));
             DayOffList.AutoPostBack = false;
             applications.Controls.Add(DayOffList);
             string ChooseModalBody = "      </div>\r\n" +
@@ -361,11 +357,45 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         }
         else
         {
-            //format the values in the drop down list depending on the database format
             string DayOff = DayOffList.SelectedValue.ToString();
-        }
+            string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+            SqlCommand cmd = new SqlCommand("ChooseJobFromAcceptedAppSP", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@seekerUserName", Username));
+            cmd.Parameters.Add(new SqlParameter("@jobTitle", JobTitle));
+            cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+            cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+            cmd.Parameters.Add(new SqlParameter("@dayOff", DayOff));
+            //output parameters
+            SqlParameter type = cmd.Parameters.Add("@type", SqlDbType.Int);
+            type.Direction = ParameterDirection.Output;
+            SqlParameter op = cmd.Parameters.Add("@operationStatus", SqlDbType.Int);
+            op.Direction = ParameterDirection.Output;
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            switch (type.Value.ToString())
+            {
+                case "1":
+                    Session["Username"] = Username;
+                    Response.Redirect("HrControl", true);
+                    break;
+                case "2":
+                    Session["Username"] = Username;
+                    Response.Redirect("RegularEmployeeProfile", true);
+                    break;
+                case "3":
+                    Session["Username"] = Username;
+                    Response.Redirect("ManagerControl", true);
+                    break;
+
+            }
+
+        }//end of else
     }
-    protected void SignOut (object sender, EventArgs e)
+
+    protected void SignOut(object sender, EventArgs e)
     {
         Session.Clear();
         Response.Redirect("companies");
