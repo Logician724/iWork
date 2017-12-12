@@ -13,48 +13,57 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        viewPersonalInfo(sender, e);
-
-        //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
-        string Username = Session["Username"].ToString();
-        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
-        SqlConnection conn = new SqlConnection(connStr);
-        SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
-        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-        cmd.Parameters.Add(new SqlParameter("@userName", Username));
-        conn.Open();
-        SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-
-        if (rdr.Read())
+        if (Session["Username"] == null)
         {
+            Response.Redirect("login");
+        }
+        else
+        {
+            viewPersonalInfo(sender, e);
+            viewProjects(sender, e);
 
 
-            string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
-            string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
-            string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
-            string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
-            string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
-            string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
+            //-----------PLACE HOLDERS FOR EDITING INFO------------------------------------------------
+            string Username = Session["Username"].ToString();
+            string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+            SqlCommand cmd = new SqlCommand("ViewUserInfoSP", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@userName", Username));
+            conn.Open();
+            SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
-            txt_password.Attributes.Add("placeholder", "**********");
-            txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
-            txt_birthdate.Attributes.Add("placeholder", Birthdate);
-            txt_expyrs.Attributes.Add("placeholder", ExpYear);
-            txt_fn.Attributes.Add("placeholder", FirstName);
-            txt_ln.Attributes.Add("placeholder", LastName);
+            if (rdr.Read())
+            {
+
+
+                string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
+                string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
+                string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
+                string FirstName = rdr.GetString(rdr.GetOrdinal("first_name"));
+                string LastName = rdr.GetString(rdr.GetOrdinal("last_name"));
+                string Age = rdr.GetValue(rdr.GetOrdinal("age")).ToString();
+
+                txt_password.Attributes.Add("placeholder", "**********");
+                txt_personalemail.Attributes.Add("placeholder", PersonalEmail);
+                txt_birthdate.Attributes.Add("placeholder", Birthdate);
+                txt_expyrs.Attributes.Add("placeholder", ExpYear);
+                txt_fn.Attributes.Add("placeholder", FirstName);
+                txt_ln.Attributes.Add("placeholder", LastName);
+            }
         }
     }
 
-//-------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------------
 
-        protected void staff(object sender, EventArgs e)
+    protected void staff(object sender, EventArgs e)
     {
         Session["Username"] = Session["Username"].ToString();
         Session["Type"] = Session["Type"].ToString();
         Response.Redirect("Staff", true);
     }
- 
- //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -95,7 +104,7 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
 
     }//End of method 
 
-//------------------------------------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------------------------------------
     protected void editPersonalInfo(object sender, EventArgs e)
     {
         string Username = Session["Username"].ToString();
@@ -174,10 +183,17 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
     + "<div class = \"card-text\"><span class = \"font-weight-bold\">End Date: </span>" + EndDate + "</div>"
     + "</div>";
 
-          
+            Panel Tasks = new Panel();
+            Tasks.CssClass = "offset-2 col-3";
+            Button ViewTasks = new Button();
+            ViewTasks.Text = "Tasks";
+            ViewTasks.CssClass = "btn btn-primary";
+            ViewTasks.Click += new EventHandler((sender_tasks, e_tasks) => viewTasks(sender_tasks, e_tasks, ProjectName));
+            Tasks.Controls.Add(ViewTasks);
+
 
             viewproject_panel.Controls.Add(new LiteralControl(ProjectInfo));
-
+            viewproject_panel.Controls.Add(ViewTasks);
 
         }//end of while loop
 
@@ -187,45 +203,49 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
 
     // View a list of tasks in a certain project assigned to him/her along with all of their information and status.
 
-    protected void viewTasks(object sender, EventArgs e)
+    protected void viewTasks(object sender, EventArgs e, string ProjectName)
     {
 
         string Username = Session["Username"].ToString();
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         SqlCommand cmd = new SqlCommand("ViewTasksInProjectSP", conn);
-        cmd.CommandType = System.Data.CommandType.StoredProcedure;                      
+        cmd.CommandType = System.Data.CommandType.StoredProcedure;
         cmd.Parameters.Add(new SqlParameter("@userName", Username));
-        string projectname = proj_name.Text;
-        cmd.Parameters.Add(new SqlParameter("@projectName", projectname));
+
+        cmd.Parameters.Add(new SqlParameter("@projectName", ProjectName));
         //output parameterssub
         SqlParameter OperationStatus = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
         OperationStatus.Direction = ParameterDirection.Output;
         conn.Open();
         cmd.ExecuteNonQuery();
-        string op= OperationStatus.Value.ToString();
+        string op = OperationStatus.Value.ToString();
         conn.Close();
         conn.Open();
-        Label noTasks = new Label();
-        noTasks.Text = "You have no tasks in this Project.";
+
+
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+        Label Failed = new Label();
+        Failed.Text = "You have no tasks yet in this project.";
+
         switch (op)
         {
+
             case "False":
-                tasks_response.Controls.Add(noTasks);
+                viewtasks_response.Controls.Add(Failed);
                 break;
+
             case "True":
-
-
                 while (rdr.Read())
                 {
 
-            
+
                     string TaskName = rdr.GetString(rdr.GetOrdinal("name"));
                     string Description = rdr.GetString(rdr.GetOrdinal("description"));
                     string Comments = rdr.GetString(rdr.GetOrdinal("comments"));
                     string Status = rdr.GetString(rdr.GetOrdinal("status"));
-                    string Deadline= rdr.GetValue(rdr.GetOrdinal("deadline")).ToString();
+                    string Deadline = rdr.GetValue(rdr.GetOrdinal("deadline")).ToString();
 
 
                     string TasksInfo = "<div class = \"card-block\">"
@@ -237,23 +257,138 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
             + "</div>";
 
 
+                    Panel ChangeStatusAssigned = new Panel();
+                    ChangeStatusAssigned.CssClass = "offset-2 col-3";
+                    Button toAssignedButton = new Button();
+                    toAssignedButton.Text = "Change Status to Assigned";
+                    toAssignedButton.CssClass = "btn btn-primary";
+                    toAssignedButton.Click += new EventHandler((sender_assigned, e_assigned) => changeTasksToAssigned(sender_assigned,e_assigned,Username, TaskName,ProjectName,Deadline));
 
-                    viewtasks_panel.Controls.Add(new LiteralControl(TasksInfo));
+                    if (Status == "Fixed")
+                    {
 
+                        toAssignedButton.Enabled = true;
+                    }
+                    else
+                    {
+                        toAssignedButton.Visible = false;
+                    }
+                    
+                    ChangeStatusAssigned.Controls.Add(toAssignedButton);
+
+
+                    Panel ChangeStatusFixed = new Panel();
+                    ChangeStatusFixed.CssClass = "offset-2 col-3";
+                    Button toFixedButton = new Button();
+                    toFixedButton.Text = "Change Status to Fixed";
+                    toFixedButton.CssClass = "btn btn-primary";
+                    toFixedButton.Click += new EventHandler((sender_fixed, e_fixed) => changeTasksToFixed(sender_fixed, e_fixed, Username, TaskName, ProjectName, Deadline));
+                    ChangeStatusFixed.Controls.Add(toFixedButton);
+
+                    if (Status == "Assigned")
+                    {
+
+                        toFixedButton.Enabled = true;
+                    }
+                    else
+                    {
+                        toFixedButton.Visible = false;
+                    }
+
+
+                    viewproject_panel.Controls.Add(new LiteralControl(TasksInfo));
+                    viewproject_panel.Controls.Add(ChangeStatusFixed);
+                    viewproject_panel.Controls.Add(ChangeStatusAssigned);
 
 
 
 
                 }//end of while loop
 
-
                 break;
+
         }
+
+
 
     }//end of method
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    protected void changeTasksToAssigned(object sender, EventArgs e, string Username, string TaskName, string ProjectName, string Deadline)
+    {
+         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("ChangeTaskStatusSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+        cmd.Parameters.Add(new SqlParameter("@taskName", TaskName));
+        cmd.Parameters.Add(new SqlParameter("@projectName", ProjectName));
+        cmd.Parameters.Add(new SqlParameter("@deadline", Deadline));
+
+        //output parameters
+        SqlParameter op = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
+        op.Direction = ParameterDirection.Output;
+        conn.Open();
+        cmd.ExecuteNonQuery();
+        conn.Close();
+        Label failed = new Label();
+        failed.Text = "Deadline Passed";
+
+        Label Changed = new Label();
+        Changed.Text = "Status Changed";
+        switch (op.Value.ToString())
+        {
+            case "False":
+                viewproject_panel.Controls.Add(failed);
+                break;
+
+            case"True":
+                viewproject_panel.Controls.Add(Changed);
+                break;
+        }
+
+    }
+
+
+    protected void changeTasksToFixed(object sender, EventArgs e, string Username, string TaskName, string ProjectName, string Deadline)
+    {
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("FinalizeTaskSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.Add(new SqlParameter("@userName", Username));
+        cmd.Parameters.Add(new SqlParameter("@taskName", TaskName));
+        cmd.Parameters.Add(new SqlParameter("@projectName", ProjectName));
+        cmd.Parameters.Add(new SqlParameter("@deadline", Deadline));
+
+        //output parameters
+        SqlParameter op = cmd.Parameters.Add("@operationStatus", SqlDbType.Bit);
+        op.Direction = ParameterDirection.Output;
+        conn.Open();
+        cmd.ExecuteNonQuery();
+        conn.Close();
+        Label failed = new Label();
+        failed.Text = "Deadline Passed";
+
+        Label Changed = new Label();
+        Changed.Text = "Status Changed";
+        switch (op.Value.ToString())
+        {
+            case "False":
+                viewproject_panel.Controls.Add(failed);
+                break;
+
+            case "True":
+                viewproject_panel.Controls.Add(Changed);
+                break;
+        }
 
 
     }
+
+
+}

@@ -23,6 +23,7 @@ public partial class Staff : System.Web.UI.Page
         {
             populateDropDown(sender, e);
             viewRequests(sender, e);
+            viewEmails(sender,e);
         }
     }
 
@@ -613,7 +614,7 @@ public partial class Staff : System.Web.UI.Page
 
 
 
-    //--------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------------------
 
     protected void DeleteRequests(object sender, EventArgs e, string RequestID)
     {
@@ -632,5 +633,10 @@ public partial class Staff : System.Web.UI.Page
 
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------
 
+    protected void replyToEmail(object sender, EventArgs e, string RecipientUsername, string Timestamp, string SenderUsername)
+    {
+
+    }
 }
