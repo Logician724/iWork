@@ -13,8 +13,8 @@
 </head>
 <body class="jumbotron">
     <div class="container">
-        <form  runat="server">
-            <div id="search" class="form-group" runat="server">
+        <form runat="server">
+            <div class="form-group" runat="server">
                 <div class="container text-center">
                     <div class="display-1">iWork</div>
                     <p class="lead">We lighten your path</p>

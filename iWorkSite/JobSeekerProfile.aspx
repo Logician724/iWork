@@ -11,6 +11,7 @@
     <div class="container">
 
         <form runat="server">
+            <div id="response" class= "text-danger font-weight-bold text-center" runat="server"></div>
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#personal_info">View Info</a>
