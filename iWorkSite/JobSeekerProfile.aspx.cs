@@ -383,8 +383,46 @@ public partial class JobSeekerProfile : System.Web.UI.Page
         {
             //format the values in the drop down list depending on the database format
             string DayOff = DayOffList.SelectedValue.ToString();
-        }
 
+
+            string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+            SqlCommand cmd = new SqlCommand("ChooseJobFromAcceptedAppSP", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@seekerUserName", Username));
+            cmd.Parameters.Add(new SqlParameter("@jobTitle", JobTitle));
+            cmd.Parameters.Add(new SqlParameter("@departmentCode", DepartmentCode));
+            cmd.Parameters.Add(new SqlParameter("@companyDomain", CompanyDomain));
+            cmd.Parameters.Add(new SqlParameter("@dayOff", DayOff));
+            //output parameters
+            SqlParameter type = cmd.Parameters.Add("@type", SqlDbType.Int);
+            type.Direction = ParameterDirection.Output;
+
+            SqlParameter op = cmd.Parameters.Add("@operationStatus", SqlDbType.Int);
+            op.Direction = ParameterDirection.Output;
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+
+            switch (type.Value.ToString())
+            {
+                case "1":
+                Session["Username"] = Username;
+                Response.Redirect("HrControl", true);
+                    break;
+                case "2":
+                Session["Username"] = Username;
+                Response.Redirect("RegularEmployeeProfile", true);
+                    break;
+                case "3":
+                Session["Username"] = Username;
+                Response.Redirect("ManagerControl", true);
+                    break;
+
+            }
+
+        }//end of else
 
 
     }
