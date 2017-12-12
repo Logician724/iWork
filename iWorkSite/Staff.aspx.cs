@@ -13,7 +13,7 @@ public partial class Staff : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+
 
         if (Session["Username"] == null)
         {
@@ -22,8 +22,7 @@ public partial class Staff : System.Web.UI.Page
         else
         {
             populateDropDown(sender, e);
-            viewAttendance(sender, e);
-            viewEmails(sender, e);
+            viewRequests(sender, e);
         }
     }
 
@@ -249,12 +248,24 @@ public partial class Staff : System.Web.UI.Page
                     Button DeleteRequest = new Button();
                     DeleteRequest.Text = "Delete";
                     DeleteRequest.CssClass = "btn btn-danger";
-                   // DeleteRequest.Click += new EventHandler((sender_delete, e_delete) => DeleteRequest(sender_delete, e_delete, JobTitle, DepartmentCode, CompanyDomain));
+                    DeleteRequest.Click += new EventHandler((sender_delete, e_delete) => DeleteRequests(sender_delete, e_delete, RequestID));
+
+                    if (rdr.GetValue(rdr.GetOrdinal("hr_response_req")) == DBNull.Value && rdr.GetValue(rdr.GetOrdinal("manager_response_req")) == DBNull.Value)
+                    {
+
+                        DeleteRequest.Enabled = true;
+                    }
+                    else
+                    {
+                        DeleteRequest.Enabled = false;
+                        DeleteRequest.ToolTip = "You can't delete the Request unless it is pending";
+                    }
+
 
                     DeletePanel.Controls.Add(DeleteRequest);
-                    viewrequests_panel.Controls.Add(DeletePanel);
+                   
                     viewrequests_panel.Controls.Add(new LiteralControl(requests));
-
+                    viewrequests_panel.Controls.Add(DeletePanel);
 
 
 
@@ -444,7 +455,7 @@ public partial class Staff : System.Web.UI.Page
         dropdownlist_leavetype.Items.Add("annual leave");
         dropdownlist_leavetype.Items.Add("accidental leave");
         dropdownlist_leavetype.Items.Add("sick leave");
-        
+
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         conn.Open();
@@ -491,7 +502,7 @@ public partial class Staff : System.Web.UI.Page
     }
 
 
-//-----------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------
 
 
     protected void ApplyForRequests(object sender, EventArgs e)
@@ -502,104 +513,124 @@ public partial class Staff : System.Web.UI.Page
         string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
         SqlConnection conn = new SqlConnection(connStr);
         conn.Open();
-        
+
         string TripPurpose = trip_purpose.Text;
         string TripDestination = trip_destination.Text;
         string StartDate = start_date.SelectedDate.ToShortDateString();
         string EndDate = end_date.SelectedDate.ToShortDateString();
         string LeaveType = dropdownlist_leavetype.SelectedValue;
         string Replacer = dropdownlist_replacers.SelectedValue;
-        SqlCommand ApplyRequestscmd = null; 
+        SqlCommand ApplyRequestscmd = null;
 
-        if (type == "Regular") 
-       {
+        if (type == "Regular")
+        {
             ApplyRequestscmd = new SqlCommand("ApplyRegularForRequestSP", conn);
-           ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
-       }
-      
-        else if(type=="HR")
+            ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
+        }
+
+        else if (type == "HR")
         {
 
             ApplyRequestscmd = new SqlCommand("ApplyHRForRequestSP", conn);
             ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
-           
+
         }
         else
         {
 
             ApplyRequestscmd = new SqlCommand("ApplyManagerForRequestSP", conn);
             ApplyRequestscmd.CommandType = CommandType.StoredProcedure;
-          
+
         }
 
-           ApplyRequestscmd.Parameters.Add(new SqlParameter("@ownerUserName", Username));
-           ApplyRequestscmd.Parameters.Add(new SqlParameter("@startDate", StartDate));
-           ApplyRequestscmd.Parameters.Add(new SqlParameter("@endDate", EndDate));
-           ApplyRequestscmd.Parameters.Add(new SqlParameter("@replacementUserName", Replacer));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@ownerUserName", Username));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@startDate", StartDate));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@endDate", EndDate));
+        ApplyRequestscmd.Parameters.Add(new SqlParameter("@replacementUserName", Replacer));
 
-           if (string.IsNullOrEmpty(LeaveType))
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", DBNull.Value));
-           }
-           else
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", LeaveType));
-           }
-           if (string.IsNullOrEmpty(TripPurpose))
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", DBNull.Value));
-           }
-           else
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", TripPurpose));
-           }
+        if (string.IsNullOrEmpty(LeaveType))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@leaveType", LeaveType));
+        }
+        if (string.IsNullOrEmpty(TripPurpose))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripPurpose", TripPurpose));
+        }
 
-           if (string.IsNullOrEmpty(TripDestination))
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", DBNull.Value));
-           }
-           else
-           {
-               ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", TripDestination));
-           }
+        if (string.IsNullOrEmpty(TripDestination))
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", DBNull.Value));
+        }
+        else
+        {
+            ApplyRequestscmd.Parameters.Add(new SqlParameter("@tripDestination", TripDestination));
+        }
 
-           if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate) || string.IsNullOrEmpty(Replacer) || (string.IsNullOrEmpty(LeaveType) && (string.IsNullOrEmpty(TripDestination) || string.IsNullOrEmpty(TripPurpose))))
-           {
-               Label failed3 = new Label();
-               failed3.Text = "Please Enter All Info";
-           }
-           else
-           {
-               SqlParameter OperationStatus = ApplyRequestscmd.Parameters.Add("@operationStatus", SqlDbType.Int);
-               OperationStatus.Direction = ParameterDirection.Output;
-          
-               ApplyRequestscmd.ExecuteNonQuery();
-               conn.Close();
-               Label failed = new Label();
-               failed.Text = "You Exceeded Your Number of Annual Leaves.";
+        if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate) || string.IsNullOrEmpty(Replacer) || (string.IsNullOrEmpty(LeaveType) && (string.IsNullOrEmpty(TripDestination) || string.IsNullOrEmpty(TripPurpose))))
+        {
+            Label failed3 = new Label();
+            failed3.Text = "Please Enter All Info";
+        }
+        else
+        {
+            SqlParameter OperationStatus = ApplyRequestscmd.Parameters.Add("@operationStatus", SqlDbType.Int);
+            OperationStatus.Direction = ParameterDirection.Output;
 
-               Label failed1 = new Label();
-               failed1.Text = "Your Dates are overlapping with another Request's Dates";
+            ApplyRequestscmd.ExecuteNonQuery();
+            conn.Close();
+            Label failed = new Label();
+            failed.Text = "You Exceeded Your Number of Annual Leaves.";
 
-               Label Passed = new Label();
-               Passed.Text = "Requests Successfully Applied!";
-               switch (OperationStatus.Value.ToString())
-               {
-                   case "1":
-                       apply_requests_response.Controls.Add(failed);
-                       break;
+            Label failed1 = new Label();
+            failed1.Text = "Your Dates are overlapping with another Request's Dates";
 
-                   case "2":
-                       apply_requests_response.Controls.Add(failed1);
-                       break;
-                   case "3":
-                       apply_requests_response.Controls.Add(Passed);
-                       break;
-               }
-           }// End of Last Else 
+            Label Passed = new Label();
+            Passed.Text = "Requests Successfully Applied!";
+            switch (OperationStatus.Value.ToString())
+            {
+                case "1":
+                    apply_requests_response.Controls.Add(failed);
+                    break;
 
-       }//End of Method
+                case "2":
+                    apply_requests_response.Controls.Add(failed1);
+                    break;
+                case "3":
+                    apply_requests_response.Controls.Add(Passed);
+                    break;
+            }
+        }// End of Last Else 
+
+    }//End of Method
+
+
+
+    //--------------------------------------------
+
+    protected void DeleteRequests(object sender, EventArgs e, string RequestID)
+    {
+
+        string connStr = ConfigurationManager.ConnectionStrings["iWorkDbConn"].ToString();
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlCommand cmd = new SqlCommand("DeletePendingRequestsSP", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
+
+        cmd.Parameters.Add(new SqlParameter("@requestID", RequestID));
+
+
+
+        conn.Open();
+        cmd.ExecuteNonQuery();
 
     }
 
 
+}
