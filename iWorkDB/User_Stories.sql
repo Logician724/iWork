@@ -25,7 +25,7 @@ CREATE PROC SearchCompanyByAddressSP
 @keyWord VARCHAR(300)
 AS
 SELECT c.*
-FROM Companies c 
+FROM Companies c
 WHERE c.address LIKE CONCAT('%',@keyWord,'%')
 
 -- The procedure views the information of companies with its type containing a key word
@@ -39,7 +39,7 @@ GO
 CREATE PROC ViewCompaniesSP
 AS
 SELECT C.*
-FROM Companies C 
+FROM Companies C
 
 
 --3:-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -350,7 +350,7 @@ SELECT q.question_title,q.question_id,q.answer
 FROM Questions q INNER JOIN Jobs_Have_Questions jq
 ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
-	
+
 
 --3: ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
@@ -389,7 +389,7 @@ WHERE A.seeker_username=@username
 -- 0 --> This is not an accepted application
 -- 1 --> This chosen day off is friday
 -- 2 --> operation successful. the job seeker is now a staff member in his specified job, and number of vacancies in the
-	
+
 GO
 ALTER PROC ChooseJobFromAcceptedAppSP
 @seekerUserName VARCHAR(30),
@@ -436,15 +436,15 @@ VALUES
 IF(@jobTitle LIKE 'HR%')
 BEGIN
 INSERT INTO HR_Employees VALUES (@seekerUserName)
-SET @type=1; 
-END 
+SET @type=1;
+END
 ELSE IF (@jobTitle LIKE 'Employee%')
-BEGIN 
+BEGIN
 INSERT INTO Regular_Employees VALUES (@seekerUserName)
 SET @type=2;
 END
-ELSE 
-BEGIN 
+ELSE
+BEGIN
 INSERT INTO Managers VALUES (@seekerUserName,'')
 SET @type=3;
 END
@@ -454,7 +454,8 @@ WHERE Jobs.company_domain = @companyDomain AND
 		Jobs.department_code = @departmentCode AND
 		Jobs.job_title = @jobTitle
 SET @operationStatus = 2 --Successful job choice
-ENDGO
+END
+GO
 CREATE PROC ChooseJobFromAcceptedAppSP
 @seekerUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
@@ -500,15 +501,15 @@ VALUES
 IF(@jobTitle LIKE 'HR%')
 BEGIN
 INSERT INTO HR_Employees VALUES (@seekerUserName)
-SET @type=1; 
-END 
+SET @type=1;
+END
 ELSE IF (@jobTitle LIKE 'Employee%')
-BEGIN 
+BEGIN
 INSERT INTO Regular_Employees VALUES (@seekerUserName)
 SET @type=2;
 END
-ELSE 
-BEGIN 
+ELSE
+BEGIN
 INSERT INTO Managers VALUES (@seekerUserName,'')
 SET @type=3;
 END
@@ -527,20 +528,19 @@ END
 -- Users story staff member no.1 inserts a check-in attednace of a staff member
 -- The procedure takes username as input and outputs operation status 0 or 1
 -- 0 -->  no attendance inserted
--- 1 --> attendance inserted
+-- 1 --> you already checked in
+-- 2 --> insertion succeeded
 -- The procedure gets the staff member's day_off and then checks
 --if the current day of check-in is friday or his/her day_off then no attendace will be inserted
 -- Else attendance will be inserted
 GO
-
-CREATE PROC CheckInSP
+ALTER PROC CheckInSP
 @username VARCHAR(30),
-@operationStatus BIT OUTPUT
+@operationStatus INT OUTPUT
 AS
 DECLARE @timestamp DATETIME
 DECLARE @dayOff VARCHAR(10)
 SET @timestamp = CURRENT_TIMESTAMP
-
 SELECT @dayOff = s.day_off
 FROM Staff_Members s
 WHERE s.user_name = @username
@@ -554,13 +554,22 @@ DATENAME(dw,GETDATE())=@dayOff)
 ))
 SET @operationStatus = 0
 ELSE
+IF(EXISTS(
+SELECT *
+FROM Attendances WHERE 
+CAST(CURRENT_TIMESTAMP AS DATE) = CAST(Attendances.start_time AS DATE)AND
+Attendances.user_name = @username
+))
+BEGIN
+SET @operationStatus = 1
+END
+ELSE
 BEGIN
 INSERT INTO Attendances
 (user_name,start_time)
 VALUES(@username , @timestamp)
-SET @operationStatus = 1
+SET @operationStatus = 2
 END
-
 
 --2: ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -568,7 +577,7 @@ END
 --The procedure takes as input the staff member's username, if his/her dayoff equals the timestamp, the procedure return 0 (false) and we disregard the leave time.
 --Otherwise, the procedure sets the leavetime in the Attendance table to the timestamp and outputs 1 (true), meaning we regarded the leavetime.
 GO
-CREATE PROC CheckOutSP
+ALTER PROC CheckOutSP
 @username VARCHAR(30),
 @operationStatus BIT OUTPUT
 AS
@@ -583,11 +592,20 @@ WHERE a.user_name=@username AND sm.day_off = DATENAME(dw,@timestamp) OR (DATENAM
 ))
 SET @operationStatus=0
 ELSE
+IF(EXISTS
+(
+SELECT *
+FROM Attendances
+WHERE CAST(CURRENT_TIMESTAMP AS DATE) = CAST(Attendances.start_time AS DATE) AND
+Attendances.user_name = @username
+))
+SET @operationStatus = 1
+ELSE
 BEGIN
 UPDATE Attendances
 SET    leave_time = @timestamp
 WHERE  user_name = @username AND CAST( Attendances.start_time AS DATE) = CAST(@timestamp AS DATE)
-SET @operationStatus = 1
+SET @operationStatus = 2
 END
 
 
@@ -657,21 +675,21 @@ SET @operationStatus = 0; -- your replacer is not a regular employee
 ELSE IF(@leaveType IS NOT NULL AND EXISTS(
 SELECT*
 FROM Staff_Members sm WHERE sm.user_name=@ownerUserName
-AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
+AND (sm.no_annual_leaves-@noOfLeaveDays<0)
 ))
 SET @operationStatus=1; --exceeded number of annual leaves
 ELSE IF EXISTS(
 SELECT*
  FROM Requests r
- WHERE 
+ WHERE
  (r.start_date<=@startDate AND r.end_date>=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date<=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<=@endDate)
- OR 
+ OR
  (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>=@startDate)
- 
+
         )
 SET @operationStatus=2; --overlap with another request
 
@@ -738,17 +756,17 @@ AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
 SET @operationStatus=1; --exceeded number of annual leaves
 ELSE IF EXISTS(
 SELECT*
- FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hr ON r.request_id=hr.request_id  
- WHERE 
+ FROM Requests r INNER JOIN HR_Employees_Replace_HR_Employees hr ON r.request_id=hr.request_id
+ WHERE
  (hr.user_name_request_owner=@ownerUserName)
  AND
  (
  (r.start_date<=@startDate AND r.end_date>=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date<=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<=@endDate)
- OR 
+ OR
  (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>=@startDate)
  )
  )
@@ -818,17 +836,17 @@ AND (sm.no_annual_leaves<=0 OR sm.no_annual_leaves-@noOfLeaveDays<0)
 SET @operationStatus=1; --exceeded number of annual leaves
 ELSE IF EXISTS(
 SELECT*
- FROM Requests r INNER JOIN Managers_Replace_Managers mr ON r.request_id=mr.request_id  
- WHERE 
+ FROM Requests r INNER JOIN Managers_Replace_Managers mr ON r.request_id=mr.request_id
+ WHERE
  (mr.user_name_request_owner=@ownerUserName)
  AND
  (
  (r.start_date<=@startDate AND r.end_date>=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date<=@endDate)
- OR 
+ OR
  (r.start_date>=@startDate AND r.end_date>=@endDate AND r.start_date<@endDate)
- OR 
+ OR
  (r.start_date<=@startDate AND r.end_date<=@endDate AND r.end_date>@startDate)
  )
  )
@@ -871,7 +889,7 @@ END
 -- to  whatever comes from the Union.
 
 GO
-CREATE PROC ViewRequestsStatusSP
+ALTER PROC ViewRequestsStatusSP
 @userName VARCHAR(30),
 @operationStatus BIT OUTPUT
 AS
@@ -889,9 +907,9 @@ FROM Regular_Employees_Replace_Regular_Employees rrr
 WHERE rrr.user_name_request_owner = @userName
              )
 SET @operationStatus=0; --no requests found
-ELSE 
+ELSE
 BEGIN
-SELECT r.request_id, r.hr_response_req, r.manager_response_req
+SELECT r.request_id, r.hr_response_req, r.manager_response_req,r.start_date,r.end_date
 FROM Requests r
 WHERE r.request_id = ANY(
 SELECT hrr.request_id
@@ -977,6 +995,16 @@ ELSE BEGIN
 SET @operationStatus=0
 END
 
+--sending emails helper procedure
+GO
+CREATE PROC GetStaffEmailSP
+@username VARCHAR(30)
+AS
+SELECT company_email
+FROM Staff_Members
+WHERE Staff_Members.user_name = @userName
+
+
 --8:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company.
@@ -984,7 +1012,6 @@ END
 -- takes the username of the staff member as input, returns
 -- shows the emails of the username according to the primary keys of table Emails
 -- only if sender are in the same company as the receiver (handled with an Exists)
-
 
 GO
 CREATE PROC ViewReceivedEmailsSP
@@ -1410,24 +1437,32 @@ SET @operationStatus = 1
 END
 ELSE
 SET @operationStatus = 0
+DECLARE @op BIT
 
 GO
 CREATE PROC ShowRequestInfoSP
-@hrUserName VARCHAR(30),
-@requestID INT
+@username VARCHAR(30),
+@requestID INT,
+@operationStatus BIT OUTPUT
 AS
 IF EXISTS(
 SELECT *
 FROM Leave_Requests
 WHERE Leave_Requests.request_id = @requestID
 )
+BEGIN
+SET @operationStatus = 0;
 SELECT type
 FROM Leave_Requests
 WHERE request_id = @requestID
+END
 ELSE
+BEGIN
+SET @operationStatus = 1;
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests
-
+WHERE request_id = @requestID
+END
 --8: ------------------------------------------------------------------------------------------------------------------------------------------
 
 --HR user stories No.8: The HR give the final respond for the requests, and takes into
@@ -1552,7 +1587,8 @@ GO
 CREATE PROC ViewTop3RegularSP
 @hrUserName VARCHAR(30),
 @departmentCode VARCHAR(30),
-@companyDomain VARCHAR(150)
+@companyDomain VARCHAR(150),
+@month INT
 AS
 SELECT TOP 3 first_name+' '+ last_name AS full_name, SUM(a.duration) AS working_hours
 -- join the attendances and the user names of people who have fixed tasks
@@ -1564,7 +1600,7 @@ AND t.project_name = mtr.project_name
 AND t.name = mtr.task_name
 AND t.status = 'Fixed'
 -- All task deadlines should be within a month from now
-AND MONTH(t.deadline) = MONTH(CURRENT_TIMESTAMP)
+AND MONTH(t.deadline) = @month
 AND YEAR(t.deadline) = YEAR(CURRENT_TIMESTAMP)
 AND EXISTS
 (SELECT *
@@ -1578,7 +1614,7 @@ ON a.user_name = Regulars_Have_Fixed_Tasks.user_name
 -- join with users to get the full name the targer users
 INNER JOIN Users u
 ON Regulars_Have_Fixed_Tasks.user_name = u.user_name
-WHERE MONTH(a.start_time)= MONTH(CURRENT_TIMESTAMP)
+WHERE MONTH(a.start_time)= @month
 AND  YEAR(a.start_time)= YEAR(CURRENT_TIMESTAMP)
 GROUP BY first_name + ' '+ last_name
 --order by the highest number of working hours
@@ -2457,7 +2493,6 @@ END
 
 --HELPER FOR REGULAR REPLACE REGULAR AND HR REPLACE HR
 --AND MANAGER REPLACE MANAGER
-
 GO
 CREATE FUNCTION NumberOfDaysHelper(@userName VARCHAR(30),@startDate DATETIME , @endDate DATETIME)
 RETURNS INT
@@ -2481,7 +2516,6 @@ WHEN 'Wednesday'THEN  4
 WHEN 'Thursday' THEN  5
 ELSE 6
 END
-
 SET @totaldays = DATEDIFF(DAY, @startDate, @endDate)
 SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) +
                        CASE WHEN DATEPART(WEEKDAY, @startDate) = @weekEndDay THEN 1 ELSE 0 END +
@@ -2491,25 +2525,23 @@ SET @weekenddays = ((DATEDIFF(WEEK, @startDate, @endDate) * 2) +
 
 
 RETURN (@totaldays - @weekenddays)
+END
 
-
-
----------------------------ADDED PROCEDURES----------------------------------------------------------------------------------------------
+--Helper Procedures--
+GO
+CREATE PROC RegularUsernames
+AS
+SELECT user_name
+FROM Regular_Employees
 
 GO
-Create Procedure RegularUsernames
+CREATE PROC HRUsernames
 AS
-Select user_name 
-from Regular_Employees
+SELECT user_name
+FROM HR_Employees
 
 GO
-Create Procedure HRUsernames
+CREATE PROC ManagerUsernames
 AS
-Select user_name 
-from HR_Employees
-
-GO
-Create Procedure ManagerUsernames
-AS
-Select user_name 
+SELECT user_name
 from Managers

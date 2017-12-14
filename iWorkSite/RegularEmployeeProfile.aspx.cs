@@ -46,7 +46,6 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
         SqlDataReader rdr = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
         if (rdr.Read())
         {
-
             string PersonalEmail = rdr.GetString(rdr.GetOrdinal("personal_email"));
             string Birthdate = (rdr.GetValue(rdr.GetOrdinal("birth_date")).ToString()).Split(null)[0];
             string ExpYear = rdr.GetValue(rdr.GetOrdinal("exp_year")).ToString();
@@ -264,7 +263,7 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
                     string Deadline = rdr.GetValue(rdr.GetOrdinal("deadline")).ToString();
 
 
-                    string TasksInfo = "<div class=\"collapse\" id=\"project_"+Count+ "\""+" > " +
+                    string TasksInfo = "<div class=\"collapse\" id=\"project_" + Count + "\"" + " > " +
                         "<div class = \"card-block\">"
             + "<div class = \"card-text\"><span class = \"font-weight-bold\">Task Name: </span>" + TaskName + "</div>"
             + "<div class = \"card-text\"><span class = \"font-weight-bold\">Description: </span>" + Description + "</div>"
@@ -306,6 +305,7 @@ public partial class RegularEmployeeProfile : System.Web.UI.Page
                         ChangeStatusAssigned.Controls.Add(toAssignedButton);
                     }
                     else
+                    if (Status == "Assigned")
                     {
                         Button toFixedButton = new Button();
                         toFixedButton.Text = "Change Status to Fixed";
