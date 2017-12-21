@@ -1,34 +1,3 @@
---put your creations in here
-USE iWork;
-DROP TABLE Managers_Assign_Tasks_To_Regulars;
-DROP TABLE Managers_Assign_Projects_To_Regulars;
-DROP TABLE Tasks;
-DROP TABLE Projects;
-DROP TABLE Jobs_Have_Questions;
-DROP TABLE Questions;
-DROP TABLE Announcements;
-DROP TABLE Regular_Employees_Replace_Regular_Employees;
-DROP TABLE HR_Employees_Replace_HR_Employees;
-DROP TABLE Managers_Replace_Managers;
-DROP TABLE Business_Trip_Requests;
-DROP TABLE Leave_Requests;
-DROP TABLE Requests;
-DROP TABLE Applications;
-DROP TABLE HR_Employees;
-DROP TABLE Regular_Employees;
-DROP TABLE Managers;
-DROP TABLE Job_Seekers;
-DROP TABLE Attendances;
-DROP TABLE Staff_Receives_Email;
-DROP TABLE Emails;
-DROP TABLE Staff_Members;
-DROP TABLE USER_Prev_Jobs;
-DROP TABLE Users;
-DROP TABLE Jobs;
-DROP TABLE Departments;
-DROP TABLE Companies_Phones;
-DROP TABLE Companies;
-
 CREATE TABLE Companies(
 domain_name VARCHAR(150) PRIMARY KEY NOT NULL,
 name VARCHAR(50) NOT NULL,
