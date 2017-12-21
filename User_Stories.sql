@@ -2298,6 +2298,11 @@ RETURN @missingHours
 END
 
 
+
+--This Fucntions checks if the job_title in table Jobs has the following format:-
+--1.either starts with Manager, 2.starts with HR , 3.or starts with Employee
+--If so, the function outputs 1 (true)
+--Otherwise, it outputs 0 (false)
 GO
 CREATE FUNCTION CheckJobTitle
 (@jobTitle VARCHAR(150))
