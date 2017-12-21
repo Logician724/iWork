@@ -1901,7 +1901,7 @@ AND Applications.department_code = @departmentCode
 AND Applications.company_domain = @companyDomain
 
 
---5: -------------------------------------------------------------------------------------------------------
+--5: ------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.4:- 
 --Managers create a new project in their departments with all of its information.
@@ -1919,6 +1919,18 @@ INSERT Projects (project_name,manager_user_name,start_date,end_date)
 Values(@projectName,@managerUserName,@startDate,@endDate)
 
 --6: --------------------------------------------------------------------------------------------------------------
+
+--Managers User Stories 6:- 
+--A manager can assign regular employees to work on any project in his/her department. Regular employees should be working in the same department.
+--The procedure takes as inputs the Manager username, the regular username (to be assigned), and the project name.
+--Since a regular employee can't work on more than 2 projects,we first check if the Regular Employee is working on 2 projects.
+--If so, the procedure outputs integer 0  and the regular employee cannot be assigned.
+--Otherwise, we then check if the manager who defined the project , and the manager who is assigning the regular employee to the project and also the 
+--regular employee are all in the same department or no.
+--If they are not in the same department, the procedure output integer 1, and the regular employee cannot be assigned.
+--Otherwise, we check if the regular employee is already assigned to this project,, if so , the procedure outputs integer 2 and no updates happen.
+--Otherwise, we can now assign the Regular Employee to the project, updating table Managers_Assign_Projects_To_Regulars with the new values and 
+--returning integer 3 as an indication of successful assignment 
 GO
 CREATE PROC AssignRegularToProjectSP
 @regularUserName VARCHAR(30),
@@ -1956,13 +1968,13 @@ WHERE sm.user_name = @managerUserName
 ))
 SET @operationStatus = 1 --the regular is not in the same department as the manager
 ELSE
-IF  (
-SELECT COUNT(*)
+IF EXISTS (
+SELECT *
 FROM Managers_Assign_Projects_To_Regulars
 WHERE regular_user_name = @regularUserName
 AND project_name = @projectName
-) = 1
-SET @operationStatus = 2 --the regular is already assigned to the project.
+) 
+SET @operationStatus = 2 --the regular is already assigned to the project
 ELSE
 BEGIN
 INSERT INTO Managers_Assign_Projects_To_Regulars
@@ -1970,6 +1982,7 @@ INSERT INTO Managers_Assign_Projects_To_Regulars
 VALUES (@managerUserName,@regularUserName,@projectName)
 SET @operationStatus = 3 --successful assignment
 END
+
 --7: ----------------------------------------------------------------------------------------------------------- 
 -- Managers story no.7 Remove regular employees assigned to a project as long as they don’t have assigned tasks in
 -- that project.
@@ -1977,6 +1990,7 @@ END
 -- and returns an output that is represented as follows
 -- 0 --> the regular employee is already assigned to a task in the project, and can't be removed
 -- 1 --> successful removal, the regular employee is not removed from this project. 
+
 GO
 CREATE PROC RemoveRegularFromProjectSP
 @managerUsername VARCHAR(30),
