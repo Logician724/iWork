@@ -393,11 +393,11 @@ PRINT @status1
 --kindly apply FinalizeTaskSP beofre executing this procedure in order to make a successful change, all the pre-inserted tasks have a status of assigned
 --unsuccessful task edit////task doesn't exist, or is not assigned to this staff member, or deadline passed 
 DECLARE @status0 BIT
-EXEC ChangeTaskStatusSP 'godfrey.love','Task 1','5/9/2017 12:00:00 AM','Project-5651AMU chat page developing BootStrap',@status0 OUTPUT
+EXEC ChangeTaskStatusSP 'rosannah.humphrey','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status0 OUTPUT
 PRINT @status0
 --successful task edit
 DECLARE @status1 BIT
-EXEC ChangeTaskStatusSP 'godfrey.love','Task 1','12/30/2017 12:00:00 AM','Project-3284NMD upgrade of exterior of home page BootStrap',@status1 OUTPUT
+EXEC ChangeTaskStatusSP 'marisa.lavender','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status1 OUTPUT
 PRINT @status1
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 --“As a manager, I should be able to ...”

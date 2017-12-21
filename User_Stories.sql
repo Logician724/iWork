@@ -1617,7 +1617,6 @@ END
 --The Procedure 1st checks if the deadline of the task did not pass, and if the status of the task is fixed.
 --If the deadline passed or the status is fixed, the procedure outputs false.
 --otherwise, the task status is updated, returning true (1).
-
 GO 
 CREATE PROC ChangeTaskStatusSP
 @username VARCHAR(30),
@@ -1636,7 +1635,7 @@ WHERE @username = m.regular_user_name
 AND @taskName = m.task_name 
 AND @deadline = m.task_deadline 
 AND @projectName = m.project_name 
-AND DATEDIFF(DAY,GETDATE(),@deadline) >= 0
+AND DATEDIFF(DAY,CURRENT_TIMESTAMP,@deadline) >= 0
 AND t.status = 'Fixed')
 SET @operationStatus =0
 ELSE
