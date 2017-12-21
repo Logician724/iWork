@@ -3,7 +3,7 @@
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
 
---1:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------
+--1:---------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC SearchCompanyByNameSP 'face'
 GO
@@ -13,12 +13,12 @@ EXEC SearchCompanyByAddressSP 'Pal'
 
 
 
---2:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2:---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC ViewCompaniesSP
 
 
---3:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 GO
 EXEC ViewCompanySP 'facebook.com'
@@ -38,12 +38,12 @@ EXEC ViewDepartmentsOfCompanySP 'facebook.com'
 GO
 EXEC ViewDepartmentsOfCompanySP 'amazon.com'
 
---4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC ViewDepartmentSP 'amazon.com', 'CSR-1263'
 
 
---5:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5:------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --successful registration attempt
 GO
 DECLARE @status1 BIT
@@ -56,12 +56,12 @@ DECLARE @operationStatus BIT;
 EXEC RegisterToWebsite 'claire.carles','fadsfda','claire@gmail.com','05/05/1990',10,'Claire','Carles',@operationStatus OUTPUT
 PRINT @operationStatus
 
---6:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC SearchJobsSP 'js'
 
 
---7:Abdullah----------------------------------------------------------------------------------------------------------------------------
+--7:----------------------------------------------------------------------------------------------------------------------------
 
 EXEC ViewCompaniesSalariesSP
 
@@ -71,7 +71,7 @@ EXEC ViewCompaniesSalariesSP
 --“As a registered user, I should be able to ...”
 --``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
---1:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------
+--1:--------------------------------------------------------------------------------------------------------------------------------------------------------
 --Non user registration
 GO
 DECLARE @type0 INT;
@@ -100,12 +100,12 @@ GO
 DECLARE @type4 INT;
 EXEC UserLoginSP 'claire.carles','MyPassword2017',@type4 OUTPUT
 PRINT @type4 
---2:Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
+--2: ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 EXEC ViewUserInfoSP 'claire.carles'
 
 
---3:Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3: -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --change  password and email
 
 EXEC EditPersonalInfoSP 'claire.carles','changedPassword2017','chill2017@gmail.com',NULL,NULL,NULL,NULL
@@ -120,7 +120,7 @@ EXEC EditPersonalInfoSP 'claire.carles',NULL,NULL,NULL,7,NULL,NULL
 
 
 
---1:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--1:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful job application//There is another application for the same job that is pending
 GO
 DECLARE @status1 INT
@@ -137,20 +137,20 @@ DECLARE @status3 INT
 EXEC ApplyForJobSP 'omar.mofti','Employee- Customer Managing','CSR-1263','amazon.com',@status3 OUTPUT
 PRINT @status3
 
---2:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--2:----------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 GO
 EXEC ViewQuetionsInInterviewSP 'Manager- Managing PHP Department','PHP-5019','facebook.com'
 
 
---3:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC ViewMyScoreSP 'omar.mofti', 'Manager- Managing PHP Department', 'PHP-5019', 'facebook.com'
 
---4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4:---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 GO
 EXEC ViewJobsStatusSP 'shadi.aly'
 
---5:Abdullah---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5:---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful operation//application is not an accpeted one
 GO
 DECLARE @status0 INT
@@ -168,7 +168,7 @@ GO
 DECLARE @status2 INT
 EXEC ChooseJobFromAcceptedAppSP 'shadi.aly', 'BS-3291', 'facebook.com','Employee- BootStrap Developer','Sunday',@status2 OUTPUT
 PRINT @status2
---6:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful deletion// this application is not in the review process or it doesn't exist
 GO
 DECLARE @status0 BIT
@@ -186,22 +186,22 @@ PRINT @status1
 
 
 
---1:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--1:----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --to display the case where the output indicates that the check in is disregarded please change the local clock on you PC to Friday or choose a staff member
 --whose day off is equal to today
 GO
 DECLARE @status1 BIT
 EXEC CheckInSP 'claire.carles', @status1 OUTPUT
 PRINT @status1
---2:Yasmine-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- to display the case where the output indicates that the check out is disregarded please change the local clock on you PC to Friday or choose a staff member
 DECLARE @status1 BIT
 EXEC CheckOutSP 'claire.carles', @status1 OUTPUT
 PRINT @status1
---3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC ViewAttendanceSP 'salma.tarek', '2017-5-22','2017-12-21'
 
---4:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--4:-------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 --successful request application
 GO
 DECLARE @status1 BIT 
@@ -213,12 +213,12 @@ DECLARE @status0 BIT
 EXEC ApplyHRForRequestSP 'jdana.debs','ahmed.hussain','5/4/2017','5/2/2017','sick leave','','', @status0 OUTPUT
 PRINT @status0
 GO
---5:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC ViewRequestsStatusSP 'claire.carles'
---6:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC DeletePendingRequestsSP 'claire.carles'
 
---7:Reda-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--7:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DECLARE @status1 BIT
 EXEC SendEmailSP 'andra.kyla','andra.kyla@facebook.com','Yousef.Mustafa','Yousef.Mustafa@facebook.com','Plan Delivery','To Mr. Yousef, I would like to inform you that the plan we agreed on has been revised and ready for delivery. When would you like us to deliver it? From, Andra', @status1 OUTPUT
@@ -234,11 +234,11 @@ PRINT @status1
 
 
 
---8:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--8:------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 EXEC ViewReceivedEmailsSP 'Yousef.Mustafa'
 
---9:Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--9:-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 --the timestamp is dependent on when the insertions of the emails are handled. In order to test please run view received emails and get the email timestamp first to plug in
 -- the procedure. At the time of insertion this procedure worked correctly
 EXEC ReplyToEmailsSP 'Yousef.Mustafa', '2017-11-20 13:54:06.140','andra.kyla','',''
@@ -250,7 +250,7 @@ EXEC ViewLatestAnnouncementsSP 'claire.carles'
 --	“As an HR employee, I should be able to ...”
 --```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
---1:Reda-----------------------------------------------------------------------------------------------------------------------------------------------
+--1:-----------------------------------------------------------------------------------------------------------------------------------------------
 DECLARE @status0 BIT
 EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','JS-8938','facebook.com','2017-12-12','you will be managing everything related to the facebook ad experience with our viewers on the platform',12,80000,'Manage facebook Ads',3,9, @status0 OUTPUT
 PRINT @status0
@@ -260,7 +260,7 @@ EXEC AddJobSP 'Dina.AlMasry','Employee- the boss of Ads','PHP-5019','facebook.co
 PRINT @status1
 
 
---2:Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
+--2:---------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful view//job is not in the department
 DECLARE @status0 BIT
 EXEC ViewJobInformationSP 'Fayrouz.Hussain', 'Manager- Managing JS Department','JS-8938','facebook.com',@status0 OUTPUT
@@ -269,7 +269,7 @@ PRINT @status0
 DECLARE @status1 BIT
 EXEC ViewJobInformationSP 'Fayrouz.Hussain', 'Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
 PRINT @status1
---3:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
+--3:---------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful edit//job is not in the department
 DECLARE @status0 BIT
 EXEC EditJobInfoSP 'Fayrouz.Hussain', 'Manager- Managing JS Department','JS-8938','facebook.com','1-1-2018',NULL,NULL,NULL,NULL,NULL,NULL,@status0 OUTPUT
@@ -278,7 +278,7 @@ PRINT @status0
 DECLARE @status1 BIT
 EXEC EditJobInfoSP 'Fayrouz.Hussain', 'Manager- Managing PHP Department','PHP-5019','facebook.com','2018-1-1','this job is not easy, expect your eyes to shut down after looking at a computer screen for days non-stop',NULL,NULL,NULL,NULL,NULL,@status1 OUTPUT
 PRINT @status1
---4:Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
+--4:----------------------------------------------------------------------------------------------------------------------------------------------- 
 -- unsuccessful view//the application does not belong to the HR employee's department
 DECLARE @status0 BIT
 EXEC ViewNewApplicationsSP 'Fayrouz.Hussain','Manager- Managing JS Department','JS-8938','facebook.com',@status0 OUTPUT
@@ -287,7 +287,7 @@ PRINT @status0
 DECLARE @status1 BIT
 EXEC ViewNewApplicationsSP 'Fayrouz.Hussain','Manager- Managing PHP Department','PHP-5019','facebook.com',@status1 OUTPUT
 PRINT @status1
---5:Reda------------------------------------------------------------------------------------------------------------------------------------------------
+--5:------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful response addition// this job application does not belong to the HR's department 
 DECLARE @status0 BIT
 EXEC AddHrResponseSP 'shadi.aly', 'Fayrouz.Hussain', 'Employee- BootStrap Developer', 'BS-3291', 'facebook.com','Rejected',@status0 OUTPUT
@@ -302,17 +302,17 @@ PRINT @status1
 DECLARE @status1 BIT
 EXEC AddHrResponseSP 'omar.mofti','Dina.AlMasry','Manager- Managing PHP Department','PHP-5019','facebook.com','Accepted',@status1 OUTPUT
 PRINT @status1
---6:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:--------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC PostAnnouncementSP 'Fayrouz.Hussain','this is my first announcement','just chilling','fun'
 
---7:Yasmine----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--7:----------------------------------------------------------------------------------------------------------------------------------------------------------------
 DECLARE @status1 BIT
 EXEC ViewRequestsSP 'Fayrouz.Hussain','PHP-5019','facebook.com',@status1
 PRINT @status1
 
---8:Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
+--8:------------------------------------------------------------------------------------------------------------------------------------------ 
 EXEC RespondHRToRequestSP 'firdous.ahmed',11,'Accepted'
---9:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
+--9: ----------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful attendance view//the staff member doesn't belong to the HR's department or the user doesn't exists
 DECLARE @status0 BIT
 EXEC ViewAttendanceOfStaffSP 'Fayrouz.Hussain','mirna.alteer','2017-10-1','2017-10-30',@status0 OUTPUT
@@ -322,7 +322,7 @@ DECLARE @status1 BIT
 EXEC ViewAttendanceOfStaffSP 'Fayrouz.Hussain','claire.carles','2017-10-1','2017-12-30',@status1 OUTPUT
 PRINT @status1
 
---10:Reda----------------------------------------------------------------------------------------------------------------------------------
+--10:----------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful working hours view//the staff member doesn't belong to the HR's department or the user doesn't exist
 DECLARE @status0 BIT
 EXEC ViewYearlyAttendanceOfStaffSP 'Fayrouz.Hussain','mirna.alteer',2017,@status0 OUTPUT
@@ -335,7 +335,7 @@ PRINT @status1
 DECLARE @status1 BIT
 EXEC ViewYearlyAttendanceOfStaffSP 'salma.tarek','salma.tarek',2017,@status1 OUTPUT
 PRINT @status1
---11:Gharam-------------------------------------------------------------------------------------------------------------------------------------------
+--11:-------------------------------------------------------------------------------------------------------------------------------------------
 --for testing purposes you can use this query to change the task status for everyone after running the insertions file, however you are asked 
 --to run the DB.sql and Insertions.sql again before running any other execution
 --UPDATE Tasks
@@ -365,12 +365,12 @@ EXEC ViewTop3RegularSP 'mirna.alteer','BS-3291','facebook.com'
 
 
 
---1: Abdullah---------------------------------------------------------------------------------------------------
+--1: ---------------------------------------------------------------------------------------------------
 
 EXEC ViewProjectsOfEmployeeSP 'godfrey.love'
 
 
---2: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task view//the regular employee doesn't have tasks in this project
 DECLARE @status0 BIT
 EXEC ViewTasksInProjectSP 'Project Eris', 'marisa.lavender', @status0 OUTPUT 
@@ -379,7 +379,7 @@ PRINT @status0
 DECLARE @status1 BIT
 EXEC ViewTasksInProjectSP 'Project Neo', 'marisa.lavender', @status1 OUTPUT 
 PRINT @status1
---3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3: ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task edit//task doesn't exist, or is not assigned to this staff member, or deadline passed
 DECLARE @status0 BIT
 EXEC FinalizeTaskSP 'rosannah.humphrey','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status0 OUTPUT
@@ -389,7 +389,7 @@ DECLARE @status1 BIT
 EXEC FinalizeTaskSP 'marisa.lavender','Task 1','12/30/2017 12:00:00 AM','Project Neo',@status1 OUTPUT
 PRINT @status1
 
---4: Yasmine-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4: -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 --kindly apply FinalizeTaskSP beofre executing this procedure in order to make a successful change, all the pre-inserted tasks have a status of assigned
 --unsuccessful task edit////task doesn't exist, or is not assigned to this staff member, or deadline passed 
 DECLARE @status0 BIT
@@ -403,12 +403,12 @@ PRINT @status1
 --“As a manager, I should be able to ...”
 --`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
 
---1:Gharam------------------------------------------------------------------------------------------------------------------------------------------------------------
+--1:------------------------------------------------------------------------------------------------------------------------------------------------------------
 --HR Manager View
 EXEC ViewEmployeesRequestsSP 'Ahmed_Mahmoud','JS-8938','facebook.com'
 --NON-HR Manager View
 EXEC ViewEmployeesRequestsSP 'Mahmoud_Ahmed','JS-8938','facebook.com'
---2:Abdullah ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2: ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Request is accepted by a manager in the same department
 DECLARE @status1 BIT
@@ -428,7 +428,7 @@ EXEC AddManagerResponseToRequestSP 'Mahmoud_Ahmed', 'Ahmed_Mahmoud','Rejected',N
 PRINT @status0 
 
 
---3:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:--------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful application view//job doesn't belong to the manager's department, or no accpeted applications yet by HR
 DECLARE @status0 BIT
 EXEC ViewApprovedJobAppSP 'Mahmoud_Ahmed','Manager- Managing PHP Department','PHP-5019','facebook.com',@status0 OUTPUT
@@ -442,14 +442,14 @@ EXEC ViewJobInfoSP 'Manager- Managing PHP Department','PHP-5019','facebook.com'
 --procedures for viewing more job seeker info
 EXEC ViewSeekerInfoSP 'gawwad.gooda'
 
---4:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4:---------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Accepted','gawwad.gooda','Manager- Managing PHP Department','PHP-5019','facebook.com'
 EXEC RespondToJobApplicationsSP 'Mohamed_Ahmed','Rejected','omar.mofti','Manager- Managing PHP Department','PHP-5019','facebook.com'
 
---5:Abdullah-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5:-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC DefineNewProject 'Mohamed_Ahmed','2017-11-21','2017-12-30','Project Hela'
 
---6:Reda-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful assignment// the regular works on 2 project, and can't be assigned to more
 DECLARE @status0 INT
 EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Neo','Mahmoud_Mohamed',@status0 OUTPUT
@@ -466,7 +466,7 @@ PRINT @status2
 DECLARE @status3 INT
 EXEC AssignRegularToProjectSP 'claire.carles','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
 PRINT @status3
---7:Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--7:----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 --unsuccessful removal// the employee is still assigned to tasks
 DECLARE @status0 BIT
 EXEC RemoveRegularFromProjectSP 'marisa.lavender','Project Neo',@status0 OUTPUT
@@ -475,7 +475,7 @@ PRINT @status0
 DECLARE @status1 BIT
 EXEC RemoveRegularFromProjectSP 'godfrey.love','Project Deimos',@status1 OUTPUT
 PRINT @status1
---8:Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------------------
+--8:---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task definition// the regular employee doesn't belong to the project's department
 DECLARE @status0 BIT
 EXEC DefineTaskSP 'Ahmed_Mohamed','Project Mavis','2017-12-30','Alpha stage','beginning the work','this is a project orientation task',@status0 OUTPUT
@@ -485,7 +485,7 @@ DECLARE @status1 BIT
 EXEC DefineTaskSP 'Mohamed_Mahmoud','Project Eris','2017-12-30','Alpha stage','beginning the work','this is a project orientation task',@status1 OUTPUT
 PRINT @status1
 
---9:Reda -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--9: -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task assignment// the regular employee is not assigned to the project
 DECLARE @status0 BIT
 EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','andra.kyla','Task 1','12/30/2017 12:00:00 AM',@status0 OUTPUT
@@ -495,7 +495,7 @@ DECLARE @status1 BIT
 EXEC AssignRegularToTaskSP 'Project Mavis','Mahmoud_Mohamed','marisa.lavender','Task 1','12/30/2017 12:00:00 AM',@status1 OUTPUT
 PRINT @status1
 
---10:Gharam--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--10:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful reassignment
 GO
 DECLARE @status0 BIT
@@ -508,7 +508,7 @@ DECLARE @status1 BIT
 EXEC ReplaceRegularSP 'marisa.lavender','Task Beta','2017-12-30','Project Deimos',@status1 OUTPUT
 PRINT @status1
 
---11:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--11:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Tasks viewed unsuccessfully because the Department of the Manager is different from the department of the Manager who created the project
 DECLARE @status0 BIT 
 EXEC ViewTasksSP 'Joe_John', 'Project Morpheus','Assigned', @status0  OUTPUT
@@ -520,7 +520,7 @@ EXEC ViewTasksSP 'Mohamed_Mahmoud', 'Project Mavis','Assigned', @status1  OUTPUT
 PRINT @status1 
 
 
---12:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--12:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 DECLARE @status0 BIT
 EXEC ReviewTaskSP 'Mohamed_Mahmoud','Project Neo','Task 1','12/30/2017 12:00:00 AM','Accepted','2018-5-5',@status0 OUTPUT
 PRINT @status0

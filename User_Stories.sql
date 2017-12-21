@@ -69,7 +69,7 @@ DROP PROC FinalizeTaskSP;
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---1: Gharam-----------------------------------------------------------------------------------------------------------------------------------------------------
+--1: -----------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.1 views the info of companies with its name containing a key word
 -- The procedure takes keyWord as input and returns the information of the companies containing keyWord in its name
 GO 
@@ -105,7 +105,7 @@ SELECT c.*,cp.phone
 FROM Companies c LEFT JOIN Companies_Phones cp
 ON c.domain_name = cp.company_domain
 WHERE c.type LIKE CONCAT('%',@keyWord,'%')
---2:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------
+--2:--------------------------------------------------------------------------------------------------------------------------------------------
 --Registered/Unregistered Stories no. 2: View all companies with their informations.The procedure shows all columns of table Companies joined with the 
 --table Companies_Phones to show also the phones available for each company. 
 
@@ -117,7 +117,7 @@ FROM Companies C LEFT JOIN Companies_Phones CP
 ON C.domain_name = CP.company_domain
 
 
---3:Abdullah-------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:-------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.3 views the information of a certain company along with all of its departments info 
 GO
 -- The procedure takes the companyDomain as input and outputs the information of the company specified with the companyDomain
@@ -141,7 +141,7 @@ FROM Departments d
 WHERE (d.company_domain= @companyDomain)
 
 
---4:Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.4 view the info of jobs in a departments in a certain company that have vacancies in it
 -- The procedure takes the company domain and the department code as input and returns the info of the department
 GO
@@ -164,7 +164,7 @@ SELECT j.*
 FROM Jobs j
 WHERE j.department_code = @departmentCode AND j.company_domain = @companyDomain AND j.vacancies > 0
 
---5: Gharam----------------------------------------------------------------------------------------------------------------------------------------------
+--5: ----------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story no.5 registers a user into the website with the information he/she enters with the condition of the user name being unique
 -- The Procedure takes userName, password, personalEmail, birthDate, expYear, firstName and lastName as input and outputs
 --  1 -->  username  unique with respect to the database , and a successful registration
@@ -195,7 +195,7 @@ END
 ELSE
 SET @operationStatus = 0; --failed registration
 
---6:Yasmine-----------------------------------------------------------------------------------------------------------------------------------
+--6:-----------------------------------------------------------------------------------------------------------------------------------
 
 --Registered/Unregestered User stories no.6: The user searches for the jobs that have vacancies by giving the procedure a text. 
 -- The procedure checks if the job title or job description contains this text as keywords in the search.
@@ -209,7 +209,7 @@ FROM Jobs j
 WHERE j.vacancies > 0 AND j.short_description LIKE CONCAT('%' ,@keywords,'%') OR  j.job_title LIKE CONCAT('%' ,@keywords,'%') 
 
 
---7:Abdullah----------------------------------------------------------------------------------------------------------------------------
+--7:----------------------------------------------------------------------------------------------------------------------------
 
 --Users Story no.7 View the companies in the order of having the highest average salaries
 -- ViewCompaniesSalaries returns the average salary of all staff members grouped by the companies they are in while ordering those averages descendingly
@@ -229,7 +229,7 @@ ORDER BY AVG(sm.salary) DESC
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1. Reda
+--1. 
 --registered user story no.1 login to the website with your username and password and checks whether you are an existing user or and defines the type of the user
 -- the procedure takes the username and password as input and returns the an int variable as output with values as follow
 -- 0 --> not a user
@@ -287,7 +287,7 @@ SET @type = 4;
 
 END
 
---2: Gharam ---------------------------------------------------------------------------------------------------------------------------------------------------------
+--2:  ---------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story user no.2 views the all the information of a user
 -- The procedure takes userName as input and outpus all the information of a user with his/her name matching the userName
 GO
@@ -302,7 +302,7 @@ DROP PROC ViewUserInfoSp;
 
 
 
---3: Yasmine -------------------------------------------------------------------------------------------------------------------------------------------------------
+--3:  -------------------------------------------------------------------------------------------------------------------------------------------------------
 --Registered User stories no.3:The user can edit his personal info.
 --The user chooses to edit certain info or all of them. If an input is null, no change will happen to the corresponding attribute. If the user entered a value. changes 
 --will be applied
@@ -357,7 +357,7 @@ WHERE user_name = @username
 --“As a job seeker, I should be able to ...”
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
---1: Abdullah
+--1: 
 
 -- Job Seekers Story no.1 Apply for any job as long as I have the needed years of experience for the job. 
 -- ApplyForJobSP takes seeker user name and application info as inputs and checks that there is no application 
@@ -406,7 +406,7 @@ VALUES
 SET @operationStatus = 3; --successful application
 END
 
---2:Reda----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2:----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- job seeker story no.2 view the interview questions related to the job I am applying for
 -- this procedure takes the job title, department code and company domain of the target job as input and
 -- returns all the titles of the interview questions related to that job.
@@ -422,7 +422,7 @@ ON jq.question_id = q.question_id
 WHERE (jq.job_title = @jobTitle AND jq.department_code = @departmentCode AND jq.company_domain = @companyDomain)
 
 
---3: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3: ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Users story job seeker no.3 views the scores of applications, which matches the job he/she applied for and his/her username
 -- The Procedure takes userName,jobTitle, departmentCode and CompanyDomain as input and outputs the score of a certain application 
 GO 
@@ -440,7 +440,7 @@ AND @jobTitle =job_title
 AND @departmentCode =department_code
 
 
---4: Yasmine----------------------------------------------------------------------------------------------------------------------------------------------------------------
+--4: ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Job Seeker User Stories no.4: The job seeker checks the status and score of each application he/she applied for.
 --The procedure takes the username of the jobseeker as input and shows the status of all applications, where their usernae equals the input
@@ -452,7 +452,7 @@ Select A.job_title, A.department_code, A.company_domain, A.score, A.app_status
 FROM Applications A
 WHERE A.seeker_username=@username
 
---5: Abdullah------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Job Seekers Story no.5 Choose a job from the jobs I was accepted in
 -- ChooseJobFromAcceptedAppSP takes the user name of the job seeker, the job information
 -- and the day off of choice as input and returns a int as output representing the result of the procedure as follows
@@ -511,7 +511,7 @@ SET @operationStatus = 2 --Successful job choice
 END
 
 
---6: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --job seekers story no.6 delete any job application as long as it is still in the review process. The procedure takes as input the seeker username, job title, department code
 -- and company domain, returns an output bit that specifies the following
 -- 0 --> unsuccessful operation//this application is not in the review process or this application does not exist
@@ -543,7 +543,7 @@ END
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1: Gharam
+--1: 
 -- Users story staff member no.1 inserts a check-in attednace of a staff member 
 -- The procedure takes username as input and outputs operation status 0 or 1
 -- 0 -->  no attendance inserted
@@ -582,7 +582,7 @@ SET @operationStatus = 1
 END
 
 
---2: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------
+--2: ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Staff Member user stories no.2: The procedure saves the leave time of the staff members. 
 --The procedure takes as input the staff member's username, if his/her dayoff equals the timestamp, the procedure return 0 (false) and we disregard the leave time. 
@@ -611,7 +611,7 @@ SET @operationStatus = 1
 END
 
 
---3: Reda------------------------------------------------------------------------------------------------------------------------------------------------------------
+--3: ------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- staff member story no.3 View all my attendance records within certain period of time.
 -- The procedure takes the user name of the staff member that wants to view his attendance records as input
 -- and the dates over which he wants to check his attendance, and generates all the attendance records 
@@ -628,7 +628,7 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 
 
 
---4: Gharam----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+--4: ----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 -- staff member story no.4 Apply for requests of both types: business trip and leave requests.
 -- The procedures take the request info as input and distinguish wether the insertion is for
 -- A leave request or a business trip request as follows
@@ -777,7 +777,7 @@ INSERT INTO Managers_Replace_Managers
 VALUES(@identity,@ownerUserName,@replacementUserName);
 SET @operationStatus = 1; --successful request application
 END
---5: Yasmine------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--5: ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Staff Members User Stories No.5: The staff member checks the status (respond of Manager and HR ) to the requests he/she applied for.
 --The procedure has 1 input, the username of the Staff member... 
@@ -807,7 +807,7 @@ WHERE rrr.user_name_request_owner = @userName
 
 
 
---6: Abdullah --------------------------------------------------------------------------------------------------------------------------------------------------------------
+--6:  --------------------------------------------------------------------------------------------------------------------------------------------------------------
 --staff member Story no.6 Delete any request that is still in the review process
 --DeletePendingRequestsSP takes the username of the employee as input and deletes all
 --his requests that have an hr_response_req attr value of NULL
@@ -879,7 +879,7 @@ DELETE FROM Requests
 	))
 
 
---7: Reda--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--7: --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- staff member story no.7 the procedure takes the email info as input and performs
 -- a basic insertion operation with that info to the Emails and the Staff_Receives_Emails tables
 GO
@@ -921,7 +921,7 @@ ELSE BEGIN
 SET @operationStatus=0 
 END 
 
---8:Gharam-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--8:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Staff Member User Stories No.9: The Staff Member views all the Received emails from other staff members in the same company. 
 -- The procedure 
@@ -947,7 +947,7 @@ WHERE sm.user_name = @username
  FROM Staff_Members sm1
  WHERE sm1.user_name= e.sender_user_name
  ))
---9:Yasmine--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--9:--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Staff Member User Stories no.9: The Staff memeber replies to a received email, and this email is added to the table Email. 
 --So the procedure has 5 inputs:-
 --@recipientUSername is the username of the staff member checking the received emails
@@ -1014,7 +1014,7 @@ SELECT a.*
 --	“As an HR employee, I should be able to ...”
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1: Reda----------------------------------------------------------------------
+--1: ----------------------------------------------------------------------
 -- HR employee story no.1 Add a new job that belongs to my department
 -- AddJobSP takes the all the job related info as input, checks whether
 -- the hr employee is adding a job to the same company as his or not
@@ -1076,7 +1076,7 @@ INSERT INTO Jobs_Have_Questions
 (question_id,job_title,department_code,company_domain)
 VALUES(@questionID,@jobTitle,@departmentCode,@companyDomain)
 
---2: Gharam---------------------------------------------------------------------------------------------------------------------------------------------------
+--2: ---------------------------------------------------------------------------------------------------------------------------------------------------
 --HR User Stories no.2: The procedures outputs informations about a Job in the HR's Department
 --The procedure takes as inputs the HR's username and the Jobtitle, department Code and Compnay name of the Job he/she wants to view 
 --If this job is not in the same department as the HR, then the procedure will output false.
@@ -1109,7 +1109,7 @@ j.department_code = @departmentCode AND
 j.company_domain = @companyDomain
 SET @operationStatus = 1
 END
---3: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------------
+--3: ---------------------------------------------------------------------------------------------------------------------------------------------------
 --HR User Stories no.3:- In this procedure, HR can edit Job info in his/her department.
 --The procedure takes as inputs the Username of the HR, the jobtitle,departmentCode, and company domain (primary keys) of the job he/she wants to edit.
 --Then, The HR has the choice to give any of the following inputs to be updated in the table:-
@@ -1188,7 +1188,7 @@ company_domain=@companyDomain
 SET @operationStatus = 1
 END 
 
---4: Abdullah----------------------------------------------------------------------------------------------------------------------------------------------- 
+--4: ----------------------------------------------------------------------------------------------------------------------------------------------- 
 
 --HR User Stories No.4: The HR can view new applications (that has no responses yet, basically 'Pending') for a specific job in his department.
 --The procedure takes as inputs the HR's username and job title, department code, and company domain (primary keys for table job) he/she wants to view applications for.
@@ -1223,7 +1223,7 @@ a.manager_response_app IS NULL
 SET @operationStatus = 1
 END
 
---5: Reda------------------------------------------------------------------------------------------------------------------------------------------------
+--5: ------------------------------------------------------------------------------------------------------------------------------------------------
 --HR user stories no.5: HR can accept or reject Applications for jobs in his department.
 --The procedure takes as inputs the HR's username and the Job seeker username, jobtitle, department code, and company domain of the Application he/she
 --wants to respond to. The HR gives his/her response in @hrResponse
@@ -1259,7 +1259,7 @@ Applications.department_code = @departmentCode AND
 Applications.company_domain = @companyDomain)
 SET @operationStatus = 1
 END
---6: Gharam------------------------------------------------------------------------------------------------------------------------------------------------------
+--6: ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --HR user stories no.6:- The HR can post announcements to his/her company to inform the staff members about new updates
 --The procedure takes as inputs HR's username, and the entries to create an instance in the announcement table: title, description, type
@@ -1283,7 +1283,7 @@ VALUES (CONVERT (date, SYSDATETIMEOFFSET()),@domainName,@title,@username,@descri
 
 
 
---7: Yasmine---------------------------------------------------------------------------------------------------------------------------
+--7: ---------------------------------------------------------------------------------------------------------------------------
 
 --HR User Stories no.7: 
 --The HR can View requests (business or leave) approved by manager only of staff members in the same department as the HR 
@@ -1359,7 +1359,7 @@ ELSE
 SELECT trip_purpose, trip_destination
 FROM Business_Trip_Requests 
 
---8: Yasmine------------------------------------------------------------------------------------------------------------------------------------------ 
+--8: ------------------------------------------------------------------------------------------------------------------------------------------ 
 
 --HR user stories No.8: The HR give the final respond for the requests, and takes into
 --consideration that if the duration of the request includes the staff member’s weekly day-off and/or
@@ -1404,7 +1404,7 @@ END
 
 
 
---9: Abdullah ----------------------------------------------------------------------------------------------------------------------------------------
+--9:  ----------------------------------------------------------------------------------------------------------------------------------------
 
 --HR user stories no.9:-
 --The HR can view the attendance records of any staff member in my department (check-in time, check-out time,
@@ -1437,7 +1437,7 @@ WHERE (DATEDIFF(DAY,@periodStart,a.start_time)>=0 AND DATEDIFF(DAY,@periodEnd,a.
 SET @operationStatus = 1
 END
 
---10: Reda----------------------------------------------------------------------------------------------------------------------------------
+--10: ----------------------------------------------------------------------------------------------------------------------------------
 
 --HR user stories no.10:- 
 --The HR can view the total number of hours for any staff member in my department in each month of a certain year.
@@ -1472,7 +1472,7 @@ GROUP BY MONTH(a.start_time)
 SET @operationStatus = 1
 END
 
---11: Gharam-------------------------------------------------------------------------------------------------------------------------------------------
+--11: -------------------------------------------------------------------------------------------------------------------------------------------
 
 --HR user stories no.11:- 
 --View names of the top 3 high achievers in my department. A high achiever is a regular employee
@@ -1517,7 +1517,7 @@ ORDER By SUM(a.duration) DESC
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---1: Abdullah-
+--1: -
 
 --Regular Emplyees User Stories no.1: 
 --The regular employe can view all projects assigned to him/her with their info.
@@ -1535,7 +1535,7 @@ ON p.project_name = mapr.project_name
 WHERE mapr.regular_user_name = @userName
 
 
---2:Reda----------------------------------------------------------------------------
+--2:----------------------------------------------------------------------------
 
 --Regular Employees User Stories No.2:- 
 --The regular employee can view tasks in a certain project assigned to him/her
@@ -1565,7 +1565,7 @@ ELSE
 SET @operationStatus = 0
 
 
---3:Gharam------------------------------------------------------------------------------------
+--3:------------------------------------------------------------------------------------
 
 --Regular Emloyees User Stories no.3:-
 --After finalizing a task, I can change the status of this task to ‘Fixed’ as long as it did not pass the deadline.
@@ -1602,7 +1602,7 @@ AND project_name=@projectName
 SET @operationStatus = 1
 END
 
---4: Yasmine---------------------------------------------------------------------------------------------------------------------------------------------
+--4: ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
 --Regular Employees User Stories no.4:- 
@@ -1656,7 +1656,7 @@ END
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---1: Gharam--------------------------------------------------------------------------------------------------------------------------------------------------
+--1: --------------------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories No.1:-
 --Managers can view new requests from staff members working in my department. 
@@ -1739,7 +1739,7 @@ WHERE sm.department_code = @departmentCode
 ) AND r.manager_response_req IS NULL
 END
 END
---2: Abdullah ---------------------------------------------------------------------------------------------------------------------------
+--2:  ---------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.2:
 --The manager can respond to requests of Staff members in the same department as the Manager.
@@ -1794,7 +1794,7 @@ SET @operationStatus = 1;
 END
 END
 
---3: Reda--------------------------------------------------------------------------------------------------------------------------------------
+--3: --------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.3:-
 --Managers can view applications for a specific job in their departments that were approved by an HR employee. For
@@ -1860,7 +1860,7 @@ AND a.company_domain = @CompanyDomain
 AND a.hr_response_app='Accepted')
 SET @operationStatus = 1;
 END
---4: Yasmine-------------------------------------------------------------------------------------------------------------------------------------------
+--4: -------------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.4:-
 --Managers can accept or reject job applications to jobs related to their departments after being approved by an HR employee.
@@ -1897,7 +1897,7 @@ AND Applications.department_code = @departmentCode
 AND Applications.company_domain = @companyDomain
 
 
---5: Abdullah-------------------------------------------------------------------------------------------------------
+--5: -------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.4:- 
 --Managers create a new project in their departments with all of its information.
@@ -1914,7 +1914,7 @@ AS
 INSERT Projects (project_name,manager_user_name,start_date,end_date)
 Values(@projectName,@managerUserName,@startDate,@endDate)
 
---6: Reda--------------------------------------------------------------------------------------------------------------
+--6: --------------------------------------------------------------------------------------------------------------
 GO
 CREATE PROC AssignRegularToProjectSP
 @regularUserName VARCHAR(30),
@@ -1966,7 +1966,7 @@ INSERT INTO Managers_Assign_Projects_To_Regulars
 VALUES (@managerUserName,@regularUserName,@projectName)
 SET @operationStatus = 3 --successful assignment
 END
---7: Gharam----------------------------------------------------------------------------------------------------------- 
+--7: ----------------------------------------------------------------------------------------------------------- 
 GO
 CREATE PROC RemoveRegularFromProjectSP
 @username VARCHAR(30),
@@ -1994,7 +1994,7 @@ WHERE @username=regular_user_name
 AND @projectName = project_name
 SET @operationStatus = 1
 END
---8: Yasmine------------------------------------------------------------------------------------------------------------------------------------
+--8: ------------------------------------------------------------------------------------------------------------------------------------
 
 --Manager User Stories no.8:-
 --Managers can define a task in a project in their departments which will have status ‘Open’.
@@ -2032,7 +2032,7 @@ INSERT INTO Managers_Assign_Tasks_To_Regulars(manager_user_name,task_name,task_d
 VALUES  (@managerUsername,@taskName,@deadline,@projectName)
 SET @operationStatus = 1
 END
---9: Reda ------------------------------------------------------------------------------------------------------------------------------------------
+--9:  ------------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories 9:- 
 --A managers can assign one regular employee (from those already assigned to the project) to work on an already defined task by him/her in this project.
@@ -2085,7 +2085,7 @@ AND project_name = @projectName
 SET @operationStatus = 1
 END
 
---10: Gharam----------------------------------------------------------------------------------------------------------------------------------------
+--10: ----------------------------------------------------------------------------------------------------------------------------------------
 
 --Manager User Stories 10:-
 --A Manager can change the regular employee working on a task on the condition that its state is ‘Assigned’, i.e. by assigning it to another regular employee.
@@ -2138,7 +2138,7 @@ END
 ELSE
 SET @operationStatus = 0
 
---11: Yasmine---------------------------------------------------------------------------------------------------------------------------------------
+--11: ---------------------------------------------------------------------------------------------------------------------------------------
 
 --Managers User Stories no.11:-
 --Manager can view a list of tasks in a certain project that have a certain status. 
@@ -2174,7 +2174,7 @@ WHERE T.project_name = @projectName AND T.status=@TaskStatus
 SET @operationStatus=1;
 END
 
---12: Abdullah-------------------------------------------------------------------------------------------------------------------------------------
+--12: -------------------------------------------------------------------------------------------------------------------------------------
 
 GO
 CREATE PROC ReviewTaskSP

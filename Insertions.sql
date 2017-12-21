@@ -1,15 +1,4 @@
-﻿--TRUNCATE TABLE HR_Employees;
---TRUNCATE TABLE Managers;
---TRUNCATE TABLE Regular_Employees;
---TRUNCATE TABLE Job_Seekers;
---TRUNCATE TABLE Staff_Members;
---TRUNCATE TABLE Departments;
---TRUNCATE TABLE Companies;
---TRUNCATE TABLE Users;
---TRUNCATE TABLE JOBS;
---TRUNCATE TABLE APPLICATIONS;
-
--- COMPANIES INSERTIONS
+﻿-- COMPANIES INSERTIONS
 INSERT INTO Companies (domain_name,name,address,field,type,vision,email) 
 VALUES('facebook.com','facebook',' Palo Alto','computer marketing',
 		'social media','connection of all humanity','info@facebook.com');
