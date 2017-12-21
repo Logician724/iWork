@@ -2256,6 +2256,7 @@ AND Tasks.project_name = @projectName
 SET @operationStatus = 1
 END
 ------------------------FUNCTIONS----------------------------------------------------
+-- The function MakeCompanyEmail takes the user name and company dommain as input, append the username with @ sign and the company domain to generate the email
 GO
 CREATE FUNCTION MakeCompanyEmail
 ( @userName VARCHAR(30),
@@ -2268,7 +2269,9 @@ SET @email =  @userName+'@'+@companyDomain
 RETURN @email
 END
 
-
+-- The funcion get missing hours takes the user name the start time and leave time of the user in his attendance as input and reuturns the 
+-- the number of missing hours by getting diffetence between the working hours of the staff member and the duration over which he stayed 
+-- between check in and check out.
 GO
 CREATE FUNCTION GetMissingHours
 (
@@ -2295,7 +2298,6 @@ RETURN @missingHours
 END
 
 
-
 GO
 CREATE FUNCTION CheckJobTitle
 (@jobTitle VARCHAR(150))
@@ -2309,6 +2311,13 @@ ELSE
 SET @returnedBit ='0'
 RETURN @returnedBit
 END
+
+
+-- the function NumberOfDays takes the request id, start date and end date of the
+-- request as input and returns the number of leave days in this requests.
+-- by counting the the difference in days between the start date and the 
+-- end date and getting the difference between teh result and the number of
+-- week end days in between
 
 GO
 CREATE FUNCTION NumberOfDays(@requestID INT,@startDate DATETIME , @endDate DATETIME)
