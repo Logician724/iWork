@@ -1971,9 +1971,16 @@ VALUES (@managerUserName,@regularUserName,@projectName)
 SET @operationStatus = 3 --successful assignment
 END
 --7: ----------------------------------------------------------------------------------------------------------- 
+-- Managers story no.7 Remove regular employees assigned to a project as long as they don’t have assigned tasks in
+-- that project.
+-- The procedure RemoveRegularFromProjectSP takes the regular info and the project info as input
+-- and returns an output that is represented as follows
+-- 0 --> the regular employee is already assigned to a task in the project, and can't be removed
+-- 1 --> successful removal, the regular employee is not removed from this project. 
 GO
 CREATE PROC RemoveRegularFromProjectSP
-@username VARCHAR(30),
+@managerUsername VARCHAR(30),
+@regularUsername VARCHAR(30),
 @projectName VARCHAR(100),
 @operationStatus BIT OUTPUT
 AS
@@ -1986,15 +1993,22 @@ t.name=matr.task_name
 AND t.project_name=matr.project_name 
 AND t.deadline=matr.task_deadline 
 WHERE 
-matr.regular_user_name = @username
+matr.regular_user_name = @regularUsername
 AND matr.project_name = @projectName
 AND t.status = 'Assigned'
-)
+AND EXISTS(
+SELECT *
+FROM Staff_Members s1 INNER JOIN Staff_Members s2
+ON s1.department_code = s2.department_code
+AND s2.company_domain = s2.company_domain
+WHERE s1.user_name = @managerUsername
+AND s2.user_name = @regularUsername
+))
 SET @operationStatus = 0
 ELSE
 BEGIN
 DELETE Managers_Assign_Projects_To_Regulars
-WHERE @username=regular_user_name
+WHERE @regularUsername=regular_user_name
 AND @projectName = project_name
 SET @operationStatus = 1
 END
@@ -2179,7 +2193,12 @@ SET @operationStatus=1;
 END
 
 --12: -------------------------------------------------------------------------------------------------------------------------------------
-
+-- Managers story no.12 Review a task that I created in a certain project. 
+-- The procedure ReviewTaskSP takes the manager information and the task information 
+-- as input and return an output that is represented as follows
+-- 0 --> Unsuccessful review// the manager doesn't belong to the department, didn't define the task, or the task status is not fixed
+-- 1 --> Successful review// if the response is accepted the status  of the task will be closed, if not the status of the task
+-- will be Assigned again and a new deadline is assigned to the task
 GO
 CREATE PROC ReviewTaskSP
 @managerUserName VARCHAR(50),

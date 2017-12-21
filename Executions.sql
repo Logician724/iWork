@@ -473,7 +473,7 @@ EXEC RemoveRegularFromProjectSP 'marisa.lavender','Project Neo',@status0 OUTPUT
 PRINT @status0
 --successful removal 
 DECLARE @status1 BIT
-EXEC RemoveRegularFromProjectSP 'godfrey.love','Project Deimos',@status1 OUTPUT
+EXEC RemoveRegularFromProjectSP 'Mohamed_Mahmoud','rosannah.humphrey','Project Eris',@status1 OUTPUT
 PRINT @status1
 --8:---------------------------------------------------------------------------------------------------------------------------------------------------------------
 --unsuccessful task definition// the regular employee doesn't belong to the project's department
@@ -521,9 +521,11 @@ PRINT @status1
 
 
 --12:-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--unsuccessful review
 DECLARE @status0 BIT
 EXEC ReviewTaskSP 'Mohamed_Mahmoud','Project Neo','Task 1','12/30/2017 12:00:00 AM','Accepted','2018-5-5',@status0 OUTPUT
 PRINT @status0
+--successful review
 DECLARE @status1 BIT
 EXEC ReviewTaskSP 'Mahmoud_Mohamed','Project Neo','Task 1','12/30/2017 12:00:00 AM','Accepted','2018-5-5',@status1 OUTPUT
 PRINT @status1
