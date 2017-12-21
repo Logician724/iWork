@@ -799,7 +799,8 @@ INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
 VALUES ('Project Eris','Mohamed_Mahmoud','2017-5-1','2017-8-3');
 INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
 VALUES('Project Deimos','Mark_Jack','2017-10-8','2018-02-05');
-
+INSERT INTO Projects (project_name,manager_user_name,start_date,end_date)
+VALUES('Project Apollo','Mark_Bob','2017-11-15','2018-03-10');
 
 
 -- Tasks INSERTIONS
@@ -824,6 +825,7 @@ GO
 DECLARE @status1 BIT
 EXEC DefineTaskSP 'Mark_Jack','Project Deimos','2017-12-30','Task Beta','bonus offered for finishing a week early','This is the first step in project deimos',@status1 OUTPUT
 PRINT @status1
+GO
 DECLARE @status1 BIT
 EXEC DefineTaskSP 'Mahmoud_Mohamed','Project Mavis','12/30/2017 12:00:00 AM','Task 1','this one is difficult, take your time','Make a database for platform called iWork',@status1 OUTPUT
 PRINT @status1

@@ -456,15 +456,15 @@ EXEC AssignRegularToProjectSP 'rosannah.humphrey','Project Neo','Mahmoud_Mohamed
 PRINT @status0
 --unsuccessful assignment// the regular doens't belong to the manager's department
 DECLARE @status1 INT
-EXEC AssignRegularToProjectSP 'Mohamed_Mahmoud','Project Mavis','claire.carles',@status1 OUTPUT
+EXEC AssignRegularToProjectSP 'claire.carles','Project Neo','Mohamed_Mahmoud',@status1 OUTPUT
 PRINT @status1
 --unsuccessful assignment// the regular is already assigned to the project
 DECLARE @status2 INT
-EXEC AssignRegularToProjectSP 'godfrey.love','Project Mavis','Jack_Mark',@status2 OUTPUT
+EXEC AssignRegularToProjectSP 'godfrey.love','Project Deimos','Mark_Jack',@status2 OUTPUT
 PRINT @status2
 --successful assignment
 DECLARE @status3 INT
-EXEC AssignRegularToProjectSP 'claire.carles','Project Neo','Ahmed_Mohamed',@status3 OUTPUT
+EXEC AssignRegularToProjectSP 'mindy.adella','Project Apollo','Mark_Bob',@status3 OUTPUT
 PRINT @status3
 --7:----------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 --unsuccessful removal// the employee is still assigned to tasks
